@@ -1,0 +1,175 @@
+@import 'mediawiki.skin.variables.less';
+@import './variables.less';
+
+// displays a grey rectangle with a running gradient
+.loading-animation ( @param-delay,
+@param-background-color: @background-color-personal-dashboard-apparent ) {
+	animation: loading 2s ease infinite;
+	animation-delay: @param-delay;
+
+	&::before {
+		content: '';
+		width: 100%;
+		height: 100%;
+		float: left;
+		background-repeat: no-repeat;
+		background-image: linear-gradient( @param-background-color 100%, @background-color-transparent 0 );
+		background-size: 100% 100%;
+		background-position: 0 0;
+	}
+
+	@keyframes loading {
+		0% {
+			opacity: 0.5;
+		}
+
+		40% {
+			opacity: 1;
+		}
+
+		60% {
+			opacity: 1;
+		}
+
+		100% {
+			opacity: 0.4;
+		}
+	}
+}
+
+.filter ( @value ) {
+	-webkit-filter: @value;
+	filter: @value;
+}
+
+// Set font-size in em based on the default font size
+.rel-font-size( @parentFontSize, @targetFontSize ) {
+	font-size: unit( ( @targetFontSize / @parentFontSize ), em );
+}
+
+// Set line-height based on the container's font size
+.rel-line-height( @parentFontSize, @targetLineHeight ) {
+	line-height: unit( ( @targetLineHeight / @parentFontSize ) );
+}
+
+// Set font-size and line-height in em based on the target font size
+.rel-font-size-and-line-height( @parentFontSize, @targetFontSize, @targetLineHeight ) {
+	.rel-font-size( @parentFontSize, @targetFontSize );
+	.rel-line-height( @targetFontSize, @targetLineHeight );
+}
+
+.text-ellipsis() {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.paragraph-ellipsis( @lines: 2, @parentFontSize, @targetFontSize, @targetLineHeight ) {
+	overflow: hidden;
+	// Show @lines lines of text, with an ellipsis.
+	// line-clamp has not been standardized, but most modern browsers understand the Webkit syntax.
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: @lines;
+	@lineHeightValue: unit( ( @targetLineHeight / @targetFontSize ) );
+	@fontSizeValue: unit( ( @targetFontSize / @parentFontSize ), em );
+	line-height: @lineHeightValue;
+	// For IE 11 and various old browsers, limit height for the same effect, except
+	// for the ellipsis. Height is <# of lines> * <line height> * <font size>
+	// with 0.5em added to account for descenders.
+	max-height: @lines * @lineHeightValue * @fontSizeValue + 0.5em;
+	font-size: @fontSizeValue;
+	word-wrap: break-word;
+	white-space: normal;
+}
+
+.disabled-visited() {
+	&:visited {
+		color: @color-progressive;
+	}
+}
+
+/*
+* Mixin to facilitate the color and size styling of Codex
+* icon-only buttons (weight quiet + icon inside). eg:
+* <cdx-button weight="quiet">
+*   <cdx-icon :icon"cdxIconClose">
+* </cdx-button>
+* Use the mixin in the button class instead of passing
+* specific class for the button AND the icon.
+*/
+.codex-icon-only-button( @param-color: @color-subtle, @param-size: 20px ) {
+	// Overwrite .cdx-button:enabled color
+	&.cdx-button,
+	&.cdx-toggle-button {
+		color: @param-color;
+
+		.cdx-icon {
+			color: @param-color;
+
+			> svg {
+				width: @param-size;
+				height: @param-size;
+			}
+		}
+	}
+}
+
+.popover-base() {
+	border: @border-base;
+	box-shadow: @box-shadow-drop-medium;
+	border-radius: @border-radius-base;
+	background-color: @background-color-base;
+}
+
+.no-gutter() {
+	margin: 0;
+	padding: 0;
+}
+
+/*
+* Mixin to avoid flipping images that contain problematic characters
+* like a question mark "?" in Hewbrew and Yiddish wikis.
+*/
+.background-image-noflip( @imageSrc ) {
+	html:lang( he ) &,
+	html:lang( yi ) & {
+		/* @noflip */
+		background-image: @imageSrc;
+	}
+}
+
+/*
+* Mixin to set a different background position based on the html document
+* direction. This is useful to position images that have a different
+* asset for LTR / RTL.
+*/
+.background-position-ltr-rtl( @bgPositionLTR, @bgPositionRTL ) {
+	html[ dir='ltr' ] & {
+		background-position: @bgPositionLTR;
+	}
+
+	html[ dir='rtl' ] & {
+		background-position: @bgPositionRTL;
+	}
+}
+
+// Helpers
+.ext-personal-dashboard-utils__pull-right {
+	float: right;
+}
+
+.noDarkModeMixBlendMode() {
+	// TODO: figure out if we really need `mix-blend-mode` or if we can just replace it with the respective color
+	@media screen {
+		:root.skin-theme-clientpref-night & {
+			mix-blend-mode: unset;
+		}
+	}
+
+	@media screen and ( prefers-color-scheme: dark ) {
+		:root.skin-theme-clientpref-os & {
+			mix-blend-mode: unset;
+		}
+	}
+}

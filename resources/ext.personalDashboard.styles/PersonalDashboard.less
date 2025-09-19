@@ -1,0 +1,229 @@
+@import 'mediawiki.skin.variables.less';
+@import 'mediawiki.mixins';
+@import '../utils/variables.less';
+
+.stop-scrolling {
+	height: 100%;
+	width: 100%;
+	overflow-y: hidden;
+	position: fixed;
+}
+
+.personal-dashboard-container {
+	.flex-display();
+}
+
+.personal-dashboard-overlay-container {
+	display: none;
+}
+
+.mw-body-content,
+.overlay-content,
+.content {
+	.personal-dashboard-module-help {
+		ul {
+			list-style: none;
+			margin: 0.3em 0 0 1em;
+
+			li::before {
+				content: '\2022';
+				color: #0645ad;
+				margin-right: 0.3em;
+				margin-left: -0.6em;
+			}
+		}
+	}
+
+	.recent-questions-personal-dashboard-help-questions {
+		h3 {
+			margin-top: 1.4em;
+			font-family: @personal-dashboardHeaderFont;
+			font-size: 1em;
+			color: @color-subtle;
+			padding-top: 0;
+		}
+
+		.question-link-wrapper {
+			overflow: hidden;
+			text-overflow: ellipsis;
+			display: inline;
+			margin-left: 0.2em;
+		}
+
+		.question-archived .question-text {
+			font-style: italic;
+			color: @color-subtle;
+		}
+
+		.question-posted-on {
+			font-size: 0.85em;
+			color: @color-subtle;
+			display: block;
+			margin-left: 0.3em;
+			margin-bottom: 0.6em;
+			line-height: 1.3em;
+		}
+	}
+
+	.recent-questions-personal-dashboard-help-questions:empty {
+		display: none;
+	}
+}
+
+body.mw-special-PersonalDashboard {
+	.overlay-content .personal-dashboard-module-mobile-overlay,
+	.personal-dashboard-container > .personal-dashboard-module-mobile-details {
+		border: 0;
+		box-shadow: none;
+		margin: 0;
+		width: 100%;
+		background-color: unset;
+
+		.personal-dashboard-module-section-header {
+			text-align: center;
+			font-weight: normal;
+			font-size: 1.2em;
+			margin-top: 0;
+			margin-bottom: 0;
+
+			.personal-dashboard-module-header-text {
+				margin-right: 2em;
+			}
+
+			.personal-dashboard-module-header-icon {
+				.oo-ui-iconElement {
+					left: 0;
+				}
+			}
+		}
+
+		> .personal-dashboard-module-section {
+			padding-left: 1em;
+			padding-right: 1em;
+		}
+
+		.question-posted-on {
+			font-size: 0.8em;
+		}
+	}
+
+	&.personal-dashboard-mobile-summary {
+		// Enforce a minimum width to avoid breaking the connecting lines of the start modules.
+		min-width: 320px;
+		// Make sure the body is the containing block for fixed positioned elements such as dialogs
+		// Without this, overlays have incorrect widths on Firefox Android.
+		transform: translate( 0 );
+
+		&--opening-overlay {
+			// Hide the personal dashboard when the overlay should be shown directly
+			.client-js & {
+				display: none;
+			}
+		}
+		// stylelint-disable-next-line selector-max-id
+		#content .mw-first-heading {
+			// Need !important to override the other !important in
+			// skins/MinervaNeue/skinStyles/mobile.special.styles/minerva.less
+			font-family: 'Linux Libertine', 'Georgia', 'Times', serif !important; // stylelint-disable-line declaration-no-important
+			font-size: 1.7em;
+			font-weight: normal;
+		}
+
+		.minerva__tab-container {
+			border-bottom: @border-subtle;
+		}
+
+		.personal-dashboard-container {
+			flex-direction: column;
+
+			> a {
+				text-decoration: none;
+			}
+
+			> .personal-dashboard-module,
+			> a {
+				margin: 1em 0 0 0;
+				box-shadow: none;
+
+				// stylelint-disable-next-line no-descending-specificity
+				h2.personal-dashboard-module-section-header {
+					padding: 0;
+					margin-bottom: 0.625em;
+
+					// stylelint-disable-next-line no-descending-specificity
+					.personal-dashboard-module-header-text {
+						font-size: 0.729em;
+						line-height: 1.429em;
+						padding: 0;
+					}
+				}
+			}
+		}
+	}
+
+	&.personal-dashboard-desktop {
+		.personal-dashboard-container {
+			align-items: start;
+			.flex-wrap();
+
+			.personal-dashboard-group-sidebar {
+				.flex( 1, 1, 300px );
+				.flex-display();
+				.flex-wrap();
+
+				&-subgroup-primary,
+				&-subgroup-secondary {
+					.flex( 1, 0, 300px );
+				}
+
+				.personal-dashboard-module {
+					margin-right: 0;
+				}
+			}
+
+			.personal-dashboard-group-main {
+				.flex( 1, 0, 480px );
+
+				&-subgroup-primary {
+					.flex-display();
+					.flex-wrap();
+					width: 100%;
+
+					.personal-dashboard-module-start {
+						width: 100%;
+					}
+				}
+
+				&-subgroup-secondary {
+					// Define a minimum height so as to avoid height change once the
+					// card/controls/pager etc are loaded.
+					min-height: 631.533px;
+				}
+			}
+		}
+	}
+
+	&.personal-dashboard-mobile-details {
+		.heading-holder {
+			display: none;
+		}
+		// stylelint-disable-next-line selector-max-id
+		#content {
+			padding-bottom: 0;
+
+			// stylelint-disable-next-line selector-max-id
+			#bodyContent {
+				margin: 0;
+			}
+		}
+	}
+
+	.overlay-header .overlay-title {
+		// This padding is the same size as the back button on the left.
+		// Adding it makes the title centered on the screen instead of
+		// on the space between the back button and the right edge.
+		padding-right: 56px;
+		text-align: center;
+		font-weight: bold;
+	}
+}

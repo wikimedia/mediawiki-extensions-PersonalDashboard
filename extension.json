@@ -1,0 +1,136 @@
+{
+	"name": "PersonalDashboard",
+	"author": [
+		"Jason Sherman",
+		"[https://www.mediawiki.org/wiki/Growth/Team WMF Growth Team]"
+	],
+	"url": "https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:PersonalDashboard",
+	"descriptionmsg": "personal-dashboard-desc",
+	"license-name": "GPL-3.0-or-later",
+	"type": "other",
+	"requires": {
+		"MediaWiki": ">= 1.45",
+		"extensions": {
+			"CommunityConfiguration": "*"
+		}
+	},
+	"AutoloadNamespaces": {
+		"MediaWiki\\Extension\\PersonalDashboard\\": "src/"
+	},
+	"ServiceWiringFiles": [
+		"ServiceWiring.php"
+	],
+	"SpecialPages": {
+		"PersonalDashboard": "MediaWiki\\Extension\\PersonalDashboard\\Specials\\SpecialPersonalDashboard"
+	},
+	"ConfigRegistry": {
+		"PersonalDashboard": "MediaWiki\\Config\\GlobalVarConfig::newInstance"
+	},
+	"HookHandlers": {
+		"before-page-display": {
+			"class": "MediaWiki\\Extension\\PersonalDashboard\\HookHandler\\BeforePageDisplayHandler"
+		},
+		"skintemplatenav-universal": {
+			"class": "MediaWiki\\Extension\\PersonalDashboard\\HookHandler\\SkinTemplateNavigationUniversalHandler",
+			"services": [ "SpecialPageFactory" ]
+		},
+		"special-page": {
+			"class": "MediaWiki\\Extension\\PersonalDashboard\\HookHandler\\SpecialPageInitListHandler"
+		}
+	},
+	"Hooks": {
+		"BeforePageDisplay": [
+			"before-page-display"
+		],
+		"CommunityConfigurationSchemaBeforeEditor": "communityconfig",
+		"CommunityConfigurationProvider_initList": "communityconfig",
+		"MediaWikiServices": "mediawikiservices",
+		"MessageCacheFetchOverrides": "earlylifecycle",
+		"ParserFirstCallInit": "parserfunctions",
+		"SkinTemplateNavigation::Universal": "skintemplatenav-universal",
+		"SkinMinervaOptionsInit": [
+			"MediaWiki\\Extension\\PersonalDashboard\\HookHandler::onSkinMinervaOptionsInit"
+		],
+		"SpecialPage_initList": [
+			"config",
+			"special-page"
+		],
+		"UserSendConfirmationMail": "confirmEmail"
+	},
+	"MessagesDirs": {
+		"PersonalDashboard": [
+			"i18n"
+		]
+	},
+	"ExtensionMessagesFiles": {
+		"PersonalDashboardAlias": "PersonalDashboard.i18n.alias.php"
+	},
+	"ResourceModules": {
+		"ext.personalDashboard": {
+			"localBasePath": "resources/ext.personalDashboard",
+			"remoteExtPath": "PersonalDashboard/resources/personalDashboard",
+			"dependencies": [
+				"mediawiki.user",
+				"oojs-ui-core",
+				"oojs-ui-windows"
+			],
+			"styles": [],
+			"packageFiles": [
+				"init.js"
+			],
+			"messages": []
+		},
+		"ext.personalDashboard.mobileMenu.icons": {
+			"class": "MediaWiki\\ResourceLoader\\OOUIIconPackModule",
+			"selectorWithoutVariant": ".minerva-icon.minerva-icon--{name}",
+			"useMaskImage": true,
+			"defaultColor": "#54595d",
+			"icons": [
+				"newspaper"
+			]
+		},
+		"ext.personalDashboard.styles": {
+			"localBasePath": "resources/ext.personalDashboard.styles",
+			"remoteExtPath": "PersonalDashboard/resources/personalDashboard.styles",
+			"styles": [
+				"BaseModule.less",
+				"BannerModule.less",
+				"PersonalDashboard.less",
+				"../vue-components/Skeleton.less"
+			]
+		},
+		"ext.personalDashboard.icons": {
+			"class": "MediaWiki\\ResourceLoader\\ImageModule",
+			"localBasePath": "resources/images",
+			"selectorWithVariant": ".oo-ui-image-{variant}.oo-ui-icon-{name}",
+			"selectorWithoutVariant": ".oo-ui-icon-{name},.mw-ui-icon-{name}",
+			"variants": {
+				"progressive": {
+					"color": "#3366cc"
+				}
+			},
+			"images": {
+				"personal-dashboard-previous": {
+					"file": {
+						"ltr": "arrowPrevious-ltr.svg",
+						"rtl": "arrowPrevious-rtl.svg"
+					}
+				}
+			}
+		}
+	},
+	"config": {
+		"PersonalDashboardDeveloperSetup": {
+			"description": "Catch fewer errors for easier troubleshooting",
+			"value": false
+		},
+		"PersonalDashboardVariant": {
+			"description": "The dashboard variant served to users",
+			"value": null
+		}
+	},
+	"DatabaseVirtualDomains": [
+		"virtual-dashboard"
+	],
+	"manifest_version": 2
+}

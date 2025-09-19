@@ -1,0 +1,13 @@
+@import 'mediawiki.skin.variables.less';
+
+.personal-dashboard-module-banner {
+	width: 100%;
+	background-color: @background-color-warning-subtle;
+	border-color: @border-color-warning;
+
+	// Override strong padding-top: 0 rule for mobile from PersonalDashboard.less
+	// FIXME this should probably be handled centrally for modules with no header
+	body.mw-special-PersonalDashboard.personal-dashboard-mobile-summary .personal-dashboard-container &.personal-dashboard-module {
+		padding-top: 1em;
+	}
+}

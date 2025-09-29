@@ -4,6 +4,7 @@ namespace MediaWiki\Extension\PersonalDashboard;
 
 use MediaWiki\Context\IContextSource;
 use MediaWiki\Extension\PersonalDashboard\Modules\Banner;
+use MediaWiki\Extension\PersonalDashboard\Modules\ContentPolicies;
 use MediaWiki\MediaWikiServices;
 use OutOfBoundsException;
 
@@ -69,7 +70,16 @@ class PersonalDashboardModuleRegistry {
 					$dashboardServices->getPersonalDashboardWikiConfig(),
 				);
 			},
-
+			'contentPolicies' => static function (
+				MediaWikiServices $services,
+				IContextSource $context
+			) {
+				$dashboardServices = PersonalDashboardServices::wrap( $services );
+				return new ContentPolicies(
+					$context,
+					$dashboardServices->getPersonalDashboardWikiConfig()
+				);
+			}
 		];
 	}
 

@@ -59,7 +59,8 @@
 	},
 	"MessagesDirs": {
 		"PersonalDashboard": [
-			"i18n"
+			"i18n",
+			"i18n/ext.personalDashboard.contentPolicies"
 		]
 	},
 	"ExtensionMessagesFiles": {
@@ -87,6 +88,41 @@
 			"defaultColor": "#54595d",
 			"icons": [
 				"newspaper"
+			]
+		},
+		"ext.personalDashboard.contentPolicies": {
+			"localBasePath": "resources/ext.personalDashboard.contentPolicies",
+			"remoteExtPath": "PersonalDashboard/resources/personalDashboard.contentPolicies",
+			"class": "MediaWiki\\ResourceLoader\\CodexModule",
+			"codexComponents": [
+				"CdxPopover",
+				"CdxToggleButton"
+			],
+			"dependencies": [
+				"vue"
+			],
+			"messages": [
+				"content-policies-title",
+				"content-policies-description",
+				"content-policies-card-1-title",
+				"content-policies-card-1-description",
+				"content-policies-card-2-title",
+				"content-policies-card-2-description",
+				"content-policies-card-3-title",
+				"content-policies-card-3-description",
+				"content-policies-card-4-title",
+				"content-policies-card-4-description"
+			],
+			"packageFiles": [
+				"init.js",
+				"App.vue",
+				{
+					"name": "icons.json",
+					"callback": "MediaWiki\\ResourceLoader\\CodexModule::getIcons",
+					"callbackParam": [
+						"cdxIconLightbulb"
+					]
+				}
 			]
 		},
 		"ext.personalDashboard.styles": {

@@ -1,0 +1,17 @@
+{
+	"@metadata": {
+		"authors": [
+			"Dillon Hardy"
+		]
+	},
+	"content-policies-title": "Primary title inside the Content Policies module card.",
+	"content-policies-description": "Description text inside the Content Policies module card.",
+	"content-policies-card-1-title": "Brief title for the first content policy card.",
+	"content-policies-card-1-description": "Concise description for the first content policy card.",
+	"content-policies-card-2-title": "Brief title for the second content policy card.",
+	"content-policies-card-2-description": "Concise description for the second content policy card.",
+	"content-policies-card-3-title": "Brief title for the third content policy card.",
+	"content-policies-card-3-description": "Concise description for the third content policy card.",
+	"content-policies-card-4-title": "Brief title for the fourth content policy card.",
+	"content-policies-card-4-description": "Concise description for the fourth content policy card."
+}

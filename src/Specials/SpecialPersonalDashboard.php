@@ -115,6 +115,7 @@ class SpecialPersonalDashboard extends SpecialPage {
 	private function getModules( bool $isMobile, $par = '' ) {
 		$moduleConfig = [
 			'banner' => true,
+			'contentPolicies' => true
 		];
 
 		if ( $isMobile ) {
@@ -140,14 +141,14 @@ class SpecialPersonalDashboard extends SpecialPage {
 	 */
 	private function getModuleGroups(): array {
 		return [
-		'main' => [
-			'primary' => [ 'banner' ],
-		],
-		'sidebar' => [
-			'primary' => [],
-			'secondary' => [],
-		]
-
+			'main' => [
+				'primary' => [ 'banner' ],
+				'secondary' => [ 'contentPolicies' ]
+			],
+			'sidebar' => [
+				'primary' => [],
+				'secondary' => [],
+			]
 		];
 	}
 

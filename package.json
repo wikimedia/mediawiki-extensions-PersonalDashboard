@@ -3,7 +3,8 @@
 	"private": true,
 	"scripts": {
 		"coverage": "npm -s run test:unit -- --coverage",
-		"test": "npm run lint",
+		"test": "npm -s run lint && npm -s run test:unit",
+		"test:unit": "vitest run --silent false",
 		"lint": "npm -s run lint:js && npm -s run lint:styles && npm -s run lint:i18n",
 		"lint:fix": "npm -s run lint:fix:js && npm -s run lint:fix:styles && npm -s run lint:i18n",
 		"lint:fix:js": "npm -s run lint:js -- --fix",
@@ -13,10 +14,20 @@
 		"lint:i18n": "banana-checker --requireLowerCase=0 i18n/"
 	},
 	"devDependencies": {
-		"eslint-config-wikimedia": "0.31.0",
-		"grunt-banana-checker": "0.13.0",
-		"grunt-eslint": "24.3.0",
-		"grunt-stylelint": "0.20.1",
-		"stylelint-config-wikimedia": "0.18.0"
+		"@vitejs/plugin-vue": "^6.0.1",
+		"@vitest/coverage-v8": "^4.0.5",
+		"@vue/test-utils": "^2.4.6",
+		"@wikimedia/codex": "^2.3.2",
+		"@wikimedia/codex-icons": "^2.3.2",
+		"eslint-config-wikimedia": "^0.31.0",
+		"grunt-banana-checker": "^0.13.0",
+		"grunt-eslint": "^24.3.0",
+		"grunt-stylelint": "^0.20.1",
+		"happy-dom": "^20.0.10",
+		"less": "^4.4.2",
+		"stylelint-config-wikimedia": "^0.18.0",
+		"vitest": "^4.0.5",
+		"vitest-plugin-mediawiki": "git+https://gitlab.wikimedia.org/repos/modtools/vitest-plugin.git",
+		"vue": "^3.5.22"
 	}
 }

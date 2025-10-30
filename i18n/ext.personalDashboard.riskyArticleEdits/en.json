@@ -1,0 +1,18 @@
+{
+	"@metadata": {
+		"authors": [ "Katherine Graessle" ]
+	},
+	"personal-dashboard-risky-article-edits-header": "Recent activity",
+	"personal-dashboard-risky-article-edits-subheader": "Help to keep Wikipedia reliable for readers by reviewing the following edits, which may need attention.",
+	"personal-dashboard-risky-article-edits-footer-preamble": "View more edits in the",
+	"personal-dashboard-risky-article-edits-footer-link-text": "recent changes page",
+	"personal-dashboard-risky-article-edits-info-title": "Recent activity cards",
+	"personal-dashboard-risky-article-edits-info-subtitle": "Each card displays information about the edit including:",
+	"personal-dashboard-risky-article-edits-info-article-title": "Article title",
+	"personal-dashboard-risky-article-edits-info-author": "Author's username",
+	"personal-dashboard-risky-article-edits-edit-summary": "Edit summary: a brief explanation of what changes were made",
+	"personal-dashboard-risky-article-edits-bytes": "+ 4 Page byte size change",
+	"personal-dashboard-risky-article-edits-tags": "Tags that are used to identify a type of edit",
+	"personal-dashboard-risky-article-edits-tag-text": "Mobile edit",
+	"personal-dashboard-risky-article-edits-question-button": "Ask a moderation question"
+}

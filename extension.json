@@ -57,10 +57,36 @@
 		],
 		"UserSendConfirmationMail": "confirmEmail"
 	},
+	"attributes": {
+		"CommunityConfiguration": {
+			"Providers": {
+				"PersonalDashboardRiskyArticleEdits": {
+					"store": {
+						"type": "wikipage",
+						"args": [
+							"MediaWiki:PersonalDashboardRiskyArticleEdits.json"
+						]
+					},
+					"validator": {
+						"type": "jsonschema",
+						"args": [
+							"MediaWiki\\Extension\\PersonalDashboard\\Config\\Schemas\\RiskyArticleEditsSchema"
+						]
+					},
+					"type": "mw-config",
+					"options": {
+						"helpPage": "Help:PersonalDashboard/RiskyArticleEdits"
+					}
+				}
+			}
+		}
+	},
+
 	"MessagesDirs": {
 		"PersonalDashboard": [
 			"i18n",
-			"i18n/ext.personalDashboard.contentPolicies"
+			"i18n/ext.personalDashboard.contentPolicies",
+			"i18n/ext.personalDashboard.riskyArticleEdits"
 		]
 	},
 	"ExtensionMessagesFiles": {
@@ -123,6 +149,52 @@
 						"cdxIconLightbulb"
 					]
 				}
+			]
+		},
+		"ext.personalDashboard.riskyArticleEdits": {
+			"localBasePath": "resources/ext.personalDashboard.riskyArticleEdits",
+			"remoteExtPath": "PersonalDashboard/resources/personalDashboard.riskyArticleEdits",
+			"styles": [],
+			"packageFiles": [
+				"init.js",
+				"App.vue",
+				"components/ListCard.vue",
+				"components/RecentActivity.vue",
+				"components/ChangeNumber.vue",
+				"components/InfoPopover.vue",
+				"composables/useFetchActivityResult.js",
+				{
+					"name": "icons.json",
+					"callback": "MediaWiki\\ResourceLoader\\CodexModule::getIcons",
+					"callbackParam": [
+						"cdxIconArticle",
+						"cdxIconUserActive",
+						"cdxIconTextSummary",
+						"cdxIconInfo"
+					]
+				}
+			],
+			"messages": [
+				"personal-dashboard-risky-article-edits-subheader",
+				"personal-dashboard-risky-article-edits-footer-preamble",
+				"personal-dashboard-risky-article-edits-footer-link-text",
+				"personal-dashboard-risky-article-edits-info-title",
+				"personal-dashboard-risky-article-edits-info-article-title",
+				"personal-dashboard-risky-article-edits-info-author",
+				"personal-dashboard-risky-article-edits-edit-summary",
+				"personal-dashboard-risky-article-edits-bytes",
+				"personal-dashboard-risky-article-edits-tags",
+				"personal-dashboard-risky-article-edits-info-subtitle",
+				"personal-dashboard-risky-article-edits-tag-text",
+				"tag-mw-reverted",
+				"tag-mw-rollback",
+				"tag-mw-replace",
+				"tag-mw-manual-revert"
+
+			],
+			"dependencies": [
+				"vue",
+				"@wikimedia/codex"
 			]
 		},
 		"ext.personalDashboard.styles": {

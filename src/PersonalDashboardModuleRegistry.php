@@ -5,6 +5,7 @@ namespace MediaWiki\Extension\PersonalDashboard;
 use MediaWiki\Context\IContextSource;
 use MediaWiki\Extension\PersonalDashboard\Modules\Banner;
 use MediaWiki\Extension\PersonalDashboard\Modules\ContentPolicies;
+use MediaWiki\Extension\PersonalDashboard\Modules\RiskyArticleEdits;
 use MediaWiki\MediaWikiServices;
 use OutOfBoundsException;
 
@@ -79,7 +80,18 @@ class PersonalDashboardModuleRegistry {
 					$context,
 					$dashboardServices->getPersonalDashboardWikiConfig()
 				);
-			}
+			},
+			'riskyArticleEdits' => static function (
+				MediaWikiServices $services,
+				IContextSource $context
+			) {
+				$dashboardServices = PersonalDashboardServices::wrap( $services );
+				return new RiskyArticleEdits(
+					$context,
+					$dashboardServices->getPersonalDashboardWikiConfig(),
+					$services->getUserEditTracker(),
+				);
+			},
 		];
 	}
 

@@ -1,8 +1,9 @@
 import { test, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
-import App from '@resources/ext.personalDashboard.contentPolicies/App.vue';
+import InfoPopover from '@resources/ext.personalDashboard.riskyArticleEdits/components/InfoPopover.vue';
 
 test( 'mount component', () => {
-	const wrapper = mount( App );
+	const wrapper = mount( InfoPopover );
+
 	expect( wrapper.element ).toMatchSnapshot();
 } );

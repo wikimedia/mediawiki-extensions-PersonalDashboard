@@ -1,0 +1,45 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`mount component 1`] = `
+<div
+  data-v-app=""
+>
+  
+  ⧼personal-dashboard-risky-article-edits-subheader⧽ 
+  
+  <span
+    class="cdx-icon cdx-icon--medium"
+  >
+    <svg
+      aria-hidden="true"
+      height="20"
+      viewBox="0 0 20 20"
+      width="20"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <!--v-if-->
+      <g>
+        <path
+          d="M4 10a6 6 0 1012 0 6 6 0 00-12 0m6-8a8 8 0 110 16 8 8 0 010-16m1 7v5H9V9zm0-1V6H9v2z"
+        />
+      </g>
+    </svg>
+  </span>
+  <!--teleport start-->
+  <!--teleport end-->
+  
+  
+  <!--v-if-->
+  <!--v-if-->
+  
+   ⧼personal-dashboard-risky-article-edits-footer-preamble⧽ 
+  <a
+    href="Special:RecentChanges"
+    rel="noopener noreferrer"
+    target="_blank"
+  >
+    ⧼personal-dashboard-risky-article-edits-footer-link-text⧽
+  </a>
+  
+</div>
+`;

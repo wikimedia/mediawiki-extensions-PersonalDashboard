@@ -13,7 +13,6 @@ use MediaWiki\Language\RawMessage;
 use MediaWiki\Linker\LinkTarget;
 use MediaWiki\Logger\LoggerFactory;
 use MediaWiki\MediaWikiServices;
-use MediaWiki\Minerva\Skins\SkinMinerva;
 use MediaWiki\Parser\Sanitizer;
 use MediaWiki\Skin\Skin;
 use MediaWiki\Status\Status;
@@ -97,7 +96,7 @@ class Util {
 	}
 
 	/**
-	 * @param Skin|SkinMinerva $skin
+	 * @param Skin $skin
 	 * @return bool Whether the given skin is considered "mobile".
 	 */
 	public static function isMobile( Skin $skin ) {

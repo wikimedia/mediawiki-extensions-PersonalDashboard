@@ -1,0 +1,19 @@
+{
+	"@metadata": {
+		"authors": [
+			"Katherine Graessle"
+		]
+	},
+	"personal-dashboard-risky-article-edits-header": "Text header for the recent activity module",
+	"personal-dashboard-risky-article-edits-subheader": "Sub header text for the recent activity module",
+	"personal-dashboard-risky-article-edits-footer-preamble": "Text for the footer of the recent activity module",
+	"personal-dashboard-risky-article-edits-footer-link-text": "Footer link text for the recent activity module which sends the user to Special:RecentChanges with the revertrisklanguageagnostic query parameter set.",
+	"personal-dashboard-risky-article-edits-info-title": "Text for the Recent activity module title on the info popover",
+	"personal-dashboard-risky-article-edits-info-subtitle": "Text for the Recent activity module subtitle in the info popover",
+	"personal-dashboard-risky-article-edits-info-article-title": "Text for the Recent activity module explaining the article title in the info popover",
+	"personal-dashboard-risky-article-edits-info-author": "Text for the Recent activity module explaining the author's name in the info popover",
+	"personal-dashboard-risky-article-edits-edit-summary": "Text for the Recent activity module explaining the edit summary in the info popover",
+	"personal-dashboard-risky-article-edits-bytes": "Text for the Recent activity module explaining the page byte change in the info popover",
+	"personal-dashboard-risky-article-edits-tags": "Text for the Recent activity module explaining the tags in the info popover",
+	"personal-dashboard-risky-article-edits-tag-text": "Text for the example tag in the Recent activity module explaining the tags in the info popover"
+}

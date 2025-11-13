@@ -15,8 +15,10 @@ test( 'mount component', () => {
 			rcid: 0,
 			revid: 0,
 			user: 'TestUser',
-			parsedcomment: 'TestComment',
+			comment: 'TestComment',
 			tags: [ 'test' ],
+			timestamp: '',
+			pages : {}
 		},
 	} );
 

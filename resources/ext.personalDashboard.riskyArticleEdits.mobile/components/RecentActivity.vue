@@ -18,6 +18,7 @@
 </template>
 
 <script>
+// TODO: this is duplicated, can probably pull out into a common module
 const { defineComponent } = require( 'vue' );
 const ListCard = require( './ListCard.vue' );
 const {

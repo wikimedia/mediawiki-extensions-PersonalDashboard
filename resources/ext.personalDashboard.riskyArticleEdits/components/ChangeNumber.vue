@@ -1,33 +1,39 @@
 <template>
-	<span
-		class="ext-personal-dashboard-moderation-card-info-change-number"
-		:class="{
-			'ext-personal-dashboard-moderation-card-info-change-number-positive': oldlen - newlen > 0,
-			'ext-personal-dashboard-moderation-card-info-change-number-negative': oldlen - newlen < 0
-		}"
-	>
-		{{ getChangeNumber( oldlen, newlen ) }}
+	<span :class="changeClass">
+		{{ changeNumber }}
 	</span>
 </template>
 
 <script>
 const { defineComponent } = require( 'vue' );
+
 module.exports = defineComponent( {
 	name: 'ChangeNumber',
 	props: {
 		newlen: { type: Number, required: true },
-
 		oldlen: { type: Number, required: true }
 	},
-	methods: {
-		getChangeNumber: function ( oldlen, newlen ) {
-			const value = oldlen - newlen;
-			if ( value > 0 ) {
-				return `+${ value }`;
-			} else if ( value < 0 ) {
-				return `${ value }`;
+	computed: {
+		changeValue() {
+			return this.oldlen - this.newlen;
+		},
+		changeClass() {
+			if ( this.changeValue > 0 ) {
+				return 'ext-personal-dashboard-moderation-card-info-change-number-positive';
+			} else if ( this.changeValue < 0 ) {
+				return 'ext-personal-dashboard-moderation-card-info-change-number-negative';
+			} else {
+				return 'ext-personal-dashboard-moderation-card-info-change-number-none';
 			}
-			return '';
+		},
+		changeNumber() {
+			let formatted = mw.language.convertNumber( this.changeValue );
+
+			if ( this.changeValue > 0 ) {
+				formatted = '+' + formatted;
+			}
+
+			return formatted;
 		}
 	}
 } );
@@ -36,15 +42,15 @@ module.exports = defineComponent( {
 <style lang="less">
 @import 'mediawiki.skin.variables.less';
 
-.ext-personal-dashboard-moderation-card-info-change-number {
-	margin-left: auto;
-}
-
 .ext-personal-dashboard-moderation-card-info-change-number-positive {
 	color: @color-success;
 }
 
 .ext-personal-dashboard-moderation-card-info-change-number-negative {
 	color: @color-destructive;
+}
+
+.ext-personal-dashboard-moderation-card-info-change-number-none {
+	color: @color-subtle;
 }
 </style>

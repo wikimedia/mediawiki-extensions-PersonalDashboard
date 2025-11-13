@@ -5,41 +5,66 @@ exports[`mount component 1`] = `
   data-v-app=""
 >
   
-  ⧼personal-dashboard-risky-article-edits-subheader⧽ 
-  
-  <span
-    class="cdx-icon cdx-icon--medium"
+  <div
+    class="ext-personal-dashboard-recent-activity-card-header"
   >
-    <svg
-      aria-hidden="true"
-      height="20"
-      viewBox="0 0 20 20"
-      width="20"
-      xmlns="http://www.w3.org/2000/svg"
+    <h3>
+      ⧼personal-dashboard-risky-article-edits-header⧽
+    </h3>
+    
+    <button
+      aria-label="⧼personal-dashboard-risky-article-edits-info-button-aria-label⧽"
+      aria-pressed="false"
+      class="cdx-toggle-button cdx-toggle-button--quiet cdx-toggle-button--toggled-off cdx-toggle-button--icon-only"
+      type="button"
     >
-      <!--v-if-->
-      <g>
-        <path
-          d="M4 10a6 6 0 1012 0 6 6 0 00-12 0m6-8a8 8 0 110 16 8 8 0 010-16m1 7v5H9V9zm0-1V6H9v2z"
-        />
-      </g>
-    </svg>
-  </span>
-  <!--teleport start-->
-  <!--teleport end-->
-  
-  
-  <!--v-if-->
-  <!--v-if-->
-  
-   ⧼personal-dashboard-risky-article-edits-footer-preamble⧽ 
-  <a
-    href="Special:RecentChanges"
-    rel="noopener noreferrer"
-    target="_blank"
+      
+      <span
+        class="cdx-icon cdx-icon--medium"
+      >
+        <svg
+          aria-hidden="true"
+          height="20"
+          viewBox="0 0 20 20"
+          width="20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <!--v-if-->
+          <g>
+            <path
+              d="M10 0C4.477 0 0 4.477 0 10s4.477 10 10 10 10-4.477 10-10S15.523 0 10 0M9 5h2v2H9zm0 4h2v6H9z"
+            />
+          </g>
+        </svg>
+      </span>
+      
+    </button>
+    <!--teleport start-->
+    <!--v-if-->
+    <!--teleport end-->
+    
+  </div>
+  <div
+    class="ext-personal-dashboard-recent-activity-card-subheader"
   >
-    ⧼personal-dashboard-risky-article-edits-footer-link-text⧽
-  </a>
+    ⧼personal-dashboard-risky-article-edits-subheader⧽
+  </div>
+  
+  <!--v-if-->
+  <!--v-if-->
+  
+  <div
+    class="ext-personal-dashboard-recent-activity-footer"
+  >
+    ⧼personal-dashboard-risky-article-edits-footer-preamble⧽ 
+    <a
+      href="Special:RecentChanges"
+      rel="noopener noreferrer"
+      target="_blank"
+    >
+      ⧼personal-dashboard-risky-article-edits-footer-link-text⧽
+    </a>
+  </div>
   
 </div>
 `;

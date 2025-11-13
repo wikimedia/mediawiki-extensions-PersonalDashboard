@@ -1,83 +1,65 @@
 <template>
-	<cdx-icon :icon="cdxIconInfo" @click="open = true">
-	</cdx-icon>
-	<cdx-dialog
-		v-model:open="open"
+	<cdx-toggle-button
+		ref="triggerElement"
+		v-model="showPopover"
+		:aria-label="buttonAriaLabel"
+		quiet>
+		<cdx-icon :icon="cdxIconInfoFilled"></cdx-icon>
+	</cdx-toggle-button>
+
+	<cdx-popover
+		v-model:open="showPopover"
+		:anchor="triggerElement"
+		placement="bottom-start"
+		:render-in-place="true"
 		:title="title"
 		:use-close-button="true"
-		:default-action="defaultAction"
-		@default="open = false"
-	>
-		<p>{{ subtitle }}</p>
-		<cdx-icon
-			:icon="cdxIconArticle"
-			size="medium">
-		</cdx-icon>
-		{{ articleText }}
-		<br>
-		<cdx-icon
-			:icon="cdxIconUserActive"
-			size="medium">
-		</cdx-icon>
-		{{ authorText }}
-		<br>
-		<cdx-icon
-			:icon="cdxIconTextSummary"
-			size="medium">
-		</cdx-icon>
-		{{ editSummaryText }}
-		<br>
-		{{ byteText }}
-		<br>
-		<cdx-info-chip>{{ chipText }}</cdx-info-chip>
-		{{ tagsText }}
-	</cdx-dialog>
+		:icon="cdxIconInfoFilled">
+		{{ subtitle }}
+		<ul>
+			<li>{{ articleText }}</li>
+			<li>{{ editSummaryText }}</li>
+			<li>{{ authorText }}</li>
+			<li>{{ byteText }}</li>
+		</ul>
+	</cdx-popover>
 </template>
 
 <script>
 const { defineComponent, ref } = require( 'vue' );
-const {
-	CdxDialog,
-	CdxIcon,
-	CdxInfoChip
-} = require( '@wikimedia/codex' );
-const { cdxIconArticle, cdxIconUserActive, cdxIconTextSummary, cdxIconInfo } = require( '../icons.json' );
+const { CdxIcon, CdxPopover, CdxToggleButton } = require( '../codex.js' );
+const { cdxIconInfoFilled } = require( '../icons.json' );
+
 module.exports = defineComponent( {
 	name: 'InfoPopover',
-	components: {
-		CdxDialog,
-		CdxIcon,
-		CdxInfoChip
-	},
+	components: { CdxIcon, CdxPopover, CdxToggleButton },
 	setup() {
-		const open = ref( false );
-		const defaultAction = {
-			label: 'Cancel'
-		};
-		const title = mw.message( 'personal-dashboard-risky-article-edits-info-title' ).text();
-		const subtitle = mw.message( 'personal-dashboard-risky-article-edits-info-subtitle' ).text();
-		const articleText = mw.message( 'personal-dashboard-risky-article-edits-info-article-title' ).text();
-		const authorText = mw.message( 'personal-dashboard-risky-article-edits-info-author' ).text();
-		const editSummaryText = mw.message( 'personal-dashboard-risky-article-edits-edit-summary' ).text();
-		const byteText = mw.message( 'personal-dashboard-risky-article-edits-bytes' ).text();
-		const chipText = mw.message( 'personal-dashboard-risky-article-edits-tag-text' ).text();
-		const tagsText = mw.message( 'personal-dashboard-risky-article-edits-tags' ).text();
 		return {
-			title,
-			subtitle,
-			articleText,
-			authorText,
-			byteText,
-			tagsText,
-			chipText,
-			editSummaryText,
-			open,
-			defaultAction,
-			cdxIconArticle,
-			cdxIconTextSummary,
-			cdxIconUserActive,
-			cdxIconInfo
+			showPopover: ref( false ),
+			triggerElement: ref(),
+			title: mw.msg( 'personal-dashboard-risky-article-edits-info-title' ),
+			subtitle: mw.msg( 'personal-dashboard-risky-article-edits-info-subtitle' ),
+			articleText: mw.msg( 'personal-dashboard-risky-article-edits-info-article-title' ),
+			authorText: mw.msg( 'personal-dashboard-risky-article-edits-info-author' ),
+			byteText: mw.msg( 'personal-dashboard-risky-article-edits-info-bytes' ),
+			editSummaryText: mw.msg( 'personal-dashboard-risky-article-edits-info-edit-summary' ),
+			buttonAriaLabel: mw.msg( 'personal-dashboard-risky-article-edits-info-button-aria-label' ),
+			cdxIconInfoFilled
 		};
 	}
+
 } );
 </script>
+
+<style lang="less">
+@import 'mediawiki.skin.variables.less';
+
+.ext-personal-dashboard-moderation-card-header-icon {
+	align-self: center;
+	color: @color-subtle;
+}
+
+.ext-personal-dashboard-moderation-card-header-icon-popover {
+	color: @color-base;
+}
+</style>

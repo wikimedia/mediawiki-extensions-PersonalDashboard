@@ -5,6 +5,7 @@
 		"coverage": "npm -s run test:unit -- --coverage",
 		"test": "npm -s run lint && npm -s run test:unit",
 		"test:unit": "vitest run --silent false",
+		"test:update": "npm -s run test:unit -- -u",
 		"lint": "npm -s run lint:js && npm -s run lint:styles && npm -s run lint:i18n",
 		"lint:fix": "npm -s run lint:fix:js && npm -s run lint:fix:styles && npm -s run lint:i18n",
 		"lint:fix:js": "npm -s run lint:js -- --fix",
@@ -27,7 +28,7 @@
 		"less": "^4.4.2",
 		"stylelint-config-wikimedia": "^0.18.0",
 		"vitest": "^4.0.5",
-		"vitest-plugin-mediawiki": "git+https://gitlab.wikimedia.org/repos/modtools/vitest-plugin.git#v0.0.3",
+		"vitest-plugin-mediawiki": "git+https://gitlab.wikimedia.org/repos/modtools/vitest-plugin.git#v0.0.4",
 		"vue": "^3.5.22"
 	}
 }

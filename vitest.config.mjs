@@ -11,6 +11,10 @@ export default defineConfig( {
 	resolve: {
 		alias: {
 			'@resources': path.resolve(__dirname, './resources'),
+			'mediawiki.DateFormatter': path.resolve(
+				__dirname,
+				'./tests/vitest/mocks/mediawiki.DateFormatter.mjs'
+			)
 		}
 	}
 } );

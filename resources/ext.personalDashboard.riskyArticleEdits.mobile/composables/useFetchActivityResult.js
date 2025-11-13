@@ -6,7 +6,7 @@ const error = ref( null );
 
 function getRandomIndexes( filteredByScore ) {
 	const randomIndexes = [];
-	while ( randomIndexes.length < 10 ) {
+	while ( randomIndexes.length < 1 ) {
 		const randomIndex = Math.floor(
 			Math.random() * filteredByScore.length
 		);
@@ -16,7 +16,7 @@ function getRandomIndexes( filteredByScore ) {
 	}
 	return randomIndexes;
 }
-
+// TODO: this is just completely duped from ext.personalDashboard.riskyArticleEdits, DRY IT UP
 const fetchRecentActivity = async () => {
 	loading.value = true;
 	error.value = null;
@@ -61,7 +61,7 @@ const fetchRecentActivity = async () => {
 							change.oresscores.revertrisklanguageagnostic.true >= threshold
 					);
 					if ( filteredByScore ) {
-						if ( filteredByScore.length > 10 ) {
+						if ( filteredByScore.length > 1 ) {
 							const randomIndexes = getRandomIndexes( filteredByScore );
 							recentActivityResult.value.query.recentchanges = filteredByScore.filter(
 								( change, index ) => randomIndexes.includes( index )
@@ -74,7 +74,7 @@ const fetchRecentActivity = async () => {
 					recentActivityResult.value.query.recentchanges = [];
 				}
 			} else {
-				if ( filteredResults.length > 10 ) {
+				if ( filteredResults.length > 1 ) {
 					const randomIndexes = getRandomIndexes( filteredResults );
 					recentActivityResult.value.query.recentchanges = filteredResults.filter(
 						( change, index ) => randomIndexes.includes( index )

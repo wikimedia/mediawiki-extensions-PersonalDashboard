@@ -1,0 +1,10 @@
+{
+	"@metadata": {
+		"authors": [
+			"Katherine Graessle"
+		]
+	},
+	"personal-dashboard-risky-article-edits-mobile-summary-header": "Text header for the recent activity module when mobile summary view is enabled",
+	"personal-dashboard-risky-article-edits-mobile-summary-footer-link-text": "Footer link text for the recent activity module when mobile summary view is enabled which sends the user to Special:RecentChanges with the revertrisklanguageagnostic query parameter set.",
+	"personal-dashboard-risky-article-edits-mobile-summary-footer-button-aria-label": "aria-label for navigate to recent changes button"
+}

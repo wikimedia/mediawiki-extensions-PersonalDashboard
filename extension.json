@@ -80,7 +80,8 @@
 		"PersonalDashboard": [
 			"i18n",
 			"i18n/ext.personalDashboard.policiesGuidelines",
-			"i18n/ext.personalDashboard.riskyArticleEdits"
+			"i18n/ext.personalDashboard.riskyArticleEdits",
+			"i18n/ext.personalDashboard.riskyArticleEdits.mobile"
 		]
 	},
 	"ExtensionMessagesFiles": {
@@ -187,7 +188,13 @@
 		"ext.personalDashboard.riskyArticleEdits": {
 			"localBasePath": "resources/ext.personalDashboard.riskyArticleEdits",
 			"remoteExtPath": "PersonalDashboard/resources/personalDashboard.riskyArticleEdits",
-			"styles": [],
+			"class": "MediaWiki\\ResourceLoader\\CodexModule",
+			"codexComponents": [
+				"CdxCard",
+				"CdxIcon",
+				"CdxPopover",
+				"CdxToggleButton"
+			],
 			"packageFiles": [
 				"init.js",
 				"App.vue",
@@ -195,6 +202,7 @@
 				"components/RecentActivity.vue",
 				"components/ChangeNumber.vue",
 				"components/InfoPopover.vue",
+				"components/CreatorByline.vue",
 				"composables/useFetchActivityResult.js",
 				{
 					"name": "icons.json",
@@ -203,22 +211,22 @@
 						"cdxIconArticle",
 						"cdxIconUserActive",
 						"cdxIconTextSummary",
-						"cdxIconInfo"
+						"cdxIconInfoFilled"
 					]
 				}
 			],
 			"messages": [
+				"personal-dashboard-risky-article-edits-header",
 				"personal-dashboard-risky-article-edits-subheader",
 				"personal-dashboard-risky-article-edits-footer-preamble",
 				"personal-dashboard-risky-article-edits-footer-link-text",
 				"personal-dashboard-risky-article-edits-info-title",
 				"personal-dashboard-risky-article-edits-info-article-title",
 				"personal-dashboard-risky-article-edits-info-author",
-				"personal-dashboard-risky-article-edits-edit-summary",
-				"personal-dashboard-risky-article-edits-bytes",
-				"personal-dashboard-risky-article-edits-tags",
+				"personal-dashboard-risky-article-edits-info-edit-summary",
+				"personal-dashboard-risky-article-edits-info-bytes",
 				"personal-dashboard-risky-article-edits-info-subtitle",
-				"personal-dashboard-risky-article-edits-tag-text",
+				"personal-dashboard-risky-article-edits-list-card-no-comment-message",
 				"tag-mw-reverted",
 				"tag-mw-rollback",
 				"tag-mw-replace",
@@ -227,7 +235,40 @@
 			],
 			"dependencies": [
 				"vue",
-				"@wikimedia/codex"
+				"mediawiki.DateFormatter"
+			]
+		},
+		"ext.personalDashboard.riskyArticleEdits.mobile": {
+			"localBasePath": "resources/ext.personalDashboard.riskyArticleEdits.mobile",
+			"remoteExtPath": "PersonalDashboard/resources/personalDashboard.riskyArticleEdits.mobile",
+			"class": "MediaWiki\\ResourceLoader\\CodexModule",
+			"codexComponents": [
+				"CdxButton",
+				"CdxCard",
+				"CdxIcon"
+			],
+			"packageFiles": [
+				"init.js",
+				"App.vue",
+				"components/ListCard.vue",
+				"components/RecentActivity.vue",
+				"components/ChangeNumber.vue",
+				"composables/useFetchActivityResult.js",
+				{
+					"name": "icons.json",
+					"callback": "MediaWiki\\ResourceLoader\\CodexModule::getIcons",
+					"callbackParam": [
+						"cdxIconEdit"
+					]
+				}
+			],
+			"messages": [
+				"personal-dashboard-risky-article-edits-mobile-summary-header",
+				"personal-dashboard-risky-article-edits-mobile-summary-footer-link-text"
+			],
+			"dependencies": [
+				"vue",
+				"mediawiki.DateFormatter"
 			]
 		},
 		"ext.personalDashboard.styles": {

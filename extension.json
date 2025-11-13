@@ -27,9 +27,6 @@
 		"PersonalDashboard": "MediaWiki\\Config\\GlobalVarConfig::newInstance"
 	},
 	"HookHandlers": {
-		"before-page-display": {
-			"class": "MediaWiki\\Extension\\PersonalDashboard\\HookHandler\\BeforePageDisplayHandler"
-		},
 		"skintemplatenav-universal": {
 			"class": "MediaWiki\\Extension\\PersonalDashboard\\HookHandler\\SkinTemplateNavigationUniversalHandler",
 			"services": [ "SpecialPageFactory" ]
@@ -39,9 +36,6 @@
 		}
 	},
 	"Hooks": {
-		"BeforePageDisplay": [
-			"before-page-display"
-		],
 		"CommunityConfigurationSchemaBeforeEditor": "communityconfig",
 		"CommunityConfigurationProvider_initList": "communityconfig",
 		"MediaWikiServices": "mediawikiservices",
@@ -107,14 +101,12 @@
 			],
 			"messages": []
 		},
-		"ext.personalDashboard.mobileMenu.icons": {
+		"ext.personalDashboard.menuIcon": {
 			"class": "MediaWiki\\ResourceLoader\\OOUIIconPackModule",
-			"selectorWithoutVariant": ".minerva-icon.minerva-icon--{name}",
+			"selectorWithVariant": ".vector-icon.mw-ui-icon-wikimedia-{name}-{variant}",
+			"selectorWithoutVariant": ".vector-icon.mw-ui-icon-wikimedia-{name}, .minerva-icon--{name}",
 			"useMaskImage": true,
-			"defaultColor": "#54595d",
-			"icons": [
-				"newspaper"
-			]
+			"icons": [ "viewCompact" ]
 		},
 		"ext.personalDashboard.policiesGuidelines": {
 			"localBasePath": "resources/ext.personalDashboard.policiesGuidelines",

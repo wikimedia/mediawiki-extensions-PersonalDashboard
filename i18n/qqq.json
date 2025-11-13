@@ -5,6 +5,7 @@
 		]
 	},
 	"personal-dashboard-desc": "{{desc|name=PersonalDashboard|url=https://www.mediawiki.org/wiki/Extension:PersonalDashboard}}",
+	"personal-dashboard-link-title": "Title for the Special:PersonalDashboard link in the user menu.",
 	"personal-dashboard-specialpage-title": "Title for Special:PersonalDashboard, which is a place for users to access useful tools about contributing. Parameters:\n* $1 - Name of the current user. Can be used with GENDER.\n\n{{doc-personal-dashboard}}",
 	"personal-dashboard-module-no-js-fallback": "Message to display to user if JavaScript is not enabled.\n\n{{doc-personal-dashboard}}",
 	"personal-dashboard-tab": "Label of the personal dashboard tab.\n{{Identical|PersonalDashboard}}\n\n{{doc-personal-dashboard}}",

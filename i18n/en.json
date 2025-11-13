@@ -3,6 +3,7 @@
 		"authors": []
 	},
 	"personal-dashboard-desc": "An experimental dashboard for moderators",
+	"personal-dashboard-link-title": "Dashboard",
 	"personal-dashboard-specialpage-title": "{{GENDER:$1|Hello}}, {{bidi:$1}}!",
 	"personal-dashboard-tab": "PersonalDashboard",
 	"tooltip-pt-dashboard": "{{GENDER:|Your}} personal dashboard",

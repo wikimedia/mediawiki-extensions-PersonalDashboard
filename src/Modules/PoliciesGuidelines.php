@@ -9,7 +9,7 @@ use MediaWiki\Html\Html;
 /**
  * Class for the Moderation module.
  */
-class ContentPolicies extends BaseModule {
+class PoliciesGuidelines extends BaseModule {
 	/**
 	 * @param IContextSource $ctx
 	 * @param Config $wikiConfig
@@ -18,12 +18,12 @@ class ContentPolicies extends BaseModule {
 		IContextSource $ctx,
 		Config $wikiConfig
 	) {
-		parent::__construct( 'ContentPolicies', $ctx, $wikiConfig, false );
+		parent::__construct( 'policiesGuidelines', $ctx, $wikiConfig );
 	}
 
 	/** @inheritDoc */
 	protected function getHeaderText() {
-		return $this->msg( 'content-policies-title' )->text();
+		return $this->msg( 'personal-dashboard-policies-guidelines-title' )->text();
 	}
 
 	/** @inheritDoc */
@@ -33,16 +33,18 @@ class ContentPolicies extends BaseModule {
 
 	/** @inheritDoc */
 	protected function getBody() {
-		return Html::rawElement( 'div', [ 'id' => 'content-policies-vue-root' ] );
+		return Html::rawElement( 'div', [ 'id' => 'policies-guidelines-vue-root' ] );
 	}
 
 	/** @inheritDoc */
 	protected function getMobileSummaryBody() {
-		return $this->getBody();
+		return Html::rawElement( 'p', [], $this->msg(
+			'personal-dashboard-policies-guidelines-mobile-summary'
+		)->text() );
 	}
 
 	/** @inheritDoc */
 	protected function getModules() {
-		return [ 'ext.personalDashboard.contentPolicies' ];
+		return [ 'ext.personalDashboard.policiesGuidelines', 'ext.personalDashboard.policiesGuidelines' ];
 	}
 }

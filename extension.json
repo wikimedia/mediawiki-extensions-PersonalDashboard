@@ -85,7 +85,7 @@
 	"MessagesDirs": {
 		"PersonalDashboard": [
 			"i18n",
-			"i18n/ext.personalDashboard.contentPolicies",
+			"i18n/ext.personalDashboard.policiesGuidelines",
 			"i18n/ext.personalDashboard.riskyArticleEdits"
 		]
 	},
@@ -116,37 +116,78 @@
 				"newspaper"
 			]
 		},
-		"ext.personalDashboard.contentPolicies": {
-			"localBasePath": "resources/ext.personalDashboard.contentPolicies",
-			"remoteExtPath": "PersonalDashboard/resources/personalDashboard.contentPolicies",
+		"ext.personalDashboard.policiesGuidelines": {
+			"localBasePath": "resources/ext.personalDashboard.policiesGuidelines",
+			"remoteExtPath": "PersonalDashboard/resources/personalDashboard.policiesGuidelines",
 			"class": "MediaWiki\\ResourceLoader\\CodexModule",
 			"codexComponents": [
-				"CdxPopover",
-				"CdxToggleButton"
+				"CdxButton",
+				"CdxCard",
+				"CdxDialog",
+				"CdxIcon"
 			],
 			"dependencies": [
 				"vue"
 			],
 			"messages": [
-				"content-policies-title",
-				"content-policies-description",
-				"content-policies-card-1-title",
-				"content-policies-card-1-description",
-				"content-policies-card-2-title",
-				"content-policies-card-2-description",
-				"content-policies-card-3-title",
-				"content-policies-card-3-description",
-				"content-policies-card-4-title",
-				"content-policies-card-4-description"
+				"personal-dashboard-policies-guidelines-title",
+				"personal-dashboard-policies-guidelines-body",
+				"personal-dashboard-policies-guidelines-neutral-point-of-view-title",
+				"personal-dashboard-policies-guidelines-neutral-point-of-view-definition",
+				"personal-dashboard-policies-guidelines-neutral-point-of-view-example-1",
+				"personal-dashboard-policies-guidelines-neutral-point-of-view-answer-1-label",
+				"personal-dashboard-policies-guidelines-neutral-point-of-view-answer-1-text",
+				"personal-dashboard-policies-guidelines-neutral-point-of-view-example-2",
+				"personal-dashboard-policies-guidelines-neutral-point-of-view-answer-2-label",
+				"personal-dashboard-policies-guidelines-neutral-point-of-view-answer-2-text",
+				"personal-dashboard-policies-guidelines-no-original-research-title",
+				"personal-dashboard-policies-guidelines-no-original-research-definition",
+				"personal-dashboard-policies-guidelines-no-original-research-example-1",
+				"personal-dashboard-policies-guidelines-no-original-research-answer-1-label",
+				"personal-dashboard-policies-guidelines-no-original-research-answer-1-text",
+				"personal-dashboard-policies-guidelines-no-original-research-example-2",
+				"personal-dashboard-policies-guidelines-no-original-research-answer-2-label",
+				"personal-dashboard-policies-guidelines-no-original-research-answer-2-text",
+				"personal-dashboard-policies-guidelines-verifiability-title",
+				"personal-dashboard-policies-guidelines-verifiability-definition",
+				"personal-dashboard-policies-guidelines-verifiability-example-1",
+				"personal-dashboard-policies-guidelines-verifiability-answer-1-label",
+				"personal-dashboard-policies-guidelines-verifiability-answer-1-text",
+				"personal-dashboard-policies-guidelines-verifiability-example-2",
+				"personal-dashboard-policies-guidelines-verifiability-answer-2-label",
+				"personal-dashboard-policies-guidelines-verifiability-answer-2-text",
+				"personal-dashboard-policies-guidelines-verifiability-example-3",
+				"personal-dashboard-policies-guidelines-verifiability-answer-3-label",
+				"personal-dashboard-policies-guidelines-verifiability-answer-3-text",
+				"personal-dashboard-policies-guidelines-assume-good-faith-title",
+				"personal-dashboard-policies-guidelines-assume-good-faith-definition",
+				"personal-dashboard-policies-guidelines-assume-good-faith-example-1",
+				"personal-dashboard-policies-guidelines-assume-good-faith-answer-1-label",
+				"personal-dashboard-policies-guidelines-assume-good-faith-answer-1-text",
+				"personal-dashboard-policies-guidelines-assume-good-faith-example-2",
+				"personal-dashboard-policies-guidelines-assume-good-faith-answer-2-label",
+				"personal-dashboard-policies-guidelines-assume-good-faith-answer-2-text",
+				"personal-dashboard-policies-guidelines-examples-button",
+				"personal-dashboard-policies-guidelines-examples-progress",
+				"personal-dashboard-policies-guidelines-examples-header",
+				"personal-dashboard-policies-guidelines-next-button",
+				"personal-dashboard-policies-guidelines-previous-button",
+				"personal-dashboard-policies-guidelines-got-it-button"
 			],
 			"packageFiles": [
 				"init.js",
 				"App.vue",
+				"components/ExamplesDialog.vue",
+				"components/ListCard.vue",
 				{
 					"name": "icons.json",
 					"callback": "MediaWiki\\ResourceLoader\\CodexModule::getIcons",
 					"callbackParam": [
-						"cdxIconLightbulb"
+						"cdxIconAlert",
+						"cdxIconError",
+						"cdxIconNext",
+						"cdxIconPrevious",
+						"cdxIconSuccess"
 					]
 				}
 			]

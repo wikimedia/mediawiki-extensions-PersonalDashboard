@@ -100,7 +100,7 @@ class Util {
 	 * @return bool Whether the given skin is considered "mobile".
 	 */
 	public static function isMobile( Skin $skin ) {
-		return is_a( $skin, 'SkinMinerva' );
+		return $skin->getSkinName() === 'minerva';
 	}
 
 	/**

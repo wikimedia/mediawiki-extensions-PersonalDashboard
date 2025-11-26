@@ -116,7 +116,8 @@ class SpecialPersonalDashboard extends SpecialPage {
 		$moduleConfig = [
 			'banner' => true,
 			'riskyArticleEdits' => true,
-			'policiesGuidelines' => true
+			'policiesGuidelines' => true,
+			'impact' => true
 		];
 
 		if ( $isMobile ) {
@@ -147,8 +148,8 @@ class SpecialPersonalDashboard extends SpecialPage {
 				'secondary' => []
 			],
 			'sidebar' => [
-				'primary' => [],
-				'secondary' => [ 'policiesGuidelines' ],
+				'primary' => [ 'policiesGuidelines', 'impact' ],
+				'secondary' => [],
 			]
 		];
 	}

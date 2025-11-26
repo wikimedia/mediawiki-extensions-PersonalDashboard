@@ -4,6 +4,7 @@ namespace MediaWiki\Extension\PersonalDashboard;
 
 use MediaWiki\Context\IContextSource;
 use MediaWiki\Extension\PersonalDashboard\Modules\Banner;
+use MediaWiki\Extension\PersonalDashboard\Modules\Impact;
 use MediaWiki\Extension\PersonalDashboard\Modules\PoliciesGuidelines;
 use MediaWiki\Extension\PersonalDashboard\Modules\RiskyArticleEdits;
 use MediaWiki\MediaWikiServices;
@@ -69,6 +70,17 @@ class PersonalDashboardModuleRegistry {
 				return new Banner(
 					$context,
 					$dashboardServices->getPersonalDashboardWikiConfig(),
+				);
+			},
+			'impact' => static function (
+				MediaWikiServices $services,
+				IContextSource $context
+			) {
+				$dashboardServices = PersonalDashboardServices::wrap( $services );
+				return new Impact(
+					$context,
+					$dashboardServices->getPersonalDashboardWikiConfig(),
+					$services->getConnectionProvider()
 				);
 			},
 			'policiesGuidelines' => static function (

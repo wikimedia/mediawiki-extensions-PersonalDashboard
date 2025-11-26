@@ -3,7 +3,7 @@
 exports[`mount component 1`] = `
 <a
   class="cdx-card cdx-card--is-link ext-personal-dashboard-moderation-card"
-  href="TestTitle"
+  href="/w/index.php?title=TestTitle&curid=0&diff=0&oldid=0"
   target="_blank"
 >
   <!--v-if-->
@@ -63,7 +63,7 @@ exports[`mount component 1`] = `
           
           <a
             class="cdx-link mw-userlink"
-            href="User:TestUser"
+            href="/w/index.php?title=User%3ATestUser"
             target="_blank"
           >
             TestUser

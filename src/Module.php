@@ -359,7 +359,7 @@ abstract class Module implements IModule {
 	}
 
 	/**
-	 * @return IconWidget The navigation icon.
+	 * @return IconWidget|null The navigation icon.
 	 */
 	protected function getNavIcon() {
 		return new IconWidget( [
@@ -374,7 +374,9 @@ abstract class Module implements IModule {
 	 *
 	 * @return string HTML content of the body
 	 */
-	abstract protected function getMobileSummaryBody();
+	protected function getMobileSummaryBody() {
+		return $this->getBody();
+	}
 
 	/**
 	 * Provide optional subheader for the module
@@ -453,7 +455,9 @@ abstract class Module implements IModule {
 	 *
 	 * @return string
 	 */
-	abstract protected function getHeaderIconName();
+	protected function getHeaderIconName() {
+		return '';
+	}
 
 	/**
 	 * @return bool Whether the header icon should be inverted.

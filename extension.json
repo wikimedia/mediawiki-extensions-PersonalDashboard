@@ -79,6 +79,7 @@
 	"MessagesDirs": {
 		"PersonalDashboard": [
 			"i18n",
+			"i18n/ext.personalDashboard.impact",
 			"i18n/ext.personalDashboard.policiesGuidelines",
 			"i18n/ext.personalDashboard.riskyArticleEdits",
 			"i18n/ext.personalDashboard.riskyArticleEdits.mobile"
@@ -108,6 +109,39 @@
 			"selectorWithoutVariant": ".vector-icon.mw-ui-icon-wikimedia-{name}, .minerva-icon--{name}",
 			"useMaskImage": true,
 			"icons": [ "viewCompact" ]
+		},
+		"ext.personalDashboard.impact": {
+			"localBasePath": "resources/ext.personalDashboard.impact",
+			"remoteExtPath": "PersonalDashboard/resources/personalDashboard.impact",
+			"class": "MediaWiki\\ResourceLoader\\CodexModule",
+			"codexComponents": [
+				"CdxButton",
+				"CdxIcon",
+				"CdxPopover"
+			],
+			"dependencies": [
+				"vue"
+			],
+			"messages": [
+				"personal-dashboard-impact-thanks-sent",
+				"personal-dashboard-impact-edits-reviewed",
+				"personal-dashboard-impact-edits-reviewed-description",
+				"personal-dashboard-impact-info-button"
+			],
+			"packageFiles": [
+				"init.js",
+				"App.vue",
+				{
+					"name": "icons.json",
+					"callback": "MediaWiki\\ResourceLoader\\CodexModule::getIcons",
+					"callbackParam": [
+						"cdxIconCheckAll",
+						"cdxIconInfo",
+						"cdxIconInfoFilled",
+						"cdxIconUserTalk"
+					]
+				}
+			]
 		},
 		"ext.personalDashboard.policiesGuidelines": {
 			"localBasePath": "resources/ext.personalDashboard.policiesGuidelines",

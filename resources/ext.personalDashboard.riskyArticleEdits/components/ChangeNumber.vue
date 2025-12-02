@@ -43,11 +43,11 @@ module.exports = defineComponent( {
 @import 'mediawiki.skin.variables.less';
 
 .ext-personal-dashboard-moderation-card-info-change-number-positive {
-	color: @color-success;
+	color: @color-content-added;
 }
 
 .ext-personal-dashboard-moderation-card-info-change-number-negative {
-	color: @color-destructive;
+	color: @color-content-removed;
 }
 
 .ext-personal-dashboard-moderation-card-info-change-number-none {

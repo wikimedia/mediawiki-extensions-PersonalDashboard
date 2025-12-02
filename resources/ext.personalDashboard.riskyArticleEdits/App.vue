@@ -10,14 +10,7 @@
 
 	<recent-activity></recent-activity>
 
-	<div class="ext-personal-dashboard-recent-activity-footer">
-		{{ footer }}
-		<a
-			:href="footerUrl"
-			target="_blank"
-			rel="noopener noreferrer">
-			{{ footerLinkText }}
-		</a>
+	<div class="ext-personal-dashboard-recent-activity-footer" v-html="footer">
 	</div>
 </template>
 
@@ -38,12 +31,6 @@ module.exports = defineComponent( {
 		},
 		footer() {
 			return mw.message( 'personal-dashboard-risky-article-edits-footer-preamble' ).parse();
-		},
-		footerUrl() {
-			return mw.util.getUrl( 'Special:RecentChanges', { revertrisklanguageagnostic: 'all' } );
-		},
-		footerLinkText() {
-			return mw.message( 'personal-dashboard-risky-article-edits-footer-link-text' ).parse();
 		}
 	}
 } );

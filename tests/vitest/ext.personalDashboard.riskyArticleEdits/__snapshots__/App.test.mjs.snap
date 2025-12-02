@@ -56,14 +56,7 @@ exports[`mount component 1`] = `
   <div
     class="ext-personal-dashboard-recent-activity-footer"
   >
-    ⧼personal-dashboard-risky-article-edits-footer-preamble⧽ 
-    <a
-      href="Special:RecentChanges"
-      rel="noopener noreferrer"
-      target="_blank"
-    >
-      ⧼personal-dashboard-risky-article-edits-footer-link-text⧽
-    </a>
+    ⧼personal-dashboard-risky-article-edits-footer-preamble⧽
   </div>
   
 </div>

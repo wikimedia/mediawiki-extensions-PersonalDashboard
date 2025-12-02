@@ -10,5 +10,5 @@
 	"prefs-dashboard": "Personal personal dashboard features",
 	"personal-dashboard-enable": "Display personal dashboard",
 	"personal-dashboard-module-no-js-fallback": "Please enable JavaScript to view this component.",
-	"personal-dashboard-enable-preference": "To enable the personal dashboard, visit your \"Personal personal dashboard features\" settings in [[Special:Preferences#mw-prefsection-personal-dashboard|Preferences]]."
+	"personal-dashboard-enable-preference": "To enable the personal dashboard, visit your {{int:prefs-dashboard}} settings in [[Special:Preferences#mw-prefsection-personal-dashboard|Preferences]]."
 }

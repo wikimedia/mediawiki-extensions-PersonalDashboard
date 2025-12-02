@@ -15,7 +15,7 @@ module.exports = defineComponent( {
 	},
 	computed: {
 		changeValue() {
-			return this.oldlen - this.newlen;
+			return this.newlen - this.oldlen;
 		},
 		changeClass() {
 			if ( this.changeValue > 0 ) {

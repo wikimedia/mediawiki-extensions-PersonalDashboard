@@ -25,8 +25,9 @@
 						<span>∙</span>
 						{{ comment }}
 					</span>
-
-					<span v-else class="ext-personal-dashboard-moderation-card-missing-comment-message">
+					<span
+						v-else
+						class="ext-personal-dashboard-moderation-card-missing-comment-message">
 						<change-number :oldlen :newlen></change-number>
 						<span>∙</span>
 						{{ missingCommentMessage }}
@@ -52,7 +53,7 @@ const { defineComponent } = require( 'vue' );
 const { CdxCard } = require( '../codex.js' );
 const ChangeNumber = require( './ChangeNumber.vue' );
 const CreatorByline = require( './CreatorByline.vue' );
-const { formatTimeAndDate } = require( 'mediawiki.DateFormatter' );
+const { formatDate, formatTime } = require( 'mediawiki.DateFormatter' );
 
 module.exports = defineComponent( {
 	name: 'ListCard',
@@ -95,18 +96,18 @@ module.exports = defineComponent( {
 		},
 		timestampFormatted() {
 			const changeDateTimestamp = new Date( Date.parse( this.timestamp ) );
-			const changeDateFormatted = formatTimeAndDate( changeDateTimestamp );
 			const todayDate = new Date();
 			todayDate.setHours( 0, 0, 0, 0 );
-
-			if ( changeDateTimestamp <= todayDate ) {
-				return `${ changeDateFormatted.split( ',' )[ 1 ] }`;
+			if ( changeDateTimestamp >= todayDate ) {
+				return mw.message( 'personal-dashboard-risky-article-edits-info-time-text-today',
+					[ formatTime( changeDateTimestamp ) ] ).parse();
+			} else {
+				return `${ formatDate( changeDateTimestamp ) }`;
 			}
-
-			return `${ changeDateFormatted }`;
 		},
 		description() {
-			return ( this.pages && this.pages[ this.pageid ] && this.pages[ this.pageid ].description ) ?
+			return ( this.pages && this.pages[ this.pageid ] &&
+				this.pages[ this.pageid ].description ) ?
 				this.pages[ this.pageid ].description : '';
 		},
 		isTempUser() {

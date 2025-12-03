@@ -1,4 +1,3 @@
-import path from 'path';
 import { defineConfig } from 'vitest/config';
 import mediawiki from 'vitest-plugin-mediawiki';
 import vue from '@vitejs/plugin-vue';
@@ -10,11 +9,8 @@ export default defineConfig( {
 	},
 	resolve: {
 		alias: {
-			'@resources': path.resolve(__dirname, './resources'),
-			'mediawiki.DateFormatter': path.resolve(
-				__dirname,
-				'./tests/vitest/mocks/mediawiki.DateFormatter.mjs'
-			)
+			'@resources': '/resources',
+			'mediawiki.DateFormatter': '/tests/vitest/mocks/mediawiki.DateFormatter.mjs'
 		}
 	}
 } );

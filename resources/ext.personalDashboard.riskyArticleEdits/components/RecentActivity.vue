@@ -7,7 +7,12 @@
 		<p>Error: {{ error.message }}</p>
 	</div>
 
-	<div v-if="recentActivityResult">
+	<div
+		v-if="recentActivityResult &&
+			recentActivityResult.query &&
+			recentActivityResult.query.recentchanges &&
+			recentActivityResult.query.pages
+		">
 		<list-card
 			v-for="rc in recentActivityResult.query.recentchanges"
 			v-bind="rc"

@@ -222,6 +222,7 @@
 				"personal-dashboard-risky-article-edits-info-title",
 				"personal-dashboard-risky-article-edits-info-article-title",
 				"personal-dashboard-risky-article-edits-info-author",
+				"personal-dashboard-risky-article-edits-info-time-text-today",
 				"personal-dashboard-risky-article-edits-info-edit-summary",
 				"personal-dashboard-risky-article-edits-info-bytes",
 				"personal-dashboard-risky-article-edits-info-subtitle",
@@ -263,7 +264,9 @@
 			],
 			"messages": [
 				"personal-dashboard-risky-article-edits-mobile-summary-header",
-				"personal-dashboard-risky-article-edits-mobile-summary-footer-link-text"
+				"personal-dashboard-risky-article-edits-mobile-summary-footer-link-text",
+				"personal-dashboard-risky-article-edits-mobile-byte-text",
+				"personal-dashboard-risky-article-edits-mobile-user-text"
 			],
 			"dependencies": [
 				"vue",

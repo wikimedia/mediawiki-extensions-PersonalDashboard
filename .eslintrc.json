@@ -12,6 +12,12 @@
 	},
 	"overrides": [
 		{
+			"files": [ "**/*.mjs" ],
+			"parserOptions": {
+				"sourceType": "module"
+			}
+		},
+		{
 			"files": [
 				"**/*.vue"
 			],

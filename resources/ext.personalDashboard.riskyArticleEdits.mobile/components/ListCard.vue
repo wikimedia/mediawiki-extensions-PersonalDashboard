@@ -55,10 +55,10 @@ module.exports = defineComponent( {
 	},
 	computed: {
 		userMessage() {
-			return `${ this.user } changed`;
+			return mw.message( 'personal-dashboard-risky-article-edits-mobile-user-text', [ this.user ] );
 		},
 		articleMessage() {
-			return `bytes in the ${ this.title } article`;
+			return mw.message( 'personal-dashboard-risky-article-edits-mobile-byte-text', [ this.title ] );
 		}
 	}
 } );

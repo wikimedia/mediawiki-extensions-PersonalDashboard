@@ -66,7 +66,10 @@ class RiskyArticleEdits extends BaseModule {
 
 	/** @inheritDoc */
 	protected function getModules() {
-		return [ 'ext.personalDashboard.riskyArticleEdits', 'ext.personalDashboard.riskyArticleEdits.mobile' ];
+		if ( $this->getMode() == self::RENDER_MOBILE_SUMMARY ) {
+			return [ 'ext.personalDashboard.riskyArticleEdits.mobile' ];
+		}
+		return [ 'ext.personalDashboard.riskyArticleEdits' ];
 	}
 
 	/** @inheritDoc */

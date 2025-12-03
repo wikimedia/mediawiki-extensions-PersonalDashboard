@@ -9,9 +9,8 @@
 	</div>
 
 	<recent-activity></recent-activity>
-
-	<div class="ext-personal-dashboard-recent-activity-footer" v-html="footer">
-	</div>
+	<!-- eslint-disable-next-line vue/no-v-html -->
+	<div class="ext-personal-dashboard-recent-activity-footer" v-html="footer"></div>
 </template>
 
 <script>

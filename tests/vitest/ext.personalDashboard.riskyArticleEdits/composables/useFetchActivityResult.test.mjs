@@ -1,10 +1,10 @@
 import { test, expectTypeOf, vi, expect } from 'vitest';
-
-import {
+import { useFetchActivityResult } from '@resources/ext.personalDashboard.common';
+const {
 	recentActivityResult,
 	error,
 	fetchRecentActivity
-} from '@resources/ext.personalDashboard.riskyArticleEdits/composables/useFetchActivityResult.js';
+} = useFetchActivityResult();
 
 test( 'fetchRecentActivity with response', async () => {
 	const mockResponse = {

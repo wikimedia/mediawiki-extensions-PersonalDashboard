@@ -1,27 +1,26 @@
-import { test, expect, vi, beforeEach } from 'vitest';
+import { test, expect, beforeEach, vi } from 'vitest';
 import { mount } from '@vue/test-utils';
 import { ref } from 'vue';
 
-vi.mock( '@resources/ext.personalDashboard.riskyArticleEdits/composables/useFetchActivityResult.js', () => ( {
-	recentActivityResult: ref( null ),
-	loading: ref( false ),
-	error: ref( null ),
-	fetchRecentActivity: vi.fn()
-} ) );
+const recentActivityResult = ref( null );
+const loading = ref( true );
+const error = ref( null );
+const mockFetchRecentActivity = vi.fn();
 
-import RecentActivity from '@resources/ext.personalDashboard.riskyArticleEdits/components/RecentActivity.vue';
-import {
+vi.mock( 'ext.personalDashboard.common', () => ( { useFetchActivityResult: () => ( {
 	recentActivityResult,
 	loading,
 	error,
-	fetchRecentActivity
-} from '@resources/ext.personalDashboard.riskyArticleEdits/composables/useFetchActivityResult.js';
+	fetchRecentActivity: mockFetchRecentActivity
+} ) } ) );
+
+import RecentActivity from '@resources/ext.personalDashboard.riskyArticleEdits/components/RecentActivity.vue';
 
 beforeEach( () => {
 	recentActivityResult.value = null;
 	loading.value = true;
 	error.value = null;
-	fetchRecentActivity.mockReset();
+	mockFetchRecentActivity.mockReset();
 } );
 
 test( 'mount component', () => {

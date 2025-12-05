@@ -23,27 +23,28 @@
 </template>
 
 <script>
-const { defineComponent } = require( 'vue' );
+const { defineComponent, onMounted } = require( 'vue' );
 const ListCard = require( './ListCard.vue' );
-const {
-	recentActivityResult,
-	loading,
-	error,
-	fetchRecentActivity
-} = require( '../composables/useFetchActivityResult.js' );
+const { useFetchActivityResult } = require( 'ext.personalDashboard.common' );
 
 module.exports = defineComponent( {
 	name: 'RecentActivity',
 	components: { ListCard },
 	setup() {
+		const {
+			recentActivityResult,
+			loading,
+			error,
+			fetchRecentActivity
+		} = useFetchActivityResult();
+		onMounted( () => {
+			fetchRecentActivity( 10 );
+		} );
 		return {
 			recentActivityResult,
 			loading,
 			error
 		};
-	},
-	mounted() {
-		fetchRecentActivity();
 	}
 } );
 </script>

@@ -103,6 +103,17 @@
 			],
 			"messages": []
 		},
+		"ext.personalDashboard.common": {
+			"localBasePath": "resources/ext.personalDashboard.common",
+			"remoteExtPath": "PersonalDashboard/resources/personalDashboard.common",
+			"dependencies": [
+				"vue"
+			],
+			"packageFiles": [
+				"composables/useFetchActivityResult.js",
+				"index.js"
+			]
+		},
 		"ext.personalDashboard.menuIcon": {
 			"class": "MediaWiki\\ResourceLoader\\OOUIIconPackModule",
 			"selectorWithVariant": ".vector-icon.mw-ui-icon-wikimedia-{name}-{variant}",
@@ -237,7 +248,6 @@
 				"components/ChangeNumber.vue",
 				"components/InfoPopover.vue",
 				"components/CreatorByline.vue",
-				"composables/useFetchActivityResult.js",
 				{
 					"name": "icons.json",
 					"callback": "MediaWiki\\ResourceLoader\\CodexModule::getIcons",
@@ -269,7 +279,8 @@
 			],
 			"dependencies": [
 				"vue",
-				"mediawiki.DateFormatter"
+				"mediawiki.DateFormatter",
+				"ext.personalDashboard.common"
 			]
 		},
 		"ext.personalDashboard.riskyArticleEdits.mobile": {
@@ -287,7 +298,6 @@
 				"components/ListCard.vue",
 				"components/RecentActivity.vue",
 				"components/ChangeNumber.vue",
-				"composables/useFetchActivityResult.js",
 				{
 					"name": "icons.json",
 					"callback": "MediaWiki\\ResourceLoader\\CodexModule::getIcons",
@@ -304,7 +314,8 @@
 			],
 			"dependencies": [
 				"vue",
-				"mediawiki.DateFormatter"
+				"mediawiki.DateFormatter",
+				"ext.personalDashboard.common"
 			]
 		},
 		"ext.personalDashboard.styles": {

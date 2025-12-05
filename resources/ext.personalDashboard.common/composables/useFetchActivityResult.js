@@ -4,9 +4,9 @@ const recentActivityResult = ref( null );
 const loading = ref( false );
 const error = ref( null );
 
-function getRandomIndexes( filteredByScore ) {
+function getRandomIndexes( filteredByScore, limit ) {
 	const randomIndexes = [];
-	while ( randomIndexes.length < 10 ) {
+	while ( randomIndexes.length < limit ) {
 		const randomIndex = Math.floor(
 			Math.random() * filteredByScore.length
 		);
@@ -16,8 +16,7 @@ function getRandomIndexes( filteredByScore ) {
 	}
 	return randomIndexes;
 }
-
-const fetchRecentActivity = async () => {
+const fetchRecentActivity = async ( limit ) => {
 	loading.value = true;
 	error.value = null;
 	try {
@@ -54,6 +53,7 @@ const fetchRecentActivity = async () => {
 					thresholds[ wiki ].revertrisklanguageagnostic.revertrisk.min
 				) {
 					const threshold = thresholds[ wiki ].revertrisklanguageagnostic.revertrisk.min;
+
 					const filteredByScore = filteredResults.filter(
 						( change ) => change !== null &&
 							change.oresscores !== undefined &&
@@ -61,8 +61,8 @@ const fetchRecentActivity = async () => {
 							change.oresscores.revertrisklanguageagnostic.true >= threshold
 					);
 					if ( filteredByScore ) {
-						if ( filteredByScore.length > 10 ) {
-							const randomIndexes = getRandomIndexes( filteredByScore );
+						if ( filteredByScore.length > limit ) {
+							const randomIndexes = getRandomIndexes( filteredByScore, limit );
 							recentActivityResult.value.query.recentchanges = filteredByScore.filter(
 								( change, index ) => randomIndexes.includes( index )
 							);
@@ -74,8 +74,8 @@ const fetchRecentActivity = async () => {
 					recentActivityResult.value.query.recentchanges = [];
 				}
 			} else {
-				if ( filteredResults.length > 10 ) {
-					const randomIndexes = getRandomIndexes( filteredResults );
+				if ( filteredResults.length > limit ) {
+					const randomIndexes = getRandomIndexes( filteredResults, limit );
 					recentActivityResult.value.query.recentchanges = filteredResults.filter(
 						( change, index ) => randomIndexes.includes( index )
 					);
@@ -98,8 +98,10 @@ const fetchRecentActivity = async () => {
 };
 
 module.exports = {
-	recentActivityResult,
-	loading,
-	error,
-	fetchRecentActivity
+	useFetchActivityResult: () => ( {
+		recentActivityResult,
+		loading,
+		error,
+		fetchRecentActivity
+	} )
 };

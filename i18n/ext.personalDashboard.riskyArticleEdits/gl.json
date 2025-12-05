@@ -1,0 +1,18 @@
+{
+	"@metadata": {
+		"authors": [
+			"Toliño"
+		]
+	},
+	"personal-dashboard-risky-article-edits-header": "Revisar os cambios",
+	"personal-dashboard-risky-article-edits-subheader": "Axuda a manter a fiabilidade da Wikipedia revisando as seguintes edicións que poden precisar atención.",
+	"personal-dashboard-risky-article-edits-footer-preamble": "Ver máis edicións na páxina dos [{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}} cambios recentes]",
+	"personal-dashboard-risky-article-edits-info-title": "Revisar os cambios",
+	"personal-dashboard-risky-article-edits-info-subtitle": "Estas edicións, seleccionadas ao chou entre as feitas nos últimos 30 días, aínda non foron revisadas nin revertidas. Cada tarxeta pode mostrar a seguinte información:",
+	"personal-dashboard-risky-article-edits-info-article-title": "Título do artigo e descrición breve",
+	"personal-dashboard-risky-article-edits-info-author": "Nome de usuario do autor",
+	"personal-dashboard-risky-article-edits-info-edit-summary": "Un resumo dos cambios feitos na edición.",
+	"personal-dashboard-risky-article-edits-info-bytes": "±123 Cambio no tamaño da páxina en bytes",
+	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Sen resumo de edición",
+	"personal-dashboard-risky-article-edits-info-button-aria-label": "botón de información"
+}

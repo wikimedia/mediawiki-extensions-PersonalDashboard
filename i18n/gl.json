@@ -1,0 +1,16 @@
+{
+	"@metadata": {
+		"authors": [
+			"Toliño"
+		]
+	},
+	"personal-dashboard-desc": "Un panel experimental para a moderación",
+	"personal-dashboard-link-title": "Panel de control",
+	"personal-dashboard-specialpage-title": "{{GENDER:$1|Ola}}, {{bidi:$1}}!",
+	"personal-dashboard-tab": "Panel persoal",
+	"tooltip-pt-dashboard": "{{GENDER:|O teu}} panel persoal",
+	"prefs-dashboard": "Funcións do panel de control persoal",
+	"personal-dashboard-enable": "Mostrar o panel de control persoal",
+	"personal-dashboard-module-no-js-fallback": "Activa o JavaScript para ver este compoñente.",
+	"personal-dashboard-enable-preference": "Para activar o panel persoal, visita a túa configuración de «{{int:prefs-dashboard}}» nas [[Special:Preferences#mw-prefsection-personal-dashboard|preferencias]]."
+}

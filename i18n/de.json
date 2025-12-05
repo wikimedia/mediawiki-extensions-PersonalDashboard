@@ -1,0 +1,14 @@
+{
+	"@metadata": {
+		"authors": []
+	},
+	"personal-dashboard-desc": "Ein experimentelles Dashboard für Moderatoren",
+	"personal-dashboard-link-title": "Dashboard",
+	"personal-dashboard-specialpage-title": "{{GENDER:$1|Hallo}}, {{bidi:$1}}!",
+	"personal-dashboard-tab": "Persönliches Dashboard",
+	"tooltip-pt-dashboard": "{{GENDER:|Dein}} persönliches Dashboard",
+	"prefs-dashboard": "Funktionen des persönlichen Dashboards",
+	"personal-dashboard-enable": "Persönliches Dashboard anzeigen",
+	"personal-dashboard-module-no-js-fallback": "Bitte aktiviere JavaScript, um diese Komponente zu sehen.",
+	"personal-dashboard-enable-preference": "Um das persönliche Dashboard zu aktivieren, rufe deine {{int:prefs-dashboard}}-Einstellungen unter [[Special:Preferences#mw-prefsection-personal-dashboard|Einstellungen]] auf."
+}

@@ -12,7 +12,9 @@
 	},
 	"overrides": [
 		{
-			"files": [ "**/*.mjs" ],
+			"files": [
+				"**/*.mjs"
+			],
 			"parserOptions": {
 				"sourceType": "module"
 			}

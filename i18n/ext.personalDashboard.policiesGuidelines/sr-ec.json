@@ -1,0 +1,19 @@
+{
+	"@metadata": {
+		"authors": [
+			"Milicevic01"
+		]
+	},
+	"personal-dashboard-policies-guidelines-neutral-point-of-view-title": "Неутрална тачка гледишта",
+	"personal-dashboard-policies-guidelines-neutral-point-of-view-answer-1-label": "Није неутрално:",
+	"personal-dashboard-policies-guidelines-neutral-point-of-view-answer-2-label": "Неутрално:",
+	"personal-dashboard-policies-guidelines-no-original-research-answer-1-label": "Садржи оригинално истраживање:",
+	"personal-dashboard-policies-guidelines-verifiability-title": "Проверљивост",
+	"personal-dashboard-policies-guidelines-verifiability-answer-3-label": "Проверљиво:",
+	"personal-dashboard-policies-guidelines-examples-button": "Примери",
+	"personal-dashboard-policies-guidelines-examples-progress": "$1 од $2",
+	"personal-dashboard-policies-guidelines-examples-header": "Пример $1",
+	"personal-dashboard-policies-guidelines-next-button": "Следеће",
+	"personal-dashboard-policies-guidelines-previous-button": "Претходно",
+	"personal-dashboard-policies-guidelines-got-it-button": "Разумео"
+}

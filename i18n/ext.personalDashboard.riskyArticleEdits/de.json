@@ -11,6 +11,7 @@
 	"personal-dashboard-risky-article-edits-info-subtitle": "Diese Änderungen, die zufällig aus den letzten 30 Tagen ausgewählt wurden, wurden noch nicht überprüft oder rückgängig gemacht. Jede Karte kann die folgenden Informationen anzeigen:",
 	"personal-dashboard-risky-article-edits-info-article-title": "Artikeltitel und Kurzbeschreibung",
 	"personal-dashboard-risky-article-edits-info-author": "Benutzername des Autors",
+	"personal-dashboard-risky-article-edits-info-time-text-today": "$1, heute",
 	"personal-dashboard-risky-article-edits-info-edit-summary": "Eine Zusammenfassung der Änderungen in der Bearbeitung.",
 	"personal-dashboard-risky-article-edits-info-bytes": "±123 Byte Änderung der Seitengröße",
 	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Keine Bearbeitungszusammenfassung",

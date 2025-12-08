@@ -4,5 +4,7 @@
 	},
 	"personal-dashboard-risky-article-edits-mobile-summary-header": "Änderungen überprüfen",
 	"personal-dashboard-risky-article-edits-mobile-summary-footer-link-text": "Weitere Bearbeitungen ansehen",
+	"personal-dashboard-risky-article-edits-mobile-byte-text": "Bytes im Artikel $1",
+	"personal-dashboard-risky-article-edits-mobile-user-text": "$1 änderte",
 	"personal-dashboard-risky-article-edits-mobile-summary-footer-button-aria-label": "Zur Schaltfläche „Letzte Änderungen“ navigieren"
 }

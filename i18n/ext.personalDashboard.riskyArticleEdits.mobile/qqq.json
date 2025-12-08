@@ -6,7 +6,7 @@
 	},
 	"personal-dashboard-risky-article-edits-mobile-summary-header": "Text header for the recent activity module when mobile summary view is enabled",
 	"personal-dashboard-risky-article-edits-mobile-summary-footer-link-text": "Footer link text for the recent activity module when mobile summary view is enabled which sends the user to Special:RecentChanges with the revertrisklanguageagnostic query parameter set.",
-	"personal-dashboard-risky-article-edits-mobile-byte-text": "Text for displaying the article bytes changed on the mobile summary view \n\nParameters:\n* $1 - the article title \n",
-	"personal-dashboard-risky-article-edits-mobile-user-text": "Text for displaying the user who made the change on the mobile summary view \n\nParameters:\n* $1 - the user's name \n",
+	"personal-dashboard-risky-article-edits-mobile-byte-text": "Text for displaying the article bytes changed on the mobile summary view \n\nParameters:\n* $1 - the article title",
+	"personal-dashboard-risky-article-edits-mobile-user-text": "Text for displaying the user who made the change on the mobile summary view \n\nParameters:\n* $1 - the user's name",
 	"personal-dashboard-risky-article-edits-mobile-summary-footer-button-aria-label": "aria-label for navigate to recent changes button"
 }

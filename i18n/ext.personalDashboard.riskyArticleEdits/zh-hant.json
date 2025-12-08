@@ -1,0 +1,19 @@
+{
+	"@metadata": {
+		"authors": [
+			"Kly"
+		]
+	},
+	"personal-dashboard-risky-article-edits-header": "檢閱更改",
+	"personal-dashboard-risky-article-edits-subheader": "請檢閱以下可能需注意的編輯內容，以協助維持維基百科的可靠性。",
+	"personal-dashboard-risky-article-edits-footer-preamble": "在[{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}} 最近變更頁面]查看更多編輯內容",
+	"personal-dashboard-risky-article-edits-info-title": "檢閱更改",
+	"personal-dashboard-risky-article-edits-info-subtitle": "這些編輯是從過去 30 天內隨機選擇的，尚未經過檢閱或回退。每張卡片會顯示以下資訊：",
+	"personal-dashboard-risky-article-edits-info-article-title": "條目標題和簡短描述",
+	"personal-dashboard-risky-article-edits-info-author": "作者使用者名稱",
+	"personal-dashboard-risky-article-edits-info-time-text-today": "$1，今日",
+	"personal-dashboard-risky-article-edits-info-edit-summary": "修改編輯摘要。",
+	"personal-dashboard-risky-article-edits-info-bytes": "頁面位元組大小變化 ±123",
+	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "無編輯摘要",
+	"personal-dashboard-risky-article-edits-info-button-aria-label": "資訊按鈕"
+}

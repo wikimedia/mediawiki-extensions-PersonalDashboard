@@ -1,0 +1,12 @@
+{
+	"@metadata": {
+		"authors": [
+			"Volvox"
+		]
+	},
+	"personal-dashboard-policies-guidelines-neutral-point-of-view-answer-1-label": "Net neutral:",
+	"personal-dashboard-policies-guidelines-neutral-point-of-view-answer-2-label": "Neutral:",
+	"personal-dashboard-policies-guidelines-examples-button": "Beispiller",
+	"personal-dashboard-policies-guidelines-examples-progress": "$1 vu(n) $2",
+	"personal-dashboard-policies-guidelines-examples-header": "Beispill $1"
+}

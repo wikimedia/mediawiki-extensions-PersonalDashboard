@@ -145,11 +145,10 @@ class SpecialPersonalDashboard extends SpecialPage {
 		return [
 			'main' => [
 				'primary' => [ 'banner', 'riskyArticleEdits' ],
-				'secondary' => []
 			],
 			'sidebar' => [
-				'primary' => [ 'policiesGuidelines', 'impact' ],
-				'secondary' => [],
+				'primary' => [ 'policiesGuidelines' ],
+				'secondary' => [ 'impact' ],
 			]
 		];
 	}

@@ -91,7 +91,18 @@ class Impact extends BaseModule {
 
 	/** @inheritDoc */
 	protected function getBody() {
-		return Html::rawElement( 'div', [ 'id' => 'impact-vue-root' ] );
+		return implode( "\n", [
+			Html::rawElement( 'div',
+				[
+					'id' => 'impact-vue-root',
+					'class' => [ 'ext-personal-dashboard-app-root' ],
+				],
+			),
+			Html::element( 'p',
+				[ 'class' => 'personal-dashboard-module-no-js-fallback' ],
+				$this->msg( 'personal-dashboard-module-no-js-fallback' )->text()
+			)
+		] );
 	}
 
 	/** @inheritDoc */
@@ -109,10 +120,5 @@ class Impact extends BaseModule {
 	/** @inheritDoc */
 	protected function getModules() {
 		return [ 'ext.personalDashboard.impact' ];
-	}
-
-	/** @inheritDoc */
-	protected function getNavIcon() {
-		return null;
 	}
 }

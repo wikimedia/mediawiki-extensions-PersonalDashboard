@@ -8,7 +8,7 @@ exports[`mount component 1`] = `
   <button
     aria-label="⧼personal-dashboard-risky-article-edits-info-button-aria-label⧽"
     aria-pressed="false"
-    class="cdx-toggle-button cdx-toggle-button--quiet cdx-toggle-button--toggled-off cdx-toggle-button--icon-only"
+    class="cdx-toggle-button cdx-toggle-button--quiet cdx-toggle-button--toggled-off cdx-toggle-button--icon-only cdx-button--icon-only"
     type="button"
   >
     

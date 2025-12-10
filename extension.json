@@ -259,8 +259,12 @@
 					]
 				}
 			],
+			"styles": [
+				"Module.less"
+			],
 			"messages": [
 				"personal-dashboard-risky-article-edits-header",
+				"personal-dashboard-risky-article-edits-info-button-aria-label",
 				"personal-dashboard-risky-article-edits-subheader",
 				"personal-dashboard-risky-article-edits-footer-preamble",
 				"personal-dashboard-risky-article-edits-info-title",
@@ -327,25 +331,6 @@
 				"PersonalDashboard.less",
 				"../vue-components/Skeleton.less"
 			]
-		},
-		"ext.personalDashboard.icons": {
-			"class": "MediaWiki\\ResourceLoader\\ImageModule",
-			"localBasePath": "resources/images",
-			"selectorWithVariant": ".oo-ui-image-{variant}.oo-ui-icon-{name}",
-			"selectorWithoutVariant": ".oo-ui-icon-{name},.mw-ui-icon-{name}",
-			"variants": {
-				"progressive": {
-					"color": "#3366cc"
-				}
-			},
-			"images": {
-				"personal-dashboard-previous": {
-					"file": {
-						"ltr": "arrowPrevious-ltr.svg",
-						"rtl": "arrowPrevious-rtl.svg"
-					}
-				}
-			}
 		}
 	},
 	"config": {

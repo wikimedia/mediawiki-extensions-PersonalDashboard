@@ -1,16 +1,10 @@
 <template>
-	<div class="ext-personal-dashboard-recent-activity-card-header">
-		<h3>{{ header }}</h3>
+	<teleport
+		to=".personal-dashboard-module-riskyArticleEdits > .personal-dashboard-module-header > span"
+	>
 		<info-popover></info-popover>
-	</div>
-
-	<div class="ext-personal-dashboard-recent-activity-card-subheader">
-		{{ subheader }}
-	</div>
-
+	</teleport>
 	<recent-activity></recent-activity>
-	<!-- eslint-disable-next-line vue/no-v-html -->
-	<div class="ext-personal-dashboard-recent-activity-footer" v-html="footer"></div>
 </template>
 
 <script>
@@ -20,41 +14,15 @@ const InfoPopover = require( './components/InfoPopover.vue' );
 
 module.exports = defineComponent( {
 	name: 'RiskyArticleEdits',
-	components: { RecentActivity, InfoPopover },
-	computed: {
-		header() {
-			return mw.message( 'personal-dashboard-risky-article-edits-header' ).parse();
-		},
-		subheader() {
-			return mw.message( 'personal-dashboard-risky-article-edits-subheader' ).parse();
-		},
-		footer() {
-			return mw.message( 'personal-dashboard-risky-article-edits-footer-preamble' ).parse();
-		}
-	}
+	components: { RecentActivity, InfoPopover }
 } );
 </script>
 
 <style lang="less">
 @import 'mediawiki.skin.variables.less';
 
-.ext-personal-dashboard-recent-activity-card-header {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	padding-bottom: 0.5rem;
-
-	h3 {
-		padding: 0;
-		margin: 0;
-	}
-}
-
-.ext-personal-dashboard-recent-activity-card-subheader {
-	padding-bottom: 1rem;
-}
-
-.ext-personal-dashboard-recent-activity-footer {
-	padding-top: 1rem;
+.personal-dashboard-module-riskyArticleEdits .personal-dashboard-module-header .cdx-popover__body {
+	font-weight: @font-weight-normal;
+	font-size: @font-size-small;
 }
 </style>

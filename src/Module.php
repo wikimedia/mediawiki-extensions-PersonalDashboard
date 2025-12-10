@@ -9,7 +9,6 @@ use MediaWiki\Html\Html;
 use MediaWiki\Message\Message;
 use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\User\User;
-use OOUI\IconWidget;
 use Wikimedia\Message\MessageSpecifier;
 
 abstract class Module implements IModule {
@@ -313,10 +312,7 @@ abstract class Module implements IModule {
 	protected function getHeader() {
 		$html = '';
 		if ( $this->shouldHeaderIncludeIcon() ) {
-			$html .= $this->getHeaderIcon(
-				$this->getHeaderIconName(),
-				$this->shouldInvertHeaderIcon()
-			);
+			$html .= $this->getHeaderIcon();
 		}
 		$html .= $this->getHeaderTextElement();
 		return $html;
@@ -345,27 +341,29 @@ abstract class Module implements IModule {
 		return $icon . $text;
 	}
 
+	/**
+	 * @return string HTML string wrapper for the back icon.
+	 */
 	private function getBackIcon(): string {
 		return Html::rawElement(
 			'a',
 			[
 				'href' => SpecialPage::getTitleFor( 'PersonalDashboard' )->getLinkURL(),
+				'class' => [ static::BASE_CSS_CLASS . '-header-back-icon' ],
 			],
-			new IconWidget( [
-				'icon' => 'arrowPrevious',
-				'classes' => [ static::BASE_CSS_CLASS . '-header-back-icon' ],
-			] )
 		);
 	}
 
 	/**
-	 * @return IconWidget|null The navigation icon.
+	 * @return string HTML string wrapper for the navigation icon.
 	 */
 	protected function getNavIcon() {
-		return new IconWidget( [
-			'icon' => 'arrowNext',
-			'classes' => [ static::BASE_CSS_CLASS . '-header-nav-icon' ],
-		] );
+		return Html::element(
+			'span',
+			[
+				'class' => [ static::BASE_CSS_CLASS . '-header-nav-icon' ],
+			],
+		);
 	}
 
 	/**
@@ -427,49 +425,19 @@ abstract class Module implements IModule {
 	}
 
 	/**
-	 * @param string $name Name of the icon
-	 * @param bool $invert Whether the icon should be inverted
-	 * @return IconWidget
+	 * @return string HTML string wrapper for the header icon.
 	 */
-	protected function getHeaderIcon( $name, $invert ) {
-		$defaultIconClasses = [
-			self::BASE_CSS_CLASS . '-header-icon',
-			'icon-' . $name
-		];
-		$invertClasses = $invert ?
-			[ 'oo-ui-image-invert', 'oo-ui-checkboxInputWidget-checkIcon' ] :
-			[];
-
-		return new IconWidget( [
-			'icon' => $name,
-			// HACK: IconWidget doesn't let us set 'invert' => true, and setting
-			// 'classes' => [ 'oo-ui-image-invert' ] doesn't work either, because
-			// Theme::getElementClasses() will unset it again. So instead, trick that code into
-			// thinking this is a checkbox icon, which will cause it to invert the icon
-			'classes' => array_merge( $defaultIconClasses, $invertClasses )
-		] );
-	}
-
-	/**
-	 * Override this function to provide the name of the header icon.
-	 *
-	 * @return string
-	 */
-	protected function getHeaderIconName() {
-		return '';
-	}
-
-	/**
-	 * @return bool Whether the header icon should be inverted.
-	 */
-	protected function shouldInvertHeaderIcon() {
-		return false;
+	protected function getHeaderIcon() {
+		return Html::element(
+			'span',
+			[
+				'class' => [ static::BASE_CSS_CLASS . '-header-icon' ],
+			],
+		);
 	}
 
 	/**
 	 * Override this method if header should include the icon
-	 *
-	 * No styles provided by default! Remember to position the icon manually via CSS.
 	 *
 	 * @return bool Should header include the icon?
 	 */

@@ -53,11 +53,6 @@ class Banner extends BaseModule {
 	}
 
 	/** @inheritDoc */
-	protected function getHeaderIconName() {
-		return '';
-	}
-
-	/** @inheritDoc */
 	protected function getHeader() {
 		return '';
 	}

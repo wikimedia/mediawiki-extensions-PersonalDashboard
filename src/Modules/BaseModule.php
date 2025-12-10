@@ -129,8 +129,15 @@ abstract class BaseModule extends Module {
 	/**
 	 * @inheritDoc
 	 */
+	protected function getModules() {
+		return [];
+	}
+
+	/**
+	 * @inheritDoc
+	 */
 	protected function getModuleStyles() {
-		return [ 'oojs-ui.styles.icons-movement' ];
+		return [ 'ext.personalDashboard.styles' ];
 	}
 
 	/**

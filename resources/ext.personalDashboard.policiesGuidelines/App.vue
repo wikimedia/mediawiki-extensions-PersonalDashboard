@@ -1,7 +1,5 @@
 <template>
 	<div class="personal-dashboard-policies-guidelines__container">
-		<p>{{ $i18n( 'personal-dashboard-policies-guidelines-body' ).text() }}</p>
-
 		<div class="personal-dashboard-policies-guidelines__list">
 			<list-card
 				v-for="( pages, prefix ) in cards"

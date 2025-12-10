@@ -36,6 +36,32 @@ class RiskyArticleEdits extends BaseModule {
 	}
 
 	/** @inheritDoc */
+	protected function getSubheaderText() {
+		return $this->msg( 'personal-dashboard-risky-article-edits-subheader' );
+	}
+
+	/** @inheritDoc */
+	protected function shouldHeaderIncludeIcon(): bool {
+		return false;
+	}
+
+	/** @inheritDoc */
+	protected function getHeader() {
+		$html = $this->getHeaderTextElement();
+		if ( $this->shouldHeaderIncludeIcon() ) {
+			$html .= $this->getHeaderIcon();
+		} else {
+			$html .= Html::element( 'span' );
+		}
+		return $html;
+	}
+
+	/** @inheritDoc */
+	protected function getFooter() {
+		return $this->msg( 'personal-dashboard-risky-article-edits-footer-preamble' );
+	}
+
+	/** @inheritDoc */
 	protected function getBody() {
 		return implode( "\n", [
 			Html::rawElement( 'div',
@@ -70,16 +96,6 @@ class RiskyArticleEdits extends BaseModule {
 			return [ 'ext.personalDashboard.riskyArticleEdits.mobile', 'ext.personalDashboard.common' ];
 		}
 		return [ 'ext.personalDashboard.riskyArticleEdits', 'ext.personalDashboard.common' ];
-	}
-
-	/** @inheritDoc */
-	protected function getHeaderIconName() {
-		return '';
-	}
-
-	/** @inheritDoc */
-	protected function getHeader() {
-		return '';
 	}
 
 	/** @inheritDoc */

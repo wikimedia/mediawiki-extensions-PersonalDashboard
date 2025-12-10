@@ -3,6 +3,7 @@
 		ref="triggerElement"
 		v-model="showPopover"
 		:aria-label="buttonAriaLabel"
+		class="cdx-button--icon-only"
 		quiet>
 		<cdx-icon :icon="cdxIconInfoFilled"></cdx-icon>
 	</cdx-toggle-button>

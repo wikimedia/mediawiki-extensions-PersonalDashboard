@@ -27,13 +27,24 @@ class PoliciesGuidelines extends BaseModule {
 	}
 
 	/** @inheritDoc */
-	protected function getHeaderIconName() {
-		return 'chart';
+	protected function getSubheaderText() {
+		return $this->msg( 'personal-dashboard-policies-guidelines-body' )->text();
 	}
 
 	/** @inheritDoc */
 	protected function getBody() {
-		return Html::rawElement( 'div', [ 'id' => 'policies-guidelines-vue-root' ] );
+		return implode( "\n", [
+			Html::rawElement( 'div',
+				[
+					'id' => 'policies-guidelines-vue-root',
+					'class' => [ 'ext-personal-dashboard-app-root' ],
+				],
+			),
+			Html::element( 'p',
+				[ 'class' => 'personal-dashboard-module-no-js-fallback' ],
+				$this->msg( 'personal-dashboard-module-no-js-fallback' )->text()
+			)
+		] );
 	}
 
 	/** @inheritDoc */

@@ -47,17 +47,21 @@
 		}
 
 		&-nav-icon {
-			height: 0.8em;
+			.cdx-mixin-css-icon( @cdx-icon-arrow-next );
+		}
+
+		&-back-icon {
+			.cdx-mixin-css-icon( @cdx-icon-arrow-previous );
 		}
 	}
 
 	.personal-dashboard-module-subheader,
 	h3.personal-dashboard-module-subheader {
-		font-family: @personal-dashboardHeaderFont;
-		font-size: 1em;
-		font-weight: normal;
-		color: @color-subtle;
 		margin: 0;
+		padding: 0 0 1rem 0;
+		font-family: unset;
+		font-weight: unset;
+		font-size: unset;
 	}
 
 	&-text-normal {

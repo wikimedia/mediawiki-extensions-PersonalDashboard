@@ -1,0 +1,24 @@
+@import 'mediawiki.skin.variables.less';
+@import 'mediawiki.mixins';
+@import '../utils/variables.less';
+
+.personal-dashboard-module-riskyArticleEdits {
+	.personal-dashboard-module-header,
+	h2.personal-dashboard-module-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding-bottom: 0.5rem;
+
+		&-icon {
+			align-self: center;
+			color: @color-subtle;
+			.cdx-mixin-css-icon( @cdx-icon-info-filled );
+		}
+
+		&-text {
+			padding: 0;
+			margin: 0;
+		}
+	}
+}

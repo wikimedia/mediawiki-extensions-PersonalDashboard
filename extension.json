@@ -26,6 +26,9 @@
 	"ConfigRegistry": {
 		"PersonalDashboard": "MediaWiki\\Config\\GlobalVarConfig::newInstance"
 	},
+	"DefaultUserOptions": {
+		"personaldashboard-onboarding": 2
+	},
 	"HookHandlers": {
 		"skintemplatenav-universal": {
 			"class": "MediaWiki\\Extension\\PersonalDashboard\\HookHandler\\SkinTemplateNavigationUniversalHandler",
@@ -33,11 +36,15 @@
 		},
 		"special-page": {
 			"class": "MediaWiki\\Extension\\PersonalDashboard\\HookHandler\\SpecialPageInitListHandler"
+		},
+		"preferences": {
+			"class": "MediaWiki\\Extension\\PersonalDashboard\\HookHandler\\GetPreferencesHandler"
 		}
 	},
 	"Hooks": {
 		"CommunityConfigurationSchemaBeforeEditor": "communityconfig",
 		"CommunityConfigurationProvider_initList": "communityconfig",
+		"GetPreferences": "preferences",
 		"MediaWikiServices": "mediawikiservices",
 		"MessageCacheFetchOverrides": "earlylifecycle",
 		"ParserFirstCallInit": "parserfunctions",
@@ -75,11 +82,12 @@
 			}
 		}
 	},
-
 	"MessagesDirs": {
 		"PersonalDashboard": [
 			"i18n",
+			"i18n/ext.personalDashboard.common",
 			"i18n/ext.personalDashboard.impact",
+			"i18n/ext.personalDashboard.onboarding",
 			"i18n/ext.personalDashboard.policiesGuidelines",
 			"i18n/ext.personalDashboard.riskyArticleEdits",
 			"i18n/ext.personalDashboard.riskyArticleEdits.mobile"
@@ -89,37 +97,72 @@
 		"PersonalDashboardAlias": "PersonalDashboard.i18n.alias.php"
 	},
 	"ResourceModules": {
-		"ext.personalDashboard": {
-			"localBasePath": "resources/ext.personalDashboard",
-			"remoteExtPath": "PersonalDashboard/resources/personalDashboard",
-			"dependencies": [
-				"mediawiki.user",
-				"oojs-ui-core",
-				"oojs-ui-windows"
-			],
-			"styles": [],
-			"packageFiles": [
-				"init.js"
-			],
-			"messages": []
-		},
-		"ext.personalDashboard.common": {
-			"localBasePath": "resources/ext.personalDashboard.common",
-			"remoteExtPath": "PersonalDashboard/resources/personalDashboard.common",
-			"dependencies": [
-				"vue"
-			],
-			"packageFiles": [
-				"composables/useFetchActivityResult.js",
-				"index.js"
-			]
-		},
 		"ext.personalDashboard.menuIcon": {
 			"class": "MediaWiki\\ResourceLoader\\OOUIIconPackModule",
 			"selectorWithVariant": ".vector-icon.mw-ui-icon-wikimedia-{name}-{variant}",
 			"selectorWithoutVariant": ".vector-icon.mw-ui-icon-wikimedia-{name}, .minerva-icon--{name}",
 			"useMaskImage": true,
 			"icons": [ "viewCompact" ]
+		},
+		"ext.personalDashboard.common": {
+			"localBasePath": "resources/ext.personalDashboard.common",
+			"class": "MediaWiki\\ResourceLoader\\CodexModule",
+			"codexComponents": [
+				"CdxButton",
+				"CdxDialog",
+				"CdxIcon"
+			],
+			"dependencies": [
+				"vue"
+			],
+			"messages": [
+				"personal-dashboard-multi-step-dialog-progress",
+				"personal-dashboard-multi-step-dialog-next-button",
+				"personal-dashboard-multi-step-dialog-previous-button",
+				"personal-dashboard-multi-step-dialog-got-it-button"
+			],
+			"packageFiles": [
+				"index.js",
+				"components/MultiStepDialog.vue",
+				"composables/useFetchActivityResult.js",
+				{
+					"name": "icons.json",
+					"callback": "MediaWiki\\ResourceLoader\\CodexModule::getIcons",
+					"callbackParam": [
+						"cdxIconClose",
+						"cdxIconNext",
+						"cdxIconPrevious"
+					]
+				}
+			]
+		},
+		"ext.personalDashboard.onboarding": {
+			"localBasePath": "resources/ext.personalDashboard.onboarding",
+			"class": "MediaWiki\\ResourceLoader\\CodexModule",
+			"codexComponents": [
+				"CdxCheckbox"
+			],
+			"dependencies": [
+				"vue",
+				"ext.personalDashboard.common"
+			],
+			"messages": [
+				"personal-dashboard-onboarding-title",
+				"personal-dashboard-onboarding-dont-show-again",
+				"personal-dashboard-onboarding-step-1-title",
+				"personal-dashboard-onboarding-step-1-body",
+				"personal-dashboard-onboarding-step-1-alt",
+				"personal-dashboard-onboarding-step-2-title",
+				"personal-dashboard-onboarding-step-2-body",
+				"personal-dashboard-onboarding-step-2-alt",
+				"personal-dashboard-onboarding-step-3-title",
+				"personal-dashboard-onboarding-step-3-body",
+				"personal-dashboard-onboarding-step-3-alt"
+			],
+			"packageFiles": [
+				"init.js",
+				"App.vue"
+			]
 		},
 		"ext.personalDashboard.impact": {
 			"localBasePath": "resources/ext.personalDashboard.impact",

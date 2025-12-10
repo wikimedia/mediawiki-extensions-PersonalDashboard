@@ -1,0 +1,18 @@
+{
+	"@metadata": {
+		"authors": [
+			"Dillon Hardy"
+		]
+	},
+	"personal-dashboard-onboarding-title": "Your dashboard",
+	"personal-dashboard-onboarding-dont-show-again": "Don't show again",
+	"personal-dashboard-onboarding-step-1-title": "Welcome",
+	"personal-dashboard-onboarding-step-1-body": "You are one of the first to try out this new feature! This is a central place that helps you contribute to Wikipedia by surfacing open tasks and useful resources.",
+	"personal-dashboard-onboarding-step-1-alt": "Illustration of a page with three separate simplified dashboard panels.",
+	"personal-dashboard-onboarding-step-2-title": "Features",
+	"personal-dashboard-onboarding-step-2-body": "In this first version of the dashboard you can review edits that might need attention, learn about relevant policies and guidelines, and track relevant statistics.",
+	"personal-dashboard-onboarding-step-2-alt": "Illustration of three simplified dashboard panels being added to the page.",
+	"personal-dashboard-onboarding-step-3-title": "Share your feedback",
+	"personal-dashboard-onboarding-step-3-body": "Over the coming months we plan to personalise the features in the dashboard based on your editing activity, and add new modules. We want to make this a valuable feature for editors on your project. To share your feedback, we have provided a survey link at the top of the page.",
+	"personal-dashboard-onboarding-step-3-alt": "Illustration of a simplified dashboard where the top of the page has a darker blue section emphasizing the feedback link."
+}

@@ -1,5 +1,4 @@
-const { useFetchActivityResult } = require( './composables/useFetchActivityResult.js' );
+const MultiStepDialog = require( './components/MultiStepDialog.vue' );
+const useFetchActivityResult = require( './composables/useFetchActivityResult.js' );
 
-module.exports = {
-	useFetchActivityResult
-};
+module.exports = { MultiStepDialog, useFetchActivityResult };

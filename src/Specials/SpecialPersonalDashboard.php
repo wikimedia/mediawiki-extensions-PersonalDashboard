@@ -55,17 +55,23 @@ class SpecialPersonalDashboard extends SpecialPage {
 		$this->requireNamedUser();
 		parent::execute( $par );
 		$out = $this->getContext()->getOutput();
+
+		$out->addModuleStyles( 'ext.personalDashboard.styles' );
+		$out->addModules( 'ext.personalDashboard.onboarding' );
+
 		$this->isMobile = Util::isMobile( $out->getSkin() );
 		$out->addJsConfigVars( [
 			'wgPersonalDashboardPageviewToken' => $this->pageviewToken
 		] );
-		$out->addModules( 'ext.personalDashboard' );
 		$out->enableOOUI();
-		$out->addModuleStyles( [ 'ext.personalDashboard.styles' ] );
-		$out->addHTML( Html::openElement( 'div', [
-			'class' => 'personal-dashboard-container ' .
-				'personal-dashboard-container-user-variant-' . $this->variant
-		] ) );
+		$out->addHTML( Html::rawElement(
+			'div',
+			[
+				'class' => 'personal-dashboard-container ' .
+					'personal-dashboard-container-user-variant-' . $this->variant
+			],
+			Html::openElement( 'div', [ 'id' => 'personal-dashboard-onboarding' ] )
+		) );
 		$modules = $this->getModules( $this->isMobile, $par );
 
 		if ( $this->isMobile ) {

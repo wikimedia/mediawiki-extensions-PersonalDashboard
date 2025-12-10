@@ -3,32 +3,22 @@
 	"extends": [
 		"wikimedia/client/common",
 		"wikimedia/language/es2018",
-		"wikimedia/mediawiki",
-		"wikimedia/jquery"
+		"wikimedia/mediawiki/common"
 	],
-	"env": {
-		"browser": true,
-		"commonjs": true
-	},
 	"overrides": [
 		{
-			"files": [
-				"**/*.mjs"
-			],
+			"files": "**/*.mjs",
 			"parserOptions": {
 				"sourceType": "module"
 			}
 		},
 		{
-			"files": [
-				"**/*.vue"
-			],
+			"files": "**/*.vue",
 			"extends": [
-				"wikimedia/vue3/common"
-			],
-			"rules": {
-				"vue/component-name-in-template-casing": "off"
-			}
+				"wikimedia/vue3/common",
+				"wikimedia/language/es2018",
+				"wikimedia/mediawiki/common"
+			]
 		}
 	]
 }

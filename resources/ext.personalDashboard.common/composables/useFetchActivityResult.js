@@ -16,7 +16,8 @@ function getRandomIndexes( filteredByScore, limit ) {
 	}
 	return randomIndexes;
 }
-const fetchRecentActivity = async ( limit ) => {
+
+async function fetchRecentActivity( limit ) {
 	loading.value = true;
 	error.value = null;
 	try {
@@ -95,13 +96,15 @@ const fetchRecentActivity = async ( limit ) => {
 	} finally {
 		loading.value = false;
 	}
-};
+}
 
-module.exports = {
-	useFetchActivityResult: () => ( {
+function useFetchActivityResult() {
+	return {
 		recentActivityResult,
 		loading,
 		error,
 		fetchRecentActivity
-	} )
-};
+	};
+}
+
+module.exports = useFetchActivityResult;

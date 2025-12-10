@@ -1,0 +1,18 @@
+{
+	"@metadata": {
+		"authors": [
+			"Dillon Hardy"
+		]
+	},
+	"personal-dashboard-onboarding-title": "Title for the onboarding dialog.",
+	"personal-dashboard-onboarding-dont-show-again": "Checkbox label for “Don't show again” in the onboarding dialog.",
+	"personal-dashboard-onboarding-step-1-title": "Title for step 1 in the onboarding dialog.",
+	"personal-dashboard-onboarding-step-1-body": "Body for step 1 in the onboarding dialog.",
+	"personal-dashboard-onboarding-step-1-alt": "Illustration alt text for step 1 in the onboarding dialog.",
+	"personal-dashboard-onboarding-step-2-title": "Title for step 2 in onboarding dialog.",
+	"personal-dashboard-onboarding-step-2-body": "Body for step 2 in the onboarding dialog.",
+	"personal-dashboard-onboarding-step-2-alt": "Illustration alt text for step 2 in the onboarding dialog.",
+	"personal-dashboard-onboarding-step-3-title": "Title for step 3 in the onboarding dialog.",
+	"personal-dashboard-onboarding-step-3-body": "Body for step 3 in the onboarding dialog.",
+	"personal-dashboard-onboarding-step-3-alt": "Illustration alt text for step 3 in the onboarding dialog."
+}

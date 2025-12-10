@@ -1,0 +1,11 @@
+{
+	"@metadata": {
+		"authors": [
+			"Dillon Hardy"
+		]
+	},
+	"personal-dashboard-multi-step-dialog-progress": "Current page indicator for the multi-step dialog.\n\nParameters:\n* $1 - Current page\n* $2 - Total pages",
+	"personal-dashboard-multi-step-dialog-next-button": "Text for the “Next” button, which navigates to the next page.",
+	"personal-dashboard-multi-step-dialog-previous-button": "Text for the “Previous” button, which navigates to the previous page.",
+	"personal-dashboard-multi-step-dialog-got-it-button": "Text for the “Got it” button, which closes the multi-step dialog."
+}

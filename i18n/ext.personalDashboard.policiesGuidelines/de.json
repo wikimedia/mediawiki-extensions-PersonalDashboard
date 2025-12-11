@@ -1,6 +1,8 @@
 {
 	"@metadata": {
-		"authors": []
+		"authors": [
+			"Brettchenweber"
+		]
 	},
 	"personal-dashboard-policies-guidelines-title": "Richt- und Leitlinien",
 	"personal-dashboard-policies-guidelines-body": "Informiere dich auf Wikipedia darüber, was akzeptabel und erwartet wird.",
@@ -35,11 +37,11 @@
 	"personal-dashboard-policies-guidelines-assume-good-faith-title": "Gehe von guten Absichten aus.",
 	"personal-dashboard-policies-guidelines-assume-good-faith-definition": "Denke daran, dass die meisten Nutzer versuchen, Wikipedia zu verbessern und nicht absichtlich deren Qualität zu mindern.",
 	"personal-dashboard-policies-guidelines-assume-good-faith-example-1": "„Ich kann es nicht fassen, dass du meine Seite durch die fehlerhafte Formatierung deiner Bearbeitung ruiniert hast. Hör auf, Wikipedia zu bearbeiten!“",
-	"personal-dashboard-policies-guidelines-assume-good-faith-answer-1-label": "Keine Annahme von gutem Absichten:",
+	"personal-dashboard-policies-guidelines-assume-good-faith-answer-1-label": "Keine Annahme von guten Absichten:",
 	"personal-dashboard-policies-guidelines-assume-good-faith-answer-1-text": "Man sollte Benutzern nicht vorwerfen, in böser Absicht gehandelt zu haben, wenn ihnen ein Fehler unterlaufen ist.",
 	"personal-dashboard-policies-guidelines-assume-good-faith-example-2": "„Mir ist aufgefallen, dass die Formatierung in deiner Bearbeitung nicht ganz korrekt war. Ich habe sie für dich korrigiert, und diese Hilfeseite könnte dir beim nächsten Mal weiterhelfen.“",
 	"personal-dashboard-policies-guidelines-assume-good-faith-answer-2-label": "Gehe von guten Absichten aus:",
-	"personal-dashboard-policies-guidelines-assume-good-faith-answer-2-text": "Sofern keine eindeutigen Beweise für böswillige Absicht vorliegen, helfe einander, die Qualität der Artikel zu verbessern.",
+	"personal-dashboard-policies-guidelines-assume-good-faith-answer-2-text": "Sofern keine eindeutigen Beweise für böswillige Absicht vorliegen, helft einander, die Qualität der Artikel zu verbessern.",
 	"personal-dashboard-policies-guidelines-examples-button": "Beispiele",
 	"personal-dashboard-policies-guidelines-examples-progress": "$1 von $2",
 	"personal-dashboard-policies-guidelines-examples-header": "Beispiel $1",

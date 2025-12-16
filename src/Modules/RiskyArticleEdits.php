@@ -57,6 +57,13 @@ class RiskyArticleEdits extends BaseModule {
 	}
 
 	/** @inheritDoc */
+	protected function getMobileDetailsHeader() {
+		$icon = $this->getBackIcon();
+		$text = $this->getHeaderTextElement();
+		return $icon . $text . Html::element( 'span' );
+	}
+
+	/** @inheritDoc */
 	protected function getFooter() {
 		return $this->msg( 'personal-dashboard-risky-article-edits-footer-preamble' );
 	}

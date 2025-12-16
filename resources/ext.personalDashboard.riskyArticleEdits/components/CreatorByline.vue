@@ -2,7 +2,7 @@
 	<a
 		:href="userPageUrl"
 		class="cdx-link"
-		:class="userPageClass"
+		:class="[ userPageClass, userPageMarginClass ]"
 		target="_blank">
 		{{ creatorName }}
 	</a>
@@ -30,6 +30,10 @@ module.exports = defineComponent( {
 		},
 		userPageUrl() {
 			return mw.util.getUrl( `User:${ this.creatorName }` );
+		},
+		userPageMarginClass() {
+			return mw.config.get( 'skin' ) === 'minerva' ? 'ext-personal-dashboard-moderation-card-user-link-minerva' :
+				'';
 		}
 	}
 } );
@@ -42,4 +46,9 @@ module.exports = defineComponent( {
 	// see: https://doc.wikimedia.org/codex/latest/components/mixins/link.html
 	.cdx-mixin-link();
 }
+
+.ext-personal-dashboard-moderation-card-user-link-minerva {
+	margin-top: 1px;
+}
+
 </style>

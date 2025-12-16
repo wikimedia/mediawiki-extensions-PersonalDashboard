@@ -20,17 +20,17 @@
 				</div>
 
 				<div class="ext-personal-dashboard-moderation-card-info-title-row">
+					<change-number :oldlen :newlen></change-number>
+					<span class="ext-personal-dashboard-moderation-card-separator">∙</span>
 					<span v-if="comment">
-						<change-number :oldlen :newlen></change-number>
-						<span>∙</span>
 						{{ comment }}
 					</span>
 					<span
 						v-else
-						class="ext-personal-dashboard-moderation-card-missing-comment-message">
-						<change-number :oldlen :newlen></change-number>
-						<span>∙</span>
-						{{ missingCommentMessage }}
+						class="ext-personal-dashboard-moderation-card-missing-comment-message"
+					>{{
+						missingCommentMessage
+					}}
 					</span>
 				</div>
 
@@ -39,9 +39,6 @@
 						:creator-name="user"
 						:creator-is-temp-account="isTempUser"
 					></creator-byline>
-					<span class="ext-personal-dashboard-moderation-card-info-title-row-additional">
-
-					</span>
 				</div>
 			</div>
 		</template>
@@ -121,10 +118,12 @@ module.exports = defineComponent( {
 @import 'mediawiki.skin.variables.less';
 
 .cdx-card.ext-personal-dashboard-moderation-card {
-	border-top: 1px solid @color-subtle;
 	border-left: 0;
 	border-right: 0;
 	border-radius: 0;
+	border-bottom: 0;
+	border-top: 1px solid @border-color-subtle;
+	padding: 0.5rem;
 
 	&:hover {
 		background-color: @background-color-interactive;
@@ -135,47 +134,55 @@ module.exports = defineComponent( {
 	}
 
 	&:last-child {
-		border-bottom: 1px solid @color-subtle;
+		border-bottom: 1px solid @border-color-subtle;
 	}
-}
 
-.ext-personal-dashboard-moderation-card-icon {
-	color: @color-subtle;
-}
+	.ext-personal-dashboard-moderation-card-icon {
+		color: @color-subtle;
+	}
 
-.ext-personal-dashboard-moderation-card-info {
-	display: flex;
-	flex-direction: column;
-}
+	.ext-personal-dashboard-moderation-card-info {
+		display: flex;
+		flex-direction: column;
+		gap: 0.44rem;
+	}
 
-.ext-personal-dashboard-moderation-card-info-title-row {
-	display: flex;
-	flex-flow: row wrap;
+	.ext-personal-dashboard-moderation-card-info-title-row {
+		display: flex;
+		flex-flow: row wrap;
 
-	.ext-personal-dashboard-moderation-card-info-title {
-		font-weight: @font-weight-bold;
+		.ext-personal-dashboard-moderation-card-info-title {
+			font-weight: @font-weight-bold;
+			line-height: @line-height-medium;
+			color: @color-base;
+		}
+	}
+
+	.ext-personal-dashboard-moderation-card-info-title-row-additional {
+		margin-left: auto;
+	}
+
+	.ext-personal-dashboard-moderation-card-missing-comment-message {
+		font-style: italic;
+	}
+
+	.ext-personal-dashboard-moderation-card-separator {
+		padding: 0 0.25rem;
+		font-weight: @font-weight-normal;
+	}
+
+	.ext-personal-dashboard-moderation-card-info-description {
 		line-height: @line-height-medium;
-		color: @color-base;
+		padding-left: 0.25rem;
+	}
+
+	.mw-tempuserlink {
+		background-color: @background-color-interactive;
+		outline: 2px solid @background-color-interactive;
+		border-radius: @border-radius-base;
+		white-space: nowrap;
+		margin-left: 2px;
 	}
 }
 
-.ext-personal-dashboard-moderation-card-info-title-row-additional {
-	margin-left: auto;
-}
-
-.ext-personal-dashboard-moderation-card-missing-comment-message {
-	font-style: italic;
-}
-
-.ext-personal-dashboard-moderation-card-info-description {
-	line-height: @line-height-medium;
-	padding-left: 8px;
-}
-
-.mw-tempuserlink {
-	background-color: @background-color-interactive;
-	outline: 2px solid @background-color-interactive;
-	border-radius: @border-radius-base;
-	white-space: nowrap;
-}
 </style>

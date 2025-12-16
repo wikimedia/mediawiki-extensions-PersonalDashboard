@@ -148,7 +148,6 @@ body.mw-special-PersonalDashboard {
 				// stylelint-disable-next-line no-descending-specificity
 				h2.personal-dashboard-module-section-header {
 					padding: 0;
-					margin-bottom: 0.625em;
 
 					// stylelint-disable-next-line no-descending-specificity
 					.personal-dashboard-module-header-text {
@@ -165,11 +164,13 @@ body.mw-special-PersonalDashboard {
 		.personal-dashboard-container {
 			align-items: start;
 			.flex-wrap();
+			gap: 1rem;
 
 			.personal-dashboard-group-sidebar {
 				.flex( 1, 1, 300px );
 				.flex-display();
 				.flex-wrap();
+				gap: 1rem;
 
 				&-subgroup-primary,
 				&-subgroup-secondary {

@@ -71,8 +71,16 @@ module.exports = defineComponent( {
 	border: unset;
 	border-bottom: unset;
 
+	&.cdx-card {
+		padding: 0 0 1rem 0;
+	}
+
 	&:hover {
 		background-color: unset;
+	}
+
+	&.cdx-button {
+		font-size: @font-size-medium;
 	}
 }
 

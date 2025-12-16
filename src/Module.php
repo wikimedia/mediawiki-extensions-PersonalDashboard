@@ -344,7 +344,7 @@ abstract class Module implements IModule {
 	/**
 	 * @return string HTML string wrapper for the back icon.
 	 */
-	private function getBackIcon(): string {
+	protected function getBackIcon(): string {
 		return Html::rawElement(
 			'a',
 			[

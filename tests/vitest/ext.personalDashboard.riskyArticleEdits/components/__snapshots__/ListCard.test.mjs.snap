@@ -45,16 +45,18 @@ exports[`mount component 1`] = `
         <div
           class="ext-personal-dashboard-moderation-card-info-title-row"
         >
+          <span
+            class="ext-personal-dashboard-moderation-card-info-change-number-none"
+          >
+            0
+          </span>
+          <span
+            class="ext-personal-dashboard-moderation-card-separator"
+          >
+            ∙
+          </span>
           <span>
-            <span
-              class="ext-personal-dashboard-moderation-card-info-change-number-none"
-            >
-              0
-            </span>
-            <span>
-              ∙
-            </span>
-             TestComment
+            TestComment
           </span>
         </div>
         <div
@@ -70,9 +72,6 @@ exports[`mount component 1`] = `
           </a>
           <!--v-if-->
           
-          <span
-            class="ext-personal-dashboard-moderation-card-info-title-row-additional"
-          />
         </div>
       </div>
       

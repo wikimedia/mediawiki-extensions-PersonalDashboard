@@ -11,11 +11,13 @@
 	<cdx-popover
 		v-model:open="showPopover"
 		:anchor="triggerElement"
-		placement="bottom-start"
+		placement="bottom"
 		:render-in-place="true"
 		:title="title"
 		:use-close-button="true"
-		:icon="cdxIconInfoFilled">
+		:icon="cdxIconInfoFilled"
+		class="ext-personal-dashboard-moderation-card-header-popover"
+	>
 		{{ subtitle }}
 		<ul>
 			<li>{{ articleText }}</li>
@@ -55,12 +57,21 @@ module.exports = defineComponent( {
 <style lang="less">
 @import 'mediawiki.skin.variables.less';
 
-.ext-personal-dashboard-moderation-card-header-icon {
-	align-self: center;
+.personal-dashboard-module-header > span > .cdx-toggle-button:enabled {
+	min-height: 1rem;
+	min-width: 1rem;
 	color: @color-subtle;
 }
 
-.ext-personal-dashboard-moderation-card-header-icon-popover {
-	color: @color-base;
+.personal-dashboard-module-footer {
+	color: @color-subtle;
+}
+
+.ext-personal-dashboard-moderation-card-header-popover {
+	text-align: left;
+
+	li {
+		margin-bottom: unset;
+	}
 }
 </style>

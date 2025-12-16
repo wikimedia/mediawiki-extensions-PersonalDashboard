@@ -1,6 +1,6 @@
 <template>
 	<teleport
-		to=".personal-dashboard-module-riskyArticleEdits > .personal-dashboard-module-header > span"
+		to=".personal-dashboard-module-riskyArticleEdits > .personal-dashboard-module-header > .ext-personal-dashboard-mobile-details-header-icon"
 	>
 		<info-popover></info-popover>
 	</teleport>
@@ -24,5 +24,12 @@ module.exports = defineComponent( {
 .personal-dashboard-module-riskyArticleEdits .personal-dashboard-module-header .cdx-popover__body {
 	font-weight: @font-weight-normal;
 	font-size: @font-size-small;
+}
+
+@media all and ( max-width: @max-width-breakpoint-mobile ) {
+	.personal-dashboard-module-header {
+		/* stylelint-disable-next-line declaration-no-important */
+		margin: 0 0.75rem !important;
+	}
 }
 </style>

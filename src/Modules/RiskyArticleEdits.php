@@ -60,7 +60,8 @@ class RiskyArticleEdits extends BaseModule {
 	protected function getMobileDetailsHeader() {
 		$icon = $this->getBackIcon();
 		$text = $this->getHeaderTextElement();
-		return $icon . $text . Html::element( 'span' );
+		return $icon . $text . Html::element( 'div',
+				[ 'class' => [ 'ext-personal-dashboard-mobile-details-header-icon' ] ] );
 	}
 
 	/** @inheritDoc */

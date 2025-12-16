@@ -259,9 +259,6 @@
 					]
 				}
 			],
-			"styles": [
-				"Module.less"
-			],
 			"messages": [
 				"personal-dashboard-risky-article-edits-header",
 				"personal-dashboard-risky-article-edits-info-button-aria-label",

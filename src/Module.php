@@ -271,6 +271,8 @@ abstract class Module implements IModule {
 	protected function renderMobileDetails() {
 		return $this->buildModuleWrapper(
 			$this->buildSection( 'header', $this->getMobileDetailsHeader(), $this->getHeaderTag() ),
+			$this->buildSection( 'header-separator',
+				Html::element( 'div', [ 'class' => static::BASE_CSS_CLASS . '-header-separator' ] ) ),
 			$this->buildSection( 'subheader', $this->getSubheader(), $this->getSubheaderTag() ),
 			$this->buildSection( 'body', $this->getBody() ),
 			$this->buildSection( 'footer', $this->getFooter() )
@@ -301,7 +303,7 @@ abstract class Module implements IModule {
 	 * @return string Tag to use with the header, eg. h2, h3, h4, ...
 	 */
 	protected function getHeaderTag() {
-		return 'h2';
+		return 'div';
 	}
 
 	/**
@@ -412,7 +414,7 @@ abstract class Module implements IModule {
 	 * @return string Tag to use with the subheader, e.g. h2, h3, h4
 	 */
 	protected function getSubheaderTag() {
-		return 'h3';
+		return 'div';
 	}
 
 	/**

@@ -7,7 +7,6 @@
 	border-radius: @border-radius-base;
 	box-shadow: none;
 	color: @color-base;
-	padding: 16px;
 	box-sizing: border-box;
 
 	.client-js &-no-js-fallback {
@@ -17,14 +16,12 @@
 	.personal-dashboard-module-header,
 	h2.personal-dashboard-module-header {
 		font-family: @personal-dashboardHeaderFont;
-		font-size: 1.2em;
-		line-height: 1.2em;
+		position: relative;
+		font-size: 1rem;
+		line-height: 1.625rem;
 		font-weight: bold;
 		color: @color-base;
-		margin-top: 0;
-		margin-bottom: 0;
-		padding-top: 0;
-		padding-bottom: (1 / 1.05em);
+		margin: 1rem;
 		border-bottom: unset;
 		display: flex;
 		flex-direction: row;
@@ -47,21 +44,33 @@
 		}
 
 		&-back-icon {
-			.cdx-mixin-css-icon( @cdx-icon-arrow-previous );
+			.cdx-mixin-css-icon( @cdx-icon-arrow-previous, @param-size-icon: @size-icon-small );
+			padding: 0;
+			line-height: 1;
 		}
 	}
 
 	.personal-dashboard-module-subheader,
 	h3.personal-dashboard-module-subheader {
-		margin: 0;
-		padding: 0 0 1rem 0;
+		margin: 1rem;
 		font-family: unset;
 		font-weight: unset;
 		font-size: unset;
 	}
 
+	&-body {
+		margin: 1rem;
+	}
+
 	&-text-normal {
 		color: @color-base;
+	}
+
+	&-header-separator {
+		flex-grow: 1;
+		height: 1px;
+		background-color: @border-color-subtle;
+		margin-left: auto;
 	}
 
 	&-text-light {
@@ -70,7 +79,7 @@
 	}
 
 	&-footer {
-		margin-top: 1.143em;
+		margin: 1rem;
 	}
 
 	.oo-ui-buttonElement .oo-ui-buttonElement-button .oo-ui-labelElement-label {

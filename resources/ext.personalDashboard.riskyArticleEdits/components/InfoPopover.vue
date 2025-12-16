@@ -11,7 +11,7 @@
 	<cdx-popover
 		v-model:open="showPopover"
 		:anchor="triggerElement"
-		placement="bottom"
+		:placement="popoverPlacement"
 		:render-in-place="true"
 		:title="title"
 		:use-close-button="true"
@@ -49,17 +49,22 @@ module.exports = defineComponent( {
 			buttonAriaLabel: mw.msg( 'personal-dashboard-risky-article-edits-info-button-aria-label' ),
 			cdxIconInfoFilled
 		};
+	},
+	computed: {
+		popoverPlacement() {
+			if ( mw.config.get( 'skin' ) === 'minerva' ) {
+				return 'left-end';
+			}
+			return 'bottom';
+		}
 	}
-
 } );
 </script>
 
 <style lang="less">
 @import 'mediawiki.skin.variables.less';
 
-.personal-dashboard-module-header > span > .cdx-toggle-button:enabled {
-	min-height: 1rem;
-	min-width: 1rem;
+.personal-dashboard-module-header > .ext-personal-dashboard-mobile-details-header-icon > .cdx-toggle-button:enabled {
 	color: @color-subtle;
 }
 

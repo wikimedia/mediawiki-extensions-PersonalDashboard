@@ -1,0 +1,19 @@
+{
+	"@metadata": {
+		"authors": [
+			"Hedda"
+		]
+	},
+	"personal-dashboard-risky-article-edits-header": "Değişiklikleri gözden geçir",
+	"personal-dashboard-risky-article-edits-subheader": "Aşağıdaki düzenlemeleri gözden geçirerek gerekebilecek düzeltmelerle Vikipedi’nin güvenilirliğinin korunmasına yardımcı olun.",
+	"personal-dashboard-risky-article-edits-footer-preamble": "[{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}} Son değişiklikler sayfasında] daha fazla düzenleme görüntüle.",
+	"personal-dashboard-risky-article-edits-info-title": "Değişiklikleri gözden geçir",
+	"personal-dashboard-risky-article-edits-info-subtitle": "Son 30 gün içinden rastgele seçilen bu düzenlemeler henüz incelenmemiş veya geri alınmamıştır. Her bir kartta, aşağıdaki bilgiler yer alabilir:",
+	"personal-dashboard-risky-article-edits-info-article-title": "Madde başlığı ve kısa açıklaması",
+	"personal-dashboard-risky-article-edits-info-author": "Yazarın kullanıcı adı",
+	"personal-dashboard-risky-article-edits-info-time-text-today": "$1, Bugün",
+	"personal-dashboard-risky-article-edits-info-edit-summary": "Düzenlemede yapılan değişikliklerin özeti.",
+	"personal-dashboard-risky-article-edits-info-bytes": "±123 Sayfa bayt boyutu değişikliği",
+	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Değişiklik özeti yok",
+	"personal-dashboard-risky-article-edits-info-button-aria-label": "bilgi butonu"
+}

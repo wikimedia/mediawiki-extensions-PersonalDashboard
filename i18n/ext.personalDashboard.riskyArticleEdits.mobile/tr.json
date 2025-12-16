@@ -1,0 +1,12 @@
+{
+	"@metadata": {
+		"authors": [
+			"Hedda"
+		]
+	},
+	"personal-dashboard-risky-article-edits-mobile-summary-header": "Değişiklikleri gözden geçir",
+	"personal-dashboard-risky-article-edits-mobile-summary-footer-link-text": "Daha fazla düzenleme görüntüle",
+	"personal-dashboard-risky-article-edits-mobile-byte-text": "$1 maddesindeki bayt sayısı",
+	"personal-dashboard-risky-article-edits-mobile-user-text": "$1 tarafından değiştirildi",
+	"personal-dashboard-risky-article-edits-mobile-summary-footer-button-aria-label": "son değişikliklere git butonu"
+}

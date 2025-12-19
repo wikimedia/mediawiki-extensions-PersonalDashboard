@@ -1,0 +1,12 @@
+{
+	"@metadata": {
+		"authors": [
+			"Bjankuloski06"
+		]
+	},
+	"personal-dashboard-risky-article-edits-mobile-summary-header": "Прегледај промени",
+	"personal-dashboard-risky-article-edits-mobile-summary-footer-link-text": "Погледајте повеќе уредувања",
+	"personal-dashboard-risky-article-edits-mobile-byte-text": "бајти во статијата $1",
+	"personal-dashboard-risky-article-edits-mobile-user-text": "$1 измени",
+	"personal-dashboard-risky-article-edits-mobile-summary-footer-button-aria-label": "појдете на копчето за скорешни промени"
+}

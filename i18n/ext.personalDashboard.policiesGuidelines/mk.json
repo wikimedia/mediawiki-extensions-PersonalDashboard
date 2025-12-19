@@ -1,0 +1,23 @@
+{
+	"@metadata": {
+		"authors": [
+			"Bjankuloski06"
+		]
+	},
+	"personal-dashboard-policies-guidelines-title": "Правила и напатствија",
+	"personal-dashboard-policies-guidelines-body": "Прочитајте што е прифатливо и очекувано на Википодатоците.",
+	"personal-dashboard-policies-guidelines-mobile-summary": "Прегледајте ги најдобрите практики за создавање на бесплатна и меродавна енциклопедија.",
+	"personal-dashboard-policies-guidelines-neutral-point-of-view-title": "Неутрална гледна точка",
+	"personal-dashboard-policies-guidelines-neutral-point-of-view-definition": "Содржината мора да ги претставува значајните гледишта праведно, сразмерно и без пристрасност.",
+	"personal-dashboard-policies-guidelines-neutral-point-of-view-example-1": "Вардар е најдобар фудбалски клуб во историјата на Македонија.",
+	"personal-dashboard-policies-guidelines-neutral-point-of-view-answer-1-label": "Не е неутрално:",
+	"personal-dashboard-policies-guidelines-neutral-point-of-view-answer-1-text": "Ова е мислење и не може да се поддржи со меродавни извори. Затоа, треба да напишете „Вардар има освоено повеќе првенства од било кој друг клуб во Македонија”.",
+	"personal-dashboard-policies-guidelines-neutral-point-of-view-example-2": "Вилијам Шекспир е широко прифатен како еден од најголемите писатели на англиски јазик.",
+	"personal-dashboard-policies-guidelines-neutral-point-of-view-answer-2-label": "Неутрално:",
+	"personal-dashboard-policies-guidelines-neutral-point-of-view-answer-2-text": "Ова е правилна дефиниција за углед. Важечка е само затоа што монгу доверливи извори велат дека Шекспир го има тој углед.",
+	"personal-dashboard-policies-guidelines-no-original-research-title": "Без свои истражувања",
+	"personal-dashboard-policies-guidelines-no-original-research-definition": "Статиите треба да сумираат објавени извори, а не сопствени толкувања или сознанија на корисникот.",
+	"personal-dashboard-policies-guidelines-no-original-research-example-1": "Ноември е потопол годинава во споредба со лани.",
+	"personal-dashboard-policies-guidelines-no-original-research-answer-1-label": "Содржи свое истражување:",
+	"personal-dashboard-policies-guidelines-no-original-research-answer-1-text": "Тврдењето не е поддржано со никаков меродавен и поврзан изворен материјал."
+}

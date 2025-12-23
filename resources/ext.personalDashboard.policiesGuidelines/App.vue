@@ -55,6 +55,10 @@ module.exports = defineComponent( {
 	}
 
 	&__list {
+		.cdx-card {
+			border-color: @border-color-subtle;
+		}
+
 		.cdx-card:not( :first-child ) {
 			border-top-left-radius: @border-radius-sharp;
 			border-top-right-radius: @border-radius-sharp;

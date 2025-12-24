@@ -1,0 +1,12 @@
+{
+	"@metadata": {
+		"authors": [
+			"Peterxy12"
+		]
+	},
+	"personal-dashboard-risky-article-edits-mobile-summary-header": "查看更改",
+	"personal-dashboard-risky-article-edits-mobile-summary-footer-link-text": "查看更多详细内容",
+	"personal-dashboard-risky-article-edits-mobile-byte-text": "$1条目中的字节",
+	"personal-dashboard-risky-article-edits-mobile-user-text": "$1做出更改",
+	"personal-dashboard-risky-article-edits-mobile-summary-footer-button-aria-label": "导航至最近更改按钮"
+}

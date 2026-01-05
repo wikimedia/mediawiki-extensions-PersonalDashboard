@@ -7,7 +7,10 @@
 		<template #description>
 			{{ msgDefinition }}
 
-			<a href="#" @click="openDialog = true">
+			<a
+				:id="prefix"
+				href="#"
+				@click="openDialog = true">
 				{{ msgExample }}
 			</a>
 		</template>
@@ -48,6 +51,9 @@ module.exports = defineComponent( {
 			msgDefinition: mw.msg( msgPrefix + props.prefix + '-definition' ),
 			msgExample: mw.msg( msgPrefix + 'examples-button' )
 		};
+	},
+	mounted() {
+		mw.hook( 'personaldashboard.policymodule.loaded' ).fire();
 	}
 } );
 </script>

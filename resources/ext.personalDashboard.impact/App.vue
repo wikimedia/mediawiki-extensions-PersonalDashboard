@@ -3,7 +3,10 @@
 		<div class="personal-dashboard-impact__category">
 			<div class="personal-dashboard-impact__value">
 				<cdx-icon :icon="cdxIconUserTalk"></cdx-icon>
-				<a :href="thanksUrl" target="_blank">{{ thanksCount }}</a>
+				<a
+					id="personal-dashboard-thanks-link"
+					:href="thanksUrl"
+					target="_blank">{{ thanksCount }}</a>
 			</div>
 
 			<div class="personal-dashboard-impact__name">
@@ -81,6 +84,9 @@ module.exports = defineComponent( {
 			cdxIconInfoFilled,
 			cdxIconUserTalk
 		};
+	},
+	mounted() {
+		mw.hook( 'personaldashboard.impact.loaded' ).fire();
 	}
 } );
 </script>

@@ -65,7 +65,11 @@ class RiskyArticleEdits extends BaseModule {
 
 	/** @inheritDoc */
 	protected function getFooter() {
-		return $this->msg( 'personal-dashboard-risky-article-edits-footer-preamble' );
+		return Html::rawElement(
+			'div',
+			[ 'id' => 'personal-dashboard-go-to-recentchanges' ],
+			$this->msg( 'personal-dashboard-risky-article-edits-footer-preamble' )
+		);
 	}
 
 	/** @inheritDoc */

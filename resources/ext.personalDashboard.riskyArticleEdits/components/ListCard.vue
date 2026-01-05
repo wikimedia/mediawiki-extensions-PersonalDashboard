@@ -110,6 +110,9 @@ module.exports = defineComponent( {
 		isTempUser() {
 			return mw.util.isTemporaryUser( this.user );
 		}
+	},
+	mounted() {
+		mw.hook( 'personaldashboard.recentactivity.listcard.loaded' ).fire();
 	}
 } );
 </script>

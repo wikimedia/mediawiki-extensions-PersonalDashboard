@@ -4,6 +4,7 @@
 
 		<span class="ext-personal-dashboard-recent-activity-footer">
 			<cdx-button
+				id="personal-dashboard-go-to-recentchanges"
 				:aria-label="buttonAriaLabel"
 				action="progressive"
 				weight="primary"

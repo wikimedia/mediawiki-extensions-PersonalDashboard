@@ -11,12 +11,12 @@ use MediaWiki\Title\Title;
 use MediaWiki\User\Options\UserOptionsManager;
 use MediaWiki\User\User;
 use MediaWiki\User\UserEditTracker;
-use MediaWikiUnitTestCase;
+use MediaWikiIntegrationTestCase;
 
 /**
  * @coversDefaultClass \MediaWiki\Extension\PersonalDashboard\HookHandler\SkinTemplateNavigationUniversalHandler
  */
-class SkinTemplateNavigationUniversalHandlerTest extends MediaWikiUnitTestCase {
+class SkinTemplateNavigationUniversalHandlerTest extends MediaWikiIntegrationTestCase {
 	private HashConfig $configMock;
 	private OutputPage $outputMock;
 	private Title $titleMock;

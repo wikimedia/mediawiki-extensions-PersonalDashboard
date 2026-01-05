@@ -19,7 +19,7 @@
 
 <script>
 
-const { defineComponent, onMounted } = require( 'vue' );
+const { defineComponent } = require( 'vue' );
 const ListCard = require( './ListCard.vue' );
 const { useFetchActivityResult } = require( 'ext.personalDashboard.common' );
 
@@ -33,14 +33,17 @@ module.exports = defineComponent( {
 			error,
 			fetchRecentActivity
 		} = useFetchActivityResult();
-		onMounted( () => {
-			fetchRecentActivity( 1 );
-		} );
+
 		return {
 			recentActivityResult,
 			loading,
-			error
+			error,
+			fetchRecentActivity
 		};
+	},
+	mounted() {
+		this.fetchRecentActivity( 1 );
+		mw.hook( 'personaldashboard.recentactivity.loaded' ).fire();
 	}
 } );
 </script>

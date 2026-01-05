@@ -3,6 +3,7 @@
 namespace MediaWiki\Extension\PersonalDashboard\HookHandler;
 
 use MediaWiki\Hook\SkinTemplateNavigation__UniversalHook;
+use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Skin\SkinTemplate;
 use MediaWiki\SpecialPage\SpecialPageFactory;
 use MediaWiki\User\Options\UserOptionsManager;
@@ -50,6 +51,10 @@ class SkinTemplateNavigationUniversalHandler implements SkinTemplateNavigation__
 
 		if ( $this->isBlueDotVisible( $sktemplate, $user ) ) {
 			$output->addModules( 'ext.personalDashboard.blueDot' );
+		}
+
+		if ( ExtensionRegistry::getInstance()->isLoaded( 'WikimediaEvents' ) ) {
+			$output->addModules( 'ext.wikimediaEvents.personalDashboard' );
 		}
 	}
 

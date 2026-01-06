@@ -12,5 +12,6 @@
 	"prefs-dashboard": "Text of the section header for the \"Personal dashboard\" section in Special:Preferences.\n\n{{doc-personal-dashboard}}",
 	"personal-dashboard-enable": "Text of the preference in Special:Preferences to enable the personal dashboard.\n\n{{doc-personal-dashboard}}",
 	"personal-dashboard-module-no-js-fallback": "Message to display to user if JavaScript is not enabled.\n\n{{doc-personal-dashboard}}",
-	"personal-dashboard-enable-preference": "Text with link to [Special:Preferences#mw-prefsection-personal-dashboard] to show if users visits [Special:PersonalDashboard] but has not set the preference to enable the personal dashboard\n\nRelated: {{msg-mw|prefs-dashboard}} and {{msg-mw|dashboard-enable}}\n\n{{doc-personal-dashboard}}"
+	"personal-dashboard-enable-preference": "Text with link to [Special:Preferences#mw-prefsection-personal-dashboard] to show if users visits [Special:PersonalDashboard] but has not set the preference to enable the personal dashboard\n\nRelated: {{msg-mw|prefs-dashboard}} and {{msg-mw|dashboard-enable}}\n\n{{doc-personal-dashboard}}",
+	"personal-dashboard-survey-text": "Text with link to the Personal Dashboard feedback survey."
 }

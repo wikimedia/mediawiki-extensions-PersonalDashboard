@@ -25,4 +25,17 @@ class SpecialPersonalDashboardTest extends SpecialPageTestBase {
 		$this->executeSpecialPage( '', $req, null, $user->getUser() );
 		$this->assertTrue( true );
 	}
+
+	public function testRenderSurveyLink() {
+		$sp = $this->newSpecialPage();
+
+		$this->overrideConfigValue( 'PersonalDashboardSurveyLink', 'https://example.com?Q_lang=' );
+		$this->assertStringContainsString( 'https://example.com?Q_lang=en', $sp->getSurveyLink() );
+
+		$this->overrideConfigValue( 'PersonalDashboardSurveyLink', 'https://example.com?foo=bar&Q_lang=' );
+		$this->assertStringContainsString( 'https://example.com?foo=bar&amp;Q_lang=en', $sp->getSurveyLink() );
+
+		$this->overrideConfigValue( 'PersonalDashboardSurveyLink', '' );
+		$this->assertNull( $sp->getSurveyLink() );
+	}
 }

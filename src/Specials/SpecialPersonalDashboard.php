@@ -64,14 +64,19 @@ class SpecialPersonalDashboard extends SpecialPage {
 			'wgPersonalDashboardPageviewToken' => $this->pageviewToken
 		] );
 		$out->enableOOUI();
-		$out->addHTML( Html::rawElement(
-			'div',
-			[
-				'class' => 'personal-dashboard-container ' .
-					'personal-dashboard-container-user-variant-' . $this->variant
-			],
-			Html::openElement( 'div', [ 'id' => 'personal-dashboard-onboarding' ] )
-		) );
+		$out->addHTML( Html::element( 'div', [ 'id' => 'personal-dashboard-onboarding' ] ) );
+
+		$surveyLink = $this->getSurveyLink();
+
+		if ( $surveyLink ) {
+			$out->addHTML( $surveyLink );
+		}
+
+		$out->addHTML( Html::openElement( 'div', [
+			'class' => 'personal-dashboard-container ' .
+				'personal-dashboard-container-user-variant-' . $this->variant
+		] ) );
+
 		$modules = $this->getModules( $this->isMobile, $par );
 
 		if ( $this->isMobile ) {
@@ -174,6 +179,24 @@ class SpecialPersonalDashboard extends SpecialPage {
 	 */
 	private function generatePageviewToken() {
 		return \Wikimedia\base_convert( \MWCryptRand::generateHex( 40 ), 16, 32, 32 );
+	}
+
+	/**
+	 * Get the survey link header HTML if the config value is set and valid.
+	 */
+	public function getSurveyLink(): ?string {
+		$url = $this->getConfig()->get( 'PersonalDashboardSurveyLink' );
+
+		if ( !$url ) {
+			return null;
+		}
+
+		return Html::rawElement(
+			'div',
+			[ 'class' => 'personal-dashboard-survey' ],
+			Html::element( 'span', [ 'class' => 'personal-dashboard-survey-icon' ] ) .
+			$this->msg( 'personal-dashboard-survey-text', $url . $this->getLanguage()->getCode() )
+		);
 	}
 
 	private function renderDesktop() {

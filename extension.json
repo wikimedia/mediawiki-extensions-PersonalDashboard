@@ -381,6 +381,10 @@
 		"PersonalDashboardVariant": {
 			"description": "The dashboard variant served to users",
 			"value": null
+		},
+		"PersonalDashboardSurveyLink": {
+			"description": "External link to the Personal Dashboard feedback survey.",
+			"value": null
 		}
 	},
 	"DatabaseVirtualDomains": [

@@ -51,7 +51,7 @@ class RiskyArticleEdits extends BaseModule {
 		if ( $this->shouldHeaderIncludeIcon() ) {
 			$html .= $this->getHeaderIcon();
 		} else {
-			$html .= Html::element( 'span' );
+			$html .= $this->getInfoIconContainer();
 		}
 		return $html;
 	}
@@ -60,8 +60,7 @@ class RiskyArticleEdits extends BaseModule {
 	protected function getMobileDetailsHeader() {
 		$icon = $this->getBackIcon();
 		$text = $this->getHeaderTextElement();
-		return $icon . $text . Html::element( 'div',
-				[ 'class' => [ 'ext-personal-dashboard-mobile-details-header-icon' ] ] );
+		return $icon . $text . $this->getInfoIconContainer();
 	}
 
 	/** @inheritDoc */
@@ -122,5 +121,10 @@ class RiskyArticleEdits extends BaseModule {
 
 		// Otherwise, render
 		return true;
+	}
+
+	private function getInfoIconContainer(): string {
+		return Html::element( 'div',
+			[ 'class' => [ 'ext-personal-dashboard-mobile-details-header-icon' ] ] );
 	}
 }

@@ -155,17 +155,21 @@ body.mw-special-PersonalDashboard {
 		.personal-dashboard-container {
 			align-items: start;
 			.flex-wrap();
-			gap: 1rem;
+			// Tighten vertical whitespace between stacked modules while keeping horizontal gutter
+			gap: 0.5rem 1rem;
 
 			.personal-dashboard-group-sidebar {
 				.flex( 1, 1, 300px );
 				.flex-display();
-				.flex-wrap();
-				gap: 1rem;
+				flex-direction: column;
+				gap: 0.5rem;
 
 				&-subgroup-primary,
 				&-subgroup-secondary {
-					.flex( 1, 0, 300px );
+					.flex-display();
+					flex-direction: column;
+					gap: 0.5rem;
+					width: 100%;
 				}
 
 				.personal-dashboard-module {
@@ -175,6 +179,9 @@ body.mw-special-PersonalDashboard {
 
 			.personal-dashboard-group-main {
 				.flex( 1, 0, 480px );
+				display: flex;
+				flex-direction: column;
+				gap: 0.5rem;
 
 				&-subgroup-primary {
 					.flex-display();

@@ -9,6 +9,7 @@ class GetPreferencesHandler implements GetPreferencesHook {
 	 * @inheritDoc
 	 */
 	public function onGetPreferences( $user, &$preferences ) {
+		$preferences['personaldashboard-visited'] = [ 'type' => 'api' ];
 		$preferences['personaldashboard-onboarding'] = [ 'type' => 'api' ];
 	}
 }

@@ -1,0 +1,55 @@
+@import 'mediawiki.skin.variables.less';
+
+/* stylelint-disable selector-max-id */
+.personal-dashboard-blue-dot {
+	&-dropdown {
+		position: absolute;
+		left: 50%;
+		bottom: -4px;
+		z-index: @z-index-above-content;
+
+		.navigation-drawer & {
+			left: 10px;
+		}
+
+		#vector-user-links-dropdown-checkbox:checked ~ &,
+		#main-menu-input:checked ~ &,
+		#minerva-user-menu-checkbox:checked ~ & {
+			visibility: hidden;
+		}
+	}
+
+	&-link {
+		position: absolute;
+		z-index: @z-index-above-content;
+
+		.vector-user-menu &,
+		.minerva-user-menu &,
+		.navigation-drawer & {
+			top: 50%;
+		}
+
+		.vector-user-menu-legacy & {
+			bottom: -8px;
+			left: 50%;
+		}
+
+		.vector-user-menu & {
+			left: -16px;
+		}
+
+		.navigation-drawer & {
+			right: 24px;
+		}
+	}
+}
+
+#vector-user-links-dropdown > .vector-dropdown-content,
+.minerva-user-menu-list {
+	overflow: visible;
+}
+
+.vector-menu-content-list > li,
+.minerva-user-menu-list > li {
+	position: relative;
+}

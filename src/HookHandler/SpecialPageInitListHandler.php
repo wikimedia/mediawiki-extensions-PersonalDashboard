@@ -14,6 +14,7 @@ class SpecialPageInitListHandler implements SpecialPage_initListHook {
 		$list['PersonalDashboard'] = [
 			'class' => SpecialPersonalDashboard::class,
 			'services' => [
+				'UserOptionsManager',
 				'PersonalDashboardModuleRegistry',
 				'StatsFactory',
 			]

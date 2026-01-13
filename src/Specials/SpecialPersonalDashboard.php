@@ -10,28 +10,33 @@ use MediaWiki\Extension\PersonalDashboard\PersonalDashboardModuleRegistry;
 use MediaWiki\Extension\PersonalDashboard\Util;
 use MediaWiki\Html\Html;
 use MediaWiki\SpecialPage\SpecialPage;
+use MediaWiki\User\Options\UserOptionsManager;
 use MediaWiki\WikiMap\WikiMap;
 use Throwable;
 use Wikimedia\Stats\StatsFactory;
 
 class SpecialPersonalDashboard extends SpecialPage {
-
+	private UserOptionsManager $userOptionsManager;
 	private PersonalDashboardModuleRegistry $moduleRegistry;
-	private string|null $variant;
+	private StatsFactory $statsFactory;
 
 	/**
 	 * @var string Unique identifier for this specific rendering of Special:PersonalDashboard.
 	 * Used by various EventLogging schemas to correlate events.
 	 */
 	private string $pageviewToken;
+
+	private string|null $variant;
+
 	private bool $isMobile;
-	private StatsFactory $statsFactory;
 
 	public function __construct(
+		UserOptionsManager $userOptionsManager,
 		PersonalDashboardModuleRegistry $moduleRegistry,
 		StatsFactory $statsFactory,
 	) {
 		parent::__construct( 'PersonalDashboard', '', false );
+		$this->userOptionsManager = $userOptionsManager;
 		$this->moduleRegistry = $moduleRegistry;
 		$this->statsFactory = $statsFactory;
 		$this->pageviewToken = $this->generatePageviewToken();
@@ -54,6 +59,14 @@ class SpecialPersonalDashboard extends SpecialPage {
 		$startTime = microtime( true );
 		$this->requireNamedUser();
 		parent::execute( $par );
+
+		$user = $this->getUser();
+
+		if ( !$this->userOptionsManager->getBoolOption( $user, 'personaldashboard-visited' ) ) {
+			$this->userOptionsManager->setOption( $user, 'personaldashboard-visited', true );
+			$this->userOptionsManager->saveOptions( $user );
+		}
+
 		$out = $this->getContext()->getOutput();
 
 		$out->addModuleStyles( 'ext.personalDashboard.styles' );

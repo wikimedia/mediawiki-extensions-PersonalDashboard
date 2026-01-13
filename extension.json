@@ -27,12 +27,17 @@
 		"PersonalDashboard": "MediaWiki\\Config\\GlobalVarConfig::newInstance"
 	},
 	"DefaultUserOptions": {
+		"personaldashboard-visited": false,
 		"personaldashboard-onboarding": 2
 	},
 	"HookHandlers": {
 		"skintemplatenav-universal": {
 			"class": "MediaWiki\\Extension\\PersonalDashboard\\HookHandler\\SkinTemplateNavigationUniversalHandler",
-			"services": [ "SpecialPageFactory" ]
+			"services": [
+				"SpecialPageFactory",
+				"UserOptionsManager",
+				"UserEditTracker"
+			]
 		},
 		"special-page": {
 			"class": "MediaWiki\\Extension\\PersonalDashboard\\HookHandler\\SpecialPageInitListHandler"
@@ -103,6 +108,18 @@
 			"selectorWithoutVariant": ".vector-icon.mw-ui-icon-wikimedia-{name}, .minerva-icon--{name}",
 			"useMaskImage": true,
 			"icons": [ "viewCompact" ]
+		},
+		"ext.personalDashboard.blueDot": {
+			"localBasePath": "resources/ext.personalDashboard.blueDot",
+			"dependencies": [
+				"mediawiki.pulsatingdot"
+			],
+			"packageFiles": [
+				"index.js"
+			],
+			"styles": [
+				"dots.less"
+			]
 		},
 		"ext.personalDashboard.common": {
 			"localBasePath": "resources/ext.personalDashboard.common",
@@ -385,6 +402,14 @@
 		"PersonalDashboardSurveyLink": {
 			"description": "External link to the Personal Dashboard feedback survey.",
 			"value": null
+		},
+		"PersonalDashboardBlueDot": {
+			"description": "Show a blue dot inviting users to try out the dashboard.",
+			"value": true
+		},
+		"PersonalDashboardBlueDotMinimumEdits": {
+			"description": "The minimum number of edits required to show the blue dot.",
+			"value": 100
 		}
 	},
 	"DatabaseVirtualDomains": [

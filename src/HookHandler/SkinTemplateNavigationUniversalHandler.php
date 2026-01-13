@@ -3,20 +3,27 @@
 namespace MediaWiki\Extension\PersonalDashboard\HookHandler;
 
 use MediaWiki\Hook\SkinTemplateNavigation__UniversalHook;
+use MediaWiki\Skin\SkinTemplate;
 use MediaWiki\SpecialPage\SpecialPageFactory;
+use MediaWiki\User\Options\UserOptionsManager;
+use MediaWiki\User\UserEditTracker;
+use MediaWiki\User\UserIdentity;
 
 class SkinTemplateNavigationUniversalHandler implements SkinTemplateNavigation__UniversalHook {
-	private SpecialPageFactory $specialPageFactory;
-
-	public function __construct( SpecialPageFactory $specialPageFactory ) {
-		$this->specialPageFactory = $specialPageFactory;
+	public function __construct(
+		private readonly SpecialPageFactory $specialPageFactory,
+		private readonly UserOptionsManager $userOptionsManager,
+		private readonly UserEditTracker $userEditTracker
+	) {
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function onSkinTemplateNavigation__Universal( $sktemplate, &$links ): void {
-		if ( !$sktemplate->getUser()->isNamed() ) {
+		$user = $sktemplate->getUser();
+
+		if ( !$user->isNamed() ) {
 			return;
 		}
 
@@ -38,6 +45,24 @@ class SkinTemplateNavigationUniversalHandler implements SkinTemplateNavigation__
 				array_slice( $menu, $offset, null, true );
 		}
 
-		$sktemplate->getOutput()->addModuleStyles( 'ext.personalDashboard.menuIcon' );
+		$output = $sktemplate->getOutput();
+		$output->addModuleStyles( 'ext.personalDashboard.menuIcon' );
+
+		if ( $this->isBlueDotVisible( $sktemplate, $user ) ) {
+			$output->addModules( 'ext.personalDashboard.blueDot' );
+		}
+	}
+
+	/**
+	 * Check if the blue dot indicator should be visible on the current page.
+	 */
+	public function isBlueDotVisible( SkinTemplate $sktemplate, UserIdentity $user ): bool {
+		$isEnabled = $sktemplate->getConfig()->get( 'PersonalDashboardBlueDot' );
+		$isSelf = $sktemplate->getTitle()->isSpecial( 'PersonalDashboard' );
+		$hasVisited = $this->userOptionsManager->getBoolOption( $user, 'personaldashboard-visited' );
+		$editCount = $this->userEditTracker->getUserEditCount( $user );
+		$minimumEdits = $sktemplate->getConfig()->get( 'PersonalDashboardBlueDotMinimumEdits' );
+
+		return $isEnabled && !$isSelf && !$hasVisited && $editCount >= $minimumEdits;
 	}
 }

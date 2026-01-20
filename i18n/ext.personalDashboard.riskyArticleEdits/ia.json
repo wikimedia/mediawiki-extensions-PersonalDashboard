@@ -1,0 +1,19 @@
+{
+	"@metadata": {
+		"authors": [
+			"McDutchie"
+		]
+	},
+	"personal-dashboard-risky-article-edits-header": "Revider cambiamentos",
+	"personal-dashboard-risky-article-edits-subheader": "Adjuta a mantener Wikipedia digne de fide: revide le sequente modificationes que pote requirer attention.",
+	"personal-dashboard-risky-article-edits-footer-preamble": "Vide plus modificationes sur le [{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}} pagina de modificationes recente]",
+	"personal-dashboard-risky-article-edits-info-title": "Revider cambiamentos",
+	"personal-dashboard-risky-article-edits-info-subtitle": "Iste modificationes, seligite aleatorimente inter le ultime 30 dies, non ha ancora essite revidite o revertite. Cata carta pote monstrar le sequente informationes:",
+	"personal-dashboard-risky-article-edits-info-article-title": "Titulo del articulo e curte description",
+	"personal-dashboard-risky-article-edits-info-author": "Nomine de usator del autor",
+	"personal-dashboard-risky-article-edits-info-time-text-today": "$1, hodie",
+	"personal-dashboard-risky-article-edits-info-edit-summary": "Un summario de lo que ha cambiate in le modification.",
+	"personal-dashboard-risky-article-edits-info-bytes": "±123 Cambio de dimension del pagina in bytes",
+	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Nulle summario de modification",
+	"personal-dashboard-risky-article-edits-info-button-aria-label": "button de information"
+}

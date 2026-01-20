@@ -41,9 +41,10 @@ async function fetchRecentActivity( limit ) {
 			recentActivityResult.value.query &&
 			Array.isArray( recentActivityResult.value.query.recentchanges )
 		) {
-			// exclude reverted edits
+			// exclude specific tags
+			const excludeTags = [ 'mw-reverted', 'mw-rollback', 'mw-undo' ];
 			const filteredResults = recentActivityResult.value.query.recentchanges.filter(
-				( change ) => !change.tags.includes( 'mw-reverted' )
+				( change ) => !excludeTags.some( ( tag ) => change.tags.includes( tag ) )
 			);
 			if ( mw.config.get( 'wgOresUiEnabled' ) ) {
 				const thresholds = mw.config.get( 'wgOresFiltersThresholds' );

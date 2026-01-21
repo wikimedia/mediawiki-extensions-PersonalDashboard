@@ -16,10 +16,6 @@ use Throwable;
 use Wikimedia\Stats\StatsFactory;
 
 class SpecialPersonalDashboard extends SpecialPage {
-	private UserOptionsManager $userOptionsManager;
-	private PersonalDashboardModuleRegistry $moduleRegistry;
-	private StatsFactory $statsFactory;
-
 	/**
 	 * @var string Unique identifier for this specific rendering of Special:PersonalDashboard.
 	 * Used by various EventLogging schemas to correlate events.
@@ -31,14 +27,11 @@ class SpecialPersonalDashboard extends SpecialPage {
 	private bool $isMobile;
 
 	public function __construct(
-		UserOptionsManager $userOptionsManager,
-		PersonalDashboardModuleRegistry $moduleRegistry,
-		StatsFactory $statsFactory,
+		private readonly PersonalDashboardModuleRegistry $moduleRegistry,
+		private readonly UserOptionsManager $userOptionsManager,
+		private readonly StatsFactory $statsFactory,
 	) {
 		parent::__construct( 'PersonalDashboard', '', false );
-		$this->userOptionsManager = $userOptionsManager;
-		$this->moduleRegistry = $moduleRegistry;
-		$this->statsFactory = $statsFactory;
 		$this->pageviewToken = $this->generatePageviewToken();
 		$this->variant = $this->getConfig()->get( 'PersonalDashboardVariant' );
 	}
@@ -68,22 +61,26 @@ class SpecialPersonalDashboard extends SpecialPage {
 		}
 
 		$out = $this->getContext()->getOutput();
-
-		$out->addModuleStyles( 'ext.personalDashboard.styles' );
-		$out->addModules( 'ext.personalDashboard.onboarding' );
-
 		$this->isMobile = Util::isMobile( $out->getSkin() );
-		$out->addJsConfigVars( [
-			'wgPersonalDashboardPageviewToken' => $this->pageviewToken
-		] );
+
 		$out->enableOOUI();
-		$out->addHTML( Html::element( 'div', [ 'id' => 'personal-dashboard-onboarding' ] ) );
+		$out->addModuleStyles( 'ext.personalDashboard.styles' );
+
+		if ( $this->userOptionsManager->getIntOption( $user, 'personaldashboard-onboarding' ) > 0 ) {
+			$out->addHTML( Html::element( 'div', [ 'id' => 'personal-dashboard-onboarding' ] ) );
+			$out->addModules( 'ext.personalDashboard.onboarding' );
+		}
 
 		$surveyLink = $this->getSurveyLink();
 
 		if ( $surveyLink ) {
 			$out->addHTML( $surveyLink );
 		}
+
+		$out->addJsConfigVars( [
+			'wgPersonalDashboardPageviewToken' => $this->pageviewToken,
+			'wgPersonalDashboardShowSurvey' => (bool)$surveyLink
+		] );
 
 		$out->addHTML( Html::openElement( 'div', [
 			'class' => 'personal-dashboard-container ' .

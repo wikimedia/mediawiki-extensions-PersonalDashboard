@@ -2,35 +2,19 @@
 	<multi-step-dialog
 		v-model:open="open"
 		v-model:step="step"
-		:total
 		:title="msgTitle"
 		:no-padding="true"
 		class="personal-dashboard-onboarding"
 		@update:open="onClose">
-		<template #step-1>
-			<img :src="bannerPath + '1.svg'" :alt="msgStep1Alt">
+		<template
+			v-for="( data, index ) in steps"
+			:key="index"
+			#[data.slot]>
+			<img :src="data.banner" :alt="data.alt">
 
 			<div class="personal-dashboard-onboarding__text">
-				<h4>{{ msgStep1Title }}</h4>
-				<p>{{ msgStep1Body }}</p>
-			</div>
-		</template>
-
-		<template #step-2>
-			<img :src="bannerPath + '2.svg'" :alt="msgStep2Alt">
-
-			<div class="personal-dashboard-onboarding__text">
-				<h4>{{ msgStep2Title }}</h4>
-				<p>{{ msgStep2Body }}</p>
-			</div>
-		</template>
-
-		<template #step-3>
-			<img :src="bannerPath + '3.svg'" :alt="msgStep3Alt">
-
-			<div class="personal-dashboard-onboarding__text">
-				<h4>{{ msgStep3Title }}</h4>
-				<p>{{ msgStep3Body }}</p>
+				<h4>{{ data.title }}</h4>
+				<p>{{ data.body }}</p>
 			</div>
 		</template>
 
@@ -52,31 +36,32 @@ module.exports = defineComponent( {
 	name: 'OnboardingDialog',
 	components: { CdxCheckbox, MultiStepDialog },
 	setup() {
-		const chance = parseInt( mw.user.options.get( 'personaldashboard-onboarding', 0 ) );
+		const length = mw.config.get( 'wgPersonalDashboardShowSurvey', false ) ? 3 : 2;
+		const bannerPath = mw.config.get( 'wgExtensionAssetsPath' ) +
+			'/PersonalDashboard/resources/ext.personalDashboard.onboarding/images/';
+		const msgPrefix = 'personal-dashboard-onboarding-step-';
 
 		return {
-			chance,
-			open: ref( chance > 0 ),
+			open: ref( true ),
 			step: ref( 1 ),
-			total: ref( 3 ),
+			steps: Array.from( { length }, ( _, i ) => ( {
+				slot: `step-${ ++i }`,
+				banner: `${ bannerPath }${ i }.svg`,
+				// * personal-dashboard-onboarding-step-1-alt
+				alt: mw.msg( `${ msgPrefix }${ i }-alt` ),
+				// * personal-dashboard-onboarding-step-2-title
+				title: mw.msg( `${ msgPrefix }${ i }-title` ),
+				// * personal-dashboard-onboarding-step-3-body
+				body: mw.msg( `${ msgPrefix }${ i }-body` )
+			} ) ),
 			dontShowAgain: ref( false ),
-			bannerPath: mw.config.get( 'wgExtensionAssetsPath' ) +
-				'/PersonalDashboard/resources/ext.personalDashboard.onboarding/images/',
+			chance: parseInt( mw.user.options.get( 'personaldashboard-onboarding', 0 ) ),
 			msgTitle: mw.msg( 'personal-dashboard-onboarding-title' ),
-			msgStep1Title: mw.msg( 'personal-dashboard-onboarding-step-1-title' ),
-			msgStep1Body: mw.msg( 'personal-dashboard-onboarding-step-1-body' ),
-			msgStep1Alt: mw.msg( 'personal-dashboard-onboarding-step-1-alt' ),
-			msgStep2Title: mw.msg( 'personal-dashboard-onboarding-step-2-title' ),
-			msgStep2Body: mw.msg( 'personal-dashboard-onboarding-step-2-body' ),
-			msgStep2Alt: mw.msg( 'personal-dashboard-onboarding-step-2-alt' ),
-			msgStep3Title: mw.msg( 'personal-dashboard-onboarding-step-3-title' ),
-			msgStep3Body: mw.msg( 'personal-dashboard-onboarding-step-3-body' ),
-			msgStep3Alt: mw.msg( 'personal-dashboard-onboarding-step-3-alt' ),
 			msgDontShowAgain: mw.msg( 'personal-dashboard-onboarding-dont-show-again' )
 		};
 	},
 	methods: {
-		async onClose( value, done ) {
+		async onClose( _, done ) {
 			this.chance = this.dontShowAgain || done ? 0 : Math.max( this.chance - 1, 0 );
 
 			await api.postWithEditToken( {

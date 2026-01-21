@@ -94,10 +94,6 @@ module.exports = defineComponent( {
 			type: Number,
 			default: 1
 		},
-		total: {
-			type: Number,
-			default: 1
-		},
 		title: {
 			type: String,
 			default: 'Multi-Step Dialog'
@@ -108,8 +104,9 @@ module.exports = defineComponent( {
 		}
 	},
 	emits: [ 'update:open', 'update:step' ],
-	setup() {
+	setup( _, { slots } ) {
 		return {
+			total: Object.keys( slots ).filter( ( key ) => key.startsWith( 'step-' ) ).length,
 			msgCloseButtonLabel: mw.msg( 'cdx-dialog-close-button-label' ),
 			msgNextButton: mw.msg( 'personal-dashboard-multi-step-dialog-next-button' ),
 			msgPreviousButton: mw.msg( 'personal-dashboard-multi-step-dialog-previous-button' ),

@@ -96,8 +96,8 @@ module.exports = defineComponent( {
 			const todayDate = new Date();
 			todayDate.setHours( 0, 0, 0, 0 );
 			if ( changeDateTimestamp >= todayDate ) {
-				return mw.message( 'personal-dashboard-risky-article-edits-info-time-text-today',
-					[ formatTime( changeDateTimestamp ) ] ).parse();
+				return mw.msg( 'personal-dashboard-risky-article-edits-info-time-text-today',
+					[ formatTime( changeDateTimestamp ) ] );
 			} else {
 				return `${ formatDate( changeDateTimestamp ) }`;
 			}

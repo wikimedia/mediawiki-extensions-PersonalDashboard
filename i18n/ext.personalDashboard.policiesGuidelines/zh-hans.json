@@ -7,5 +7,21 @@
 	"personal-dashboard-policies-guidelines-title": "方针与指引",
 	"personal-dashboard-policies-guidelines-neutral-point-of-view-title": "中立的观点",
 	"personal-dashboard-policies-guidelines-neutral-point-of-view-answer-1-label": "不中立：",
-	"personal-dashboard-policies-guidelines-neutral-point-of-view-answer-2-label": "中立："
+	"personal-dashboard-policies-guidelines-neutral-point-of-view-answer-2-label": "中立：",
+	"personal-dashboard-policies-guidelines-no-original-research-title": "没有原创研究",
+	"personal-dashboard-policies-guidelines-no-original-research-answer-1-label": "包含原创研究：",
+	"personal-dashboard-policies-guidelines-no-original-research-answer-1-text": "该说法没有任何可靠的相关来源资料支持。",
+	"personal-dashboard-policies-guidelines-no-original-research-answer-2-label": "包含原创研究：",
+	"personal-dashboard-policies-guidelines-verifiability-title": "可供查证",
+	"personal-dashboard-policies-guidelines-verifiability-example-1": "突发新闻。",
+	"personal-dashboard-policies-guidelines-verifiability-answer-1-label": "原则上不接受：",
+	"personal-dashboard-policies-guidelines-verifiability-answer-2-label": "不可靠：",
+	"personal-dashboard-policies-guidelines-verifiability-answer-3-label": "可靠：",
+	"personal-dashboard-policies-guidelines-assume-good-faith-title": "假定善意",
+	"personal-dashboard-policies-guidelines-examples-button": "范例",
+	"personal-dashboard-policies-guidelines-examples-progress": "$1/$2",
+	"personal-dashboard-policies-guidelines-examples-header": "范例：$1",
+	"personal-dashboard-policies-guidelines-next-button": "下一个",
+	"personal-dashboard-policies-guidelines-previous-button": "上一个",
+	"personal-dashboard-policies-guidelines-got-it-button": "了解"
 }

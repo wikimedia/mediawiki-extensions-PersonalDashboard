@@ -1,8 +1,15 @@
 {
 	"@metadata": {
 		"authors": [
+			"Peterxy12",
 			"Plana"
 		]
 	},
-	"personal-dashboard-risky-article-edits-info-time-text-today": "$1，今天"
+	"personal-dashboard-risky-article-edits-header": "检查更改",
+	"personal-dashboard-risky-article-edits-info-title": "检查更改",
+	"personal-dashboard-risky-article-edits-info-author": "作者用户名",
+	"personal-dashboard-risky-article-edits-info-time-text-today": "$1，今天",
+	"personal-dashboard-risky-article-edits-info-edit-summary": "修改编辑概要。",
+	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "无编辑摘要",
+	"personal-dashboard-risky-article-edits-info-button-aria-label": "信息按钮"
 }

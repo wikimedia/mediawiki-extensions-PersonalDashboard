@@ -42,7 +42,7 @@ module.exports = defineComponent( {
 		temp: { type: String, default: '' },
 		user: { type: String, required: true },
 		// eslint-disable-next-line vue/no-unused-properties
-		comment: { type: String, required: true },
+		parsedcomment: { type: String, required: true },
 		// eslint-disable-next-line vue/no-unused-properties
 		tags: { type: Array, required: true },
 		// eslint-disable-next-line vue/no-unused-properties

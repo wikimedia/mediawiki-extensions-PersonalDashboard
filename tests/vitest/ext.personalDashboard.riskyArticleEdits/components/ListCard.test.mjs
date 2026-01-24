@@ -19,7 +19,7 @@ test( 'mount component', () => {
 			rcid: 0,
 			revid: 0,
 			user: 'TestUser',
-			comment: 'TestComment',
+			parsedcomment: 'TestComment',
 			tags: [ 'test' ],
 			timestamp: date.toISOString(),
 			pages: {
@@ -50,7 +50,7 @@ test( 'renders appropriate message when edit is made today', () => {
 			rcid: 0,
 			revid: 0,
 			user: 'TestUser',
-			comment: 'TestComment',
+			parsedcomment: 'TestComment',
 			tags: [ 'test' ],
 			timestamp: date.toISOString(),
 			pages: {}
@@ -75,7 +75,7 @@ test( 'renders timestamp without hours when edit is not made today', async () =>
 			rcid: 0,
 			revid: 0,
 			user: 'TestUser',
-			comment: 'TestComment',
+			parsedcomment: 'TestComment',
 			tags: [ 'test' ],
 			timestamp: date.toISOString(),
 			pages: {}

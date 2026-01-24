@@ -22,7 +22,7 @@ test( 'fetchRecentActivity with response', async () => {
 				revid: 58859,
 				temp: '',
 				user: 'user',
-				comment: 'comment',
+				parsedcomment: 'comment',
 				tags: [],
 				timestamp: ''
 			} ],

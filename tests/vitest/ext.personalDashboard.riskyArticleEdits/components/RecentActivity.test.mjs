@@ -62,7 +62,7 @@ test( 'shows recent changes information when available', () => {
 				newlen: 250,
 				oldlen: 20,
 				temp: '',
-				comment: 'A comment',
+				parsedcomment: 'A comment',
 				tags: [],
 				timestamp: new Date( 2024, 11, 2 ).toISOString()
 			} ],

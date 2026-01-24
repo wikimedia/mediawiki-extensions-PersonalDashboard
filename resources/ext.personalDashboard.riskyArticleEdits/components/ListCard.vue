@@ -22,9 +22,8 @@
 				<div class="ext-personal-dashboard-moderation-card-info-title-row">
 					<change-number :oldlen :newlen></change-number>
 					<span class="ext-personal-dashboard-moderation-card-separator">∙</span>
-					<span v-if="comment">
-						{{ comment }}
-					</span>
+					<!-- eslint-disable-next-line vue/no-v-html -->
+					<span v-if="parsedcomment" v-html="parsedcomment"></span>
 					<span
 						v-else
 						class="ext-personal-dashboard-moderation-card-missing-comment-message"
@@ -72,7 +71,7 @@ module.exports = defineComponent( {
 		// eslint-disable-next-line vue/no-unused-properties
 		temp: { type: String, default: '' },
 		user: { type: String, required: true },
-		comment: { type: String, required: true },
+		parsedcomment: { type: String, required: true },
 		// eslint-disable-next-line vue/no-unused-properties
 		tags: { type: Array, required: true },
 		timestamp: { type: String, default: '' },

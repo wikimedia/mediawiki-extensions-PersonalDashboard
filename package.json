@@ -19,6 +19,6 @@
 		"eslint-config-wikimedia": "^0.32.3",
 		"grunt-banana-checker": "^0.13.0",
 		"stylelint-config-wikimedia": "^0.18.0",
-		"vitest-plugin-mediawiki": "git+https://gitlab.wikimedia.org/repos/modtools/vitest-plugin.git#v0.1.2"
+		"vitest-plugin-mediawiki": "git+https://gitlab.wikimedia.org/repos/modtools/vitest-plugin.git#v0.1.3"
 	}
 }

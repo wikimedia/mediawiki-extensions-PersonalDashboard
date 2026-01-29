@@ -23,7 +23,8 @@
 					<change-number :oldlen :newlen></change-number>
 					<span class="ext-personal-dashboard-moderation-card-separator">∙</span>
 					<!-- eslint-disable-next-line vue/no-v-html -->
-					<span v-if="parsedcomment" v-html="parsedcomment"></span>
+					<div v-if="parsedcomment" v-html="parsedcomment"
+						class="ext-personal-dashboard-moderation-card-comment"></div>
 					<span
 						v-else
 						class="ext-personal-dashboard-moderation-card-missing-comment-message"
@@ -154,6 +155,12 @@ module.exports = defineComponent( {
 			font-weight: @font-weight-bold;
 			line-height: @line-height-medium;
 			color: @color-base;
+		}
+
+		.ext-personal-dashboard-moderation-card-comment {
+			overflow: hidden;
+			text-overflow: ellipsis;
+			text-wrap: nowrap;
 		}
 	}
 

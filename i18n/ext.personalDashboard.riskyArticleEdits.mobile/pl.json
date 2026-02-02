@@ -1,0 +1,12 @@
+{
+	"@metadata": {
+		"authors": [
+			"Woytecr"
+		]
+	},
+	"personal-dashboard-risky-article-edits-mobile-summary-header": "Przejrzyj zmiany",
+	"personal-dashboard-risky-article-edits-mobile-summary-footer-link-text": "Zobacz więcej edycji",
+	"personal-dashboard-risky-article-edits-mobile-byte-text": "bajtów w artykule $1",
+	"personal-dashboard-risky-article-edits-mobile-user-text": "Zmienione przez $1",
+	"personal-dashboard-risky-article-edits-mobile-summary-footer-button-aria-label": "przycisk służący do przejścia do ostatnich zmian"
+}

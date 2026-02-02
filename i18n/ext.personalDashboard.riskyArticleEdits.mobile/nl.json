@@ -1,0 +1,12 @@
+{
+	"@metadata": {
+		"authors": [
+			"McDutchie"
+		]
+	},
+	"personal-dashboard-risky-article-edits-mobile-summary-header": "Wijzigingen controleren",
+	"personal-dashboard-risky-article-edits-mobile-summary-footer-link-text": "Meer bewerkingen bekijken",
+	"personal-dashboard-risky-article-edits-mobile-byte-text": "bytes in het artikel $1",
+	"personal-dashboard-risky-article-edits-mobile-user-text": "$1 heeft gewijzigd",
+	"personal-dashboard-risky-article-edits-mobile-summary-footer-button-aria-label": "knop om naar recente wijzigingen te gaan"
+}

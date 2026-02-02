@@ -1,0 +1,19 @@
+{
+	"@metadata": {
+		"authors": [
+			"Woytecr"
+		]
+	},
+	"personal-dashboard-risky-article-edits-header": "Przejrzyj zmiany",
+	"personal-dashboard-risky-article-edits-subheader": "Pomóż nam dbać o wiarygodność Wikipedii, sprawdzając poniższe edycje, które mogą wymagać uwagi.",
+	"personal-dashboard-risky-article-edits-footer-preamble": "Więcej edycji znajdziesz na [{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}} stronie ostatnich zmian]",
+	"personal-dashboard-risky-article-edits-info-title": "Przejrzyj zmiany",
+	"personal-dashboard-risky-article-edits-info-subtitle": "Te zmiany, wybrane losowo z ostatnich 30 dni, nie zostały jeszcze sprawdzone ani cofnięte. Każda karta może wyświetlać następujące informacje:",
+	"personal-dashboard-risky-article-edits-info-article-title": "Tytuł artykułu i krótki opis",
+	"personal-dashboard-risky-article-edits-info-author": "Nazwa użytkownika edytującego",
+	"personal-dashboard-risky-article-edits-info-time-text-today": "$1, dzisiaj",
+	"personal-dashboard-risky-article-edits-info-edit-summary": "Opis zmian.",
+	"personal-dashboard-risky-article-edits-info-bytes": "±123 Zmiana rozmiaru strony w bajtach",
+	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Nie podano opisu zmian",
+	"personal-dashboard-risky-article-edits-info-button-aria-label": "przycisk do wyświetlania informacji"
+}

@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"McDutchie"
+			"McDutchie",
+			"Siebrand"
 		]
 	},
 	"personal-dashboard-policies-guidelines-title": "Beleid en richtlijnen",
@@ -27,7 +28,7 @@
 	"personal-dashboard-policies-guidelines-verifiability-definition": "Nieuwe toevoegingen moeten een bronvermelding bevatten, waarin de informatiebron wordt vermeld.",
 	"personal-dashboard-policies-guidelines-verifiability-example-1": "Het laatste nieuws.",
 	"personal-dashboard-policies-guidelines-verifiability-answer-1-label": "Grotendeels onaanvaardbaar:",
-	"personal-dashboard-policies-guidelines-verifiability-answer-1-text": "Nieuwsberichten bevatten vaak onnauwkeurigheden. Het is beter om een dag of twee na een gebeurtenis te wachten voordat je details aan Wikipedia toevoegt. Dit geeft journalisten de tijd om meer informatie te verzamelen en kunnen de onderzoeksautoriteiten eerst officiële verklaringen doen uitgaan.",
+	"personal-dashboard-policies-guidelines-verifiability-answer-1-text": "Nieuwsberichten bevatten vaak onnauwkeurigheden. Het is beter om een dag of twee na een gebeurtenis te wachten voordat u details aan Wikipedia toevoegt. Dit geeft journalisten de tijd om meer informatie te verzamelen en kunnen de onderzoeksautoriteiten eerst officiële verklaringen doen uitgaan.",
 	"personal-dashboard-policies-guidelines-verifiability-example-2": "Inhoud uit berichten op sociale media.",
 	"personal-dashboard-policies-guidelines-verifiability-answer-2-label": "Niet betrouwbaar:",
 	"personal-dashboard-policies-guidelines-verifiability-answer-2-text": "Inhoud van sociale media is over het algemeen niet toelaatbaar. Zoiets kan alleen in overweging worden genomen als het is gepubliceerd door een gevestigde expert op het betreffende vakgebied.",
@@ -41,7 +42,7 @@
 	"personal-dashboard-policies-guidelines-assume-good-faith-answer-1-text": "Beschuldig redacteuren niet van kwade trouw wanneer ze een fout hebben gemaakt.",
 	"personal-dashboard-policies-guidelines-assume-good-faith-example-2": "“Ik zag dat de opmaak in je bewerking niet helemaal goed was. Ik heb het voor je aangepast, en deze hulppagina kan je de volgende keer wellicht verder helpen.”",
 	"personal-dashboard-policies-guidelines-assume-good-faith-answer-2-label": "Uitgaande van goede trouw:",
-	"personal-dashboard-policies-guidelines-assume-good-faith-answer-2-text": "Tenzij er duidelijk bewijs is van kwade trouw, help elkaar dan de kwaliteit van de artikelen te verbeteren.",
+	"personal-dashboard-policies-guidelines-assume-good-faith-answer-2-text": "Tenzij er duidelijk bewijs is van kwade trouw, help elkaar dan de kwaliteit van de pagina's te verbeteren.",
 	"personal-dashboard-policies-guidelines-examples-button": "Voorbeelden",
 	"personal-dashboard-policies-guidelines-examples-progress": "$1 van $2",
 	"personal-dashboard-policies-guidelines-examples-header": "Voorbeeld $1",

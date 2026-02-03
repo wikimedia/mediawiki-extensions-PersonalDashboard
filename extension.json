@@ -94,7 +94,8 @@
 			"i18n/ext.personalDashboard.onboarding",
 			"i18n/ext.personalDashboard.policiesGuidelines",
 			"i18n/ext.personalDashboard.riskyArticleEdits",
-			"i18n/ext.personalDashboard.riskyArticleEdits.mobile"
+			"i18n/ext.personalDashboard.riskyArticleEdits.mobile",
+			"i18n/main"
 		]
 	},
 	"ExtensionMessagesFiles": {

@@ -89,7 +89,6 @@
 	},
 	"MessagesDirs": {
 		"PersonalDashboard": [
-			"i18n",
 			"i18n/ext.personalDashboard.common",
 			"i18n/ext.personalDashboard.impact",
 			"i18n/ext.personalDashboard.onboarding",

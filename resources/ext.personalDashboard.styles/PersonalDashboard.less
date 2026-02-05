@@ -98,6 +98,13 @@ body.mw-special-PersonalDashboard {
 		}
 	}
 
+	.personal-dashboard-survey {
+		a {
+			margin: 0 @spacing-50 0 @spacing-50;
+		}
+		text-align: end;
+	}
+
 	&.personal-dashboard-mobile-summary {
 		// Enforce a minimum width to avoid breaking the connecting lines of the start modules.
 		min-width: 320px;
@@ -232,20 +239,12 @@ body.mw-special-PersonalDashboard {
 		font-weight: bold;
 	}
 
-	.personal-dashboard-survey {
-		font-weight: @font-weight-bold;
-		margin-bottom: @spacing-125;
-
-		&-icon {
-			.cdx-mixin-css-icon(
-				@cdx-icon-info-filled,
-				@color-icon-notice
-			);
-			margin-right: @spacing-50;
-		}
-	}
-
 	&.skin-minerva .personal-dashboard-survey {
 		margin-bottom: @spacing-0;
+		text-align: start;
+	}
+
+	.cdx-info-chip-css-icon--lab-flask {
+		.cdx-mixin-css-icon( @cdx-icon-lab-flask, @color-icon-notice, @size-icon-small );
 	}
 }

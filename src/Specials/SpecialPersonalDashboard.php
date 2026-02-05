@@ -13,6 +13,7 @@ use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\User\Options\UserOptionsManager;
 use MediaWiki\WikiMap\WikiMap;
 use Throwable;
+use Wikimedia\Codex\Utility\Codex;
 use Wikimedia\Stats\StatsFactory;
 
 class SpecialPersonalDashboard extends SpecialPage {
@@ -76,15 +77,18 @@ class SpecialPersonalDashboard extends SpecialPage {
 			$out->addModules( 'ext.personalDashboard.onboarding' );
 		}
 
-		$surveyLink = $this->getSurveyLink();
+		$surveyLink = $this->createSurveyLinkBetaChip();
 
 		if ( $surveyLink ) {
-			$out->addHTML( $surveyLink );
+			if ( $this->isMobile ) {
+				$out->addHTML( $surveyLink );
+			} else {
+				$out->setIndicators( [ 'mw-ext-personal-dashboard-survey' => $surveyLink ] );
+			}
 		}
 
 		$out->addJsConfigVars( [
-			'wgPersonalDashboardPageviewToken' => $this->pageviewToken,
-			'wgPersonalDashboardShowSurvey' => (bool)$surveyLink
+			'wgPersonalDashboardPageviewToken' => $this->pageviewToken
 		] );
 
 		$out->addHTML( Html::openElement( 'div', [
@@ -197,20 +201,26 @@ class SpecialPersonalDashboard extends SpecialPage {
 	}
 
 	/**
-	 * Get the survey link header HTML if the config value is set and valid.
+	 * Create the survey link header HTML if the config value is set and valid
+	 * and create an info chip that indicates that this extension is in Beta.
 	 */
-	public function getSurveyLink(): ?string {
-		$url = $this->getConfig()->get( 'PersonalDashboardSurveyLink' );
+	public function createSurveyLinkBetaChip(): ?string {
+		$url = $this->getConfig()->get( 'PersonalDashboardSurveyLink' ) ?:
+			'https://www.mediawiki.org/wiki/Talk:Moderator_Tools/Dashboard?uselang=';
 
-		if ( !$url ) {
-			return null;
-		}
+		$cdx = new Codex();
+		$betaChip = $cdx->infoChip()
+			->setStatus( 'notice' )
+			->setIcon( 'cdx-info-chip-css-icon--lab-flask' )
+			->setText( $this->msg( 'personal-dashboard-beta-info-chip-text' ) )
+			->build()
+			->getHtml();
 
 		return Html::rawElement(
 			'div',
 			[ 'class' => 'personal-dashboard-survey' ],
-			Html::element( 'span', [ 'class' => 'personal-dashboard-survey-icon' ] ) .
-			$this->msg( 'personal-dashboard-survey-text', $url . $this->getLanguage()->getCode() )
+			$this->msg( 'personal-dashboard-survey-text', $url . $this->getLanguage()->getCode() ) .
+			$betaChip
 		);
 	}
 

@@ -31,12 +31,16 @@ class SpecialPersonalDashboardTest extends SpecialPageTestBase {
 		$sp = $this->newSpecialPage();
 
 		$this->overrideConfigValue( 'PersonalDashboardSurveyLink', 'https://example.com?Q_lang=' );
-		$this->assertStringContainsString( 'https://example.com?Q_lang=en', $sp->getSurveyLink() );
+		$this->assertStringContainsString( 'https://example.com?Q_lang=en', $sp->createSurveyLinkBetaChip() );
 
 		$this->overrideConfigValue( 'PersonalDashboardSurveyLink', 'https://example.com?foo=bar&Q_lang=' );
-		$this->assertStringContainsString( 'https://example.com?foo=bar&amp;Q_lang=en', $sp->getSurveyLink() );
+		$this->assertStringContainsString( 'https://example.com?foo=bar&amp;Q_lang=en',
+			$sp->createSurveyLinkBetaChip() );
 
 		$this->overrideConfigValue( 'PersonalDashboardSurveyLink', '' );
-		$this->assertNull( $sp->getSurveyLink() );
+		$this->assertStringNotContainsString( 'https://example.com?foo=bar&amp;Q_lang=en',
+			$sp->createSurveyLinkBetaChip() );
+		$this->assertStringContainsString( 'https://www.mediawiki.org/wiki/Talk:Moderator_Tools/Dashboard',
+			$sp->createSurveyLinkBetaChip() );
 	}
 }

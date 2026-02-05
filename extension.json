@@ -127,7 +127,8 @@
 			"codexComponents": [
 				"CdxButton",
 				"CdxDialog",
-				"CdxIcon"
+				"CdxIcon",
+				"CdxInfoChip"
 			],
 			"dependencies": [
 				"vue"

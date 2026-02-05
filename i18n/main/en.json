@@ -14,5 +14,6 @@
 	"personal-dashboard-enable": "Display personal dashboard",
 	"personal-dashboard-module-no-js-fallback": "Please enable JavaScript to view this component.",
 	"personal-dashboard-enable-preference": "To enable the personal dashboard, visit your {{int:prefs-dashboard}} settings in [[Special:Preferences#mw-prefsection-personal-dashboard|Preferences]].",
-	"personal-dashboard-survey-text": "This is an early version of this page. Share your feedback to inform future improvements via [$1 this survey]."
+	"personal-dashboard-survey-text": "[$1 Share feedback]",
+	"personal-dashboard-beta-info-chip-text": "Beta"
 }

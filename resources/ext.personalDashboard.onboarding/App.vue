@@ -36,7 +36,7 @@ module.exports = defineComponent( {
 	name: 'OnboardingDialog',
 	components: { CdxCheckbox, MultiStepDialog },
 	setup() {
-		const length = mw.config.get( 'wgPersonalDashboardShowSurvey', false ) ? 3 : 2;
+		const length = 3;
 		const bannerPath = mw.config.get( 'wgExtensionAssetsPath' ) +
 			'/PersonalDashboard/resources/ext.personalDashboard.onboarding/images/';
 		const msgPrefix = 'personal-dashboard-onboarding-step-';

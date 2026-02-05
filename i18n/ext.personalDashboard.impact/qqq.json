@@ -1,12 +1,13 @@
 {
 	"@metadata": {
 		"authors": [
-			"Dillon Hardy"
+			"Dillon Hardy",
+			"Woytecr"
 		]
 	},
 	"personal-dashboard-impact-title": "Title for the “Your impact” module.",
 	"personal-dashboard-impact-thanks-sent": "Title for the “Thanks sent” statistic.",
 	"personal-dashboard-impact-edits-reviewed": "Title for the “Edits reviewed” statistic.",
 	"personal-dashboard-impact-edits-reviewed-description": "Description for the “Edits reviewed” statistic.",
-	"personal-dashboard-impact-info-button": "Label for the info button, which explains the “Edits reviewed” category."
+	"personal-dashboard-impact-info-button": "Label (visible only for screen readers) for the info button, which explains the “Edits reviewed” category."
 }

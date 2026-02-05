@@ -1,0 +1,9 @@
+{
+	"@metadata": {
+		"authors": []
+	},
+	"personal-dashboard-multi-step-dialog-progress": "$1 von $2",
+	"personal-dashboard-multi-step-dialog-next-button": "Nächste",
+	"personal-dashboard-multi-step-dialog-previous-button": "Vorherige",
+	"personal-dashboard-multi-step-dialog-got-it-button": "Verstanden"
+}

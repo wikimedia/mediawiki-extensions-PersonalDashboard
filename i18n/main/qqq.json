@@ -1,8 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Jsn.sherman",
-			"Dillon Hardy"
+			"Dillon Hardy",
+			"Jsn.sherman"
 		]
 	},
 	"personal-dashboard-desc": "{{desc|name=PersonalDashboard|url=https://www.mediawiki.org/wiki/Extension:PersonalDashboard}}",

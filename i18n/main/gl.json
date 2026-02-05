@@ -12,5 +12,6 @@
 	"prefs-dashboard": "Funcións do panel de control persoal",
 	"personal-dashboard-enable": "Mostrar o panel de control persoal",
 	"personal-dashboard-module-no-js-fallback": "Activa o JavaScript para ver este compoñente.",
-	"personal-dashboard-enable-preference": "Para activar o panel persoal, visita a túa configuración de «{{int:prefs-dashboard}}» nas [[Special:Preferences#mw-prefsection-personal-dashboard|preferencias]]."
+	"personal-dashboard-enable-preference": "Para activar o panel persoal, visita a túa configuración de «{{int:prefs-dashboard}}» nas [[Special:Preferences#mw-prefsection-personal-dashboard|preferencias]].",
+	"personal-dashboard-survey-text": "Esta é unha versión inicial da páxina. Comparte os teus comentarios para darlles xeito ás futuras melloras a través [$1 desta enquisa]."
 }

@@ -1,0 +1,15 @@
+{
+	"@metadata": {
+		"authors": [
+			"Escargot bleu"
+		]
+	},
+	"personal-dashboard-desc": "Tableau de bord expérimental pour les patrouilleurs",
+	"personal-dashboard-link-title": "Tableau de bord",
+	"personal-dashboard-specialpage-title": "{{GENDER:$1|Bonjour}}, {{bidi:$1}} !",
+	"tooltip-pt-dashboard": "{{GENDER:|Votre}} tableau de bord personnel",
+	"prefs-dashboard": "Fonctionnalités du tableau de bord personnel",
+	"personal-dashboard-enable": "Afficher le tableau de bord personnel",
+	"personal-dashboard-module-no-js-fallback": "Veuillez activer JavaScript pour voir cet élément.",
+	"personal-dashboard-enable-preference": "Pour activer le tableau de bord personnel, rendez-vous dans la section {{int:prefs-dashboard}} des [[Special:Preferences#mw-prefsection-personal-dashboard|préferences]]."
+}

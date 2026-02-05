@@ -10,5 +10,6 @@
 	"prefs-dashboard": "Funktionen des persönlichen Dashboards",
 	"personal-dashboard-enable": "Persönliches Dashboard anzeigen",
 	"personal-dashboard-module-no-js-fallback": "Bitte aktiviere JavaScript, um diese Komponente zu sehen.",
-	"personal-dashboard-enable-preference": "Um das persönliche Dashboard zu aktivieren, rufe deine {{int:prefs-dashboard}}-Einstellungen unter [[Special:Preferences#mw-prefsection-personal-dashboard|Einstellungen]] auf."
+	"personal-dashboard-enable-preference": "Um das persönliche Dashboard zu aktivieren, rufe deine {{int:prefs-dashboard}}-Einstellungen unter [[Special:Preferences#mw-prefsection-personal-dashboard|Einstellungen]] auf.",
+	"personal-dashboard-survey-text": "Dies ist eine frühe Version dieser Seite. Teile uns dein Feedback mit, um zukünftige Verbesserungen zu ermöglichen, indem du [$1 an dieser Umfrage teilnimmst]."
 }

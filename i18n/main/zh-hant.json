@@ -1,0 +1,17 @@
+{
+	"@metadata": {
+		"authors": [
+			"Kly"
+		]
+	},
+	"personal-dashboard-desc": "一個版主性質的實驗性面板",
+	"personal-dashboard-link-title": "面板",
+	"personal-dashboard-specialpage-title": "{{GENDER:$1|您好}}，{{bidi:$1}}！",
+	"personal-dashboard-tab": "個人面板",
+	"tooltip-pt-dashboard": "{{GENDER:|您的}}個人面板",
+	"prefs-dashboard": "個人面板功能",
+	"personal-dashboard-enable": "顯示個人面板",
+	"personal-dashboard-module-no-js-fallback": "請啟用 JavaScript 來檢視此組件。",
+	"personal-dashboard-enable-preference": "若要啟用個人面板，請造訪在您的[[Special:Preferences#mw-prefsection-personal-dashboard|偏好設定]]裡的{{int:prefs-dashboard}}設定。",
+	"personal-dashboard-survey-text": "這是此頁面的早期版本。請透過[$1 參與此調查]分享您的回饋意見，來告知我們改善功能。"
+}

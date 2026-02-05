@@ -1,8 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Jsn.sherman",
-			"Dillon Hardy"
+			"Dillon Hardy",
+			"Jsn.sherman"
 		]
 	},
 	"personal-dashboard-multi-step-dialog-progress": "Current page indicator for the multi-step dialog.\n\nParameters:\n* $1 - Current page\n* $2 - Total pages",

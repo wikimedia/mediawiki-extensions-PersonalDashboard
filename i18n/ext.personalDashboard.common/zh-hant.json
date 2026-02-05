@@ -1,0 +1,11 @@
+{
+	"@metadata": {
+		"authors": [
+			"Kly"
+		]
+	},
+	"personal-dashboard-multi-step-dialog-progress": "第 $1 頁，共 $2 頁",
+	"personal-dashboard-multi-step-dialog-next-button": "下一頁",
+	"personal-dashboard-multi-step-dialog-previous-button": "上一頁",
+	"personal-dashboard-multi-step-dialog-got-it-button": "了解"
+}

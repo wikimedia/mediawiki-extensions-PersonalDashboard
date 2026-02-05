@@ -1,0 +1,12 @@
+{
+	"@metadata": {
+		"authors": [
+			"Kly"
+		]
+	},
+	"personal-dashboard-impact-title": "您的影響",
+	"personal-dashboard-impact-thanks-sent": "發送感謝",
+	"personal-dashboard-impact-edits-reviewed": "已審核的編輯",
+	"personal-dashboard-impact-edits-reviewed-description": "統計您已回退的編輯次數，與您發送的感謝次數。",
+	"personal-dashboard-impact-info-button": "資訊按鈕的標籤，解釋「已審核的編輯」分類。"
+}

@@ -1,0 +1,12 @@
+{
+	"@metadata": {
+		"authors": [
+			"Toliño"
+		]
+	},
+	"personal-dashboard-impact-title": "O teu impacto",
+	"personal-dashboard-impact-thanks-sent": "Agradecementos enviados",
+	"personal-dashboard-impact-edits-reviewed": "Edicións revisadas",
+	"personal-dashboard-impact-edits-reviewed-description": "Conta as edicións que revertiches e os agradecementos que enviaches.",
+	"personal-dashboard-impact-info-button": "Etiqueta para o botón de información que explica a categoría «Edicións revisadas»."
+}

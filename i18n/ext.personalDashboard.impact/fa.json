@@ -1,0 +1,12 @@
+{
+	"@metadata": {
+		"authors": [
+			"Jeeputer"
+		]
+	},
+	"personal-dashboard-impact-title": "اثرگذاری شما",
+	"personal-dashboard-impact-thanks-sent": "تشکرهای ارسال‌شده",
+	"personal-dashboard-impact-edits-reviewed": "ویرایش‌های بازبینی‌شده",
+	"personal-dashboard-impact-edits-reviewed-description": "شمار ویرایش‌هایی که برگردانده‌اید و تشکرهایی که ارسال کرده‌اید.",
+	"personal-dashboard-impact-info-button": "برچسبی برای دکمهٔ اطلاعات، که ردهٔ «ویرایش‌های بررسی‌شده» را توضیح می‌دهد."
+}

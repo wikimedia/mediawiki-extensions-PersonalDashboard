@@ -1,20 +1,14 @@
 <template>
-	<teleport
-		to=".personal-dashboard-module-riskyArticleEdits > .personal-dashboard-module-header > .ext-personal-dashboard-mobile-details-header-icon"
-	>
-		<info-popover></info-popover>
-	</teleport>
 	<recent-activity></recent-activity>
 </template>
 
 <script>
 const { defineComponent } = require( 'vue' );
 const RecentActivity = require( './components/RecentActivity.vue' );
-const InfoPopover = require( './components/InfoPopover.vue' );
 
 module.exports = defineComponent( {
 	name: 'RiskyArticleEdits',
-	components: { RecentActivity, InfoPopover }
+	components: { RecentActivity }
 } );
 </script>
 

@@ -5,13 +5,6 @@
 	"personal-dashboard-risky-article-edits-header": "Review changes",
 	"personal-dashboard-risky-article-edits-subheader": "Help keep Wikipedia reliable by reviewing the following edits which may need attention.",
 	"personal-dashboard-risky-article-edits-footer-preamble": "View more edits in the [{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}} recent changes page]",
-	"personal-dashboard-risky-article-edits-info-title": "Review changes",
-	"personal-dashboard-risky-article-edits-info-subtitle": "These edits, randomly selected from the last 30 days, have not yet been reviewed or reverted. Each card may display the following information:",
-	"personal-dashboard-risky-article-edits-info-article-title": "Article title and short description",
-	"personal-dashboard-risky-article-edits-info-author": "Author’s username",
 	"personal-dashboard-risky-article-edits-info-time-text-today": "$1, Today",
-	"personal-dashboard-risky-article-edits-info-edit-summary": "A summary of what changed in the edit.",
-	"personal-dashboard-risky-article-edits-info-bytes": "±123 Page byte size change",
-	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "No edit summary",
-	"personal-dashboard-risky-article-edits-info-button-aria-label": "information button"
+	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "No edit summary"
 }

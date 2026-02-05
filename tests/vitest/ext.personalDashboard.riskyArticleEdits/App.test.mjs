@@ -11,10 +11,6 @@ test( 'mount component', () => {
 	header.className = 'personal-dashboard-module-header';
 	card.appendChild( header );
 
-	const placeholder = document.createElement( 'span' );
-	placeholder.className = 'ext-personal-dashboard-mobile-details-header-icon';
-	header.appendChild( placeholder );
-
 	const wrapper = mount( App );
 	expect( wrapper.element ).toMatchSnapshot();
 } );

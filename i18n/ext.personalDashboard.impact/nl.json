@@ -1,0 +1,12 @@
+{
+	"@metadata": {
+		"authors": [
+			"Siebrand"
+		]
+	},
+	"personal-dashboard-impact-title": "Uw bijdrage",
+	"personal-dashboard-impact-thanks-sent": "Bedankje verzonden",
+	"personal-dashboard-impact-edits-reviewed": "Bewerkingen beoordeeld",
+	"personal-dashboard-impact-edits-reviewed-description": "Telt de bewerkingen die u hebt teruggedraaid en de bedankjes die u hebt verzonden.",
+	"personal-dashboard-impact-info-button": "Label voor de infoknop, die de categorie \"Bewerkingen beoordeeld\" uitlegt."
+}

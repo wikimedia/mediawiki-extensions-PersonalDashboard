@@ -1,0 +1,17 @@
+{
+	"@metadata": {
+		"authors": [
+			"Siebrand"
+		]
+	},
+	"personal-dashboard-desc": "Een experimenteel dashboard voor beheerders",
+	"personal-dashboard-link-title": "Dashboard",
+	"personal-dashboard-specialpage-title": "{{GENDER:$1|Hallo}}, {{bidi:$1}}!",
+	"personal-dashboard-tab": "Persoonlijk dashboard",
+	"tooltip-pt-dashboard": "{{GENDER:|Uw}} persoonlijke dashboard",
+	"prefs-dashboard": "Persoonlijke dashboardfuncties",
+	"personal-dashboard-enable": "Persoonlijk dashboard weergeven",
+	"personal-dashboard-module-no-js-fallback": "Schakel JavaScript in om dit onderdeel te bekijken.",
+	"personal-dashboard-enable-preference": "Om het persoonlijke dashboard in te schakelen, gaat u naar uw {{int:prefs-dashboard}}-instellingen in [[Special:Preferences#mw-prefsection-personal-dashboard|Voorkeuren]].",
+	"personal-dashboard-survey-text": "Dit is een vroege versie van deze pagina. Deel uw terugkoppeling om toekomstige verbeteringen mogelijk te maken via [$1 deze vragenlijst]."
+}

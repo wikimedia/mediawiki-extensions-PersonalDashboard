@@ -4,5 +4,13 @@
 	},
 	"personal-dashboard-onboarding-title": "Dein Dashboard",
 	"personal-dashboard-onboarding-dont-show-again": "Nicht noch einmal anzeigen",
-	"personal-dashboard-onboarding-step-1-title": "Willkommen"
+	"personal-dashboard-onboarding-step-1-title": "Willkommen",
+	"personal-dashboard-onboarding-step-1-body": "Du gehörst zu den Ersten, die diese neue Funktion ausprobieren! Dies ist ein zentraler Ort, der dir hilft, zu Wikipedia beizutragen, indem er offene Aufgaben und nützliche Ressourcen aufzeigt.",
+	"personal-dashboard-onboarding-step-1-alt": "Illustration einer Seite mit drei separaten, vereinfachten Dashboard-Panels.",
+	"personal-dashboard-onboarding-step-2-title": "Funktionen",
+	"personal-dashboard-onboarding-step-2-body": "In dieser ersten Version des Dashboards kannst du Änderungen überprüfen, die möglicherweise Aufmerksamkeit erfordern, sich über relevante Richtlinien und Vorgaben informieren und relevante Statistiken verfolgen.",
+	"personal-dashboard-onboarding-step-2-alt": "Illustration der Hinzufügung von drei vereinfachten Dashboard-Panels zur Seite.",
+	"personal-dashboard-onboarding-step-3-title": "Schreibe dein Feedback",
+	"personal-dashboard-onboarding-step-3-body": "In den kommenden Monaten planen wir, die Funktionen im Dashboard basierend auf deinen Bearbeitungsaktivitäten zu personalisieren und neue Module hinzuzufügen. Wir möchten dies zu einer wertvollen Funktion für die Bearbeiter deines Projekts machen. Um uns dein Feedback mitzuteilen, findest du oben auf der Seite einen Link zu einer Umfrage.",
+	"personal-dashboard-onboarding-step-3-alt": "Illustration eines vereinfachten Dashboards, bei dem der obere Teil der Seite einen dunkelblauen Bereich aufweist, der den Feedback-Link hervorhebt."
 }

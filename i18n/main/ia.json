@@ -1,0 +1,17 @@
+{
+	"@metadata": {
+		"authors": [
+			"McDutchie"
+		]
+	},
+	"personal-dashboard-desc": "Un tabuliero de instrumentos experimental pro moderatores",
+	"personal-dashboard-link-title": "Tabuliero de instrumentos",
+	"personal-dashboard-specialpage-title": "{{GENDER:$1|Salute}}, {{bidi:$1}}!",
+	"personal-dashboard-tab": "TabulieroPersonal",
+	"tooltip-pt-dashboard": "Tu tabuliero de instrumentos personal",
+	"prefs-dashboard": "Functiones del tabuliero de instrumentos personal",
+	"personal-dashboard-enable": "Monstrar tabuliero de instrumentos personal",
+	"personal-dashboard-module-no-js-fallback": "Per favor activa JavaScript pro vider iste componente.",
+	"personal-dashboard-enable-preference": "Pro activar le tabuliero de instrumentos personal, visita le parametros de {{int:prefs-dashboard}} in le [[Special:Preferences#mw-prefsection-personal-dashboard|Preferentias]].",
+	"personal-dashboard-survey-text": "Isto es un version preliminar de iste pagina. Condivide tu opinion via [$1 iste sondage] pro influentiar meliorationes futur."
+}

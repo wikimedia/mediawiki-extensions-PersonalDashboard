@@ -1,0 +1,16 @@
+{
+	"@metadata": {
+		"authors": [
+			"Saurmandal"
+		]
+	},
+	"personal-dashboard-desc": "मॉडरेटर्स के लिए एक प्रायोगिक डैशबोर्ड",
+	"personal-dashboard-link-title": "डैशबोर्ड",
+	"personal-dashboard-specialpage-title": "{{GENDER:$1|नमस्ते}}, {{bidi:$1}} जी!",
+	"personal-dashboard-tab": "व्यक्तिगत डैशबोर्ड",
+	"tooltip-pt-dashboard": "{{GENDER:|आपका}} व्यक्तिगत डैशबोर्ड",
+	"personal-dashboard-enable": "व्यक्तिगत डैशबोर्ड दिखाएँ",
+	"personal-dashboard-module-no-js-fallback": "इस घटक को देखने के लिए कृपया जावास्क्रिप्ट सक्षम करें।",
+	"personal-dashboard-enable-preference": "व्यक्तिगत डैशबोर्ड को सक्षम करने के लिए [[Special:Preferences#mw-prefsection-personal-dashboard|वरीयताओं]] में {{int:prefs-dashboard}} सेटिंग्स पर जाएँ।",
+	"personal-dashboard-survey-text": "यह इस पृष्ठ का प्रारंभिक संस्करण है। [$1 इस सर्वेक्षण] के माध्यम से भविष्य के सुधारों को सूचित करने के लिए अपनी प्रतिक्रिया साझा करें।"
+}

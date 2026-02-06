@@ -1,0 +1,18 @@
+{
+	"@metadata": {
+		"authors": [
+			"Woytecr"
+		]
+	},
+	"personal-dashboard-onboarding-title": "Twój pulpit",
+	"personal-dashboard-onboarding-dont-show-again": "Nie pokazuj ponownie",
+	"personal-dashboard-onboarding-step-1-title": "Witaj",
+	"personal-dashboard-onboarding-step-1-body": "Jesteś jedną z pierwszych osób, które wypróbowały tę nową funkcję! To centralne miejsce, które pomoże Ci wnosić wkład w Wikipedię, wyświetlając otwarte zadania i przydatne zasoby.",
+	"personal-dashboard-onboarding-step-1-alt": "Ilustracja przedstawiająca stronę z trzema oddzielnymi, uproszczonymi panelami pulpitu.",
+	"personal-dashboard-onboarding-step-2-title": "Funkcje",
+	"personal-dashboard-onboarding-step-2-body": "W pierwszej wersji tego pulpitu możesz przeglądać zmiany, które mogą wymagać uwagi, zapoznać się z odpowiednimi zasadami i wytycznymi oraz śledzić statystyki związane z tym wszystkim.",
+	"personal-dashboard-onboarding-step-2-alt": "Ilustracja przedstawiająca trzy uproszczone panele pulpitu dodawane do tej strony.",
+	"personal-dashboard-onboarding-step-3-title": "Podziel się swoją opinią",
+	"personal-dashboard-onboarding-step-3-body": "W nadchodzących miesiącach planujemy personalizować funkcje w panelu na podstawie Twojej aktywności edycyjnej i dodawać nowe moduły. Chcemy, aby ta funkcja była cenna dla redaktorów pracujących w Twoim projekcie. Abyś mógł podzielić się swoją opinią, umieściliśmy link do ankiety na górze tej strony.",
+	"personal-dashboard-onboarding-step-3-alt": "Ilustracja uproszczonego pulpitu, w którym u góry strony znajduje się ciemnoniebieska sekcja, wskazująca umiejscowienie linka do wyrażenia opinii."
+}

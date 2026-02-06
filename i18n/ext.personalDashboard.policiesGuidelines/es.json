@@ -1,0 +1,13 @@
+{
+	"@metadata": {
+		"authors": [
+			"Suecarmol"
+		]
+	},
+	"personal-dashboard-policies-guidelines-examples-button": "Ejemplos",
+	"personal-dashboard-policies-guidelines-examples-progress": "$1 de $2",
+	"personal-dashboard-policies-guidelines-examples-header": "Ejemplo $1",
+	"personal-dashboard-policies-guidelines-next-button": "Siguiente",
+	"personal-dashboard-policies-guidelines-previous-button": "Anterior",
+	"personal-dashboard-policies-guidelines-got-it-button": "Entendido"
+}

@@ -1,0 +1,17 @@
+{
+	"@metadata": {
+		"authors": [
+			"Woytecr"
+		]
+	},
+	"personal-dashboard-desc": "Eksperymentalny panel dla moderatorów",
+	"personal-dashboard-link-title": "Centrum dowodzenia",
+	"personal-dashboard-specialpage-title": "{{GENDER:$1|Witaj}}, {{bidi:$1}}!",
+	"personal-dashboard-tab": "Pulpit",
+	"tooltip-pt-dashboard": "{{GENDER:|Twój}} osobisty pulpit",
+	"prefs-dashboard": "Funkcje pulpitu osobistego",
+	"personal-dashboard-enable": "Wyświetl pulpit osobisty",
+	"personal-dashboard-module-no-js-fallback": "Zezwól na JavaScript, aby zobaczyć ten komponent.",
+	"personal-dashboard-enable-preference": "Aby włączyć pulpit osobisty, przejdź do ustawień {{int:prefs-dashboard}} w [[Special:Preferences#mw-prefsection-personal-dashboard|Preferencjach]].",
+	"personal-dashboard-survey-text": "To jest wczesna wersja tej strony. Podziel się swoją opinią, aby zaproponować kolejne ulepszenia, korzystając [$1 z tej ankiety]."
+}

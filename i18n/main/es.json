@@ -1,0 +1,9 @@
+{
+	"@metadata": {
+		"authors": [
+			"Suecarmol"
+		]
+	},
+	"personal-dashboard-specialpage-title": "¡{{GENDER:$1|Hola}}, {{bidi:$1}}!",
+	"personal-dashboard-module-no-js-fallback": "Favor de habilitar JavaScript para ver este componente."
+}

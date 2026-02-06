@@ -1,0 +1,13 @@
+{
+	"@metadata": {
+		"authors": [
+			"Neriah"
+		]
+	},
+	"personal-dashboard-policies-guidelines-examples-button": "דוגמאות",
+	"personal-dashboard-policies-guidelines-examples-progress": "$1 מתוך $2",
+	"personal-dashboard-policies-guidelines-examples-header": "דוגמה: $1",
+	"personal-dashboard-policies-guidelines-next-button": "הבא",
+	"personal-dashboard-policies-guidelines-previous-button": "הקודם",
+	"personal-dashboard-policies-guidelines-got-it-button": "הבנתי"
+}

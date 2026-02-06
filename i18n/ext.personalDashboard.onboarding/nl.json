@@ -1,0 +1,19 @@
+{
+	"@metadata": {
+		"authors": [
+			"McDutchie",
+			"Siebrand"
+		]
+	},
+	"personal-dashboard-onboarding-title": "Uw dashboard",
+	"personal-dashboard-onboarding-dont-show-again": "Niet opnieuw weergeven",
+	"personal-dashboard-onboarding-step-1-title": "Welkom",
+	"personal-dashboard-onboarding-step-1-body": "U bent een van de eersten die deze nieuwe functie uitprobeert! Dit is een centrale plek waar u kunt bijdragen aan Wikipedia door openstaande taken en nuttige bronnen weer te geven.",
+	"personal-dashboard-onboarding-step-1-alt": "Illustratie van een pagina met drie afzonderlijke, vereenvoudigde dashboardpanelen.",
+	"personal-dashboard-onboarding-step-2-title": "Functies",
+	"personal-dashboard-onboarding-step-2-body": "In deze eerste versie van het dashboard kunt u wijzigingen bekijken die mogelijk aandacht vereisen, meer te weten komen over relevant beleid en richtlijnen, en relevante statistieken bijhouden.",
+	"personal-dashboard-onboarding-step-2-alt": "Illustratie van drie vereenvoudigde dashboardpanelen die aan de pagina worden toegevoegd.",
+	"personal-dashboard-onboarding-step-3-title": "Deel uw terugkoppeling",
+	"personal-dashboard-onboarding-step-3-body": "De komende maanden willen we de functies in het dashboard personaliseren op basis van uw bewerkingsactiviteit en nieuwe modules toevoegen. We willen hiervan een waardevolle functie maken voor de bewerkers van uw project. Om uw terugkoppeling te delen kunt u via de koppeling bovenaan de pagina een vragenlijst invullen.",
+	"personal-dashboard-onboarding-step-3-alt": "Illustratie van een vereenvoudigd dashboard waarbij de bovenkant van de pagina een donkerblauw gedeelte heeft dat de mogelijkheid voor terugkoppeling benadrukt."
+}

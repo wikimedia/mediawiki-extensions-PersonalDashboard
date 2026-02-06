@@ -1,0 +1,16 @@
+{
+	"@metadata": {
+		"authors": [
+			"Suecarmol"
+		]
+	},
+	"personal-dashboard-active-discussions-title": "Title for the Active discussions module of the PersonalDashboard.",
+	"personal-dashboard-active-discussions-description": "Description for the Active discussions module of the PersonalDashboard.",
+	"personal-dashboard-active-discussions-latest-comment": "Label that precedes the time when the latest comment in a thread was made.",
+	"personal-dashboard-active-discussions-today": "Label that is used when the latest comment date is today.",
+	"personal-dashboard-active-discussions-mobile-latest-comment": "Label that precedes the time when the latest comment in a thread was made.",
+	"personal-dashboard-active-discussions-mobile-today": "Descriptor of when the last comment was made in a discussion, if it was made on the same day the discussion is being viewed.",
+	"personal-dashboard-active-discussions-mobile-summary-footer-link-text": "Label for a button that navigates a user to the complete list of active discussions on mobile.",
+	"personal-dashboard-active-discussions-mobile-summary-footer-button-aria-label": "Aria label for a button that shows more active discussions in its mobile version",
+	"personal-dashboard-active-discussions-progress-bar-aria-label": "Aria label for the progress bar"
+}

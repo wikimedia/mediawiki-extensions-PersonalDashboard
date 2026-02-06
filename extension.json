@@ -57,6 +57,7 @@
 	},
 	"MessagesDirs": {
 		"PersonalDashboard": [
+			"i18n/ext.personalDashboard.activeDiscussions",
 			"i18n/ext.personalDashboard.common",
 			"i18n/ext.personalDashboard.impact",
 			"i18n/ext.personalDashboard.onboarding",
@@ -332,6 +333,48 @@
 				"ext.personalDashboard.common"
 			]
 		},
+		"ext.personalDashboard.activeDiscussions": {
+			"localBasePath": "resources/ext.personalDashboard.activeDiscussions",
+			"remoteExtPath": "PersonalDashboard/resources/personalDashboard.activeDiscussions",
+			"class": "MediaWiki\\ResourceLoader\\CodexModule",
+			"codexComponents": [
+				"CdxCard",
+				"CdxIcon",
+				"CdxButton",
+				"CdxProgressBar"
+			],
+			"packageFiles": [
+				"App.vue",
+				"components/ListCard.vue",
+				"components/ListCardMobile.vue",
+				"composables/useFetchActiveDiscussionsResult.js",
+				{
+					"name": "icons.json",
+					"callback": "MediaWiki\\ResourceLoader\\CodexModule::getIcons",
+					"callbackParam": [
+						"cdxIconUserActive",
+						"cdxIconSpeechBubble",
+						"cdxIconSpeechBubbles"
+					]
+				}
+			],
+			"messages": [
+				"personal-dashboard-active-discussions-title",
+				"personal-dashboard-active-discussions-description",
+				"personal-dashboard-active-discussions-latest-comment",
+				"personal-dashboard-active-discussions-today",
+				"personal-dashboard-active-discussions-mobile-summary-footer-link-text",
+				"personal-dashboard-active-discussions-mobile-latest-comment",
+				"personal-dashboard-active-discussions-mobile-today",
+				"personal-dashboard-active-discussions-mobile-summary-footer-button-aria-label",
+				"personal-dashboard-active-discussions-progress-bar-aria-label"
+			],
+			"dependencies": [
+				"vue",
+				"mediawiki.DateFormatter",
+				"ext.personalDashboard.common"
+			]
+		},
 		"ext.personalDashboard.styles": {
 			"localBasePath": "resources/ext.personalDashboard.styles",
 			"remoteExtPath": "PersonalDashboard/resources/personalDashboard.styles",
@@ -372,6 +415,18 @@
 		"PersonalDashboardRiskyArticleEditsMlModel": {
 			"description": "ML model used to filter edits",
 			"value": "revertrisklanguageagnostic"
+		},
+		"PersonalDashboardRiskyArticleEditsEnabled": {
+			"description": "Whether the risky article edits module is enabled",
+			"value": true
+		},
+		"PersonalDashboardRiskyArticleEditsMinimumEditCount": {
+			"description": "Minimum edit count required to view the risky article edits module",
+			"value": 0
+		},
+		"PersonalDashboardActiveDiscussionsPages": {
+			"description": "The pages were active discussions will be extracted from",
+			"value": []
 		}
 	},
 	"DatabaseVirtualDomains": [

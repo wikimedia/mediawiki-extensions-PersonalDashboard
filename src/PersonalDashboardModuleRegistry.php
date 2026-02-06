@@ -3,6 +3,7 @@
 namespace MediaWiki\Extension\PersonalDashboard;
 
 use MediaWiki\Context\IContextSource;
+use MediaWiki\Extension\PersonalDashboard\Modules\ActiveDiscussions;
 use MediaWiki\Extension\PersonalDashboard\Modules\Banner;
 use MediaWiki\Extension\PersonalDashboard\Modules\Impact;
 use MediaWiki\Extension\PersonalDashboard\Modules\PoliciesGuidelines;
@@ -62,6 +63,16 @@ class PersonalDashboardModuleRegistry {
 	 */
 	private static function getWiring() {
 		return [
+			'activeDiscussions' => static function (
+				MediaWikiServices $services,
+				IContextSource $context
+			) {
+				$dashboardServices = PersonalDashboardServices::wrap( $services );
+				return new ActiveDiscussions(
+					$context,
+					$dashboardServices->getPersonalDashboardWikiConfig()
+				);
+			},
 			'banner' => static function (
 				MediaWikiServices $services,
 				IContextSource $context

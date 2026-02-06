@@ -37,7 +37,7 @@ module.exports = defineComponent( {
 <style lang="less">
 @import 'mediawiki.skin.variables.less';
 
-.ext-personal-dashboard-moderation-card-mobile-summary {
+.cdx-card.ext-personal-dashboard-moderation-card-mobile-summary {
 	border: unset;
 	border-bottom: unset;
 

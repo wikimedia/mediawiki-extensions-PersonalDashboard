@@ -12,6 +12,7 @@
 	const rootSelector = '.ext-personal-dashboard-app-root';
 	const navModuleList = [];
 	const app = createMwApp( {} );
+	const showActiveDiscussions = mw.config.get( 'wgPersonalDashboardShowActiveDiscussions' );
 
 	for ( const moduleEl of modules ) {
 		// skip modules that are already wrapped in an anchor
@@ -94,6 +95,12 @@
 				render( vnode, root );
 			}
 		} );
+	}
+
+	if ( showActiveDiscussions === 'false' || showActiveDiscussions === '' ) {
+		const activeDiscussionsContainer = document.getElementById( 'activeDiscussions' );
+		activeDiscussionsContainer.style.display = 'none';
+
 	}
 
 	// sync state with hash

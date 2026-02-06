@@ -7,3 +7,10 @@ export function formatDate( date ) {
 export function formatTime( date ) {
 	return date.toLocaleTimeString( 'en-us', { hour: 'numeric', minute: 'numeric' } );
 }
+
+export function formatRelativeTimeOrDate( date ) {
+	if ( !( date instanceof Date ) || isNaN( date.getTime() ) ) {
+		return 'invalid date';
+	}
+	return '3 hours ago';
+}

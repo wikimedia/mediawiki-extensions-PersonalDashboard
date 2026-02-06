@@ -24,6 +24,8 @@ class SpecialPersonalDashboard extends SpecialPage {
 	 */
 	private string $pageviewToken;
 
+	private array $activeDiscussionsPages;
+
 	private bool $isMobile;
 
 	public function __construct(
@@ -33,6 +35,7 @@ class SpecialPersonalDashboard extends SpecialPage {
 	) {
 		parent::__construct( 'PersonalDashboard' );
 		$this->pageviewToken = $this->generatePageviewToken();
+		$this->activeDiscussionsPages = $this->getConfig()->get( 'PersonalDashboardActiveDiscussionsPages' );
 	}
 
 	/** @inheritDoc */
@@ -90,7 +93,8 @@ class SpecialPersonalDashboard extends SpecialPage {
 		}
 
 		$out->addJsConfigVars( [
-			'wgPersonalDashboardPageviewToken' => $this->pageviewToken
+			'wgPersonalDashboardPageviewToken' => $this->pageviewToken,
+			'wgPersonalDashboardActiveDiscussionsPages' => $this->activeDiscussionsPages
 		] );
 
 		$out->addHTML( Html::openElement( 'div', [
@@ -141,10 +145,14 @@ class SpecialPersonalDashboard extends SpecialPage {
 	 * @return IModule[]
 	 */
 	private function getModules( bool $isMobile, $par = '' ) {
+		// TODO: Remove this variable. This is for the soft launch of the active discussions module
+		$showActiveDiscussions = $this->getContext()->getRequest()
+			->getText( 'personaldashboard_activediscussions_show' ) ?? false;
 		$moduleConfig = [
 			'banner' => true,
 			'riskyArticleEdits' => true,
 			'impact' => true,
+			'activeDiscussions' => (bool)$showActiveDiscussions,
 			'policiesGuidelines' => true,
 		];
 
@@ -172,7 +180,7 @@ class SpecialPersonalDashboard extends SpecialPage {
 	private function getModuleGroups(): array {
 		return [
 			'main' => [
-				'primary' => [ 'banner', 'riskyArticleEdits' ],
+				'primary' => [ 'banner', 'riskyArticleEdits', 'activeDiscussions' ],
 			],
 			'sidebar' => [
 				'primary' => [ 'impact' ],

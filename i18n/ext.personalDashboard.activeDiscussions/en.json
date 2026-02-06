@@ -1,0 +1,16 @@
+{
+	"@metadata": {
+		"authors": [
+			"Suecarmol"
+		]
+	},
+	"personal-dashboard-active-discussions-title": "Active discussions",
+	"personal-dashboard-active-discussions-description": "Stay up to date with the latest discussions and join the conversation with other Wikipedia editors.",
+	"personal-dashboard-active-discussions-latest-comment": "Latest comment:",
+	"personal-dashboard-active-discussions-today": "$1, Today",
+	"personal-dashboard-active-discussions-mobile-latest-comment": "Latest comment:",
+	"personal-dashboard-active-discussions-mobile-today": "$1, Today",
+	"personal-dashboard-active-discussions-mobile-summary-footer-link-text": "View more",
+	"personal-dashboard-active-discussions-mobile-summary-footer-button-aria-label": "Navigate to more active discussions",
+	"personal-dashboard-active-discussions-progress-bar-aria-label": "inline progress bar that indicates that active discussions are being loaded"
+}

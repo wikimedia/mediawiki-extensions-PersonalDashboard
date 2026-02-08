@@ -31,9 +31,14 @@ class SpecialPersonalDashboard extends SpecialPage {
 		private readonly UserOptionsManager $userOptionsManager,
 		private readonly StatsFactory $statsFactory,
 	) {
-		parent::__construct( 'PersonalDashboard', '', false );
+		parent::__construct( 'PersonalDashboard' );
 		$this->pageviewToken = $this->generatePageviewToken();
 		$this->variant = $this->getConfig()->get( 'PersonalDashboardVariant' );
+	}
+
+	/** @inheritDoc */
+	public function isListed() {
+		return false;
 	}
 
 	/** @inheritDoc */

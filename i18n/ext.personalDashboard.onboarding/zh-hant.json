@@ -1,0 +1,18 @@
+{
+	"@metadata": {
+		"authors": [
+			"Kly"
+		]
+	},
+	"personal-dashboard-onboarding-title": "您的面板",
+	"personal-dashboard-onboarding-dont-show-again": "不再顯示",
+	"personal-dashboard-onboarding-step-1-title": "歡迎",
+	"personal-dashboard-onboarding-step-1-body": "您是首批體驗這項新功能的使用者之一！這是一個中心平台，透過展示開放任務與有用的資源，來幫助您為維基百科做出貢獻。",
+	"personal-dashboard-onboarding-step-1-alt": "頁面示意圖，帶有三個獨立的簡化面板控制板。",
+	"personal-dashboard-onboarding-step-2-title": "功能",
+	"personal-dashboard-onboarding-step-2-body": "在這個面板的第一個版本中，您可以查看可能需要留意的編輯，了解相關的政策和指南，並追蹤相關的統計資料。",
+	"personal-dashboard-onboarding-step-2-alt": "為頁面新增三個簡化的面板控制板的示意圖。",
+	"personal-dashboard-onboarding-step-3-title": "分享您的意見回饋",
+	"personal-dashboard-onboarding-step-3-body": "未來幾個月，我們計劃根據您的編輯活動來對面板功能進行個人化，並添加新的模組。我們希望將其打造成為您專案中給編輯者的實用工具。為了方便您分享回饋，我們在頁面頂部提供了一個調查連結。",
+	"personal-dashboard-onboarding-step-3-alt": "簡化面板示意圖，頁面頂部深藍色區域突顯出回饋連結。"
+}

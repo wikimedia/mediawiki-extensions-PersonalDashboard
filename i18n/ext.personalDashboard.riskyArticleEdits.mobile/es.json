@@ -1,0 +1,12 @@
+{
+	"@metadata": {
+		"authors": [
+			"Suecarmol"
+		]
+	},
+	"personal-dashboard-risky-article-edits-mobile-summary-header": "Revisar cambios",
+	"personal-dashboard-risky-article-edits-mobile-summary-footer-link-text": "Ver más ediciones",
+	"personal-dashboard-risky-article-edits-mobile-byte-text": "bytes en el artículo $1",
+	"personal-dashboard-risky-article-edits-mobile-user-text": "cambió $1",
+	"personal-dashboard-risky-article-edits-mobile-summary-footer-button-aria-label": "Navegar al botón de cambios recientes"
+}

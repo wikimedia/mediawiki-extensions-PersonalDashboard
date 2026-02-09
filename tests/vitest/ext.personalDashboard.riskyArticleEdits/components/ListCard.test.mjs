@@ -84,3 +84,27 @@ test( 'renders timestamp without hours when edit is not made today', async () =>
 
 	expect( expectedDate ).toBe( wrapper.vm.timestampFormatted );
 } );
+
+test( 'strips all html formatting from parsedcomment', () => {
+	const wrapper = mount( ListCard, {
+		props: {
+			title: 'TestTitle',
+			type: 'TestType',
+			ns: 0,
+			newlen: 0,
+			// eslint-disable-next-line camelcase
+			old_revid: 0,
+			oldlen: 0,
+			pageid: 0,
+			rcid: 0,
+			revid: 0,
+			user: 'TestUser',
+			parsedcomment: 'Plain text <h1>heading</h1>, <b>bold</b>, and <a href="#">link</a>.',
+			tags: [ 'test' ],
+			timestamp: new Date( 2024, 11, 2, 4, 29 ).toISOString(),
+			pages: {}
+		}
+	} );
+
+	expect( wrapper.vm.comment ).toBe( 'Plain text heading, bold, and link.' );
+} );

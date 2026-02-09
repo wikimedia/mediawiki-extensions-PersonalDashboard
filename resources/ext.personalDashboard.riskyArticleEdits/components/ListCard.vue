@@ -21,16 +21,17 @@
 
 				<div class="ext-personal-dashboard-moderation-card-info-title-row">
 					<change-number :oldlen :newlen></change-number>
+
 					<span class="ext-personal-dashboard-moderation-card-separator">∙</span>
-					<!-- eslint-disable-next-line vue/no-v-html -->
-					<div v-if="parsedcomment" v-html="parsedcomment"
-						class="ext-personal-dashboard-moderation-card-comment"></div>
+
+					<div v-if="comment" class="ext-personal-dashboard-moderation-card-comment">
+						{{ comment }}
+					</div>
+
 					<span
 						v-else
-						class="ext-personal-dashboard-moderation-card-missing-comment-message"
-					>{{
-						missingCommentMessage
-					}}
+						class="ext-personal-dashboard-moderation-card-missing-comment-message">
+						{{ missingCommentMessage }}
 					</span>
 				</div>
 
@@ -90,6 +91,16 @@ module.exports = defineComponent( {
 				diff: this.revid,
 				oldid: this.old_revid
 			} );
+		},
+		comment() {
+			if ( !this.parsedcomment ) {
+				return null;
+			}
+
+			const temp = document.createElement( 'div' );
+			temp.innerHTML = this.parsedcomment;
+
+			return temp.innerText;
 		},
 		timestampFormatted() {
 			const changeDateTimestamp = new Date( Date.parse( this.timestamp ) );

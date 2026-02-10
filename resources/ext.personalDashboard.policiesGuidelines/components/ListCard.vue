@@ -7,12 +7,12 @@
 		<template #description>
 			{{ msgDefinition }}
 
-			<a
+			<span
 				:id="name"
-				href="#"
+				class="personal-dashboard-policies-guidelines-examples-link"
 				@click="open = true">
 				{{ msgButton }}
-			</a>
+			</span>
 		</template>
 	</cdx-card>
 
@@ -68,3 +68,11 @@ module.exports = defineComponent( {
 	}
 } );
 </script>
+
+<style lang="less">
+@import 'mediawiki.skin.variables.less';
+
+span.personal-dashboard-policies-guidelines-examples-link {
+	.cdx-mixin-link-base();
+}
+</style>

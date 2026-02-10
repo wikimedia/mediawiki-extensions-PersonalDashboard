@@ -14,7 +14,7 @@ vi.mock( 'ext.personalDashboard.common', () => ( { useFetchActivityResult: () =>
 	fetchRecentActivity: mockFetchRecentActivity
 } ) } ) );
 
-import RecentActivity from '@resources/ext.personalDashboard.riskyArticleEdits/components/RecentActivity.vue';
+import RecentActivity from '@resources/ext.personalDashboard.riskyArticleEdits/App.vue';
 
 beforeEach( () => {
 	recentActivityResult.value = null;
@@ -45,6 +45,7 @@ test( 'shows error message when there is one', () => {
 } );
 
 test( 'shows up to 5 recent changes with information', () => {
+	mw.config.set( { wgMFMode: null } );
 	loading.value = false;
 	recentActivityResult.value = {
 		query: {
@@ -82,7 +83,7 @@ test( 'shows up to 5 recent changes with information', () => {
 } );
 
 test( 'shows up to 10 recent changes with information when on mobile view', () => {
-	mw.config.set( { skin: 'minerva' } );
+	mw.config.set( { wgMFMode: true } );
 	loading.value = false;
 	recentActivityResult.value = {
 		query: {

@@ -24,8 +24,6 @@ class SpecialPersonalDashboard extends SpecialPage {
 	 */
 	private string $pageviewToken;
 
-	private string|null $variant;
-
 	private bool $isMobile;
 
 	public function __construct(
@@ -35,7 +33,6 @@ class SpecialPersonalDashboard extends SpecialPage {
 	) {
 		parent::__construct( 'PersonalDashboard' );
 		$this->pageviewToken = $this->generatePageviewToken();
-		$this->variant = $this->getConfig()->get( 'PersonalDashboardVariant' );
 	}
 
 	/** @inheritDoc */
@@ -100,8 +97,7 @@ class SpecialPersonalDashboard extends SpecialPage {
 		] );
 
 		$out->addHTML( Html::openElement( 'div', [
-			'class' => 'personal-dashboard-container ' .
-				'personal-dashboard-container-user-variant-' . $this->variant
+			'class' => 'personal-dashboard-container'
 		] ) );
 
 		$modules = $this->getModules( $this->isMobile, $par );
@@ -124,9 +120,6 @@ class SpecialPersonalDashboard extends SpecialPage {
 
 		$out->addHTML( Html::closeElement( 'div' ) );
 		$this->outputJsData( $mode, $modules );
-		$this->getOutput()->addBodyClasses(
-			'personal-dashboard-user-variant-' . $this->variant
-		);
 		$platform = ( $this->isMobile ? 'mobile' : 'desktop' );
 		$overallSsrTimeInSeconds = microtime( true ) - $startTime;
 		$this->statsFactory->withComponent( 'PersonalDashboard' )
@@ -192,13 +185,6 @@ class SpecialPersonalDashboard extends SpecialPage {
 	}
 
 	/**
-	 * @return string
-	 */
-	private function getDashboardVariant(): string {
-		return $this->getConfig()->get( 'PersonalDashboardVariant' );
-	}
-
-	/**
 	 * Returns 32-character random string.
 	 * The token is used for client-side logging and can be retrieved on Special:PersonalDashboard via the
 	 * wgPersonalDashboardPageviewToken JS variable.
@@ -238,14 +224,11 @@ class SpecialPersonalDashboard extends SpecialPage {
 		$out->addBodyClasses( 'personal-dashboard-desktop' );
 		foreach ( $this->getModuleGroups() as $group => $subGroups ) {
 			$out->addHTML( Html::openElement( 'div', [
-				'class' => "personal-dashboard-group-$group " .
-					"personal-dashboard-group-$group-user-variant-" . $this->variant
+				'class' => "personal-dashboard-group-$group"
 			] ) );
 			foreach ( $subGroups as $subGroup => $moduleNames ) {
 				$out->addHTML( Html::openElement( 'div', [
-					'class' => "personal-dashboard-group-$group-subgroup-$subGroup " .
-					"personal-dashboard-group-$group-subgroup-$subGroup-user-variant-" .
-					$this->variant
+					'class' => "personal-dashboard-group-$group-subgroup-$subGroup"
 				] ) );
 				foreach ( $moduleNames as $moduleName ) {
 					/** @var IModule $module */
@@ -292,10 +275,8 @@ class SpecialPersonalDashboard extends SpecialPage {
 	private function renderMobileSummary() {
 		$out = $this->getContext()->getOutput();
 		$modules = $this->getModules( true );
-		$isOpeningOverlay = $this->getContext()->getRequest()->getFuzzyBool( 'overlay' );
 		$out->addBodyClasses( [
 			'personal-dashboard-mobile-summary',
-			$isOpeningOverlay ? 'personal-dashboard-mobile-summary--opening-overlay' : ''
 		] );
 		foreach ( $modules as $moduleName => $module ) {
 			$startTime = microtime( true );
@@ -340,16 +321,12 @@ class SpecialPersonalDashboard extends SpecialPage {
 	 */
 	private function outputJsData( $mode, array $modules ) {
 		$out = $this->getContext()->getOutput();
+		$out->addModules( 'ext.personalDashboard.special.personalDashboard' );
 
 		$data = [];
-		$html = '';
 		foreach ( $modules as $moduleName => $module ) {
 			try {
 				$data[$moduleName] = $module->getJsData( $mode );
-				if ( isset( $data[$moduleName]['overlay'] ) ) {
-					$html .= $data[$moduleName]['overlay'];
-					unset( $data[$moduleName]['overlay'] );
-				}
 			} catch ( Throwable $throwable ) {
 				if ( $this->getConfig()->get( 'PersonalDashboardDeveloperSetup' ) ) {
 					throw $throwable;
@@ -358,15 +335,8 @@ class SpecialPersonalDashboard extends SpecialPage {
 			}
 		}
 		$out->addJsConfigVars( 'dashboardmodules', $data );
-
 		if ( $mode === IModule::RENDER_MOBILE_SUMMARY ) {
 			$out->addJsConfigVars( 'dashboardmobile', true );
-			$out->addModules( 'ext.personalDashboard.mobile' );
-			$out->addHTML( Html::rawElement(
-				'div',
-				[ 'class' => 'personal-dashboard-overlay-container' ],
-				$html
-			) );
 		}
 	}
 }

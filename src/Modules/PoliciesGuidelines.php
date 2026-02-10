@@ -49,9 +49,16 @@ class PoliciesGuidelines extends BaseModule {
 
 	/** @inheritDoc */
 	protected function getMobileSummaryBody() {
-		return Html::rawElement( 'p', [], $this->msg(
-			'personal-dashboard-policies-guidelines-mobile-summary'
-		)->text() );
+		return implode( "\n", [
+			Html::rawElement( 'p', [],
+			$this->msg(
+				'personal-dashboard-policies-guidelines-mobile-summary'
+			)->text() ),
+			Html::element( 'p',
+				[ 'class' => 'personal-dashboard-module-no-js-fallback' ],
+				$this->msg( 'personal-dashboard-module-no-js-fallback' )->text()
+			)
+		] );
 	}
 
 	/** @inheritDoc */

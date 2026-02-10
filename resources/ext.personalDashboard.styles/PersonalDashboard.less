@@ -13,12 +13,7 @@
 	.flex-display();
 }
 
-.personal-dashboard-overlay-container {
-	display: none;
-}
-
 .mw-body-content,
-.overlay-content,
 .content {
 	.personal-dashboard-module-help {
 		ul {
@@ -71,7 +66,6 @@
 }
 
 body.mw-special-PersonalDashboard {
-	.overlay-content .personal-dashboard-module-mobile-overlay,
 	.personal-dashboard-container > .personal-dashboard-module-mobile-details {
 		border: 0;
 		box-shadow: none;
@@ -108,16 +102,7 @@ body.mw-special-PersonalDashboard {
 	&.personal-dashboard-mobile-summary {
 		// Enforce a minimum width to avoid breaking the connecting lines of the start modules.
 		min-width: 320px;
-		// Make sure the body is the containing block for fixed positioned elements such as dialogs
-		// Without this, overlays have incorrect widths on Firefox Android.
-		transform: translate( 0 );
 
-		&--opening-overlay {
-			// Hide the personal dashboard when the overlay should be shown directly
-			.client-js & {
-				display: none;
-			}
-		}
 		// stylelint-disable-next-line selector-max-id
 		#content .mw-first-heading {
 			// Need !important to override the other !important in
@@ -222,11 +207,6 @@ body.mw-special-PersonalDashboard {
 		// stylelint-disable-next-line selector-max-id
 		#content {
 			padding-bottom: 0;
-
-			// stylelint-disable-next-line selector-max-id
-			#bodyContent {
-				margin: 0;
-			}
 		}
 	}
 

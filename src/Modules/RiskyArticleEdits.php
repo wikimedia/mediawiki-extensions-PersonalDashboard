@@ -27,7 +27,7 @@ class RiskyArticleEdits extends BaseModule {
 
 	/** @inheritDoc */
 	protected function getHeaderText() {
-		return $this->msg( 'personal-dashboard-risky-article-edits-mobile-summary-header' );
+		return $this->msg( 'personal-dashboard-risky-article-edits-header' );
 	}
 
 	/** @inheritDoc */
@@ -83,9 +83,10 @@ class RiskyArticleEdits extends BaseModule {
 
 	/** @inheritDoc */
 	protected function getMobileSummaryBody() {
-		return Html::rawElement( 'div',
+		return Html::element( 'div',
 				[
-					'id' => 'risky-article-edits-vue-root--mobile',
+					'id' => 'risky-article-edits-vue-root',
+					'class' => [ 'ext-personal-dashboard-app-root' ],
 				],
 			) .
 			Html::element( 'p',
@@ -96,10 +97,7 @@ class RiskyArticleEdits extends BaseModule {
 
 	/** @inheritDoc */
 	protected function getModules() {
-		if ( $this->getMode() == self::RENDER_MOBILE_SUMMARY ) {
-			return [ 'ext.personalDashboard.riskyArticleEdits.mobile', 'ext.personalDashboard.common' ];
-		}
-		return [ 'ext.personalDashboard.riskyArticleEdits', 'ext.personalDashboard.common' ];
+		return [ 'ext.personalDashboard.riskyArticleEdits' ];
 	}
 
 	/** @inheritDoc */

@@ -96,6 +96,32 @@
 				"dots.less"
 			]
 		},
+		"ext.personalDashboard.special.personalDashboard": {
+			"localBasePath": "resources/ext.personalDashboard.special.personalDashboard",
+			"class": "MediaWiki\\ResourceLoader\\CodexModule",
+			"codexComponents": [
+				"CdxButton",
+				"CdxDialog",
+				"CdxIcon"
+			],
+			"packageFiles": [
+				"init.js",
+				"ModuleDialog.vue",
+				{
+					"name": "icons.json",
+					"callback": "MediaWiki\\ResourceLoader\\CodexModule::getIcons",
+					"callbackParam": [
+						"cdxIconClose",
+						"cdxIconNext",
+						"cdxIconArrowPrevious"
+					]
+				}
+			],
+			"dependencies": [
+				"vue",
+				"ext.personalDashboard.common"
+			]
+		},
 		"ext.personalDashboard.common": {
 			"localBasePath": "resources/ext.personalDashboard.common",
 			"class": "MediaWiki\\ResourceLoader\\CodexModule",
@@ -176,7 +202,6 @@
 				"personal-dashboard-impact-info-button"
 			],
 			"packageFiles": [
-				"init.js",
 				"App.vue",
 				{
 					"name": "icons.json",
@@ -244,7 +269,6 @@
 				"personal-dashboard-policies-guidelines-examples-header"
 			],
 			"packageFiles": [
-				"init.js",
 				"App.vue",
 				"components/ExampleStep.vue",
 				"components/ListCard.vue",
@@ -264,23 +288,25 @@
 			"remoteExtPath": "PersonalDashboard/resources/personalDashboard.riskyArticleEdits",
 			"class": "MediaWiki\\ResourceLoader\\CodexModule",
 			"codexComponents": [
+				"CdxButton",
 				"CdxCard",
 				"CdxIcon",
 				"CdxPopover",
 				"CdxToggleButton"
 			],
 			"packageFiles": [
-				"init.js",
 				"App.vue",
 				"components/ListCard.vue",
-				"components/RecentActivity.vue",
+				"components/ListCardMobile.vue",
 				"components/ChangeNumber.vue",
+				"components/ChangeNumberMobile.vue",
 				"components/CreatorByline.vue",
 				{
 					"name": "icons.json",
 					"callback": "MediaWiki\\ResourceLoader\\CodexModule::getIcons",
 					"callbackParam": [
 						"cdxIconArticle",
+						"cdxIconEdit",
 						"cdxIconUserActive",
 						"cdxIconTextSummary",
 						"cdxIconInfoFilled"
@@ -293,45 +319,14 @@
 				"personal-dashboard-risky-article-edits-footer-preamble",
 				"personal-dashboard-risky-article-edits-info-time-text-today",
 				"personal-dashboard-risky-article-edits-list-card-no-comment-message",
+				"personal-dashboard-risky-article-edits-mobile-summary-header",
+				"personal-dashboard-risky-article-edits-mobile-summary-footer-link-text",
+				"personal-dashboard-risky-article-edits-mobile-byte-text",
+				"personal-dashboard-risky-article-edits-mobile-user-text",
 				"tag-mw-reverted",
 				"tag-mw-rollback",
 				"tag-mw-replace",
 				"tag-mw-manual-revert"
-			],
-			"dependencies": [
-				"vue",
-				"mediawiki.DateFormatter",
-				"ext.personalDashboard.common"
-			]
-		},
-		"ext.personalDashboard.riskyArticleEdits.mobile": {
-			"localBasePath": "resources/ext.personalDashboard.riskyArticleEdits.mobile",
-			"remoteExtPath": "PersonalDashboard/resources/personalDashboard.riskyArticleEdits.mobile",
-			"class": "MediaWiki\\ResourceLoader\\CodexModule",
-			"codexComponents": [
-				"CdxButton",
-				"CdxCard",
-				"CdxIcon"
-			],
-			"packageFiles": [
-				"init.js",
-				"App.vue",
-				"components/ListCard.vue",
-				"components/RecentActivity.vue",
-				"components/ChangeNumber.vue",
-				{
-					"name": "icons.json",
-					"callback": "MediaWiki\\ResourceLoader\\CodexModule::getIcons",
-					"callbackParam": [
-						"cdxIconEdit"
-					]
-				}
-			],
-			"messages": [
-				"personal-dashboard-risky-article-edits-mobile-summary-header",
-				"personal-dashboard-risky-article-edits-mobile-summary-footer-link-text",
-				"personal-dashboard-risky-article-edits-mobile-byte-text",
-				"personal-dashboard-risky-article-edits-mobile-user-text"
 			],
 			"dependencies": [
 				"vue",
@@ -354,10 +349,6 @@
 		"PersonalDashboardDeveloperSetup": {
 			"description": "Catch fewer errors for easier troubleshooting",
 			"value": false
-		},
-		"PersonalDashboardVariant": {
-			"description": "The dashboard variant served to users",
-			"value": null
 		},
 		"PersonalDashboardSurveyLink": {
 			"description": "External link to the Personal Dashboard feedback survey.",

@@ -6,7 +6,6 @@ interface IModule {
 	public const RENDER_DESKTOP = 'desktop';
 	public const RENDER_MOBILE_SUMMARY = 'mobile-summary';
 	public const RENDER_MOBILE_DETAILS = 'mobile-details';
-	public const RENDER_MOBILE_DETAILS_OVERLAY = 'mobile-overlay';
 
 	/**
 	 * Render the module in the given mode.

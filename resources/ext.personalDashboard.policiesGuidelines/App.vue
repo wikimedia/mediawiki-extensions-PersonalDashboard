@@ -16,8 +16,14 @@ const { defineComponent } = require( 'vue' );
 const ListCard = require( './components/ListCard.vue' );
 
 module.exports = defineComponent( {
-	name: 'PoliciesGuidelines',
 	components: { ListCard },
+	props: {
+		// eslint-disable-next-line vue/no-unused-properties
+		rendermode: {
+			type: String,
+			default: ''
+		}
+	},
 	data() {
 		return {
 			cards: {

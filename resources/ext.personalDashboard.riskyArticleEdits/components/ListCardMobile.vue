@@ -5,7 +5,7 @@
 				<span class="ext-personal-dashboard-moderation-card-info-title">
 					<cdx-icon :icon="cdxIconEdit"></cdx-icon>
 					{{ userMessage }}
-					<change-number :oldlen :newlen></change-number>
+					<change-number-mobile :oldlen :newlen></change-number-mobile>
 					{{ articleMessage }}
 				</span>
 			</div>
@@ -17,11 +17,11 @@
 const { defineComponent } = require( 'vue' );
 const { CdxCard, CdxIcon } = require( '../codex.js' );
 const { cdxIconEdit } = require( '../icons.json' );
-const ChangeNumber = require( './ChangeNumber.vue' );
+const ChangeNumberMobile = require( './ChangeNumberMobile.vue' );
 
 module.exports = defineComponent( {
 	name: 'ListCard',
-	components: { CdxCard, CdxIcon, ChangeNumber },
+	components: { CdxCard, CdxIcon, ChangeNumberMobile },
 	props: {
 		title: { type: String, required: true },
 		// eslint-disable-next-line vue/no-unused-properties

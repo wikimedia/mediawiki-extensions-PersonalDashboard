@@ -207,6 +207,7 @@ abstract class Module implements IModule {
 		return Html::rawElement(
 			'div',
 			[
+				'id' => $this->getName(),
 				'class' => array_merge( [
 					static::BASE_CSS_CLASS,
 					static::BASE_CSS_CLASS . '-' . $this->name,

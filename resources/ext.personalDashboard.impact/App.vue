@@ -60,9 +60,14 @@ const {
 } = require( './icons.json' );
 
 module.exports = defineComponent( {
-	// eslint-disable-next-line vue/multi-word-component-names
-	name: 'Impact',
 	components: { CdxButton, CdxIcon, CdxPopover },
+	props: {
+		// eslint-disable-next-line vue/no-unused-properties
+		rendermode: {
+			type: String,
+			default: ''
+		}
+	},
 	setup() {
 		const thanksCount = mw.config.get( 'wgPersonalDashboardImpactThanksCount', 0 );
 		const reviewCount = mw.config.get( 'wgPersonalDashboardImpactReviewCount', 0 );

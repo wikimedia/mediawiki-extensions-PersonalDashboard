@@ -8,7 +8,7 @@ use MediaWiki\Extension\PersonalDashboard\Module;
 use MediaWiki\Html\Html;
 
 /**
- * BaseModule is a base class for homepage modules.
+ * BaseModule is a base class for personaldashboard modules.
  * It provides utilities and a default structure (header, subheader, body, footer).
  */
 abstract class BaseModule extends Module {
@@ -44,7 +44,7 @@ abstract class BaseModule extends Module {
 		string $name,
 		IContextSource $ctx,
 		Config $wikiConfig,
-		bool $shouldWrapModuleWithLink = true
+		bool $shouldWrapModuleWithLink = false
 	) {
 		parent::__construct( $name, $ctx );
 
@@ -78,14 +78,13 @@ abstract class BaseModule extends Module {
 
 	/**
 	 * Get an array of data needed by the Javascript code related to this module.
-	 * The data will be available in the 'homepagemodules' JS configuration field, keyed by module name.
+	 * The data will be available in the 'personaldashboardmodules' JS configuration field, keyed by module name.
 	 * Keys currently in use:
 	 * - html: module HTML
-	 * - overlay: mobile overlay HTML
 	 * - rlModules: ResourceLoader modules this module depends on
 	 * - heading: module header text
-	 * 'html' is only present when the module supports dynamic loading, 'overlay' and 'heading'
-	 * in mobile summary/overlay mode, and 'rlModules' in both cases.
+	 * 'html' is only present when the module supports dynamic loading, 'heading'
+	 * in mobile summary mode, and 'rlModules' in both cases.
 	 *
 	 * @param string $mode One of RENDER_DESKTOP, RENDER_MOBILE_SUMMARY, RENDER_MOBILE_DETAILS
 	 * @return array
@@ -99,9 +98,7 @@ abstract class BaseModule extends Module {
 		if ( $this->canRender()
 			&& $mode == self::RENDER_MOBILE_SUMMARY
 		) {
-			$this->setMode( self::RENDER_MOBILE_DETAILS_OVERLAY );
 			$data = [
-				'overlay' => $this->renderMobileDetailsForOverlay(),
 				'rlModules' => $this->getModules(),
 				'heading' => $this->getHeaderText(),
 			];
@@ -109,17 +106,6 @@ abstract class BaseModule extends Module {
 		$this->setMode( $mode );
 		$data[ 'renderMode' ] = $mode;
 		return $data;
-	}
-
-	/**
-	 * @return string HTML rendering for overlay. Same as mobile details but without header.
-	 */
-	protected function renderMobileDetailsForOverlay() {
-		return $this->buildModuleWrapper(
-			$this->buildSection( 'subheader', $this->getSubheader(), $this->getSubheaderTag() ),
-			$this->buildSection( 'body', $this->getBody() ),
-			$this->buildSection( 'footer', $this->getFooter() )
-		);
 	}
 
 	final protected function getPersonalDashboardWikiConfig(): Config {
@@ -167,6 +153,7 @@ abstract class BaseModule extends Module {
 		$moduleContent = Html::rawElement(
 			'div',
 			[
+				'id' => $this->getName(),
 				'class' => array_merge( [
 					self::BASE_CSS_CLASS,
 					self::BASE_CSS_CLASS . '-' . $this->name,
@@ -185,7 +172,6 @@ abstract class BaseModule extends Module {
 		) {
 			return Html::rawElement( 'a', [
 				'href' => $this->getPageURL() . '/' . $this->getName(),
-				'data-overlay-route' => $this->getModuleRoute()
 			], $moduleContent );
 		}
 
@@ -205,13 +191,4 @@ abstract class BaseModule extends Module {
 			'wgPersonalDashboardModuleActionData-' . $this->getName() => $this->getActionData(),
 		] );
 	}
-
-	/**
-	 * The component for mw.router to use when routing clicks from mobile
-	 * summary HTML. If this is an empty string, no routing occurs.
-	 */
-	protected function getModuleRoute(): string {
-		return '#/homepage/' . $this->name;
-	}
-
 }

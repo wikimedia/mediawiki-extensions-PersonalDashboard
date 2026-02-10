@@ -163,7 +163,6 @@ module.exports = defineComponent( {
 
 	.ext-personal-dashboard-moderation-card-info-title-row {
 		display: flex;
-		flex-flow: row wrap;
 
 		.ext-personal-dashboard-moderation-card-info-title {
 			font-weight: @font-weight-bold;

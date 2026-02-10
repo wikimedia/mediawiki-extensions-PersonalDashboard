@@ -44,13 +44,16 @@ module.exports = defineComponent( {
 
 .ext-personal-dashboard-moderation-card-info-change-number-positive {
 	color: @color-content-added;
+	text-wrap: nowrap;
 }
 
 .ext-personal-dashboard-moderation-card-info-change-number-negative {
 	color: @color-content-removed;
+	text-wrap: nowrap;
 }
 
 .ext-personal-dashboard-moderation-card-info-change-number-none {
 	color: @color-subtle;
+	text-wrap: nowrap;
 }
 </style>

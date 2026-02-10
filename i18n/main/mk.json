@@ -1,0 +1,17 @@
+{
+	"@metadata": {
+		"authors": [
+			"Bjankuloski06"
+		]
+	},
+	"personal-dashboard-desc": "Експериментална управувачница за модаратори",
+	"personal-dashboard-link-title": "Управувачница",
+	"personal-dashboard-specialpage-title": "{{GENDER:$1|Здраво}}, {{bidi:$1}}!",
+	"personal-dashboard-tab": "Лична управувачница",
+	"tooltip-pt-dashboard": "{{GENDER:|Ваша}} лична управувачница",
+	"prefs-dashboard": "Функции на личната управувачница",
+	"personal-dashboard-enable": "Прикажувај лична управувачница",
+	"personal-dashboard-module-no-js-fallback": "Овозможете го JavaScript за да ја гледате оваа составница.",
+	"personal-dashboard-enable-preference": "За да ја овозможите личната управувачница, посетете ги поставките на {{int:prefs-dashboard}} во [[Special:Preferences#mw-prefsection-personal-dashboard|Нагодувањата]].",
+	"personal-dashboard-survey-text": "Ова е рана верзија на страницава. Дајте ни ваше мислење за се подобриме во иднина преку [$1 оваа анкета]."
+}

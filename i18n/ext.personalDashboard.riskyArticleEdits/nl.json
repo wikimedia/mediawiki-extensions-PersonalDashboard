@@ -8,13 +8,6 @@
 	"personal-dashboard-risky-article-edits-header": "Wijzigingen controleren",
 	"personal-dashboard-risky-article-edits-subheader": "Help Wikipedia betrouwbaar te houden door de volgende bewerkingen te bekijken, die mogelijk aandacht nodig hebben.",
 	"personal-dashboard-risky-article-edits-footer-preamble": "Bekijk meer bewerkingen op de [{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}} pagina met recente wijzigingen]",
-	"personal-dashboard-risky-article-edits-info-title": "Wijzigingen controleren",
-	"personal-dashboard-risky-article-edits-info-subtitle": "Deze bewerkingen, die willekeurig uit de afgelopen 30 dagen zijn geselecteerd, zijn nog niet beoordeeld of teruggedraaid. Op elke kaart kan de volgende informatie staan:",
-	"personal-dashboard-risky-article-edits-info-article-title": "Titel en korte beschrijving van de pagina",
-	"personal-dashboard-risky-article-edits-info-author": "Gebruikersnaam van de auteur",
 	"personal-dashboard-risky-article-edits-info-time-text-today": "$1, vandaag",
-	"personal-dashboard-risky-article-edits-info-edit-summary": "Een samenvatting van de wijzigingen in de bewerking.",
-	"personal-dashboard-risky-article-edits-info-bytes": "±123 Verandering paginagrootte in bytes",
-	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Geen bewerkingssamenvatting",
-	"personal-dashboard-risky-article-edits-info-button-aria-label": "informatieknop"
+	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Geen bewerkingssamenvatting"
 }

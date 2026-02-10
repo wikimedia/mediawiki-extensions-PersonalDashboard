@@ -7,13 +7,6 @@
 	"personal-dashboard-risky-article-edits-header": "Прегледај промени",
 	"personal-dashboard-risky-article-edits-subheader": "Помогнете ни Википедија да остане меродавна со тоа што ќе ги прегледате следниве уредувања на кои треба да им се обрне внимание.",
 	"personal-dashboard-risky-article-edits-footer-preamble": "Погледајте повеќе уредувања на страницата [{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}} скорешни промени]",
-	"personal-dashboard-risky-article-edits-info-title": "Прегледај промени",
-	"personal-dashboard-risky-article-edits-info-subtitle": "Овие уредувања, случајно избрани од последниве 30 дена, сè уште не се прегледаани или вратени. Секоја картичка може да ги прикажува следниве информации:",
-	"personal-dashboard-risky-article-edits-info-article-title": "Наслов на статијата и краток опис",
-	"personal-dashboard-risky-article-edits-info-author": "Корисничко име на авторот",
 	"personal-dashboard-risky-article-edits-info-time-text-today": "$1, денес",
-	"personal-dashboard-risky-article-edits-info-edit-summary": "Опис на промените во уредувањето.",
-	"personal-dashboard-risky-article-edits-info-bytes": "±123 Промена на страницата во бајти",
-	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Нема опис на уредувањето",
-	"personal-dashboard-risky-article-edits-info-button-aria-label": "копче за информации"
+	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Нема опис на уредувањето"
 }

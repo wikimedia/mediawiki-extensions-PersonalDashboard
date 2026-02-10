@@ -8,13 +8,6 @@
 	"personal-dashboard-risky-article-edits-header": "مراجعة التغييرات",
 	"personal-dashboard-risky-article-edits-subheader": "ساعد في الحفاظ على موثوقية ويكيبيديا من خلال مراجعة التعديلات التالية التي قد تحتاج إلى اهتمام.",
 	"personal-dashboard-risky-article-edits-footer-preamble": "يمكنك الاطلاع على المزيد من التعديلات في صفحة التغييرات الأخيرة [{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}}]",
-	"personal-dashboard-risky-article-edits-info-title": "مراجعة التغييرات",
-	"personal-dashboard-risky-article-edits-info-subtitle": "لم تتم مراجعة هذه التعديلات، التي تم اختيارها عشوائيًا من آخر 30 يومًا، أو التراجع عنها بعد. قد تعرض كل بطاقة المعلومات التالية:",
-	"personal-dashboard-risky-article-edits-info-article-title": "عنوان المقال ووصفه المختصر",
-	"personal-dashboard-risky-article-edits-info-author": "اسم المستخدم الخاص بالمؤلف",
 	"personal-dashboard-risky-article-edits-info-time-text-today": "$1، اليوم",
-	"personal-dashboard-risky-article-edits-info-edit-summary": "ملخص لما تم تغييره في التعديل.",
-	"personal-dashboard-risky-article-edits-info-bytes": "تغيير حجم الصفحة بمقدار ±123 بايت",
-	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "ملخص بدون تعديل",
-	"personal-dashboard-risky-article-edits-info-button-aria-label": "زر المعلومات"
+	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "ملخص بدون تعديل"
 }

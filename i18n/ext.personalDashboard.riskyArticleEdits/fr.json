@@ -7,13 +7,6 @@
 	"personal-dashboard-risky-article-edits-header": "Relire les modifications",
 	"personal-dashboard-risky-article-edits-subheader": "Aidez à maintenir Wikipédia fiable en relisant les modifications suivantes qui peuvent nécessiter votre attention.",
 	"personal-dashboard-risky-article-edits-footer-preamble": "Voir plus de modifications dans la [{{fullurl:Special:RecentChanges\n|revertrisklanguageagnostic=all}} page des modifications récentes]",
-	"personal-dashboard-risky-article-edits-info-title": "Relire les modifications",
-	"personal-dashboard-risky-article-edits-info-subtitle": "Ces modifications, sélectionnées aléatoirement parmi les 30 derniers jours, n'ont pas encore été relues ou annulées. Chaque carte peut contenir les informations suivantes :",
-	"personal-dashboard-risky-article-edits-info-article-title": "Titre et description courte de l'article",
-	"personal-dashboard-risky-article-edits-info-author": "Pseudonyme de l'auteur",
 	"personal-dashboard-risky-article-edits-info-time-text-today": "aujourd'hui à $1",
-	"personal-dashboard-risky-article-edits-info-edit-summary": "Un résumé de ce qui a changé avec cette modification.",
-	"personal-dashboard-risky-article-edits-info-bytes": "±123 Variation de la taille de la page en octets",
-	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Aucun résumé de modifications",
-	"personal-dashboard-risky-article-edits-info-button-aria-label": "bouton pour avoir plus d'informations"
+	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Aucun résumé de modifications"
 }

@@ -9,6 +9,7 @@
 	"personal-dashboard-specialpage-title": "{{GENDER:$1|नमस्ते}}, {{bidi:$1}} जी!",
 	"personal-dashboard-tab": "व्यक्तिगत डैशबोर्ड",
 	"tooltip-pt-dashboard": "{{GENDER:|आपका}} व्यक्तिगत डैशबोर्ड",
+	"prefs-dashboard": "व्यक्तिगत डैशबोर्ड की व्यक्तिगत सुविधाएँ",
 	"personal-dashboard-enable": "व्यक्तिगत डैशबोर्ड दिखाएँ",
 	"personal-dashboard-module-no-js-fallback": "इस घटक को देखने के लिए कृपया जावास्क्रिप्ट सक्षम करें।",
 	"personal-dashboard-enable-preference": "व्यक्तिगत डैशबोर्ड को सक्षम करने के लिए [[Special:Preferences#mw-prefsection-personal-dashboard|वरीयताओं]] में {{int:prefs-dashboard}} सेटिंग्स पर जाएँ।",

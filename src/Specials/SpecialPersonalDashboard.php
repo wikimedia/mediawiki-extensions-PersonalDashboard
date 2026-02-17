@@ -9,6 +9,7 @@ use MediaWiki\Extension\PersonalDashboard\IModule;
 use MediaWiki\Extension\PersonalDashboard\PersonalDashboardModuleRegistry;
 use MediaWiki\Extension\PersonalDashboard\Util;
 use MediaWiki\Html\Html;
+use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\User\Options\UserOptionsManager;
 use MediaWiki\WikiMap\WikiMap;
@@ -71,6 +72,13 @@ class SpecialPersonalDashboard extends SpecialPage {
 
 		$out->enableOOUI();
 		$out->addModuleStyles( 'ext.personalDashboard.styles' );
+
+		if ( ExtensionRegistry::getInstance()->isLoaded( 'WikimediaEvents' ) ) {
+			$out->addModules( [
+				'ext.wikimediaEvents.personalDashboard',
+				'ext.wikimediaEvents.xLab'
+			] );
+		}
 
 		if ( $this->userOptionsManager->getIntOption( $user, 'personaldashboard-onboarding' ) > 0 ) {
 			$out->addHTML( Html::element( 'div', [ 'id' => 'personal-dashboard-onboarding' ] ) );

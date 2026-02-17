@@ -396,6 +396,10 @@
 			"description": "External link to the Personal Dashboard feedback survey.",
 			"value": null
 		},
+		"PersonalDashboardUserMenu": {
+			"description": "Show a link to the Personal Dashboard in the user menu.",
+			"value": true
+		},
 		"PersonalDashboardBlueDot": {
 			"description": "Show a blue dot inviting users to try out the dashboard.",
 			"value": true

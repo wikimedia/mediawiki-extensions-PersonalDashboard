@@ -24,10 +24,29 @@ class SkinTemplateNavigationUniversalHandler implements SkinTemplateNavigation__
 	public function onSkinTemplateNavigation__Universal( $sktemplate, &$links ): void {
 		$user = $sktemplate->getUser();
 
-		if ( !$user->isNamed() ) {
+		if ( !$user->isNamed() || !$sktemplate->getConfig()->get( 'PersonalDashboardUserMenu' ) ) {
 			return;
 		}
 
+		$this->addToUserMenu( $sktemplate, $links );
+		$output = $sktemplate->getOutput();
+
+		if ( $this->isBlueDotVisible( $sktemplate, $user ) ) {
+			$output->addModules( 'ext.personalDashboard.blueDot' );
+		}
+
+		if ( ExtensionRegistry::getInstance()->isLoaded( 'WikimediaEvents' ) ) {
+			$output->addModules( [
+				'ext.wikimediaEvents.personalDashboard',
+				'ext.wikimediaEvents.xLab'
+			] );
+		}
+	}
+
+	/**
+	 * Add a link to Special:PersonalDashboard in the user menu.
+	 */
+	public function addToUserMenu( SkinTemplate $sktemplate, array &$links ): void {
 		$menu = &$links['user-menu'];
 		$link = [
 			'text' => $sktemplate->msg( 'personal-dashboard-link-title' ),
@@ -46,16 +65,7 @@ class SkinTemplateNavigationUniversalHandler implements SkinTemplateNavigation__
 				array_slice( $menu, $offset, null, true );
 		}
 
-		$output = $sktemplate->getOutput();
-		$output->addModuleStyles( 'ext.personalDashboard.menuIcon' );
-
-		if ( $this->isBlueDotVisible( $sktemplate, $user ) ) {
-			$output->addModules( 'ext.personalDashboard.blueDot' );
-		}
-
-		if ( ExtensionRegistry::getInstance()->isLoaded( 'WikimediaEvents' ) ) {
-			$output->addModules( 'ext.wikimediaEvents.personalDashboard' );
-		}
+		$sktemplate->getOutput()->addModuleStyles( 'ext.personalDashboard.menuIcon' );
 	}
 
 	/**

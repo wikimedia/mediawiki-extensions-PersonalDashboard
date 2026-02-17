@@ -35,6 +35,7 @@ class SkinTemplateNavigationUniversalHandlerTest extends MediaWikiIntegrationTes
 		parent::setUp();
 
 		$this->configMock = new HashConfig();
+		$this->configMock->set( 'PersonalDashboardUserMenu', true );
 		$this->configMock->set( 'PersonalDashboardBlueDot', true );
 		$this->configMock->set( 'PersonalDashboardBlueDotMinimumEdits', 100 );
 
@@ -73,13 +74,26 @@ class SkinTemplateNavigationUniversalHandlerTest extends MediaWikiIntegrationTes
 	/**
 	 * @covers ::onSkinTemplateNavigation__Universal
 	 */
-	public function testLinkExistsIfNamedUser() {
+	public function testLinkExists() {
 		$links = [ 'user-menu' => [] ];
 		$this->handler->onSkinTemplateNavigation__Universal( $this->skinTemplateMock, $links );
 
 		$link = $links['user-menu']['personaldashboard'];
 		$this->assertEquals( $this->text, $link['text'] );
 		$this->assertEquals( $this->href, $link['href'] );
+	}
+
+	/**
+	 * @covers ::onSkinTemplateNavigation__Universal
+	 */
+	public function testLinkNotExistsIfDisabled() {
+		$this->configMock->set( 'PersonalDashboardUserMenu', false );
+
+		$links = [ 'user-menu' => [] ];
+		$this->handler->onSkinTemplateNavigation__Universal( $this->skinTemplateMock, $links );
+		$this->assertArrayNotHasKey( 'personaldashboard', $links['user-menu'] );
+
+		$this->configMock->set( 'PersonalDashboardUserMenu', true );
 	}
 
 	/**
@@ -98,7 +112,7 @@ class SkinTemplateNavigationUniversalHandlerTest extends MediaWikiIntegrationTes
 	/**
 	 * @covers ::isBlueDotVisible
 	 */
-	public function testShowBlueDotIfEnabled() {
+	public function testShowBlueDot() {
 		$this->assertTrue( $this->handler->isBlueDotVisible(
 			$this->skinTemplateMock,
 			$this->userMock

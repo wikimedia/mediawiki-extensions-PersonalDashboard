@@ -102,6 +102,6 @@ test( 'fetchRecentActivity with error', async () => {
 	await fetchRecentActivity();
 
 	expect( error ).toBeTruthy();
-	expect( error.value ).toBe( 'An error' );
+	expect( error.value.message ).toBe( 'An error' );
 	expect( emptyResponse ).toEqual( recentActivityResult.value );
 } );

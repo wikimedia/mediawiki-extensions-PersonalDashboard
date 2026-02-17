@@ -29,11 +29,12 @@ async function fetchRecentActivity( limit ) {
 			list: 'recentchanges',
 			generator: 'recentchanges',
 			formatVersion: '2',
-			rcprop: 'title|ids|sizes|flags|user|parsedcomment|tags|unpatrolled|oresscores|timestamp',
+			rcprop: 'title|ids|sizes|flags|user|parsedcomment|tags|oresscores|timestamp',
 			rclimit: '100',
 			rcnamespace: '0',
 			rctype: 'categorize|edit|external|log',
-			rcexcludeuser: mw.user.getName()
+			rcexcludeuser: mw.user.getName(),
+			rcshow: 'unpatrolled'
 		};
 		recentActivityResult.value = await api.get( params );
 		if (

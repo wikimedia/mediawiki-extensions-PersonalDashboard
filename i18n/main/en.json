@@ -1,19 +1,15 @@
 {
 	"@metadata": {
 		"authors": [
-			"Jsn.sherman",
-			"Dillon Hardy"
+			"Dillon Hardy",
+			"Jsn.sherman"
 		]
 	},
+	"personal-dashboard-beta-info-chip-text": "Beta",
 	"personal-dashboard-desc": "An experimental dashboard for moderators",
 	"personal-dashboard-link-title": "Dashboard",
-	"personal-dashboard-specialpage-title": "{{GENDER:$1|Hello}}, {{bidi:$1}}!",
-	"personal-dashboard-tab": "PersonalDashboard",
-	"tooltip-pt-dashboard": "{{GENDER:|Your}} personal dashboard",
-	"prefs-dashboard": "Personal personal dashboard features",
-	"personal-dashboard-enable": "Display personal dashboard",
 	"personal-dashboard-module-no-js-fallback": "Please enable JavaScript to view this component.",
-	"personal-dashboard-enable-preference": "To enable the personal dashboard, visit your {{int:prefs-dashboard}} settings in [[Special:Preferences#mw-prefsection-personal-dashboard|Preferences]].",
+	"personal-dashboard-specialpage-title": "{{GENDER:$1|Hello}}, {{bidi:$1}}!",
 	"personal-dashboard-survey-text": "[$1 Share feedback]",
-	"personal-dashboard-beta-info-chip-text": "Beta"
+	"tooltip-pt-personaldashboard": "{{GENDER:|Your}} personal dashboard"
 }

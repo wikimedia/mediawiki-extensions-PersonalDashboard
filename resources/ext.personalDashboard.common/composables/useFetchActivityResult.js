@@ -98,11 +98,8 @@ const handleApiData = ( data, limit ) => {
 	return data;
 };
 
-const fetchRecentActivity = async ( limit ) => {
-	loading.value = true;
-	error.value = null;
-	const api = new mw.Api();
-	const params = {
+const getParams = async () => {
+	let params = {
 		format: 'json',
 		action: 'query',
 		errorlang: mw.util.getParamValue( 'uselang' ) || mw.config.get( 'wgUserLanguage' ),
@@ -116,9 +113,23 @@ const fetchRecentActivity = async ( limit ) => {
 		rclimit: '100',
 		rcnamespace: '0',
 		rctype: 'categorize|edit|external|log',
-		rcexcludeuser: mw.user.getName(),
-		rcshow: 'unpatrolled'
+		rcexcludeuser: mw.user.getName()
 	};
+	const userRights = await mw.user.getRights();
+	if ( userRights && userRights.includes( 'patrol' ) ) {
+		params = {
+			rcshow: 'unpatrolled',
+			...params
+		};
+	}
+	return params;
+};
+
+const fetchRecentActivity = async ( limit ) => {
+	loading.value = true;
+	error.value = null;
+	const api = new mw.Api();
+	const params = await getParams();
 	try {
 		recentActivityResult.value = await api.get( params ).then(
 			( data ) => handleApiData( data, limit ),

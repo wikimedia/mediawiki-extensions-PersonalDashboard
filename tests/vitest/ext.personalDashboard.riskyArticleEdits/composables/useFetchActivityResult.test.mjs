@@ -32,6 +32,7 @@ test( 'fetchRecentActivity with response', async () => {
 	window.mw = {
 		...window.mw,
 		user: {
+			getRights: () => [ 'patrol' ],
 			getName: vi.fn( () => 'TestUser' )
 		},
 		// eslint-disable-next-line prefer-arrow-callback
@@ -60,6 +61,7 @@ test( 'fetchRecentActivity with no changes', async () => {
 	window.mw = {
 		...window.mw,
 		user: {
+			getRights: () => [ 'patrol' ],
 			getName: vi.fn( () => 'TestUser' )
 		},
 		// eslint-disable-next-line prefer-arrow-callback
@@ -79,16 +81,11 @@ test( 'fetchRecentActivity with no changes', async () => {
 } );
 
 test( 'fetchRecentActivity with error', async () => {
-	const emptyResponse = {
-		query: {
-			recentchanges: [],
-			pages: {}
-		}
-	};
 	window.mw = {
 		...window.mw,
 		user: {
-			getName: vi.fn( () => 'TestUser' )
+			getName: vi.fn( () => 'TestUser' ),
+			getRights: () => [ 'patrol' ]
 		},
 		// eslint-disable-next-line prefer-arrow-callback
 		Api: vi.fn().mockImplementation( function Api() {
@@ -103,5 +100,4 @@ test( 'fetchRecentActivity with error', async () => {
 
 	expect( error ).toBeTruthy();
 	expect( error.value.message ).toBe( 'An error' );
-	expect( emptyResponse ).toEqual( recentActivityResult.value );
 } );

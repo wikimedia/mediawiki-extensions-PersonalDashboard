@@ -12,9 +12,6 @@ use MediaWiki\User\UserEditTracker;
  */
 class RiskyArticleEdits extends BaseModule {
 
-	private \StdClass $moduleConfig;
-	private UserEditTracker $userEditTracker;
-
 	/**
 	 * @param IContextSource $ctx
 	 * @param Config $wikiConfig
@@ -22,12 +19,10 @@ class RiskyArticleEdits extends BaseModule {
 	 */
 	public function __construct(
 		IContextSource $ctx,
-		Config $wikiConfig,
-		UserEditTracker $userEditTracker
+		private readonly Config $wikiConfig,
+		private readonly UserEditTracker $userEditTracker
 	) {
 		parent::__construct( 'riskyArticleEdits', $ctx, $wikiConfig );
-		$this->moduleConfig = $wikiConfig->get( 'PersonalDashboardRiskyArticleEdits' );
-		$this->userEditTracker = $userEditTracker;
 	}
 
 	/** @inheritDoc */
@@ -110,14 +105,14 @@ class RiskyArticleEdits extends BaseModule {
 	/** @inheritDoc */
 	protected function canRender() {
 		// Disabled for this wiki?
-		if ( $this->moduleConfig->enabled === false ) {
+		if ( $this->wikiConfig->get( "PersonalDashboardRiskyArticleEditsEnabled" ) === false ) {
 			return false;
 		}
 
 		// Not enough edits?
 		$userIdentity = $this->getContext()->getUser();
 		$editCount = $this->userEditTracker->getUserEditCount( $userIdentity );
-		if ( $this->moduleConfig->minimumUserEdits > $editCount ) {
+		if ( $this->wikiConfig->get( "PersonalDashboardRiskyArticleEditsMinimumEditCount" ) > $editCount ) {
 			return false;
 		}
 

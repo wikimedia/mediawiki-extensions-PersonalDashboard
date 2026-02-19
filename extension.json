@@ -63,30 +63,7 @@
 		],
 		"UserSendConfirmationMail": "confirmEmail"
 	},
-	"attributes": {
-		"CommunityConfiguration": {
-			"Providers": {
-				"PersonalDashboardRiskyArticleEdits": {
-					"store": {
-						"type": "wikipage",
-						"args": [
-							"MediaWiki:PersonalDashboardRiskyArticleEdits.json"
-						]
-					},
-					"validator": {
-						"type": "jsonschema",
-						"args": [
-							"MediaWiki\\Extension\\PersonalDashboard\\Config\\Schemas\\RiskyArticleEditsSchema"
-						]
-					},
-					"type": "mw-config",
-					"options": {
-						"helpPage": "Help:PersonalDashboard/RiskyArticleEdits"
-					}
-				}
-			}
-		}
-	},
+	"attributes": {},
 	"MessagesDirs": {
 		"PersonalDashboard": [
 			"i18n/ext.personalDashboard.common",
@@ -407,6 +384,14 @@
 		"PersonalDashboardBlueDotMinimumEdits": {
 			"description": "The minimum number of edits required to show the blue dot.",
 			"value": 100
+		},
+		"PersonalDashboardRiskyArticleEditsEnabled": {
+			"description": "Whether the risky article edits module is enabled",
+			"value": true
+		},
+		"PersonalDashboardRiskyArticleEditsMinimumEditCount": {
+			"description": "Minimum edit count required to view the risky article edits module",
+			"value": 0
 		}
 	},
 	"DatabaseVirtualDomains": [

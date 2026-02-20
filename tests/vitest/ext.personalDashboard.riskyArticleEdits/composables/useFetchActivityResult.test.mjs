@@ -31,10 +31,6 @@ test( 'fetchRecentActivity with response', async () => {
 	};
 	window.mw = {
 		...window.mw,
-		user: {
-			getRights: () => [ 'patrol' ],
-			getName: vi.fn( () => 'TestUser' )
-		},
 		// eslint-disable-next-line prefer-arrow-callback
 		Api: vi.fn().mockImplementation( function Api() {
 			return {
@@ -60,10 +56,6 @@ test( 'fetchRecentActivity with no changes', async () => {
 	};
 	window.mw = {
 		...window.mw,
-		user: {
-			getRights: () => [ 'patrol' ],
-			getName: vi.fn( () => 'TestUser' )
-		},
 		// eslint-disable-next-line prefer-arrow-callback
 		Api: vi.fn().mockImplementation( function Api() {
 			return {
@@ -83,10 +75,6 @@ test( 'fetchRecentActivity with no changes', async () => {
 test( 'fetchRecentActivity with error', async () => {
 	window.mw = {
 		...window.mw,
-		user: {
-			getName: vi.fn( () => 'TestUser' ),
-			getRights: () => [ 'patrol' ]
-		},
 		// eslint-disable-next-line prefer-arrow-callback
 		Api: vi.fn().mockImplementation( function Api() {
 			return {

@@ -46,8 +46,9 @@ module.exports = defineComponent( {
 		};
 	},
 	mounted() {
-		this.fetchRecentActivity( 10 );
 		mw.hook( 'personaldashboard.recentactivity.loaded' ).fire();
+		const limit = mw.config.get( 'skin' ) === 'minerva' ? 10 : 5;
+		this.fetchRecentActivity( limit );
 	}
 } );
 </script>

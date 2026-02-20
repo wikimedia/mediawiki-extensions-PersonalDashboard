@@ -5,13 +5,13 @@ import ListCard from '@resources/ext.personalDashboard.policiesGuidelines/compon
 
 test( 'list components match cards ', () => {
 	const wrapper = mount( App );
-	const list = wrapper.findAllComponents( ListCard );
-	let i = 0;
+	const entries = Object.entries( wrapper.vm.cards );
+	const components = wrapper.findAllComponents( ListCard );
 
-	for ( const [ prefix, pages ] of Object.entries( wrapper.vm.cards ) ) {
-		const card = list[ i ].vm;
-		expect( card.prefix ).toBe( prefix );
-		expect( card.pages ).toBe( pages );
-		i++;
+	for ( let i = 0; i < entries.length; i++ ) {
+		const [ name, steps ] = entries[ i ];
+		const card = components[ i ].vm;
+		expect( card.name ).toBe( name );
+		expect( card.steps ).toBe( steps );
 	}
 } );

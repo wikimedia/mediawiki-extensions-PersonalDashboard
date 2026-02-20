@@ -60,7 +60,8 @@ const {
 } = require( './icons.json' );
 
 module.exports = defineComponent( {
-	name: 'PoliciesGuidelines',
+	// eslint-disable-next-line vue/multi-word-component-names
+	name: 'Impact',
 	components: { CdxButton, CdxIcon, CdxPopover },
 	setup() {
 		const thanksCount = mw.config.get( 'wgPersonalDashboardImpactThanksCount', 0 );

@@ -40,7 +40,7 @@
 			v-for="i in total"
 			v-show="step === i"
 			:key="i">
-			<slot :name="'step-' + i"></slot>
+			<slot :name="`step-${ i }`"></slot>
 		</div>
 
 		<template #footer>
@@ -130,7 +130,7 @@ module.exports = defineComponent( {
 			let result = 'cdx-dialog__header__stepper__dot';
 
 			if ( step === this.step ) {
-				result += ' ' + result + '--active';
+				result += ` ${ result }--active`;
 			}
 
 			return result;

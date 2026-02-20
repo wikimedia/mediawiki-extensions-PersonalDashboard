@@ -43,9 +43,5 @@
 	"personal-dashboard-policies-guidelines-assume-good-faith-answer-2-label": "Assumed good faith:",
 	"personal-dashboard-policies-guidelines-assume-good-faith-answer-2-text": "Unless there is clear evidence of bad faith, help each other improve the articles quality.",
 	"personal-dashboard-policies-guidelines-examples-button": "Examples",
-	"personal-dashboard-policies-guidelines-examples-progress": "$1 of $2",
-	"personal-dashboard-policies-guidelines-examples-header": "Example $1",
-	"personal-dashboard-policies-guidelines-next-button": "Next",
-	"personal-dashboard-policies-guidelines-previous-button": "Previous",
-	"personal-dashboard-policies-guidelines-got-it-button": "Got it"
+	"personal-dashboard-policies-guidelines-examples-header": "Example $1"
 }

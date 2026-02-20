@@ -197,13 +197,12 @@
 			"remoteExtPath": "PersonalDashboard/resources/personalDashboard.policiesGuidelines",
 			"class": "MediaWiki\\ResourceLoader\\CodexModule",
 			"codexComponents": [
-				"CdxButton",
 				"CdxCard",
-				"CdxDialog",
 				"CdxIcon"
 			],
 			"dependencies": [
-				"vue"
+				"vue",
+				"ext.personalDashboard.common"
 			],
 			"messages": [
 				"personal-dashboard-policies-guidelines-title",
@@ -244,16 +243,12 @@
 				"personal-dashboard-policies-guidelines-assume-good-faith-answer-2-label",
 				"personal-dashboard-policies-guidelines-assume-good-faith-answer-2-text",
 				"personal-dashboard-policies-guidelines-examples-button",
-				"personal-dashboard-policies-guidelines-examples-progress",
-				"personal-dashboard-policies-guidelines-examples-header",
-				"personal-dashboard-policies-guidelines-next-button",
-				"personal-dashboard-policies-guidelines-previous-button",
-				"personal-dashboard-policies-guidelines-got-it-button"
+				"personal-dashboard-policies-guidelines-examples-header"
 			],
 			"packageFiles": [
 				"init.js",
 				"App.vue",
-				"components/ExamplesDialog.vue",
+				"components/ExampleStep.vue",
 				"components/ListCard.vue",
 				{
 					"name": "icons.json",
@@ -261,8 +256,6 @@
 					"callbackParam": [
 						"cdxIconAlert",
 						"cdxIconError",
-						"cdxIconNext",
-						"cdxIconPrevious",
 						"cdxIconSuccess"
 					]
 				}

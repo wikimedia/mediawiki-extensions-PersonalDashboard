@@ -8,52 +8,63 @@
 			{{ msgDefinition }}
 
 			<a
-				:id="prefix"
+				:id="name"
 				href="#"
-				@click="openDialog = true">
-				{{ msgExample }}
+				@click="open = true">
+				{{ msgButton }}
 			</a>
 		</template>
 	</cdx-card>
 
-	<examples-dialog
-		v-model:open="openDialog"
-		:prefix
-		:pages>
-	</examples-dialog>
+	<multi-step-dialog
+		v-model:open="open"
+		v-model:step="step"
+		:title="msgTitle"
+		class="personal-dashboard-policies-guidelines">
+		<template
+			v-for="( icon, index ) in steps"
+			:key="index"
+			#[`step-${++index}`]>
+			<example-step
+				:step="index"
+				:name
+				:icon>
+			</example-step>
+		</template>
+	</multi-step-dialog>
 </template>
 
 <script>
-const { defineComponent, ref } = require( 'vue' );
+const { defineComponent } = require( 'vue' );
+const { MultiStepDialog } = require( 'ext.personalDashboard.common' );
+const ExampleStep = require( './ExampleStep.vue' );
 const { CdxCard } = require( '../codex.js' );
-const ExamplesDialog = require( './ExamplesDialog.vue' );
 
 module.exports = defineComponent( {
 	name: 'ListCard',
-	components: { CdxCard, ExamplesDialog },
+	components: { CdxCard, MultiStepDialog, ExampleStep },
 	props: {
-		prefix: {
+		name: {
 			type: String,
 			required: true
 		},
-		pages: {
-			type: Array,
+		steps: {
+			type: Object,
 			required: true
 		}
 	},
-	setup( props ) {
+	data() {
 		const msgPrefix = 'personal-dashboard-policies-guidelines-';
 
 		return {
-			openDialog: ref( false ),
+			open: false,
+			step: 1,
 			/* eslint-disable mediawiki/msg-doc */
-			msgTitle: mw.msg( msgPrefix + props.prefix + '-title' ),
-			msgDefinition: mw.msg( msgPrefix + props.prefix + '-definition' ),
-			msgExample: mw.msg( msgPrefix + 'examples-button' )
+			msgTitle: mw.msg( `${ msgPrefix }${ this.name }-title` ),
+			msgDefinition: mw.msg( `${ msgPrefix }${ this.name }-definition` ),
+			msgButton: mw.msg( `${ msgPrefix }examples-button` )
+			/* eslint-enable mediawiki/msg-doc */
 		};
-	},
-	mounted() {
-		mw.hook( 'personaldashboard.policymodule.loaded' ).fire();
 	}
 } );
 </script>

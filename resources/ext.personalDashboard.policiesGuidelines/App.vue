@@ -2,10 +2,10 @@
 	<div class="personal-dashboard-policies-guidelines__container">
 		<div class="personal-dashboard-policies-guidelines__list">
 			<list-card
-				v-for="( pages, prefix ) in cards"
-				:key="prefix"
-				:prefix
-				:pages>
+				v-for="( steps, name ) in cards"
+				:key="name"
+				:name
+				:steps>
 			</list-card>
 		</div>
 	</div>
@@ -18,28 +18,18 @@ const ListCard = require( './components/ListCard.vue' );
 module.exports = defineComponent( {
 	name: 'PoliciesGuidelines',
 	components: { ListCard },
-	setup() {
+	data() {
 		return {
 			cards: {
-				'neutral-point-of-view': [
-					'error',
-					'success'
-				],
-				'no-original-research': [
-					'error',
-					'error'
-				],
-				verifiability: [
-					'warning',
-					'error',
-					'success'
-				],
-				'assume-good-faith': [
-					'error',
-					'success'
-				]
+				'neutral-point-of-view': [ 'error', 'success' ],
+				'no-original-research': [ 'error', 'error' ],
+				verifiability: [ 'warning', 'error', 'success' ],
+				'assume-good-faith': [ 'error', 'success' ]
 			}
 		};
+	},
+	mounted() {
+		mw.hook( 'personaldashboard.policymodule.loaded' ).fire();
 	}
 } );
 </script>

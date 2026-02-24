@@ -1,9 +1,18 @@
 {
 	"@metadata": {
 		"authors": [
+			"0x48fe75df30",
 			"Gsdn"
 		]
 	},
+	"personal-dashboard-onboarding-title": "您的面板",
+	"personal-dashboard-onboarding-dont-show-again": "不再显示",
 	"personal-dashboard-onboarding-step-1-title": "欢迎",
-	"personal-dashboard-onboarding-step-3-title": "分享您的反馈"
+	"personal-dashboard-onboarding-step-1-body": "您是首批体验这项新功能的用户之一！这是一个中心平台，通过公开开放任务与有用的资源，帮助您为维基百科做出贡献。",
+	"personal-dashboard-onboarding-step-2-title": "功能",
+	"personal-dashboard-onboarding-step-2-body": "在该面板的首个版本中，您可以查看可能需要留意的编辑，了解相关的政策和指南，并跟踪相关的统计资料。",
+	"personal-dashboard-onboarding-step-2-alt": "页面加入了三个简化控制面板的图示。",
+	"personal-dashboard-onboarding-step-3-title": "分享您的反馈",
+	"personal-dashboard-onboarding-step-3-body": "未来几个月，我们计划按照您的编辑活跃度来个性化面板的功能，并增加新组件。我们想要使该组件变为对编辑者有价值的功能。为使您分享您的反馈，我们在页眉提供了调查链接。",
+	"personal-dashboard-onboarding-step-3-alt": "简化的面板图示，该面板的页眉有一深蓝色区域，突出显示了反馈链接。"
 }

@@ -1,0 +1,12 @@
+{
+	"@metadata": {
+		"authors": [
+			"Samwalton9 (WMF)"
+		]
+	},
+	"personal-dashboard-desc": "Moderatörler için deneysel bir kontrol paneli",
+	"personal-dashboard-link-title": "Kontrol Panelim",
+	"personal-dashboard-module-no-js-fallback": "Bu bileşeni görüntülemek için lütfen JavaScript'i etkinleştirin.",
+	"personal-dashboard-specialpage-title": "{{GENDER:$1|Merhaba}}, {{bidi:$1}}!",
+	"tooltip-pt-personaldashboard": "{{GENDER:|Size ait}} kontrol paneli"
+}

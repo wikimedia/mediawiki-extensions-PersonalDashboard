@@ -1,0 +1,12 @@
+{
+	"@metadata": {
+		"authors": [
+			"Escargot bleu"
+		]
+	},
+	"personal-dashboard-impact-title": "Votre impact",
+	"personal-dashboard-impact-thanks-sent": "Remerciements envoyés",
+	"personal-dashboard-impact-edits-reviewed": "Modifications relues",
+	"personal-dashboard-impact-edits-reviewed-description": "Compte les modifications que vous avez annulées et les remerciements que vous avez envoyés.",
+	"personal-dashboard-impact-info-button": "Info"
+}

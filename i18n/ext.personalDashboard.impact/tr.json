@@ -1,0 +1,12 @@
+{
+	"@metadata": {
+		"authors": [
+			"Samwalton9 (WMF)"
+		]
+	},
+	"personal-dashboard-impact-title": "Etkiniz",
+	"personal-dashboard-impact-thanks-sent": "Teşekkür ettikleriniz",
+	"personal-dashboard-impact-edits-reviewed": "İnceledikleriniz",
+	"personal-dashboard-impact-edits-reviewed-description": "Geri aldığınız düzenlemelerin ve gönderdiğiniz teşekkürlerin sayısı.",
+	"personal-dashboard-impact-info-button": "Bilgi"
+}

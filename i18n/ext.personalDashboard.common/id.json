@@ -1,0 +1,11 @@
+{
+	"@metadata": {
+		"authors": [
+			"Samwalton9 (WMF)"
+		]
+	},
+	"personal-dashboard-multi-step-dialog-progress": "$1 dari $2",
+	"personal-dashboard-multi-step-dialog-next-button": "Selanjutnya",
+	"personal-dashboard-multi-step-dialog-previous-button": "Sebelumnya",
+	"personal-dashboard-multi-step-dialog-got-it-button": "Dimengerti"
+}

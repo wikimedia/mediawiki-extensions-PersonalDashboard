@@ -1,9 +1,12 @@
 {
 	"@metadata": {
 		"authors": [
+			"0x48fe75df30",
 			"Gsdn"
 		]
 	},
+	"personal-dashboard-multi-step-dialog-progress": "第$1页，共$2页",
 	"personal-dashboard-multi-step-dialog-next-button": "下一步",
+	"personal-dashboard-multi-step-dialog-previous-button": "上一页",
 	"personal-dashboard-multi-step-dialog-got-it-button": "明白了"
 }

@@ -1,0 +1,18 @@
+{
+	"@metadata": {
+		"authors": [
+			"Samwalton9 (WMF)"
+		]
+	},
+	"personal-dashboard-onboarding-title": "Kontrol paneliniz",
+	"personal-dashboard-onboarding-dont-show-again": "Bir daha gösterme",
+	"personal-dashboard-onboarding-step-1-title": "Hoşgeldiniz",
+	"personal-dashboard-onboarding-step-1-body": "Bu yeni özelliği deneyen ilk kişilerden birisiniz! Burası, açık görevleri ve faydalı kaynakları görünür kılarak Vikipedi’ye katkıda bulunmanıza yardımcı olan merkezi bir alandır.",
+	"personal-dashboard-onboarding-step-1-alt": "Üç ayrı basitleştirilmiş kontrol paneli içeren bir sayfanın görselleştirmesi.",
+	"personal-dashboard-onboarding-step-2-title": "Özellikler",
+	"personal-dashboard-onboarding-step-2-body": "Bu ilk kontrol paneli sürümünde, göz atılması gereken düzenlemeleri gözden geçirebilir, ilgili politika ve yönergeleri öğrenebilir ve istatistikleri takip edebilirsiniz.",
+	"personal-dashboard-onboarding-step-2-alt": "Sayfaya eklenen üç adet basitleştirilmiş gösterge panelinin görselleştirmesi.",
+	"personal-dashboard-onboarding-step-3-title": "Geribildirim verin",
+	"personal-dashboard-onboarding-step-3-body": "Önümüzdeki aylarda, kontrol panelindeki özellikleri  kendi düzenleme faaliyetlerinize göre kişiselleştirmeyi ve yeni modüller eklemeyi planlıyoruz. Bu özelliği, projenizdeki editörler için değerli bir özellik haline getirmek istiyoruz. Geri bildiriminizi paylaşmak için sayfanın üst kısmında bir anket bağlantısı verdik.",
+	"personal-dashboard-onboarding-step-3-alt": "Sayfanın üst kısmındaki geri bildirim bağlantısını vurgulayan daha koyu mavi bir bölümün yer aldığı basitleştirilmiş bir kontrol panelinin gösterimi."
+}

@@ -1,0 +1,12 @@
+{
+	"@metadata": {
+		"authors": [
+			"Samwalton9 (WMF)"
+		]
+	},
+	"personal-dashboard-risky-article-edits-mobile-summary-header": "Tinjau perubahan",
+	"personal-dashboard-risky-article-edits-mobile-summary-footer-link-text": "Lihat lebih banyak suntingan",
+	"personal-dashboard-risky-article-edits-mobile-byte-text": "bita di artikel $1",
+	"personal-dashboard-risky-article-edits-mobile-user-text": "$1 melakukan perubahan",
+	"personal-dashboard-risky-article-edits-mobile-summary-footer-button-aria-label": "arahkan ke tombol perubahan terkini"
+}

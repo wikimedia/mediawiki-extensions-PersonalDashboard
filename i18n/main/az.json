@@ -4,13 +4,11 @@
 			"Nemoralis"
 		]
 	},
+	"personal-dashboard-beta-info-chip-text": "Beta",
 	"personal-dashboard-desc": "Moderatorlar üçün eksperimental idarə paneli",
 	"personal-dashboard-link-title": "İdarə paneli",
-	"personal-dashboard-specialpage-title": "{{GENDER:$1|Salam}}, {{bidi:$1}}!",
-	"personal-dashboard-tab": "ŞəxsiPanel",
-	"tooltip-pt-dashboard": "{{GENDER:|Sizin}} şəxsi idarə paneliniz",
-	"prefs-dashboard": "Şəxsi idarə paneli xüsusiyyətləri",
-	"personal-dashboard-enable": "Şəxsi idarə panelini göstər",
 	"personal-dashboard-module-no-js-fallback": "Bu hissəni görmək üçün zəhmət olmasa, JavaScripti aktivləşdirin.",
-	"personal-dashboard-enable-preference": "Şəxsi idarəetmə panelini aktivləşdirmək üçün [[Special:Preferences#mw-prefsection-personal-dashboard|Nizamlamalar]] bölməsində {{int:prefs-dashboard}} parametrlərinizə daxil olun."
+	"personal-dashboard-specialpage-title": "{{GENDER:$1|Salam}}, {{bidi:$1}}!",
+	"personal-dashboard-survey-text": "[ $1 Rəy bildir]",
+	"tooltip-pt-personaldashboard": "{{GENDER:|Sizin}} şəxsi idarə paneliniz"
 }

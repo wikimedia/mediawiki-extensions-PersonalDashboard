@@ -1,8 +1,12 @@
 {
 	"@metadata": {
 		"authors": [
+			"0x48fe75df30",
 			"Gsdn"
 		]
 	},
+	"personal-dashboard-impact-title": "您的影响",
+	"personal-dashboard-impact-thanks-sent": "发送感谢",
+	"personal-dashboard-impact-edits-reviewed": "已审核的编辑",
 	"personal-dashboard-impact-info-button": "信息"
 }

@@ -21,7 +21,14 @@
 		"ServiceWiring.php"
 	],
 	"SpecialPages": {
-		"PersonalDashboard": "MediaWiki\\Extension\\PersonalDashboard\\Specials\\SpecialPersonalDashboard"
+		"PersonalDashboard": {
+			"class": "MediaWiki\\Extension\\PersonalDashboard\\Specials\\SpecialPersonalDashboard",
+			"services": [
+				"PersonalDashboardModuleRegistry",
+				"UserOptionsManager",
+				"StatsFactory"
+			]
+		}
 	},
 	"ConfigRegistry": {
 		"PersonalDashboard": "MediaWiki\\Config\\GlobalVarConfig::newInstance"
@@ -47,23 +54,12 @@
 		}
 	},
 	"Hooks": {
-		"CommunityConfigurationSchemaBeforeEditor": "communityconfig",
-		"CommunityConfigurationProvider_initList": "communityconfig",
 		"GetPreferences": "preferences",
-		"MediaWikiServices": "mediawikiservices",
-		"MessageCacheFetchOverrides": "earlylifecycle",
-		"ParserFirstCallInit": "parserfunctions",
 		"SkinTemplateNavigation::Universal": "skintemplatenav-universal",
-		"SkinMinervaOptionsInit": [
-			"MediaWiki\\Extension\\PersonalDashboard\\HookHandler::onSkinMinervaOptionsInit"
-		],
 		"SpecialPage_initList": [
-			"config",
 			"special-page"
-		],
-		"UserSendConfirmationMail": "confirmEmail"
+		]
 	},
-	"attributes": {},
 	"MessagesDirs": {
 		"PersonalDashboard": [
 			"i18n/ext.personalDashboard.common",
@@ -84,7 +80,9 @@
 			"selectorWithVariant": ".vector-icon.mw-ui-icon-wikimedia-{name}-{variant}",
 			"selectorWithoutVariant": ".vector-icon.mw-ui-icon-wikimedia-{name}, .minerva-icon--{name}",
 			"useMaskImage": true,
-			"icons": [ "viewCompact" ]
+			"icons": [
+				"viewCompact"
+			]
 		},
 		"ext.personalDashboard.blueDot": {
 			"localBasePath": "resources/ext.personalDashboard.blueDot",
@@ -299,7 +297,6 @@
 				"tag-mw-rollback",
 				"tag-mw-replace",
 				"tag-mw-manual-revert"
-
 			],
 			"dependencies": [
 				"vue",

@@ -5,7 +5,7 @@
 	"personal-dashboard-risky-article-edits-header": "Review changes",
 	"personal-dashboard-risky-article-edits-subheader": "Help keep Wikipedia reliable by reviewing the following edits which may need attention.",
 	"personal-dashboard-risky-article-edits-subheader-info": "Help keep Wikipedia reliable.",
-	"personal-dashboard-risky-article-edits-subheader-info-popover": "An [$1 automated anti-vanalism tool] flags potentially risky edits from other editors. Select one to open the diff view and decide whether to undo, improve, or thank the editor.",
+	"personal-dashboard-risky-article-edits-subheader-info-popover": "An [$1 automated anti-vandalism tool] flags potentially risky edits from other editors. Select one to open the diff view and decide whether to undo, improve, or thank the editor.",
 	"personal-dashboard-risky-article-edits-subheader-info-popover-title": "How?",
 	"personal-dashboard-risky-article-edits-subheader-info-popover-confirm": "Got it",
 	"personal-dashboard-risky-article-edits-footer-preamble": "View more edits in the [{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}} recent changes page]",

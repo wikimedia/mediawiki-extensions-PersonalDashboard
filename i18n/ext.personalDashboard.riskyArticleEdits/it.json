@@ -1,8 +1,11 @@
 {
 	"@metadata": {
 		"authors": [
-			"Asteralee"
+			"Asteralee",
+			"Beta16"
 		]
 	},
+	"personal-dashboard-risky-article-edits-subheader-info": "Aiuta a mantenere Wikipedia affidabile.",
+	"personal-dashboard-risky-article-edits-subheader-info-popover-title": "Come?",
 	"personal-dashboard-risky-article-edits-info-time-text-today": "$1 , oggi"
 }

@@ -4,5 +4,7 @@
 			"Neriah"
 		]
 	},
-	"personal-dashboard-risky-article-edits-header": "סקירת שינויים"
+	"personal-dashboard-risky-article-edits-header": "סקירת שינויים",
+	"personal-dashboard-risky-article-edits-info-time-text-today": "$1, היום",
+	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "אין תקציר עריכה"
 }

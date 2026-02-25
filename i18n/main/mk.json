@@ -4,10 +4,11 @@
 			"Bjankuloski06"
 		]
 	},
+	"personal-dashboard-beta-info-chip-text": "Бета",
 	"personal-dashboard-desc": "Експериментална управувачница за модаратори",
 	"personal-dashboard-link-title": "Управувачница",
 	"personal-dashboard-module-no-js-fallback": "Овозможете го JavaScript за да ја гледате оваа составница.",
 	"personal-dashboard-specialpage-title": "{{GENDER:$1|Здраво}}, {{bidi:$1}}!",
-	"personal-dashboard-survey-text": "Ова е рана верзија на страницава. Дајте ни ваше мислење за се подобриме во иднина преку [$1 оваа анкета].",
+	"personal-dashboard-survey-text": "[$1 Дајте мислење]",
 	"tooltip-pt-personaldashboard": "{{GENDER:|Ваша}} лична управувачница"
 }

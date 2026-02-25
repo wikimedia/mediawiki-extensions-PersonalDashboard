@@ -1,0 +1,16 @@
+{
+	"@metadata": {
+		"authors": [
+			"Nemoralis"
+		]
+	},
+	"personal-dashboard-risky-article-edits-header": "Redaktələri yoxla",
+	"personal-dashboard-risky-article-edits-subheader": "Diqqət tələb edə biləcək redaktələri nəzərdən keçirərək Vikipediyanın etibarlılığını qorumağa kömək edin.",
+	"personal-dashboard-risky-article-edits-subheader-info": "Vikipediyanın etibarlılığını qorumağa kömək edin.",
+	"personal-dashboard-risky-article-edits-subheader-info-popover": "[$1 Avtomatlaşdırılmış anti-vandalizm aləti] digər redaktorların etdiyi potensial riskli redaktələri işarələyir. Fərq görünüşünü açmaq üçün birini seçin və redaktəni geri qaytarmaq, təkmilləşdirmək və ya təşəkkür etmək barədə qərar verin.",
+	"personal-dashboard-risky-article-edits-subheader-info-popover-title": "Necə?",
+	"personal-dashboard-risky-article-edits-subheader-info-popover-confirm": "Başa düşdüm",
+	"personal-dashboard-risky-article-edits-footer-preamble": "[{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}} son dəyişikliklər səhifəsində] daha çox redaktəyə baxın.",
+	"personal-dashboard-risky-article-edits-info-time-text-today": "$1, Bu gün",
+	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Redaktə xülasəsi yoxdur"
+}

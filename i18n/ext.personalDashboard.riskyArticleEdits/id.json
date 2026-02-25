@@ -1,0 +1,12 @@
+{
+	"@metadata": {
+		"authors": [
+			"Samwalton9 (WMF)"
+		]
+	},
+	"personal-dashboard-risky-article-edits-header": "Periksa perubahan suntingan",
+	"personal-dashboard-risky-article-edits-subheader": "Bantu Wikipedia agar selalu tepercaya dengan memeriksa beberapa suntingan berikut.",
+	"personal-dashboard-risky-article-edits-footer-preamble": "Lihat suntingan lainnya di [{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}} halaman Perubahan Terbaru]",
+	"personal-dashboard-risky-article-edits-info-time-text-today": "$1, sekarang",
+	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Tidak ada ringkasan suntingan"
+}

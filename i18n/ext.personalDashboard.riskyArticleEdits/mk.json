@@ -6,6 +6,10 @@
 	},
 	"personal-dashboard-risky-article-edits-header": "Прегледај промени",
 	"personal-dashboard-risky-article-edits-subheader": "Помогнете ни Википедија да остане меродавна со тоа што ќе ги прегледате следниве уредувања на кои треба да им се обрне внимание.",
+	"personal-dashboard-risky-article-edits-subheader-info": "Помогнете ни Википедија да остане меродавна.",
+	"personal-dashboard-risky-article-edits-subheader-info-popover": "[$1 Автоматизирана противвандалска алатка] означува потенцијално ризични уредувања на некои уредници. Изберете едно за да го отворите прегледот на разлики и да одлучите што да отповикате, што да подобрите, или да му се заблагодарите на уредникот.",
+	"personal-dashboard-risky-article-edits-subheader-info-popover-title": "Како?",
+	"personal-dashboard-risky-article-edits-subheader-info-popover-confirm": "Јасно",
 	"personal-dashboard-risky-article-edits-footer-preamble": "Погледајте повеќе уредувања на страницата [{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}} скорешни промени]",
 	"personal-dashboard-risky-article-edits-info-time-text-today": "$1, денес",
 	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Нема опис на уредувањето"

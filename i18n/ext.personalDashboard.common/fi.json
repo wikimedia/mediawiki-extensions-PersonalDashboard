@@ -1,0 +1,11 @@
+{
+	"@metadata": {
+		"authors": [
+			"Samoasambia"
+		]
+	},
+	"personal-dashboard-multi-step-dialog-progress": "$1 / $2",
+	"personal-dashboard-multi-step-dialog-next-button": "Seuraava",
+	"personal-dashboard-multi-step-dialog-previous-button": "Edellinen",
+	"personal-dashboard-multi-step-dialog-got-it-button": "Aloita"
+}

@@ -43,9 +43,5 @@
 	"personal-dashboard-policies-guidelines-assume-good-faith-answer-2-label": "Melakukan asumsi niat baik:",
 	"personal-dashboard-policies-guidelines-assume-good-faith-answer-2-text": "Jika tidak ada indikasi jelas dalam melakukan tindakan buruk (misalnya vandalisme), membantu kontributor lain adalah hal utama.",
 	"personal-dashboard-policies-guidelines-examples-button": "Contoh",
-	"personal-dashboard-policies-guidelines-examples-progress": "$1 dari $2",
-	"personal-dashboard-policies-guidelines-examples-header": "Contoh halaman $1",
-	"personal-dashboard-policies-guidelines-next-button": "Selanjutnya",
-	"personal-dashboard-policies-guidelines-previous-button": "Sebelumnya",
-	"personal-dashboard-policies-guidelines-got-it-button": "Dimengerti"
+	"personal-dashboard-policies-guidelines-examples-header": "Contoh halaman $1"
 }

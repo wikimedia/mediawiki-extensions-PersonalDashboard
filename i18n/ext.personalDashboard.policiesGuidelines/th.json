@@ -43,9 +43,5 @@
 	"personal-dashboard-policies-guidelines-assume-good-faith-answer-2-label": "สันนิษฐานว่ากระทำด้วยความสุจริตใจ:",
 	"personal-dashboard-policies-guidelines-assume-good-faith-answer-2-text": "หากไม่มีหลักฐานชัดเจนว่าเป็นการกระทำโดยเจตนาไม่สุจริต ควรช่วยเหลือซึ่งกันและกันเพื่อปรับปรุงคุณภาพของบทความให้ดียิ่งขึ้น",
 	"personal-dashboard-policies-guidelines-examples-button": "ตัวอย่าง",
-	"personal-dashboard-policies-guidelines-examples-progress": "$1 จาก $2",
-	"personal-dashboard-policies-guidelines-examples-header": "ตัวอย่าง $1",
-	"personal-dashboard-policies-guidelines-next-button": "ต่อไป",
-	"personal-dashboard-policies-guidelines-previous-button": "ก่อนหน้า",
-	"personal-dashboard-policies-guidelines-got-it-button": "เข้าใจแล้ว"
+	"personal-dashboard-policies-guidelines-examples-header": "ตัวอย่าง $1"
 }

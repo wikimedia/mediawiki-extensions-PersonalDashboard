@@ -1,0 +1,11 @@
+{
+	"@metadata": {
+		"authors": [
+			"Samoasambia"
+		]
+	},
+	"personal-dashboard-beta-info-chip-text": "Beeta",
+	"personal-dashboard-module-no-js-fallback": "Ota JavaScript käyttöön nähdäksesi tämän komponentin.",
+	"personal-dashboard-specialpage-title": "{{GENDER:$1|Hei}}, {{bidi:$1}}!",
+	"personal-dashboard-survey-text": "[$1 Anna palautetta]"
+}

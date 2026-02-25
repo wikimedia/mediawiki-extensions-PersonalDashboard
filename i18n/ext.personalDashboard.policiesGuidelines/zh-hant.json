@@ -43,9 +43,5 @@
 	"personal-dashboard-policies-guidelines-assume-good-faith-answer-2-label": "假定善意：",
 	"personal-dashboard-policies-guidelines-assume-good-faith-answer-2-text": "除非有明顯的惡意行為證據，否則應該互相幫助以提高條目品質。",
 	"personal-dashboard-policies-guidelines-examples-button": "範例",
-	"personal-dashboard-policies-guidelines-examples-progress": "$1/$2",
-	"personal-dashboard-policies-guidelines-examples-header": "範例：$1",
-	"personal-dashboard-policies-guidelines-next-button": "下一個",
-	"personal-dashboard-policies-guidelines-previous-button": "上一個",
-	"personal-dashboard-policies-guidelines-got-it-button": "了解"
+	"personal-dashboard-policies-guidelines-examples-header": "範例：$1"
 }

@@ -19,9 +19,5 @@
 	"personal-dashboard-policies-guidelines-verifiability-answer-3-label": "可靠：",
 	"personal-dashboard-policies-guidelines-assume-good-faith-title": "假定善意",
 	"personal-dashboard-policies-guidelines-examples-button": "范例",
-	"personal-dashboard-policies-guidelines-examples-progress": "$1/$2",
-	"personal-dashboard-policies-guidelines-examples-header": "范例：$1",
-	"personal-dashboard-policies-guidelines-next-button": "下一个",
-	"personal-dashboard-policies-guidelines-previous-button": "上一个",
-	"personal-dashboard-policies-guidelines-got-it-button": "了解"
+	"personal-dashboard-policies-guidelines-examples-header": "范例：$1"
 }

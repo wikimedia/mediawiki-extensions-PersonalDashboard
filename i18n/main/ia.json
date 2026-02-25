@@ -8,6 +8,6 @@
 	"personal-dashboard-link-title": "Tabuliero de instrumentos",
 	"personal-dashboard-module-no-js-fallback": "Per favor activa JavaScript pro vider iste componente.",
 	"personal-dashboard-specialpage-title": "{{GENDER:$1|Salute}}, {{bidi:$1}}!",
-	"personal-dashboard-survey-text": "Isto es un version preliminar de iste pagina. Condivide tu opinion via [$1 iste sondage] pro influentiar meliorationes futur.",
+	"personal-dashboard-survey-text": "[$1 Condivider tu opinion]",
 	"tooltip-pt-personaldashboard": "Tu tabuliero de instrumentos personal"
 }

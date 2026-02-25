@@ -1,0 +1,12 @@
+{
+	"@metadata": {
+		"authors": [
+			"Samwalton9 (WMF)"
+		]
+	},
+	"personal-dashboard-risky-article-edits-header": "ตรวจสอบการเปลี่ยนแปลง",
+	"personal-dashboard-risky-article-edits-subheader": "ช่วยรักษาความน่าเชื่อถือของวิกิพีเดียโดยการตรวจสอบการแก้ไขต่อไปนี้ ซึ่งอาจต้องการการปรับปรุงแก้ไข",
+	"personal-dashboard-risky-article-edits-footer-preamble": "ดูการแก้ไขเพิ่มเติมได้ในหน้า [{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}} การเปลี่ยนแปลงล่าสุด]",
+	"personal-dashboard-risky-article-edits-info-time-text-today": "$1 วันนี้",
+	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "ไม่มีสรุปการแก้ไข"
+}

@@ -43,9 +43,5 @@
 	"personal-dashboard-policies-guidelines-assume-good-faith-answer-2-label": "Bonne foi présumée :",
 	"personal-dashboard-policies-guidelines-assume-good-faith-answer-2-text": "À moins d'une mauvaise foi évidente, entraidez-vous pour améliorer la qualité des articles.",
 	"personal-dashboard-policies-guidelines-examples-button": "Exemples",
-	"personal-dashboard-policies-guidelines-examples-progress": "$1 de $2",
-	"personal-dashboard-policies-guidelines-examples-header": "Exemple $1",
-	"personal-dashboard-policies-guidelines-next-button": "Suivant",
-	"personal-dashboard-policies-guidelines-previous-button": "Précédent",
-	"personal-dashboard-policies-guidelines-got-it-button": "Compris"
+	"personal-dashboard-policies-guidelines-examples-header": "Exemple $1"
 }

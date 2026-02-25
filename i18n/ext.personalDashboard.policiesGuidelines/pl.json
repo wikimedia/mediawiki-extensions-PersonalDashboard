@@ -43,9 +43,5 @@
 	"personal-dashboard-policies-guidelines-assume-good-faith-answer-2-label": "Zakłada dobra wolę:",
 	"personal-dashboard-policies-guidelines-assume-good-faith-answer-2-text": "Jeżeli nie ma wyraźnych dowodów na złą wolę, pomagajcie sobie nawzajem w poprawianiu jakości artykułów.",
 	"personal-dashboard-policies-guidelines-examples-button": "Przykłady",
-	"personal-dashboard-policies-guidelines-examples-progress": "$1 z $2",
-	"personal-dashboard-policies-guidelines-examples-header": "Przykład $1",
-	"personal-dashboard-policies-guidelines-next-button": "Następny",
-	"personal-dashboard-policies-guidelines-previous-button": "Poprzedni",
-	"personal-dashboard-policies-guidelines-got-it-button": "Rozumiem"
+	"personal-dashboard-policies-guidelines-examples-header": "Przykład $1"
 }

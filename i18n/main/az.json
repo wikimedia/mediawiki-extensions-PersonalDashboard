@@ -9,6 +9,6 @@
 	"personal-dashboard-link-title": "İdarə paneli",
 	"personal-dashboard-module-no-js-fallback": "Bu hissəni görmək üçün zəhmət olmasa, JavaScripti aktivləşdirin.",
 	"personal-dashboard-specialpage-title": "{{GENDER:$1|Salam}}, {{bidi:$1}}!",
-	"personal-dashboard-survey-text": "[ $1 Rəy bildir]",
+	"personal-dashboard-survey-text": "[$1 Rəy bildir]",
 	"tooltip-pt-personaldashboard": "{{GENDER:|Sizin}} şəxsi idarə paneliniz"
 }

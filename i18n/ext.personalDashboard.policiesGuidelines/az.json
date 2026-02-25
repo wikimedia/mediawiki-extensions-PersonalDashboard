@@ -43,9 +43,5 @@
 	"personal-dashboard-policies-guidelines-assume-good-faith-answer-2-label": "Xoş niyyətlə yanaşıldı:",
 	"personal-dashboard-policies-guidelines-assume-good-faith-answer-2-text": "Pis niyyətin açıq-aydın sübutu olmadığı təqdirdə, məqalələrin keyfiyyətini yaxşılaşdırmaq üçün bir-birinizə kömək edin.",
 	"personal-dashboard-policies-guidelines-examples-button": "Nümunələr",
-	"personal-dashboard-policies-guidelines-examples-progress": "$1/$2",
-	"personal-dashboard-policies-guidelines-examples-header": "Nümunə $1",
-	"personal-dashboard-policies-guidelines-next-button": "Növbəti",
-	"personal-dashboard-policies-guidelines-previous-button": "Əvvəlki",
-	"personal-dashboard-policies-guidelines-got-it-button": "Başa düşdüm"
+	"personal-dashboard-policies-guidelines-examples-header": "Nümunə $1"
 }

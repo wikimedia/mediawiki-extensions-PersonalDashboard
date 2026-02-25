@@ -11,9 +11,5 @@
 	"personal-dashboard-policies-guidelines-verifiability-title": "Проверљивост",
 	"personal-dashboard-policies-guidelines-verifiability-answer-3-label": "Проверљиво:",
 	"personal-dashboard-policies-guidelines-examples-button": "Примери",
-	"personal-dashboard-policies-guidelines-examples-progress": "$1 од $2",
-	"personal-dashboard-policies-guidelines-examples-header": "Пример $1",
-	"personal-dashboard-policies-guidelines-next-button": "Следеће",
-	"personal-dashboard-policies-guidelines-previous-button": "Претходно",
-	"personal-dashboard-policies-guidelines-got-it-button": "Разумео"
+	"personal-dashboard-policies-guidelines-examples-header": "Пример $1"
 }

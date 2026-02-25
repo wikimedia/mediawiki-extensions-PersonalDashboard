@@ -35,7 +35,8 @@
 	},
 	"DefaultUserOptions": {
 		"personaldashboard-visited": false,
-		"personaldashboard-onboarding": 2
+		"personaldashboard-onboarding": 2,
+		"personaldashboard-risky-articles-info": true
 	},
 	"HookHandlers": {
 		"skintemplatenav-universal": {
@@ -287,7 +288,8 @@
 				"CdxCard",
 				"CdxIcon",
 				"CdxPopover",
-				"CdxToggleButton"
+				"CdxToggleButton",
+				"CdxMessage"
 			],
 			"packageFiles": [
 				"App.vue",
@@ -296,6 +298,7 @@
 				"components/ChangeNumber.vue",
 				"components/ChangeNumberMobile.vue",
 				"components/CreatorByline.vue",
+				"components/HeaderMessage.vue",
 				{
 					"name": "icons.json",
 					"callback": "MediaWiki\\ResourceLoader\\CodexModule::getIcons",
@@ -314,10 +317,13 @@
 				"personal-dashboard-risky-article-edits-footer-preamble",
 				"personal-dashboard-risky-article-edits-info-time-text-today",
 				"personal-dashboard-risky-article-edits-list-card-no-comment-message",
-				"personal-dashboard-risky-article-edits-mobile-summary-header",
 				"personal-dashboard-risky-article-edits-mobile-summary-footer-link-text",
 				"personal-dashboard-risky-article-edits-mobile-byte-text",
 				"personal-dashboard-risky-article-edits-mobile-user-text",
+				"personal-dashboard-risky-article-edits-subheader-info-popover-title",
+				"personal-dashboard-risky-article-edits-subheader-info-popover",
+				"personal-dashboard-risky-article-edits-subheader-info-popover-confirm",
+				"personal-dashboard-risky-article-edits-subheader-info",
 				"tag-mw-reverted",
 				"tag-mw-rollback",
 				"tag-mw-replace",

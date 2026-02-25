@@ -32,11 +32,6 @@ class RiskyArticleEdits extends BaseModule {
 	}
 
 	/** @inheritDoc */
-	protected function getSubheaderText() {
-		return $this->msg( 'personal-dashboard-risky-article-edits-subheader' );
-	}
-
-	/** @inheritDoc */
 	protected function shouldHeaderIncludeIcon(): bool {
 		return false;
 	}

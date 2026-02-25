@@ -10,5 +10,6 @@
 	"personal-dashboard-risky-article-edits-subheader-info-popover-confirm": "Got it",
 	"personal-dashboard-risky-article-edits-footer-preamble": "View more edits in the [{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}} recent changes page]",
 	"personal-dashboard-risky-article-edits-info-time-text-today": "$1, Today",
-	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "No edit summary"
+	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "No edit summary",
+	"personal-dashboard-risky-article-edits-info-button-aria-label": "information button"
 }

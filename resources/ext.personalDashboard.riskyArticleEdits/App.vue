@@ -1,4 +1,15 @@
 <template>
+	<header-message
+		v-if="isMobile && showHeaderMessage && rendermode !== 'mobile-summary'"
+		class="ext-personal-dashboard-recent-activity-header-mobile"
+		@dismissed="onHeaderMessageClose"></header-message>
+	<teleport
+		v-if="!isMobile && showHeaderMessage && rendermode !== 'mobile-summary'"
+		to=".personal-dashboard-module-header"
+	>
+		<header-message
+			@dismissed="onHeaderMessageClose"></header-message>
+	</teleport>
 	<div v-if="loading">
 		Loading...
 	</div>
@@ -50,9 +61,11 @@ const { CdxButton } = require( './codex.js' );
 const { useFetchActivityResult } = require( 'ext.personalDashboard.common' );
 const ListCard = require( './components/ListCard.vue' );
 const ListCardMobile = require( './components/ListCardMobile.vue' );
+const HeaderMessage = require( './components/HeaderMessage.vue' );
+const api = new mw.Api();
 
 module.exports = defineComponent( {
-	components: { CdxButton, ListCard, ListCardMobile },
+	components: { CdxButton, ListCard, ListCardMobile, HeaderMessage },
 	props: {
 		rendermode: {
 			type: String,
@@ -78,7 +91,8 @@ module.exports = defineComponent( {
 			fetchRecentActivity,
 			footerUrl: mw.util.getUrl( 'Special:RecentChanges', { revertrisklanguageagnostic: 'all' } ),
 			footerLinkText: mw.message( 'personal-dashboard-risky-article-edits-mobile-summary-footer-link-text' ).parse(),
-			buttonAriaLabel: mw.msg( 'personal-dashboard-risky-article-edits-mobile-summary-footer-button-aria-label' )
+			buttonAriaLabel: mw.msg( 'personal-dashboard-risky-article-edits-mobile-summary-footer-button-aria-label' ),
+			showHeaderMessage: mw.user.options.get( 'personaldashboard-risky-articles-info', 0 )
 		};
 	},
 	methods: {
@@ -86,6 +100,14 @@ module.exports = defineComponent( {
 			event.preventDefault();
 			event.stopPropagation();
 			window.open( this.footerUrl, '_blank', 'noopener noreferrer' );
+		},
+		async onHeaderMessageClose() {
+			await api.postWithEditToken( {
+				action: 'options',
+				optionname: 'personaldashboard-risky-articles-info',
+				optionvalue: 0,
+				formatversion: 2
+			} );
 		}
 	},
 	mounted() {
@@ -101,6 +123,13 @@ module.exports = defineComponent( {
 .ext-personal-dashboard-recent-activity-header {
 	display: flex;
 	justify-content: space-between;
+}
+
+.personal-dashboard-module-body {
+	.ext-personal-dashboard-recent-activity-header-mobile {
+		margin-bottom: 0.75em;
+		margin-top: 0;
+	}
 }
 
 .ext-personal-dashboard-recent-activity-footer {

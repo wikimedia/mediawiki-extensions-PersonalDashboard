@@ -46,19 +46,13 @@
 				"UserEditTracker"
 			]
 		},
-		"special-page": {
-			"class": "MediaWiki\\Extension\\PersonalDashboard\\HookHandler\\SpecialPageInitListHandler"
-		},
 		"preferences": {
 			"class": "MediaWiki\\Extension\\PersonalDashboard\\HookHandler\\GetPreferencesHandler"
 		}
 	},
 	"Hooks": {
 		"GetPreferences": "preferences",
-		"SkinTemplateNavigation::Universal": "skintemplatenav-universal",
-		"SpecialPage_initList": [
-			"special-page"
-		]
+		"SkinTemplateNavigation::Universal": "skintemplatenav-universal"
 	},
 	"MessagesDirs": {
 		"PersonalDashboard": [

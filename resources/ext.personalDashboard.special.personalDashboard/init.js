@@ -6,7 +6,7 @@
 	}
 
 	const { createMwApp, h, ref } = require( 'vue' );
-	const ModuleDialog = require( './ModuleDialog.vue' );
+	const ModuleRoute = require( './ModuleRoute.vue' );
 	const bodySelector = '.personal-dashboard-module-body';
 	const navSelector = '.personal-dashboard-module-header-nav-icon';
 	const rootSelector = '.ext-personal-dashboard-app-root';
@@ -26,6 +26,7 @@
 		const module = moduleEl.getAttribute( 'data-module-name' );
 		const jsModule = `ext.personalDashboard.${ module }`;
 		const hash = `#${ module }`;
+		const allButModuleRouteSelector = `.mw-body > *:not(.personal-dashboard-module-route-${ module })`;
 		const rendermode = mw.config.get( 'dashboardmodules' )[ module ].renderMode;
 		const title = moduleEl.querySelector( '.personal-dashboard-module-header-text' ).innerText;
 		mw.loader.using( jsModule ).then( ( require ) => {
@@ -36,31 +37,43 @@
 				navModuleList.push( module );
 				const navAnchor = document.createElement( 'a' );
 				navAnchor.href = hash;
+				// only update the hash on click; no scrolling
+				navAnchor.addEventListener( 'click', ( e ) => {
+					e.preventDefault();
+					document.location.hash = hash;
+				} );
 				moduleEl.parentNode.insertBefore( navAnchor, moduleEl );
 				navAnchor.appendChild( moduleEl );
 				const open = ref( false );
 				mw.hook( `personaldashboard.special.personalDashboard.${ module }.open` ).add( () => {
+					window.scrollTo( { top: 0 } );
 					open.value = true;
+					for ( const el of document.querySelectorAll( allButModuleRouteSelector ) ) {
+						el.style.display = 'none';
+					}
 					this.location.hash = hash;
 				} );
 				mw.hook( `personaldashboard.special.personalDashboard.${ module }.close` ).add( () => {
 					open.value = false;
+					for ( const el of document.querySelectorAll( allButModuleRouteSelector ) ) {
+						el.style.display = '';
+					}
 				} );
 				createMwApp( {
 					props: [ 'open' ],
 					emits: [ 'close' ],
 					setup() {
 						if ( open.value === false && document.location.hash === hash ) {
-							open.value = true;
+							mw.hook( `personaldashboard.special.personalDashboard.${ module }.open` ).fire();
 						}
 
-						return () => h( ModuleDialog, {
+						return () => h( ModuleRoute, {
 							module,
 							title,
 							open,
-							onClose: () => {
+							onClose() {
 								document.location.hash = '';
-								open.value = false;
+								mw.hook( `personaldashboard.special.personalDashboard.${ module }.close` ).fire();
 							}
 						}, () => h( Module, { rendermode: 'mobile-details' } ) );
 					}

@@ -1,9 +1,11 @@
 <template>
-	<cdx-dialog
-		:open="open.value"
-		:title="title"
-		class="personal-dashboard-container">
-		<template #header>
+	<teleport to=".mw-body">
+		<div
+			v-if="open.value"
+			:title="title"
+			:data-module-name="module"
+			:class="containerClasses"
+		>
 			<div class="personal-dashboard-module">
 				<span class="personal-dashboard-module-header">
 					<cdx-icon
@@ -16,31 +18,31 @@
 					</div>
 				</span>
 			</div>
-		</template>
-		<div class="personal-dashboard-module-body">
-			<slot>Module Content</slot>
+			<div class="personal-dashboard-module-body">
+				<slot>Module Content</slot>
+			</div>
 		</div>
-	</cdx-dialog>
+	</teleport>
 </template>
 
 <script>
 const { defineComponent } = require( 'vue' );
 
-const {
-	CdxIcon,
-	CdxDialog
-} = require( './codex.js' );
+const { CdxIcon } = require( './codex.js' );
 const {
 	cdxIconArrowPrevious
 } = require( './icons.json' );
 
 module.exports = defineComponent( {
 	components: {
-		CdxIcon,
-		CdxDialog
+		CdxIcon
 	},
 	props: {
 		title: {
+			type: String,
+			required: true
+		},
+		module: {
 			type: String,
 			required: true
 		},
@@ -50,9 +52,15 @@ module.exports = defineComponent( {
 		}
 	},
 	emits: [ 'close' ],
-	setup() {
+	setup( props ) {
+		const containerClasses = [
+			`personal-dashboard-module-route-${ props.module }`,
+			'personal-dashboard-module-route',
+			'personal-dashboard-container'
+		];
 		return {
-			cdxIconArrowPrevious
+			cdxIconArrowPrevious,
+			containerClasses
 		};
 	}
 } );
@@ -61,9 +69,11 @@ module.exports = defineComponent( {
 <style lang="less">
 @import 'mediawiki.skin.variables.less';
 
-.personal-dashboard-container.cdx-dialog {
+.personal-dashboard-container.personal-dashboard-module-route {
 	/* @TODO: replace placeholder value */
 	max-width: @max-width-breakpoint-tablet;
+	margin-left: auto;
+	margin-right: auto;
 
 	.cdx-dialog__header {
 		padding: unset;
@@ -78,6 +88,10 @@ module.exports = defineComponent( {
 			margin: 0 2rem;
 			height: 2.4em;
 		}
+	}
+
+	.ext-personal-dashboard-recent-activity-footer {
+		display: none;
 	}
 }
 </style>

@@ -70,8 +70,6 @@ module.exports = defineComponent( {
 		// eslint-disable-next-line vue/no-unused-properties
 		rcid: { type: Number, required: true },
 		revid: { type: Number, required: true },
-		// eslint-disable-next-line vue/no-unused-properties
-		temp: { type: String, default: '' },
 		user: { type: String, required: true },
 		parsedcomment: { type: String, required: true },
 		// eslint-disable-next-line vue/no-unused-properties

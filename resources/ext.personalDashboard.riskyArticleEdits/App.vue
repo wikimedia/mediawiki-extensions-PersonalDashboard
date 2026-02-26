@@ -30,7 +30,7 @@
 		</template>
 	</div>
 
-	<div v-if="isMobile && rendermode === 'mobile-summary'">
+	<div v-if="isMobile">
 		<span class="ext-personal-dashboard-recent-activity-footer">
 			<cdx-button
 				id="personal-dashboard-go-to-recentchanges"

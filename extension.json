@@ -100,7 +100,7 @@
 			],
 			"packageFiles": [
 				"init.js",
-				"ModuleDialog.vue",
+				"ModuleRoute.vue",
 				{
 					"name": "icons.json",
 					"callback": "MediaWiki\\ResourceLoader\\CodexModule::getIcons",

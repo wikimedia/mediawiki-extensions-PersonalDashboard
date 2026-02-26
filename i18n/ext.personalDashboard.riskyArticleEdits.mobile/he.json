@@ -1,12 +1,13 @@
 {
 	"@metadata": {
 		"authors": [
+			"Amire80",
 			"Neriah"
 		]
 	},
 	"personal-dashboard-risky-article-edits-mobile-summary-header": "סקירת שינויים",
-	"personal-dashboard-risky-article-edits-mobile-summary-footer-link-text": "הצג עריכות נוספות",
+	"personal-dashboard-risky-article-edits-mobile-summary-footer-link-text": "צפייה בעריכות נוספות",
 	"personal-dashboard-risky-article-edits-mobile-byte-text": "בתים בערך $1",
-	"personal-dashboard-risky-article-edits-mobile-user-text": "$1 שונה",
+	"personal-dashboard-risky-article-edits-mobile-user-text": "שוּנה על־ידי $1",
 	"personal-dashboard-risky-article-edits-mobile-summary-footer-button-aria-label": "כפתור ניווט לשינויים אחרונים"
 }

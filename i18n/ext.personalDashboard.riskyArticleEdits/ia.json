@@ -6,6 +6,10 @@
 	},
 	"personal-dashboard-risky-article-edits-header": "Revider cambiamentos",
 	"personal-dashboard-risky-article-edits-subheader": "Adjuta a mantener Wikipedia digne de fide: revide le sequente modificationes que pote requirer attention.",
+	"personal-dashboard-risky-article-edits-subheader-info": "Adjuta a mantener Wikipedia digne de fide.",
+	"personal-dashboard-risky-article-edits-subheader-info-popover": "Un [$1 utensile anti-vandalismo] signala le modificationes potentialmente riscose de altere redactores. Selige un pro aperir le vista de differentias e decider si disfacer o meliorar le modification, o regratiar le redactor.",
+	"personal-dashboard-risky-article-edits-subheader-info-popover-title": "Como?",
+	"personal-dashboard-risky-article-edits-subheader-info-popover-confirm": "Comprendite",
 	"personal-dashboard-risky-article-edits-footer-preamble": "Vide plus modificationes sur le [{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}} pagina de modificationes recente]",
 	"personal-dashboard-risky-article-edits-info-time-text-today": "$1, hodie",
 	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Nulle summario de modification"

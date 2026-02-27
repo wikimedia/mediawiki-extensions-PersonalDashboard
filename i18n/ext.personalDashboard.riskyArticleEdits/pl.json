@@ -6,6 +6,10 @@
 	},
 	"personal-dashboard-risky-article-edits-header": "Przejrzyj zmiany",
 	"personal-dashboard-risky-article-edits-subheader": "Pomóż nam dbać o wiarygodność Wikipedii, sprawdzając poniższe edycje, które mogą wymagać uwagi.",
+	"personal-dashboard-risky-article-edits-subheader-info": "Pomóż zachować wiarygodność Wikipedii.",
+	"personal-dashboard-risky-article-edits-subheader-info-popover": "[$1 Automatyczne narzędzie przeciw wandalizmom] oznacza potencjalnie ryzykowne edycje innych użytkowników. Wybierz jedną, aby otworzyć porównanie zmian i zdecydować, czy cofnąć, poprawić, czy podziękować redaktorowi.",
+	"personal-dashboard-risky-article-edits-subheader-info-popover-title": "Jak?",
+	"personal-dashboard-risky-article-edits-subheader-info-popover-confirm": "Rozumiem",
 	"personal-dashboard-risky-article-edits-footer-preamble": "Więcej edycji znajdziesz na [{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}} stronie ostatnich zmian]",
 	"personal-dashboard-risky-article-edits-info-time-text-today": "$1, dzisiaj",
 	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Nie podano opisu zmian"

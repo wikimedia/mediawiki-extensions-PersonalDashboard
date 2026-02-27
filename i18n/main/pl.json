@@ -8,6 +8,6 @@
 	"personal-dashboard-link-title": "Centrum dowodzenia",
 	"personal-dashboard-module-no-js-fallback": "Zezwól na JavaScript, aby zobaczyć ten komponent.",
 	"personal-dashboard-specialpage-title": "{{GENDER:$1|Witaj}}, {{bidi:$1}}!",
-	"personal-dashboard-survey-text": "To jest wczesna wersja tej strony. Podziel się swoją opinią, aby zaproponować kolejne ulepszenia, korzystając [$1 z tej ankiety].",
+	"personal-dashboard-survey-text": "[$1 Podziel się opinią]",
 	"tooltip-pt-personaldashboard": "{{GENDER:|Twój}} osobisty pulpit"
 }

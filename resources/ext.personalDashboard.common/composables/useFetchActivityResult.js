@@ -96,29 +96,30 @@ const handleApiData = ( data, limit ) => {
 };
 
 const getParams = async () => {
-	let params = {
-		format: 'json',
+	const params = {
 		action: 'query',
-		errorlang: mw.util.getParamValue( 'uselang' ) || mw.config.get( 'wgUserLanguage' ),
-		errorsuselocal: true,
-		errorformat: 'plaintext',
 		prop: 'description',
 		list: 'recentchanges',
 		generator: 'recentchanges',
-		formatversion: '2',
-		rcprop: 'title|ids|sizes|flags|user|parsedcomment|tags|oresscores|timestamp',
-		rclimit: '100',
 		rcnamespace: '0',
-		rctype: 'categorize|edit|external|log',
-		rcexcludeuser: mw.user.getName()
+		rcexcludeuser: mw.user.getName(),
+		rcprop: 'title|ids|sizes|flags|user|parsedcomment|tags|oresscores|timestamp',
+		rcshow: '!bot',
+		rclimit: '100',
+		rctype: 'categorize|edit|log',
+		errorformat: 'plaintext',
+		errorlang: mw.util.getParamValue( 'uselang' ) || mw.config.get( 'wgUserLanguage' ),
+		errorsuselocal: true,
+		format: 'json',
+		formatversion: '2'
 	};
+
 	const userRights = await mw.user.getRights();
+
 	if ( userRights && userRights.includes( 'patrol' ) ) {
-		params = {
-			rcshow: 'unpatrolled',
-			...params
-		};
+		params.rcshow += '|unpatrolled';
 	}
+
 	return params;
 };
 

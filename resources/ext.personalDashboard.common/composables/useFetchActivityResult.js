@@ -28,23 +28,22 @@ const handleApiErrors = ( code, data ) => {
 	}
 };
 
-const getRandomIndexes = ( filteredByScore, limit ) => {
-	const randomIndexes = [];
-	while ( randomIndexes.length < limit ) {
+const getRandomChanges = ( changes, limit ) => {
+	if ( changes.length <= limit ) {
+		mw.log.warn( `unable to randomly sample changes: only ${ changes.length } found` );
+		return changes;
+	}
+	const randomChanges = [];
+	while ( randomChanges.length < limit ) {
 		const randomIndex = Math.floor(
-			Math.random() * filteredByScore.length
+			Math.random() * changes.length
 		);
-		if ( !randomIndexes.includes( randomIndex ) ) {
-			randomIndexes.push( randomIndex );
+		const randomChange = changes[ randomIndex ];
+		if ( !randomChanges.includes( randomChange ) ) {
+			randomChanges.push( changes[ randomIndex ] );
 		}
 	}
-	return randomIndexes;
-};
-
-const getRandomChanges = ( data, changes, limit ) => {
-	data.query.recentchanges = changes.length > limit ?
-		changes.filter( ( _, index ) => getRandomIndexes( changes, limit ).includes( index ) ) :
-		changes;
+	return randomChanges;
 };
 
 const handleApiData = ( data, limit ) => {
@@ -70,20 +69,19 @@ const handleApiData = ( data, limit ) => {
 	);
 
 	if ( !mw.config.get( 'wgOresUiEnabled' ) ) {
-		getRandomChanges( data, filteredResults, limit );
+		data.query.recentchanges = getRandomChanges( filteredResults, limit );
 		return data;
 	}
 
-	const thresholds = mw.config.get( 'wgOresFiltersThresholds' );
-	const wiki = mw.config.get( 'wgUserLanguage' );
 	const {
 		revertrisklanguageagnostic: {
 			revertrisk: { min: threshold } = {}
 		} = {}
-	} = thresholds[ wiki ] || {};
+	} = mw.config.get( 'wgOresFiltersThresholds' ) || {};
 
 	if ( !threshold ) {
 		data.query.recentchanges = [];
+		mw.log.error( 'no revertrisklanguageagnostic threshold found' );
 		return data;
 	}
 
@@ -93,8 +91,7 @@ const handleApiData = ( data, limit ) => {
 		change.oresscores.revertrisklanguageagnostic !== undefined &&
 		change.oresscores.revertrisklanguageagnostic.true >= threshold
 	);
-
-	getRandomChanges( data, filteredByScore, limit );
+	data.query.recentchanges = getRandomChanges( filteredByScore, limit );
 	return data;
 };
 

@@ -5,6 +5,7 @@ namespace MediaWiki\Extension\PersonalDashboard\Modules;
 use MediaWiki\Config\Config;
 use MediaWiki\Context\IContextSource;
 use MediaWiki\Html\Html;
+use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\User\UserEditTracker;
 
 /**
@@ -93,6 +94,16 @@ class RiskyArticleEdits extends BaseModule {
 				[ 'class' => 'personal-dashboard-module-no-js-fallback' ],
 				$this->msg( 'personal-dashboard-impact-no-js-fallback' )->text()
 			);
+	}
+
+	/** @inheritDoc */
+	protected function getJsConfigVars() {
+		$configVars = [];
+		if ( ExtensionRegistry::getInstance()->isLoaded( 'ORES' ) ) {
+			$configVars[ 'wgOresUiEnabled' ] = $this->wikiConfig->get( 'OresUiEnabled' );
+			$configVars[ 'wgOresFiltersThresholds' ] = $this->wikiConfig->get( 'OresFiltersThresholds' );
+		}
+		return $configVars;
 	}
 
 	/** @inheritDoc */

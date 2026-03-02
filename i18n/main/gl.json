@@ -4,10 +4,11 @@
 			"Toliño"
 		]
 	},
+	"personal-dashboard-beta-info-chip-text": "Beta",
 	"personal-dashboard-desc": "Un panel experimental para a moderación",
 	"personal-dashboard-link-title": "Panel de control",
 	"personal-dashboard-module-no-js-fallback": "Activa o JavaScript para ver este compoñente.",
 	"personal-dashboard-specialpage-title": "{{GENDER:$1|Ola}}, {{bidi:$1}}!",
-	"personal-dashboard-survey-text": "Esta é unha versión inicial da páxina. Comparte os teus comentarios para darlles xeito ás futuras melloras a través [$1 desta enquisa].",
+	"personal-dashboard-survey-text": "[$1 Comparte os teus comentarios]",
 	"tooltip-pt-personaldashboard": "{{GENDER:|O teu}} panel persoal"
 }

@@ -136,6 +136,7 @@
 			],
 			"packageFiles": [
 				"index.js",
+				"utils.js",
 				"components/MultiStepDialog.vue",
 				"composables/useFetchActivityResult.js",
 				{

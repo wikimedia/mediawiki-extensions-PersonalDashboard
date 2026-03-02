@@ -47,6 +47,66 @@ test( 'fetchRecentActivity with response', async () => {
 	expect( mockResponse.query.pages ).toEqual( result.query.pages );
 } );
 
+test( 'fetchRecentActivity with limit', async () => {
+	const recentchanges = [
+		{
+			title: 'A title',
+			type: 'type',
+			ns: 0,
+			newlen: 22,
+			// eslint-disable-next-line camelcase
+			old_revid: 418549,
+			oldlen: 545,
+			pageid: 494,
+			rcid: 8947984,
+			revid: 58859,
+			temp: '',
+			user: 'user',
+			parsedcomment: 'comment',
+			tags: [],
+			timestamp: ''
+		},
+		{
+			title: 'A title',
+			type: 'type',
+			ns: 0,
+			newlen: 325,
+			// eslint-disable-next-line camelcase
+			old_revid: 58859,
+			oldlen: 22,
+			pageid: 494,
+			rcid: 8947986,
+			revid: 58860,
+			temp: '',
+			user: 'user',
+			parsedcomment: 'comment',
+			tags: [],
+			timestamp: ''
+		}
+	];
+	const mockResponse = {
+		query: {
+			recentchanges,
+			pages: {}
+		}
+	};
+	window.mw = {
+		...window.mw,
+		// eslint-disable-next-line prefer-arrow-callback
+		Api: vi.fn().mockImplementation( function Api() {
+			return {
+				get: vi.fn().mockResolvedValue( mockResponse )
+			};
+		} )
+	};
+	expectTypeOf( fetchRecentActivity ).toExtend( 'asyncFunction' );
+
+	await fetchRecentActivity( 1 );
+	const result = recentActivityResult.value;
+
+	expect( result.query.recentchanges.length ).toEqual( 1 );
+} );
+
 test( 'fetchRecentActivity with no changes', async () => {
 	const mockResponse = {
 		query: {

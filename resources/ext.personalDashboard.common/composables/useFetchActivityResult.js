@@ -3,48 +3,7 @@ const { ref } = require( 'vue' );
 const recentActivityResult = ref( null );
 const loading = ref( false );
 const error = ref( null );
-
-// gets error or warning messages from api response
-const parseApiStatus = ( data ) => {
-	const messages = [];
-	for ( const index in data ) {
-		const dataObj = data[ index ];
-		// use the most specific message available
-		const msg = dataObj.text || dataObj[ '*' ] || dataObj.code;
-		messages.push( msg );
-	}
-	return messages;
-};
-
-const handleApiErrors = ( code, data ) => {
-	if ( data === undefined ) {
-		throw new Error( code );
-	}
-	if ( data.errors ) {
-		const errors = parseApiStatus( data.errors );
-		if ( errors.length > 0 ) {
-			throw new Error( errors.join( '\n' ) );
-		}
-	}
-};
-
-const getRandomChanges = ( changes, limit ) => {
-	if ( changes.length <= limit ) {
-		mw.log.warn( `unable to randomly sample changes: only ${ changes.length } found` );
-		return changes;
-	}
-	const randomChanges = [];
-	while ( randomChanges.length < limit ) {
-		const randomIndex = Math.floor(
-			Math.random() * changes.length
-		);
-		const randomChange = changes[ randomIndex ];
-		if ( !randomChanges.includes( randomChange ) ) {
-			randomChanges.push( changes[ randomIndex ] );
-		}
-	}
-	return randomChanges;
-};
+const { getRandomItems, handleApiErrors, parseApiStatus } = require( '../utils.js' );
 
 const handleApiData = ( data, limit ) => {
 	if ( !data ) {
@@ -69,7 +28,7 @@ const handleApiData = ( data, limit ) => {
 	);
 
 	if ( !mw.config.get( 'wgOresUiEnabled' ) ) {
-		data.query.recentchanges = getRandomChanges( filteredResults, limit );
+		data.query.recentchanges = getRandomItems( filteredResults, limit );
 		return data;
 	}
 
@@ -91,7 +50,7 @@ const handleApiData = ( data, limit ) => {
 		change.oresscores.revertrisklanguageagnostic !== undefined &&
 		change.oresscores.revertrisklanguageagnostic.true >= threshold
 	);
-	data.query.recentchanges = getRandomChanges( filteredByScore, limit );
+	data.query.recentchanges = getRandomItems( filteredByScore, limit );
 	return data;
 };
 

@@ -4,9 +4,11 @@
 			"Samwalton9 (WMF)"
 		]
 	},
+	"personal-dashboard-beta-info-chip-text": "Beta",
 	"personal-dashboard-desc": "Uji coba dasbor bagi moderator",
 	"personal-dashboard-link-title": "Dasbor",
 	"personal-dashboard-module-no-js-fallback": "Mohon aktifkan JavaScript untuk menampilkan bagian ini.",
 	"personal-dashboard-specialpage-title": "{{GENDER:$1|Halo}}, {{bidi:$1}}!",
+	"personal-dashboard-survey-text": "[$1 Bagikan umpan balik]",
 	"tooltip-pt-personaldashboard": "Dasbor pribadi {{GENDER:|Anda}}"
 }

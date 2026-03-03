@@ -6,6 +6,10 @@
 	},
 	"personal-dashboard-risky-article-edits-header": "Periksa perubahan suntingan",
 	"personal-dashboard-risky-article-edits-subheader": "Bantu Wikipedia agar selalu tepercaya dengan memeriksa beberapa suntingan berikut.",
+	"personal-dashboard-risky-article-edits-subheader-info": "Bantulah agar Wikipedia tetap tepercaya.",
+	"personal-dashboard-risky-article-edits-subheader-info-popover": "[$1 Perkakas otomatis untuk mencegah vandalisme] bertugas untuk menandai suntingan dari kontributor lain yang diduga merusak. Silakan pilih salah satu di antaranya untuk menampilkan perbedaan revisi dan tentukan apakah suntingan tersebut akan dikembalikan, diperbaiki, atau berikan ucapan terima kasih kepada kontributor tersebut.",
+	"personal-dashboard-risky-article-edits-subheader-info-popover-title": "Bagaimana?",
+	"personal-dashboard-risky-article-edits-subheader-info-popover-confirm": "Dimengerti",
 	"personal-dashboard-risky-article-edits-footer-preamble": "Lihat suntingan lainnya di [{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}} halaman Perubahan Terbaru]",
 	"personal-dashboard-risky-article-edits-info-time-text-today": "$1, sekarang",
 	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Tidak ada ringkasan suntingan"

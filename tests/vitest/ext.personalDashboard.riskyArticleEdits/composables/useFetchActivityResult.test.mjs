@@ -1,5 +1,5 @@
 import { test, expectTypeOf, vi, expect } from 'vitest';
-import { useFetchActivityResult } from '@resources/ext.personalDashboard.common';
+import { default as useFetchActivityResult } from '@resources/ext.personalDashboard.riskyArticleEdits/composables/useFetchActivityResult.js';
 const {
 	recentActivityResult,
 	error,
@@ -148,4 +148,73 @@ test( 'fetchRecentActivity with error', async () => {
 
 	expect( error ).toBeTruthy();
 	expect( error.value.message ).toBe( 'An error' );
+} );
+
+test( 'fetchRecentActivity with ORES data', async () => {
+	mw.config.set( {
+		wgPersonalDashboardRiskyArticleEditsMlEnabled: true,
+		wgPersonalDashboardRiskyArticleEditsMlModel: 'test',
+		wgPersonalDashboardRiskyArticleEditsMlThreshold: { min: 0.5, max: 1 }
+	} );
+	const recentchanges = [
+		{
+			title: 'A title',
+			type: 'type',
+			ns: 0,
+			newlen: 22,
+			// eslint-disable-next-line camelcase
+			old_revid: 418549,
+			oldlen: 545,
+			pageid: 494,
+			rcid: 8947984,
+			revid: 58859,
+			temp: '',
+			user: 'user',
+			parsedcomment: 'comment',
+			tags: [],
+			oresscores: { test: { true: 0.1 } },
+			timestamp: ''
+		},
+		{
+			title: 'A title',
+			type: 'type',
+			ns: 0,
+			newlen: 325,
+			// eslint-disable-next-line camelcase
+			old_revid: 58859,
+			oldlen: 22,
+			pageid: 494,
+			rcid: 8947986,
+			revid: 58860,
+			temp: '',
+			user: 'user',
+			parsedcomment: 'comment',
+			tags: [],
+			oresscores: { test: { true: 0.9 } },
+			timestamp: ''
+		}
+	];
+	const mockResponse = {
+		query: {
+			recentchanges,
+			pages: {}
+		}
+	};
+	window.mw = {
+		...window.mw,
+		// eslint-disable-next-line prefer-arrow-callback
+		Api: vi.fn().mockImplementation( function Api() {
+			return {
+				get: vi.fn().mockResolvedValue( mockResponse )
+			};
+		} )
+	};
+	expectTypeOf( fetchRecentActivity ).toExtend( 'asyncFunction' );
+
+	await fetchRecentActivity( 10 );
+	const result = recentActivityResult.value;
+
+	expect( result.query.recentchanges.length ).toEqual( 1 );
+	expect( result.query.recentchanges[ 0 ].revid ).toEqual( 58860 );
+
 } );

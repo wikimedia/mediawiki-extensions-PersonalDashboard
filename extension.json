@@ -139,7 +139,6 @@
 				"index.js",
 				"utils.js",
 				"components/MultiStepDialog.vue",
-				"composables/useFetchActivityResult.js",
 				{
 					"name": "icons.json",
 					"callback": "MediaWiki\\ResourceLoader\\CodexModule::getIcons",
@@ -297,6 +296,7 @@
 				"components/ChangeNumberMobile.vue",
 				"components/CreatorByline.vue",
 				"components/HeaderMessage.vue",
+				"composables/useFetchActivityResult.js",
 				{
 					"name": "icons.json",
 					"callback": "MediaWiki\\ResourceLoader\\CodexModule::getIcons",
@@ -370,13 +370,9 @@
 			"description": "Show a blue dot inviting users to try out the dashboard. This has no effect if `$wgPersonalDashboardUserMenu = false` or a user does not meet the `$wgPersonalDashboardMinimum/MaximumEdits` threshold.",
 			"value": true
 		},
-		"PersonalDashboardRiskyArticleEditsEnabled": {
-			"description": "Whether the risky article edits module is enabled",
-			"value": true
-		},
-		"PersonalDashboardRiskyArticleEditsMinimumEditCount": {
-			"description": "Minimum edit count required to view the risky article edits module",
-			"value": 0
+		"PersonalDashboardRiskyArticleEditsMlModel": {
+			"description": "ML model used to filter edits",
+			"value": "revertrisklanguageagnostic"
 		}
 	},
 	"DatabaseVirtualDomains": [

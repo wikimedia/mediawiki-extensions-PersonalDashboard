@@ -3,7 +3,9 @@ const { ref } = require( 'vue' );
 const recentActivityResult = ref( null );
 const loading = ref( false );
 const error = ref( null );
-const { getRandomItems, handleApiErrors, parseApiStatus } = require( '../utils.js' );
+// can't currently import with nested destruct due to our commonjs/es conversion for vitest
+const { utils } = require( 'ext.personalDashboard.common' );
+const { getRandomItems, handleApiErrors, parseApiStatus } = utils;
 
 const handleApiData = ( data, limit ) => {
 	if ( !data ) {
@@ -27,28 +29,39 @@ const handleApiData = ( data, limit ) => {
 		( change ) => !excludeTags.some( ( tag ) => change.tags.includes( tag ) )
 	);
 
-	if ( !mw.config.get( 'wgOresUiEnabled' ) ) {
+	// Fallback if ML is not enabled
+	if ( !mw.config.get( 'wgPersonalDashboardRiskyArticleEditsMlEnabled' ) ) {
 		data.query.recentchanges = getRandomItems( filteredResults, limit );
 		return data;
 	}
 
-	const {
-		revertrisklanguageagnostic: {
-			revertrisk: { min: threshold } = {}
-		} = {}
-	} = mw.config.get( 'wgOresFiltersThresholds' ) || {};
+	const model = mw.config.get( 'wgPersonalDashboardRiskyArticleEditsMlModel' );
+	if ( !model ) {
+		mw.log.error( 'no model found' );
+		return data;
+	}
 
+	const { min: threshold } = mw.config.get( 'wgPersonalDashboardRiskyArticleEditsMlThreshold' ) || {};
 	if ( !threshold ) {
-		data.query.recentchanges = [];
-		mw.log.error( 'no revertrisklanguageagnostic threshold found' );
+		mw.log.error( `no ${ model } threshold found` );
 		return data;
 	}
 
 	const filteredByScore = filteredResults.filter(
-		( change ) => change !== null &&
-		change.oresscores !== undefined &&
-		change.oresscores.revertrisklanguageagnostic !== undefined &&
-		change.oresscores.revertrisklanguageagnostic.true >= threshold
+		( change ) => {
+			if ( change === null ) {
+				return false;
+			}
+			if ( change.oresscores === undefined ) {
+				mw.log.error( `no model scores for rcid ${ change.rcid }` );
+				return false;
+			}
+			if ( change.oresscores[ model ] === undefined ) {
+				mw.log.warn( `no ${ model } score for rcid ${ change.rcid }` );
+				return false;
+			}
+			return change.oresscores[ model ].true >= threshold;
+		}
 	);
 	data.query.recentchanges = getRandomItems( filteredByScore, limit );
 	return data;
@@ -62,13 +75,13 @@ const getParams = async () => {
 		generator: 'recentchanges',
 		rcnamespace: '0',
 		rcexcludeuser: mw.user.getName(),
-		rcprop: 'title|ids|sizes|flags|user|parsedcomment|tags|oresscores|timestamp',
+		rcprop: 'title|ids|sizes|flags|user|parsedcomment|tags|timestamp',
 		rcshow: '!bot',
 		rclimit: 'max',
 		rctype: 'edit',
 		grcnamespace: '0',
 		grcexcludeuser: mw.user.getName(),
-		grcprop: 'title|ids|sizes|flags|user|parsedcomment|tags|oresscores|timestamp',
+		grcprop: 'title|ids|sizes|flags|user|parsedcomment|tags|timestamp',
 		grcshow: '!bot',
 		grclimit: 'max',
 		grctype: 'edit',
@@ -83,6 +96,12 @@ const getParams = async () => {
 
 	if ( userRights && userRights.includes( 'patrol' ) ) {
 		params.rcshow += '|unpatrolled';
+		params.grcshow += '|unpatrolled';
+	}
+
+	if ( mw.config.get( 'wgPersonalDashboardRiskyArticleEditsMlEnabled' ) === true ) {
+		params.rcprop += '|oresscores';
+		params.grcprop += '|oresscores';
 	}
 
 	return params;

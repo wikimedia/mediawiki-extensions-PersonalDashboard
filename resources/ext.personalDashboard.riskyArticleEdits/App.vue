@@ -74,7 +74,7 @@
 <script>
 const { defineComponent, ref } = require( 'vue' );
 const { CdxButton, CdxCard } = require( './codex.js' );
-const { useFetchActivityResult } = require( 'ext.personalDashboard.common' );
+const useFetchActivityResult = require( './composables/useFetchActivityResult.js' );
 const ListCard = require( './components/ListCard.vue' );
 const ListCardMobile = require( './components/ListCardMobile.vue' );
 const HeaderMessage = require( './components/HeaderMessage.vue' );

@@ -19,7 +19,7 @@ class RiskyArticleEdits extends BaseModule {
 	 * @param UserEditTracker $userEditTracker
 	 */
 	public function __construct(
-		IContextSource $ctx,
+		private readonly IContextSource $ctx,
 		private readonly Config $wikiConfig,
 		private readonly UserEditTracker $userEditTracker
 	) {
@@ -93,34 +93,72 @@ class RiskyArticleEdits extends BaseModule {
 
 	/** @inheritDoc */
 	protected function getJsConfigVars() {
-		$configVars = [];
-		if ( ExtensionRegistry::getInstance()->isLoaded( 'ORES' ) ) {
-			$configVars[ 'wgOresUiEnabled' ] = $this->wikiConfig->get( 'OresUiEnabled' );
-			$configVars[ 'wgOresFiltersThresholds' ] = $this->wikiConfig->get( 'OresFiltersThresholds' );
+		// fallback to ml disabled if ores isn't loaded and configured as expected
+		$config = $this->getConfig();
+		$mlDisabledConf = [
+				'wgPersonalDashboardRiskyArticleEditsMlEnabled' => false
+		];
+		if (
+			!ExtensionRegistry::getInstance()->isLoaded( 'ORES' ) ||
+			!$config->has( 'OresUiEnabled' ) || !$config->get( 'OresUiEnabled' ) ||
+			!$config->has( 'OresFiltersThresholds' ) ||
+			!$config->has( 'OresModels' )
+		) {
+			return $mlDisabledConf;
 		}
-		return $configVars;
+
+		// Provide ML model threshold configuration from ORES extension if avaiable
+		$thresholds = $config->get( 'OresFiltersThresholds' );
+		$oresModels = $config->get( 'OresModels' );
+
+		// use a predefined filter for models we allow
+		$filters = [
+			'revertrisklanguageagnostic' => 'revertrisk',
+			'damaging' => 'likelybad',
+		];
+		// get model from url param or config
+		$models = [];
+		$requestedModel = $this->ctx->getRequest()->getText( 'personaldashboard_riskyarticleedits_mlmodel' );
+		if ( $requestedModel !== '' ) {
+			$models[] = $requestedModel;
+		}
+		$models[] = $config->get( 'PersonalDashboardRiskyArticleEditsMlModel' );
+
+		// try models in decending order
+		// make the model avaiable if it is enabled and the expected filter is configured
+		foreach ( $models as $model ) {
+			if (
+				// model conf: model key exists
+				!array_key_exists( $model, $oresModels ) ||
+				// model conf: model enablement key exists
+				!array_key_exists( 'enabled', $oresModels[ $model ] ) ||
+				// model conf: model enabled
+				$oresModels[ $model ][ 'enabled' ] !== true ||
+				// allowed filters: model key exists
+				!array_key_exists( $model, $filters ) ||
+				// thresholds conf: model key exists
+				!array_key_exists( $model, $thresholds ) ||
+				// thresholds conf: filter key exists
+				!array_key_exists( $filters[ $model ], $thresholds[ $model ] )
+			) {
+				continue;
+			}
+			$filter = $filters[ $model ];
+			$threshold = $thresholds[ $model ][ $filter ];
+			if ( $threshold ) {
+				return [
+				'wgPersonalDashboardRiskyArticleEditsMlModel' => $model,
+				'wgPersonalDashboardRiskyArticleEditsMlThreshold' => $threshold,
+				'wgPersonalDashboardRiskyArticleEditsMlEnabled' => true,
+				];
+			}
+		}
+		// fallback to ml disabled if no model is available
+		return $mlDisabledConf;
 	}
 
 	/** @inheritDoc */
 	protected function getModules() {
 		return [ 'ext.personalDashboard.riskyArticleEdits' ];
-	}
-
-	/** @inheritDoc */
-	protected function canRender() {
-		// Disabled for this wiki?
-		if ( $this->wikiConfig->get( "PersonalDashboardRiskyArticleEditsEnabled" ) === false ) {
-			return false;
-		}
-
-		// Not enough edits?
-		$userIdentity = $this->getContext()->getUser();
-		$editCount = $this->userEditTracker->getUserEditCount( $userIdentity );
-		if ( $this->wikiConfig->get( "PersonalDashboardRiskyArticleEditsMinimumEditCount" ) > $editCount ) {
-			return false;
-		}
-
-		// Otherwise, render
-		return true;
 	}
 }

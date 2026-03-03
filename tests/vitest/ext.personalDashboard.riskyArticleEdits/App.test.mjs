@@ -2,17 +2,23 @@ import { test, expect, beforeEach, vi, afterEach } from 'vitest';
 import { mount } from '@vue/test-utils';
 import { ref } from 'vue';
 
-const recentActivityResult = ref( null );
-const loading = ref( true );
-const error = ref( null );
-const mockFetchRecentActivity = vi.fn();
+vi.mock( '@resources/ext.personalDashboard.riskyArticleEdits/composables/useFetchActivityResult.js', () => {
+	const mock = {
+		recentActivityResult: ref( null ),
+		loading: ref( true ),
+		error: ref( null ),
+		fetchRecentActivity: vi.fn()
+	};
+	return { default: () => mock };
+} );
 
-vi.mock( 'ext.personalDashboard.common', () => ( { useFetchActivityResult: () => ( {
+import useFetchActivityResult from '@resources/ext.personalDashboard.riskyArticleEdits/composables/useFetchActivityResult.js';
+const {
 	recentActivityResult,
 	loading,
 	error,
-	fetchRecentActivity: mockFetchRecentActivity
-} ) } ) );
+	fetchRecentActivity
+} = useFetchActivityResult();
 
 import RecentActivity from '@resources/ext.personalDashboard.riskyArticleEdits/App.vue';
 mw.user.options.set( 'personaldashboard-risky-articles-info', 0 );
@@ -20,7 +26,7 @@ beforeEach( () => {
 	recentActivityResult.value = null;
 	loading.value = true;
 	error.value = null;
-	mockFetchRecentActivity.mockReset();
+	fetchRecentActivity.mockReset();
 	// create teleport target for tests that require it
 	const el = document.createElement( 'div' );
 	el.classList = [ 'personal-dashboard-module-header' ];
@@ -81,7 +87,7 @@ test( 'shows up to 5 recent changes with information', () => {
 	};
 	const wrapper = mount( RecentActivity );
 
-	expect( mockFetchRecentActivity ).toHaveBeenCalledWith( 5 );
+	expect( fetchRecentActivity ).toHaveBeenCalledWith( 5 );
 	expect( wrapper.text() ).toContain( 'Article Title' );
 	expect( wrapper.text() ).toContain( 'A comment' );
 	expect( wrapper.text() ).toContain( 'A description' );
@@ -119,7 +125,7 @@ test( 'shows up to 10 recent changes with information when on mobile view', () =
 	};
 	const wrapper = mount( RecentActivity );
 
-	expect( mockFetchRecentActivity ).toHaveBeenCalledWith( 10 );
+	expect( fetchRecentActivity ).toHaveBeenCalledWith( 10 );
 	expect( wrapper.text() ).toContain( 'Article Title' );
 	expect( wrapper.text() ).toContain( 'A comment' );
 	expect( wrapper.text() ).toContain( 'A description' );

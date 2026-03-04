@@ -12,5 +12,6 @@
 	"personal-dashboard-risky-article-edits-subheader-info-popover-confirm": "Verstanden",
 	"personal-dashboard-risky-article-edits-footer-preamble": "Weitere Bearbeitungen findest du in den [{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}} letzten Änderungen].",
 	"personal-dashboard-risky-article-edits-info-time-text-today": "$1, heute",
-	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Keine Bearbeitungszusammenfassung"
+	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Keine Bearbeitungszusammenfassung",
+	"personal-dashboard-risky-article-edits-info-button-aria-label": "Informationsschaltfläche"
 }

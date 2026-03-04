@@ -8,5 +8,6 @@
 	"personal-dashboard-risky-article-edits-subheader": "Aidez à maintenir Wikipédia fiable en relisant les modifications suivantes qui peuvent nécessiter votre attention.",
 	"personal-dashboard-risky-article-edits-footer-preamble": "Voir plus de modifications dans la [{{fullurl:Special:RecentChanges\n|revertrisklanguageagnostic=all}} page des modifications récentes]",
 	"personal-dashboard-risky-article-edits-info-time-text-today": "aujourd'hui à $1",
-	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Aucun résumé de modifications"
+	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Aucun résumé de modifications",
+	"personal-dashboard-risky-article-edits-info-button-aria-label": "bouton pour avoir plus d'informations"
 }

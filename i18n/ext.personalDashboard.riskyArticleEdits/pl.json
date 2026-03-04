@@ -12,5 +12,6 @@
 	"personal-dashboard-risky-article-edits-subheader-info-popover-confirm": "Rozumiem",
 	"personal-dashboard-risky-article-edits-footer-preamble": "Więcej edycji znajdziesz na [{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}} stronie ostatnich zmian]",
 	"personal-dashboard-risky-article-edits-info-time-text-today": "$1, dzisiaj",
-	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Nie podano opisu zmian"
+	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Nie podano opisu zmian",
+	"personal-dashboard-risky-article-edits-info-button-aria-label": "przycisk do wyświetlania informacji"
 }

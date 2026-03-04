@@ -12,5 +12,6 @@
 	"personal-dashboard-risky-article-edits-subheader-info-popover-confirm": "Comprendite",
 	"personal-dashboard-risky-article-edits-footer-preamble": "Vide plus modificationes sur le [{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}} pagina de modificationes recente]",
 	"personal-dashboard-risky-article-edits-info-time-text-today": "$1, hodie",
-	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Nulle summario de modification"
+	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Nulle summario de modification",
+	"personal-dashboard-risky-article-edits-info-button-aria-label": "button de information"
 }

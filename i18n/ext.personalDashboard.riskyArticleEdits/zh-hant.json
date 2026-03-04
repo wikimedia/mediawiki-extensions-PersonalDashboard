@@ -8,5 +8,6 @@
 	"personal-dashboard-risky-article-edits-subheader": "請檢閱以下可能需注意的編輯內容，以協助維持維基百科的可靠性。",
 	"personal-dashboard-risky-article-edits-footer-preamble": "在[{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}} 最近變更頁面]查看更多編輯內容",
 	"personal-dashboard-risky-article-edits-info-time-text-today": "$1，今日",
-	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "無編輯摘要"
+	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "無編輯摘要",
+	"personal-dashboard-risky-article-edits-info-button-aria-label": "資訊按鈕"
 }

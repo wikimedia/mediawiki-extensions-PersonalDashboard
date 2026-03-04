@@ -9,5 +9,6 @@
 	"personal-dashboard-risky-article-edits-subheader": "Help Wikipedia betrouwbaar te houden door de volgende bewerkingen te bekijken, die mogelijk aandacht nodig hebben.",
 	"personal-dashboard-risky-article-edits-footer-preamble": "Bekijk meer bewerkingen op de [{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}} pagina met recente wijzigingen]",
 	"personal-dashboard-risky-article-edits-info-time-text-today": "$1, vandaag",
-	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Geen bewerkingssamenvatting"
+	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Geen bewerkingssamenvatting",
+	"personal-dashboard-risky-article-edits-info-button-aria-label": "informatieknop"
 }

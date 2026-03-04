@@ -34,6 +34,7 @@
 		"PersonalDashboard": "MediaWiki\\Config\\GlobalVarConfig::newInstance"
 	},
 	"DefaultUserOptions": {
+		"personaldashboard-eligible": false,
 		"personaldashboard-visited": false,
 		"personaldashboard-risky-articles-info": true
 	},
@@ -357,13 +358,17 @@
 			"description": "Show a link to the Personal Dashboard in the user menu.",
 			"value": true
 		},
-		"PersonalDashboardBlueDot": {
-			"description": "Show a blue dot inviting users to try out the dashboard.",
-			"value": true
+		"PersonalDashboardMinimumEdits": {
+			"description": "The minimum number of edits required to show the menu link. This has no effect if `$wgPersonalDashboardUserMenu = false`.",
+			"value": 0
 		},
-		"PersonalDashboardBlueDotMinimumEdits": {
-			"description": "The minimum number of edits required to show the blue dot.",
-			"value": 100
+		"PersonalDashboardMaximumEdits": {
+			"description": "The maximum number of edits required to show the menu link. This has no effect if `$wgPersonalDashboardUserMenu = false`",
+			"value": 0
+		},
+		"PersonalDashboardBlueDot": {
+			"description": "Show a blue dot inviting users to try out the dashboard. This has no effect if `$wgPersonalDashboardUserMenu = false` or a user does not meet the `$wgPersonalDashboardMinimum/MaximumEdits` threshold.",
+			"value": true
 		},
 		"PersonalDashboardRiskyArticleEditsEnabled": {
 			"description": "Whether the risky article edits module is enabled",

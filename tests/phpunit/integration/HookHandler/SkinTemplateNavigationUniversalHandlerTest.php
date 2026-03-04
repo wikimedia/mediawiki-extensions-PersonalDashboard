@@ -18,8 +18,6 @@ use MediaWikiIntegrationTestCase;
  */
 class SkinTemplateNavigationUniversalHandlerTest extends MediaWikiIntegrationTestCase {
 	private HashConfig $configMock;
-	private OutputPage $outputMock;
-	private Title $titleMock;
 	private User $userMock;
 	private SkinTemplate $skinTemplateMock;
 	private SkinTemplateNavigationUniversalHandler $handler;
@@ -36,33 +34,38 @@ class SkinTemplateNavigationUniversalHandlerTest extends MediaWikiIntegrationTes
 
 		$this->configMock = new HashConfig();
 		$this->configMock->set( 'PersonalDashboardUserMenu', true );
+		$this->configMock->set( 'PersonalDashboardMinimumEdits', 0 );
+		$this->configMock->set( 'PersonalDashboardMaximumEdits', 0 );
 		$this->configMock->set( 'PersonalDashboardBlueDot', true );
-		$this->configMock->set( 'PersonalDashboardBlueDotMinimumEdits', 100 );
 
-		$this->outputMock = $this->createMock( OutputPage::class );
+		$outputMock = $this->createMock( OutputPage::class );
 
-		$this->titleMock = $this->createMock( Title::class );
-		$this->titleMock->method( 'getFullURL' )->willReturn( $this->href );
-		$this->titleMock->method( 'isSpecial' )->willReturnReference( $this->isSelf );
+		$titleMock = $this->createMock( Title::class );
+		$titleMock->method( 'getFullURL' )->willReturnReference( $this->href );
+		$titleMock->method( 'isSpecial' )->willReturnReference( $this->isSelf );
 
 		$this->userMock = $this->createMock( User::class );
 		$this->userMock->method( 'isNamed' )->willReturnReference( $this->isNamed );
 
 		$this->skinTemplateMock = $this->createMock( SkinTemplate::class );
 		$this->skinTemplateMock->method( 'getConfig' )->willReturn( $this->configMock );
-		$this->skinTemplateMock->method( 'getOutput' )->willReturn( $this->outputMock );
-		$this->skinTemplateMock->method( 'getTitle' )->willReturn( $this->titleMock );
+		$this->skinTemplateMock->method( 'getOutput' )->willReturn( $outputMock );
+		$this->skinTemplateMock->method( 'getTitle' )->willReturn( $titleMock );
 		$this->skinTemplateMock->method( 'getUser' )->willReturn( $this->userMock );
 		$this->skinTemplateMock->method( 'msg' )->willReturnArgument( 0 );
 
 		$specialPageFactoryMock = $this->createMock( SpecialPageFactory::class );
-		$specialPageFactoryMock->method( 'getTitleForAlias' )->willReturn( $this->titleMock );
+		$specialPageFactoryMock->method( 'getTitleForAlias' )->willReturn( $titleMock );
 
 		$userOptionsManagerMock = $this->createMock( UserOptionsManager::class );
-		$userOptionsManagerMock->method( 'getBoolOption' )->willReturnReference( $this->hasVisited );
+		$userOptionsManagerMock
+			->method( 'getBoolOption' )
+			->willReturnReference( $this->hasVisited );
 
 		$userEditTrackerMock = $this->createMock( UserEditTracker::class );
-		$userEditTrackerMock->method( 'getUserEditCount' )->willReturnReference( $this->editCount );
+		$userEditTrackerMock
+			->method( 'getUserEditCount' )
+			->willReturnReference( $this->editCount );
 
 		$this->handler = new SkinTemplateNavigationUniversalHandler(
 			$specialPageFactoryMock,
@@ -71,9 +74,7 @@ class SkinTemplateNavigationUniversalHandlerTest extends MediaWikiIntegrationTes
 		);
 	}
 
-	/**
-	 * @covers ::onSkinTemplateNavigation__Universal
-	 */
+	/** @covers ::onSkinTemplateNavigation__Universal */
 	public function testLinkExists() {
 		$links = [ 'user-menu' => [] ];
 		$this->handler->onSkinTemplateNavigation__Universal( $this->skinTemplateMock, $links );
@@ -83,35 +84,70 @@ class SkinTemplateNavigationUniversalHandlerTest extends MediaWikiIntegrationTes
 		$this->assertEquals( $this->href, $link['href'] );
 	}
 
-	/**
-	 * @covers ::onSkinTemplateNavigation__Universal
-	 */
-	public function testLinkNotExistsIfDisabled() {
-		$this->configMock->set( 'PersonalDashboardUserMenu', false );
-
-		$links = [ 'user-menu' => [] ];
-		$this->handler->onSkinTemplateNavigation__Universal( $this->skinTemplateMock, $links );
-		$this->assertArrayNotHasKey( 'personaldashboard', $links['user-menu'] );
-
-		$this->configMock->set( 'PersonalDashboardUserMenu', true );
-	}
-
-	/**
-	 * @covers ::onSkinTemplateNavigation__Universal
-	 */
-	public function testLinkNotExistsIfNotNamedUser() {
+	/** @covers ::isMenuLinkVisible */
+	public function testHideLinkIfNotNamedUser() {
 		$this->isNamed = false;
 
-		$links = [ 'user-menu' => [] ];
-		$this->handler->onSkinTemplateNavigation__Universal( $this->skinTemplateMock, $links );
-		$this->assertArrayNotHasKey( 'personaldashboard', $links['user-menu'] );
+		$this->assertFalse( $this->handler->isMenuLinkVisible(
+			$this->skinTemplateMock,
+			$this->userMock
+		) );
 
 		$this->isNamed = true;
 	}
 
-	/**
-	 * @covers ::isBlueDotVisible
-	 */
+	/** @covers ::isMenuLinkVisible */
+	public function testHideLinkIfDisabled() {
+		$this->configMock->set( 'PersonalDashboardUserMenu', false );
+
+		$this->assertFalse( $this->handler->isMenuLinkVisible(
+			$this->skinTemplateMock,
+			$this->userMock
+		) );
+
+		$this->configMock->set( 'PersonalDashboardUserMenu', true );
+	}
+
+	/** @covers ::isMenuLinkVisible */
+	public function testShowLinkIfPreviouslyEligible() {
+		$this->hasVisited = true;
+
+		$this->assertTrue( $this->handler->isMenuLinkVisible(
+			$this->skinTemplateMock,
+			$this->userMock
+		) );
+
+		$this->hasVisited = false;
+	}
+
+	/** @covers ::isMenuLinkVisible */
+	public function testLinkThreshold() {
+		$this->configMock->set( 'PersonalDashboardMinimumEdits', 100 );
+		$this->configMock->set( 'PersonalDashboardMaximumEdits', 500 );
+
+		$this->editCount = 99;
+		$this->assertFalse( $this->handler->isMenuLinkVisible(
+			$this->skinTemplateMock,
+			$this->userMock
+		) );
+
+		$this->editCount = 501;
+		$this->assertFalse( $this->handler->isMenuLinkVisible(
+			$this->skinTemplateMock,
+			$this->userMock
+		) );
+
+		$this->editCount = 100;
+		$this->assertTrue( $this->handler->isMenuLinkVisible(
+			$this->skinTemplateMock,
+			$this->userMock
+		) );
+
+		$this->configMock->set( 'PersonalDashboardMinimumEdits', 0 );
+		$this->configMock->set( 'PersonalDashboardMaximumEdits', 0 );
+	}
+
+	/** @covers ::isBlueDotVisible */
 	public function testShowBlueDot() {
 		$this->assertTrue( $this->handler->isBlueDotVisible(
 			$this->skinTemplateMock,
@@ -119,9 +155,7 @@ class SkinTemplateNavigationUniversalHandlerTest extends MediaWikiIntegrationTes
 		) );
 	}
 
-	/**
-	 * @covers ::isBlueDotVisible
-	 */
+	/** @covers ::isBlueDotVisible */
 	public function testHideBlueDotIfDisabled() {
 		$this->configMock->set( 'PersonalDashboardBlueDot', false );
 
@@ -133,9 +167,7 @@ class SkinTemplateNavigationUniversalHandlerTest extends MediaWikiIntegrationTes
 		$this->configMock->set( 'PersonalDashboardBlueDot', true );
 	}
 
-	/**
-	 * @covers ::isBlueDotVisible
-	 */
+	/** @covers ::isBlueDotVisible */
 	public function testHideBlueDotIfSelf() {
 		$this->isSelf = true;
 
@@ -147,9 +179,7 @@ class SkinTemplateNavigationUniversalHandlerTest extends MediaWikiIntegrationTes
 		$this->isSelf = false;
 	}
 
-	/**
-	 * @covers ::isBlueDotVisible
-	 */
+	/** @covers ::isBlueDotVisible */
 	public function testHideBlueDotIfVisited() {
 		$this->hasVisited = true;
 
@@ -159,19 +189,5 @@ class SkinTemplateNavigationUniversalHandlerTest extends MediaWikiIntegrationTes
 		) );
 
 		$this->hasVisited = false;
-	}
-
-	/**
-	 * @covers ::isBlueDotVisible
-	 */
-	public function testHideBlueDotIfBelowMinimumEdits() {
-		$this->editCount = 99;
-
-		$this->assertNotTrue( $this->handler->isBlueDotVisible(
-			$this->skinTemplateMock,
-			$this->userMock
-		) );
-
-		$this->editCount = 100;
 	}
 }

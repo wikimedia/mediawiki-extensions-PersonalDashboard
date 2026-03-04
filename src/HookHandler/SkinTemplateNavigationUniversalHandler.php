@@ -7,6 +7,7 @@ use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Skin\SkinTemplate;
 use MediaWiki\SpecialPage\SpecialPageFactory;
 use MediaWiki\User\Options\UserOptionsManager;
+use MediaWiki\User\User;
 use MediaWiki\User\UserEditTracker;
 use MediaWiki\User\UserIdentity;
 
@@ -18,13 +19,11 @@ class SkinTemplateNavigationUniversalHandler implements SkinTemplateNavigation__
 	) {
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function onSkinTemplateNavigation__Universal( $sktemplate, &$links ): void {
 		$user = $sktemplate->getUser();
 
-		if ( !$user->isNamed() || !$sktemplate->getConfig()->get( 'PersonalDashboardUserMenu' ) ) {
+		if ( !$this->isMenuLinkVisible( $sktemplate, $user ) ) {
 			return;
 		}
 
@@ -41,6 +40,42 @@ class SkinTemplateNavigationUniversalHandler implements SkinTemplateNavigation__
 				'ext.wikimediaEvents.xLab'
 			] );
 		}
+	}
+
+	/**
+	 * Check if the user menu link should be visible on the current page.
+	 */
+	public function isMenuLinkVisible( SkinTemplate $sktemplate, User $user ): bool {
+		// Never show if the user is anonymous/temporary or the config value is disabled
+		if ( !$user->isNamed() || !$sktemplate->getConfig()->get( 'PersonalDashboardUserMenu' ) ) {
+			return false;
+		}
+
+		// Always show if the user was previously eligible to see the user menu link
+		if ( $this->userOptionsManager->getBoolOption( $user, 'personaldashboard-eligible' ) ) {
+			return true;
+		}
+
+		$minimumEdits = max( $sktemplate->getConfig()->get( 'PersonalDashboardMinimumEdits' ), 0 );
+		$maximumEdits = max( $sktemplate->getConfig()->get( 'PersonalDashboardMaximumEdits' ), 0 );
+
+		// Always show if both the minimum and maximum thresholds are set to 0 (default value)
+		if ( $minimumEdits === 0 && $maximumEdits === 0 ) {
+			return true;
+		}
+
+		$editCount = $this->userEditTracker->getUserEditCount( $user );
+
+		// Never show if the user's edit count is not within the minimum and maximum thresholds
+		if ( $editCount < $minimumEdits || $editCount > $maximumEdits ) {
+			return false;
+		}
+
+		// Persist the user's eligiblity state to skip redundant checks and ensure permanent access
+		$this->userOptionsManager->setOption( $user, 'personaldashboard-eligible', true );
+		$this->userOptionsManager->saveOptions( $user );
+
+		return true;
 	}
 
 	/**
@@ -72,12 +107,8 @@ class SkinTemplateNavigationUniversalHandler implements SkinTemplateNavigation__
 	 * Check if the blue dot indicator should be visible on the current page.
 	 */
 	public function isBlueDotVisible( SkinTemplate $sktemplate, UserIdentity $user ): bool {
-		$isEnabled = $sktemplate->getConfig()->get( 'PersonalDashboardBlueDot' );
-		$isSelf = $sktemplate->getTitle()->isSpecial( 'PersonalDashboard' );
-		$hasVisited = $this->userOptionsManager->getBoolOption( $user, 'personaldashboard-visited' );
-		$editCount = $this->userEditTracker->getUserEditCount( $user );
-		$minimumEdits = $sktemplate->getConfig()->get( 'PersonalDashboardBlueDotMinimumEdits' );
-
-		return $isEnabled && !$isSelf && !$hasVisited && $editCount >= $minimumEdits;
+		return $sktemplate->getConfig()->get( 'PersonalDashboardBlueDot' ) &&
+			!$sktemplate->getTitle()->isSpecial( 'PersonalDashboard' ) &&
+			!$this->userOptionsManager->getBoolOption( $user, 'personaldashboard-visited' );
 	}
 }

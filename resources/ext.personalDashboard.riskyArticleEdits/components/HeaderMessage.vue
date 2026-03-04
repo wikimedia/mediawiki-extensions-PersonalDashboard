@@ -22,6 +22,7 @@
 			:title="messagePopover"
 			:use-close-button="true"
 			class="ext-personal-dashboard-recent-activity-header-popover"
+			@primary="showPopover = false"
 		>
 			<div v-i18n-html:personal-dashboard-risky-article-edits-subheader-info-popover="[ popoverUrl ]"></div>
 		</cdx-popover>

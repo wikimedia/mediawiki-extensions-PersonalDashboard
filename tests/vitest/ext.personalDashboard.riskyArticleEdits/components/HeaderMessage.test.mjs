@@ -52,3 +52,25 @@ test( 'does not remove message if no click on the dismiss button', async () => {
 	} );
 	expect( wrapper.emitted().dismissed ).toBeFalsy();
 } );
+
+test( 'closes popover when clicking on primary action button', async () => {
+	const wrapper = mount( HeaderMessage, {
+		global: {
+			directives: {
+				'i18n-html': {
+					mounted: () => {
+					},
+					updated: () => {
+					}
+				}
+			}
+		}
+	} );
+
+	const infoLink = wrapper.find( '.ext-personal-dashboard-recent-activity-header-link' );
+	await infoLink.trigger( 'click' );
+	expect( wrapper.find( '.ext-personal-dashboard-recent-activity-header-popover' ).exists() ).toBeTruthy();
+	const dismissPopoverButton = wrapper.find( '.cdx-popover__footer__primary-action' );
+	await dismissPopoverButton.trigger( 'click' );
+	expect( wrapper.find( '.ext-personal-dashboard-recent-activity-header-popover' ).exists() ).toBeFalsy();
+} );

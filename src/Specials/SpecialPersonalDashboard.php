@@ -197,8 +197,9 @@ class SpecialPersonalDashboard extends SpecialPage {
 	 * and create an info chip that indicates that this extension is in Beta.
 	 */
 	public function createSurveyLinkBetaChip(): ?string {
-		$url = $this->getConfig()->get( 'PersonalDashboardSurveyLink' ) ?:
-			'https://www.mediawiki.org/wiki/Talk:Moderator_Tools/Dashboard?uselang=';
+		$surveyLink = $this->getConfig()->get( 'PersonalDashboardSurveyLink' );
+		$url = $surveyLink ? $surveyLink . $this->getLanguage()->getCode() :
+			'https://www.mediawiki.org/wiki/Talk:Moderator_Tools/Dashboard';
 
 		$cdx = new Codex();
 		$betaChip = $cdx->infoChip()
@@ -211,7 +212,7 @@ class SpecialPersonalDashboard extends SpecialPage {
 		return Html::rawElement(
 			'div',
 			[ 'class' => 'personal-dashboard-survey' ],
-			$this->msg( 'personal-dashboard-survey-text', $url . $this->getLanguage()->getCode() ) .
+			$this->msg( 'personal-dashboard-survey-text', $url ) .
 			$betaChip
 		);
 	}

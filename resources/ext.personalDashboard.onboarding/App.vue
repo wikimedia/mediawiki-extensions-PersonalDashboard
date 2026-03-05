@@ -3,9 +3,9 @@
 		v-model:open="open"
 		v-model:step="step"
 		:title="msgTitle"
+		:final-button-label="msgGetStartedButton"
 		:no-padding="true"
-		class="personal-dashboard-onboarding"
-		@update:open="onClose">
+		class="personal-dashboard-onboarding">
 		<template
 			v-for="( data, index ) in steps"
 			:key="index"
@@ -17,26 +17,17 @@
 				<p>{{ data.body }}</p>
 			</div>
 		</template>
-
-		<template #footer>
-			<cdx-checkbox v-model="dontShowAgain">
-				{{ msgDontShowAgain }}
-			</cdx-checkbox>
-		</template>
 	</multi-step-dialog>
 </template>
 
 <script>
 const { defineComponent, ref } = require( 'vue' );
-const { CdxCheckbox } = require( './codex.js' );
 const { MultiStepDialog } = require( 'ext.personalDashboard.common' );
-const api = new mw.Api();
 
 module.exports = defineComponent( {
 	name: 'OnboardingDialog',
-	components: { CdxCheckbox, MultiStepDialog },
+	components: { MultiStepDialog },
 	setup() {
-		const length = 3;
 		const bannerPath = mw.config.get( 'wgExtensionAssetsPath' ) +
 			'/PersonalDashboard/resources/ext.personalDashboard.onboarding/images/';
 		const msgPrefix = 'personal-dashboard-onboarding-step-';
@@ -44,33 +35,31 @@ module.exports = defineComponent( {
 		return {
 			open: ref( true ),
 			step: ref( 1 ),
-			steps: Array.from( { length }, ( _, i ) => ( {
-				slot: `step-${ ++i }`,
-				banner: `${ bannerPath }${ i }.svg`,
-				// * personal-dashboard-onboarding-step-1-alt
-				alt: mw.msg( `${ msgPrefix }${ i }-alt` ),
-				// * personal-dashboard-onboarding-step-2-title
-				title: mw.msg( `${ msgPrefix }${ i }-title` ),
-				// * personal-dashboard-onboarding-step-3-body
-				body: mw.msg( `${ msgPrefix }${ i }-body` )
-			} ) ),
-			dontShowAgain: ref( false ),
-			chance: parseInt( mw.user.options.get( 'personaldashboard-onboarding', 0 ) ),
+			steps: [
+				{
+					slot: 'step-1',
+					banner: `${ bannerPath }1.svg`,
+					// * personal-dashboard-onboarding-step-1-alt
+					alt: mw.msg( `${ msgPrefix }1-alt` ),
+					// * personal-dashboard-onboarding-step-2-title
+					title: mw.msg( `${ msgPrefix }2-title` ),
+					// * personal-dashboard-onboarding-step-1-body
+					body: mw.msg( `${ msgPrefix }1-body` )
+				},
+				{
+					slot: 'step-2',
+					banner: `${ bannerPath }3.svg`,
+					// * personal-dashboard-onboarding-step-3-alt
+					alt: mw.msg( `${ msgPrefix }3-alt` ),
+					// * personal-dashboard-onboarding-step-3-title
+					title: mw.msg( `${ msgPrefix }3-title` ),
+					// * personal-dashboard-onboarding-step-3-body
+					body: mw.msg( `${ msgPrefix }3-body` )
+				}
+			],
 			msgTitle: mw.msg( 'personal-dashboard-onboarding-title' ),
-			msgDontShowAgain: mw.msg( 'personal-dashboard-onboarding-dont-show-again' )
+			msgGetStartedButton: mw.msg( 'personal-dashboard-onboarding-get-started-button' )
 		};
-	},
-	methods: {
-		async onClose( _, done ) {
-			this.chance = this.dontShowAgain || done ? 0 : Math.max( this.chance - 1, 0 );
-
-			await api.postWithEditToken( {
-				action: 'options',
-				optionname: 'personaldashboard-onboarding',
-				optionvalue: this.chance.toString(),
-				formatversion: 2
-			} );
-		}
 	}
 } );
 </script>

@@ -62,7 +62,7 @@
 						action="progressive"
 						weight="primary"
 						@click="onClose( true )">
-						{{ msgGotItButton }}
+						{{ finalButtonLabel }}
 					</cdx-button>
 
 					<cdx-button
@@ -98,6 +98,10 @@ module.exports = defineComponent( {
 			type: String,
 			default: 'Multi-Step Dialog'
 		},
+		finalButtonLabel: {
+			type: String,
+			default: mw.msg( 'personal-dashboard-multi-step-dialog-got-it-button' )
+		},
 		noPadding: {
 			type: Boolean,
 			default: false
@@ -110,7 +114,6 @@ module.exports = defineComponent( {
 			msgCloseButtonLabel: mw.msg( 'cdx-dialog-close-button-label' ),
 			msgNextButton: mw.msg( 'personal-dashboard-multi-step-dialog-next-button' ),
 			msgPreviousButton: mw.msg( 'personal-dashboard-multi-step-dialog-previous-button' ),
-			msgGotItButton: mw.msg( 'personal-dashboard-multi-step-dialog-got-it-button' ),
 			cdxIconClose,
 			cdxIconNext,
 			cdxIconPrevious

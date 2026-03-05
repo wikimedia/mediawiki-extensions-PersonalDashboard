@@ -35,7 +35,6 @@
 	},
 	"DefaultUserOptions": {
 		"personaldashboard-visited": false,
-		"personaldashboard-onboarding": 2,
 		"personaldashboard-risky-articles-info": true
 	},
 	"HookHandlers": {
@@ -164,12 +163,10 @@
 			"messages": [
 				"personal-dashboard-onboarding-title",
 				"personal-dashboard-onboarding-dont-show-again",
-				"personal-dashboard-onboarding-step-1-title",
+				"personal-dashboard-onboarding-get-started-button",
 				"personal-dashboard-onboarding-step-1-body",
 				"personal-dashboard-onboarding-step-1-alt",
 				"personal-dashboard-onboarding-step-2-title",
-				"personal-dashboard-onboarding-step-2-body",
-				"personal-dashboard-onboarding-step-2-alt",
 				"personal-dashboard-onboarding-step-3-title",
 				"personal-dashboard-onboarding-step-3-body",
 				"personal-dashboard-onboarding-step-3-alt"

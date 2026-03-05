@@ -6,6 +6,7 @@
 	},
 	"personal-dashboard-onboarding-title": "Title for the onboarding dialog.",
 	"personal-dashboard-onboarding-dont-show-again": "Checkbox label for “Don't show again” in the onboarding dialog.",
+	"personal-dashboard-onboarding-get-started-button": "Text for the “Get Started” button, which closes the onboarding dialog.",
 	"personal-dashboard-onboarding-step-1-title": "Title for step 1 in the onboarding dialog.",
 	"personal-dashboard-onboarding-step-1-body": "Body for step 1 in the onboarding dialog.",
 	"personal-dashboard-onboarding-step-1-alt": "Illustration alt text for step 1 in the onboarding dialog.",

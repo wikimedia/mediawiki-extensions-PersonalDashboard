@@ -57,13 +57,6 @@ class SpecialPersonalDashboard extends SpecialPage {
 		$this->requireNamedUser();
 		parent::execute( $par );
 
-		$user = $this->getUser();
-
-		if ( !$this->userOptionsManager->getBoolOption( $user, 'personaldashboard-visited' ) ) {
-			$this->userOptionsManager->setOption( $user, 'personaldashboard-visited', true );
-			$this->userOptionsManager->saveOptions( $user );
-		}
-
 		$out = $this->getContext()->getOutput();
 		$this->isMobile = Util::isMobile( $out->getSkin() );
 
@@ -77,7 +70,12 @@ class SpecialPersonalDashboard extends SpecialPage {
 			] );
 		}
 
-		if ( $this->userOptionsManager->getIntOption( $user, 'personaldashboard-onboarding' ) > 0 ) {
+		$user = $this->getUser();
+
+		if ( !$this->userOptionsManager->getBoolOption( $user, 'personaldashboard-visited' ) ) {
+			$this->userOptionsManager->setOption( $user, 'personaldashboard-visited', true );
+			$this->userOptionsManager->saveOptions( $user );
+
 			$out->addHTML( Html::element( 'div', [ 'id' => 'personal-dashboard-onboarding' ] ) );
 			$out->addModules( 'ext.personalDashboard.onboarding' );
 		}

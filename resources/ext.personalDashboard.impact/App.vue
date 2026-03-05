@@ -1,5 +1,5 @@
 <template>
-	<div class="personal-dashboard-impact__container">
+	<div ref="moduleRef" class="personal-dashboard-impact__container">
 		<div class="personal-dashboard-impact__category">
 			<div class="personal-dashboard-impact__value">
 				<cdx-icon :icon="cdxIconUserTalk"></cdx-icon>
@@ -69,10 +69,19 @@ module.exports = defineComponent( {
 		}
 	},
 	setup() {
+		const moduleRef = ref();
+		// eslint-disable-next-line compat/compat
+		const observer = new IntersectionObserver( ( entries ) => {
+			if ( entries[ 0 ].isIntersecting ) {
+				mw.hook( 'personaldashboard.impact.loaded' ).fire();
+			}
+		} );
 		const thanksCount = mw.config.get( 'wgPersonalDashboardImpactThanksCount', 0 );
 		const reviewCount = mw.config.get( 'wgPersonalDashboardImpactReviewCount', 0 );
 
 		return {
+			moduleRef,
+			observer,
 			thanksCount: mw.language.convertNumber( thanksCount ),
 			reviewCount: mw.language.convertNumber( reviewCount ),
 			infoButton: ref( null ),
@@ -92,7 +101,7 @@ module.exports = defineComponent( {
 		};
 	},
 	mounted() {
-		mw.hook( 'personaldashboard.impact.loaded' ).fire();
+		this.observer.observe( this.moduleRef );
 	}
 } );
 </script>

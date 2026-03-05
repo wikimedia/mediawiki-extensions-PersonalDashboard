@@ -4,9 +4,10 @@
 			v-if="open.value"
 			:title="title"
 			:data-module-name="module"
-			:class="containerClasses"
+			:data-mode="rendermode"
+			class="personal-dashboard-container personal-dashboard-route"
 		>
-			<div class="personal-dashboard-module">
+			<div :class="moduleClasses">
 				<span class="personal-dashboard-module-header">
 					<cdx-icon
 						class="personal-dashboard-module-header-back-icon"
@@ -17,9 +18,9 @@
 						{{ title }}
 					</div>
 				</span>
-			</div>
-			<div class="personal-dashboard-module-body">
-				<slot>Module Content</slot>
+				<div class="personal-dashboard-module-body">
+					<slot>Module Content</slot>
+				</div>
 			</div>
 		</div>
 	</teleport>
@@ -46,6 +47,10 @@ module.exports = defineComponent( {
 			type: String,
 			required: true
 		},
+		rendermode: {
+			type: String,
+			required: true
+		},
 		open: {
 			type: Object,
 			required: true
@@ -53,14 +58,14 @@ module.exports = defineComponent( {
 	},
 	emits: [ 'close' ],
 	setup( props ) {
-		const containerClasses = [
-			`personal-dashboard-module-route-${ props.module }`,
+		const moduleClasses = [
+			'personal-dashboard-module',
 			'personal-dashboard-module-route',
-			'personal-dashboard-container'
+			`personal-dashboard-module-route-${ props.module }`
 		];
 		return {
 			cdxIconArrowPrevious,
-			containerClasses
+			moduleClasses
 		};
 	}
 } );
@@ -68,30 +73,4 @@ module.exports = defineComponent( {
 
 <style lang="less">
 @import 'mediawiki.skin.variables.less';
-
-.personal-dashboard-container.personal-dashboard-module-route {
-	/* @TODO: replace placeholder value */
-	max-width: @max-width-breakpoint-tablet;
-	margin-left: auto;
-	margin-right: auto;
-
-	.cdx-dialog__header {
-		padding: unset;
-	}
-
-	.personal-dashboard-module {
-		border: unset;
-
-		.personal-dashboard-module-header {
-			font-size: 1.2em;
-			text-align: center;
-			margin: 0 2rem;
-			height: 2.4em;
-		}
-	}
-
-	.ext-personal-dashboard-recent-activity-footer {
-		display: none;
-	}
-}
 </style>

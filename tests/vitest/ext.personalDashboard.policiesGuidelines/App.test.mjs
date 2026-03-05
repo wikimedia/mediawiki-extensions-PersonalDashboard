@@ -12,6 +12,6 @@ test( 'list components match cards ', () => {
 		const [ name, steps ] = entries[ i ];
 		const card = components[ i ].vm;
 		expect( card.name ).toBe( name );
-		expect( card.steps ).toBe( steps );
+		expect( card.steps ).toStrictEqual( steps );
 	}
 } );

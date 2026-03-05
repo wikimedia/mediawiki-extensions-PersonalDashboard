@@ -66,7 +66,6 @@
 						if ( open.value === false && document.location.hash === hash ) {
 							mw.hook( `personaldashboard.special.personalDashboard.${ module }.open` ).fire();
 						}
-
 						return () => h( ModuleRoute, {
 							module,
 							title,
@@ -74,7 +73,8 @@
 							onClose() {
 								document.location.hash = '';
 								mw.hook( `personaldashboard.special.personalDashboard.${ module }.close` ).fire();
-							}
+							},
+							rendermode: 'mobile-details'
 						}, () => h( Module, { rendermode: 'mobile-details' } ) );
 					}
 				} ).mount( nav );

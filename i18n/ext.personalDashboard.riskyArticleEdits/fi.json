@@ -11,5 +11,6 @@
 	"personal-dashboard-risky-article-edits-subheader-info-popover-confirm": "Selvä",
 	"personal-dashboard-risky-article-edits-footer-preamble": "Katso lisää muokkauksia  [{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}} tuoreiden muutosten sivulla]",
 	"personal-dashboard-risky-article-edits-info-time-text-today": "$1, tänään",
-	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Ei muokkausyhteenvetoa"
+	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Ei muokkausyhteenvetoa",
+	"personal-dashboard-risky-article-edits-info-button-aria-label": "tietopainike"
 }

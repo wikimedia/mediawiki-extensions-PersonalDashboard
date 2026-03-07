@@ -205,7 +205,7 @@ class SpecialPersonalDashboard extends SpecialPage {
 		$betaChip = $cdx->infoChip()
 			->setStatus( 'notice' )
 			->setIcon( 'cdx-info-chip-css-icon--lab-flask' )
-			->setText( $this->msg( 'personal-dashboard-beta-info-chip-text' ) )
+			->setText( $this->msg( 'personal-dashboard-beta-info-chip-text' )->parse() )
 			->build()
 			->getHtml();
 

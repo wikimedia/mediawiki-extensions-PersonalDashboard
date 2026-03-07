@@ -28,7 +28,7 @@ class RiskyArticleEdits extends BaseModule {
 
 	/** @inheritDoc */
 	protected function getHeaderText() {
-		return $this->msg( 'personal-dashboard-risky-article-edits-header' );
+		return $this->msg( 'personal-dashboard-risky-article-edits-header' )->text();
 	}
 
 	/** @inheritDoc */
@@ -57,7 +57,7 @@ class RiskyArticleEdits extends BaseModule {
 		return Html::rawElement(
 			'div',
 			[ 'id' => 'personal-dashboard-go-to-recentchanges' ],
-			$this->msg( 'personal-dashboard-risky-article-edits-footer-preamble' )
+			$this->msg( 'personal-dashboard-risky-article-edits-footer-preamble' )->parse()
 		);
 	}
 

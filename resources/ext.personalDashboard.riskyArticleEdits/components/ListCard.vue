@@ -47,7 +47,7 @@
 </template>
 
 <script>
-const { defineComponent } = require( 'vue' );
+const { defineComponent, toRaw } = require( 'vue' );
 const { CdxCard } = require( '../codex.js' );
 const ChangeNumber = require( './ChangeNumber.vue' );
 const CreatorByline = require( './CreatorByline.vue' );
@@ -112,9 +112,9 @@ module.exports = defineComponent( {
 			}
 		},
 		description() {
-			return ( this.pages && this.pages[ this.pageid ] &&
-				this.pages[ this.pageid ].description ) ?
-				this.pages[ this.pageid ].description : '';
+			const pages = toRaw( this.pages );
+			const page = ( pages && pages[ 0 ] ) ? pages.find( ( obj ) => obj.pageid === this.pageid && obj.description ) : undefined;
+			return ( page && page.description ) ? page.description : '';
 		},
 		isTempUser() {
 			return mw.util.isTemporaryUser( this.user );

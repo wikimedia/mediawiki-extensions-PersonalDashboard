@@ -74,9 +74,9 @@ test( 'shows up to 5 recent changes with information', () => {
 				tags: [],
 				timestamp: new Date( 2024, 11, 2 ).toISOString()
 			} ],
-			pages: {
-				15864: { ns: 0, title: 'Article Title', description: 'A description' }
-			}
+			pages: [
+				{ ns: 0, pageid: 15864, title: 'Article Title', description: 'A description' }
+			]
 		}
 	};
 	const wrapper = mount( RecentActivity );
@@ -112,9 +112,9 @@ test( 'shows up to 10 recent changes with information when on mobile view', () =
 				tags: [],
 				timestamp: new Date( 2024, 11, 2 ).toISOString()
 			} ],
-			pages: {
-				15864: { ns: 0, title: 'Article Title', description: 'A description' }
-			}
+			pages: [
+				{ ns: 0, pageid: 15864, title: 'Article Title', description: 'A description' }
+			]
 		}
 	};
 	const wrapper = mount( RecentActivity );

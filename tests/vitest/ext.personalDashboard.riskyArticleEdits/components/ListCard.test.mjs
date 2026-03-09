@@ -15,18 +15,19 @@ test( 'mount component', () => {
 			// eslint-disable-next-line camelcase
 			old_revid: 0,
 			oldlen: 0,
-			pageid: 0,
+			pageid: 8675309,
 			rcid: 0,
 			revid: 0,
 			user: 'TestUser',
 			parsedcomment: 'TestComment',
 			tags: [ 'test' ],
 			timestamp: date.toISOString(),
-			pages: {
-				0: {
+			pages: [
+				{
+					pageid: 8675309,
 					description: 'a description'
 				}
-			}
+			]
 		}
 	} );
 
@@ -46,14 +47,14 @@ test( 'renders appropriate message when edit is made today', () => {
 			// eslint-disable-next-line camelcase
 			old_revid: 0,
 			oldlen: 0,
-			pageid: 0,
+			pageid: 8675309,
 			rcid: 0,
 			revid: 0,
 			user: 'TestUser',
 			parsedcomment: 'TestComment',
 			tags: [ 'test' ],
 			timestamp: date.toISOString(),
-			pages: {}
+			pages: []
 		}
 	} );
 	expect( expectedDate ).toBe( wrapper.vm.timestampFormatted );
@@ -71,14 +72,14 @@ test( 'renders timestamp without hours when edit is not made today', async () =>
 			// eslint-disable-next-line camelcase
 			old_revid: 0,
 			oldlen: 0,
-			pageid: 0,
+			pageid: 8675309,
 			rcid: 0,
 			revid: 0,
 			user: 'TestUser',
 			parsedcomment: 'TestComment',
 			tags: [ 'test' ],
 			timestamp: date.toISOString(),
-			pages: {}
+			pages: []
 		}
 	} );
 
@@ -95,14 +96,14 @@ test( 'strips all html formatting from parsedcomment', () => {
 			// eslint-disable-next-line camelcase
 			old_revid: 0,
 			oldlen: 0,
-			pageid: 0,
+			pageid: 8675309,
 			rcid: 0,
 			revid: 0,
 			user: 'TestUser',
 			parsedcomment: 'Plain text <h1>heading</h1>, <b>bold</b>, and <a href="#">link</a>.',
 			tags: [ 'test' ],
 			timestamp: new Date( 2024, 11, 2, 4, 29 ).toISOString(),
-			pages: {}
+			pages: []
 		}
 	} );
 

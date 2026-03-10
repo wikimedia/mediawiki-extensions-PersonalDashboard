@@ -1,11 +1,11 @@
 <template>
 	<teleport to=".mw-body">
 		<div
-			v-if="open.value"
+			v-show="open.value"
 			:title="title"
 			:data-module-name="module"
 			:data-mode="rendermode"
-			class="personal-dashboard-container personal-dashboard-route"
+			:class="`personal-dashboard-container personal-dashboard-route open-${open.value}`"
 		>
 			<div :class="moduleClasses">
 				<span class="personal-dashboard-module-header">
@@ -73,4 +73,8 @@ module.exports = defineComponent( {
 
 <style lang="less">
 @import 'mediawiki.skin.variables.less';
+
+.personal-dashboard-container.personal-dashboard-route.open-false {
+	display: none;
+}
 </style>

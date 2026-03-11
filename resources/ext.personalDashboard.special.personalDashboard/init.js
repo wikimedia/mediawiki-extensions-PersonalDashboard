@@ -5,12 +5,13 @@
 		return;
 	}
 
-	const { createMwApp, h, ref } = require( 'vue' );
+	const { createMwApp, defineComponent, h, ref, render } = require( 'vue' );
 	const ModuleRoute = require( './ModuleRoute.vue' );
 	const bodySelector = '.personal-dashboard-module-body';
 	const navSelector = '.personal-dashboard-module-header-nav-icon';
 	const rootSelector = '.ext-personal-dashboard-app-root';
 	const navModuleList = [];
+	const app = createMwApp( {} );
 
 	for ( const moduleEl of modules ) {
 		// skip modules that are already wrapped in an anchor
@@ -59,7 +60,7 @@
 						el.style.display = '';
 					}
 				} );
-				createMwApp( {
+				const NavComponent = defineComponent( {
 					props: [ 'open' ],
 					emits: [ 'close' ],
 					setup() {
@@ -77,14 +78,20 @@
 							rendermode: 'mobile-details'
 						}, () => h( Module, { rendermode: 'mobile-details' } ) );
 					}
-				} ).mount( nav );
+				} );
+				// render the component to a vnode
+				const vnode = h( NavComponent );
+				// attach the existing app context
+				// eslint-disable-next-line no-underscore-dangle
+				vnode.appContext = app._context;
+				// borrow the root render function normally used for an app
+				render( vnode, nav );
 			}
 			if ( root ) {
-				createMwApp( {
-					render() {
-						return h( Module, { rendermode } );
-					}
-				} ).mount( root );
+				const vnode = h( Module, { rendermode, open } );
+				// eslint-disable-next-line no-underscore-dangle
+				vnode.appContext = app._context;
+				render( vnode, root );
 			}
 		} );
 	}

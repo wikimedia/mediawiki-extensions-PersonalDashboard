@@ -36,8 +36,7 @@ class SkinTemplateNavigationUniversalHandler implements SkinTemplateNavigation__
 
 		if ( ExtensionRegistry::getInstance()->isLoaded( 'WikimediaEvents' ) ) {
 			$output->addModules( [
-				'ext.wikimediaEvents.personalDashboard',
-				'ext.wikimediaEvents.xLab'
+				'ext.wikimediaEvents.personalDashboard'
 			] );
 		}
 	}

@@ -65,8 +65,7 @@ class SpecialPersonalDashboard extends SpecialPage {
 
 		if ( ExtensionRegistry::getInstance()->isLoaded( 'WikimediaEvents' ) ) {
 			$out->addModules( [
-				'ext.wikimediaEvents.personalDashboard',
-				'ext.wikimediaEvents.xLab'
+				'ext.wikimediaEvents.personalDashboard'
 			] );
 		}
 

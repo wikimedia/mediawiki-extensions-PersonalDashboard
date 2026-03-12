@@ -1,9 +1,11 @@
 {
 	"@metadata": {
 		"authors": [
+			"HanV",
 			"Siebrand"
 		]
 	},
+	"personal-dashboard-beta-info-chip-text": "Bèta",
 	"personal-dashboard-desc": "Een experimenteel dashboard voor beheerders",
 	"personal-dashboard-link-title": "Dashboard",
 	"personal-dashboard-module-no-js-fallback": "Schakel JavaScript in om dit onderdeel te bekijken.",

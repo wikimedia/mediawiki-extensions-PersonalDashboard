@@ -286,7 +286,8 @@
 				"CdxIcon",
 				"CdxPopover",
 				"CdxToggleButton",
-				"CdxMessage"
+				"CdxMessage",
+				"CdxProgressBar"
 			],
 			"packageFiles": [
 				"App.vue",

@@ -12,7 +12,7 @@
 				@dismissed="onHeaderMessageClose"></header-message>
 		</teleport>
 		<div v-if="loading">
-			Loading...
+			<cdx-progress-bar inline :aria-label="progressBarAriaLabel"></cdx-progress-bar>
 		</div>
 
 		<div v-if="error">
@@ -73,7 +73,7 @@
 
 <script>
 const { defineComponent, ref } = require( 'vue' );
-const { CdxButton, CdxCard } = require( './codex.js' );
+const { CdxButton, CdxCard, CdxProgressBar } = require( './codex.js' );
 const useFetchActivityResult = require( './composables/useFetchActivityResult.js' );
 const ListCard = require( './components/ListCard.vue' );
 const ListCardMobile = require( './components/ListCardMobile.vue' );
@@ -81,7 +81,14 @@ const HeaderMessage = require( './components/HeaderMessage.vue' );
 const api = new mw.Api();
 
 module.exports = defineComponent( {
-	components: { CdxButton, CdxCard, ListCard, ListCardMobile, HeaderMessage },
+	components: {
+		CdxButton,
+		CdxCard,
+		CdxProgressBar,
+		HeaderMessage,
+		ListCard,
+		ListCardMobile
+	},
 	props: {
 		rendermode: {
 			type: String,
@@ -116,6 +123,7 @@ module.exports = defineComponent( {
 			error,
 			fetchRecentActivity,
 			buttonAriaLabel: mw.msg( 'personal-dashboard-risky-article-edits-mobile-summary-footer-link-text' ),
+			progressBarAriaLabel: mw.msg( 'personal-dashboard-risky-article-edits-progress-bar-aria-label' ),
 			showHeaderMessage: mw.user.options.get( 'personaldashboard-risky-articles-info', 0 )
 		};
 	},

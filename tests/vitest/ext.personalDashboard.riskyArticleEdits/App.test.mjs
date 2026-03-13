@@ -41,10 +41,10 @@ test( 'mount component', () => {
 	expect( wrapper.element ).toMatchSnapshot();
 } );
 
-test( 'shows loading message when loading', () => {
+test( 'shows progress bar when loading', () => {
 	const wrapper = mount( RecentActivity );
 
-	expect( wrapper.text() ).toContain( 'Loading...' );
+	expect( wrapper.find( '.cdx-progress-bar' ).exists() ).toBeTruthy();
 } );
 
 test( 'shows error message when there is one', () => {

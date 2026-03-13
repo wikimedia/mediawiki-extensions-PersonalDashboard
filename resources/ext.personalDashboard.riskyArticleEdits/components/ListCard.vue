@@ -58,22 +58,14 @@ module.exports = defineComponent( {
 	components: { CdxCard, ChangeNumber, CreatorByline },
 	props: {
 		title: { type: String, required: true },
-		// eslint-disable-next-line vue/no-unused-properties
-		type: { type: String, required: true },
-		// eslint-disable-next-line vue/no-unused-properties
-		ns: { type: Number, required: true },
 		newlen: { type: Number, required: true },
 		// eslint-disable-next-line camelcase, vue/prop-name-casing
 		old_revid: { type: Number, required: true },
 		oldlen: { type: Number, required: true },
 		pageid: { type: Number, required: true },
-		// eslint-disable-next-line vue/no-unused-properties
-		rcid: { type: Number, required: true },
 		revid: { type: Number, required: true },
 		user: { type: String, required: true },
 		parsedcomment: { type: String, required: true },
-		// eslint-disable-next-line vue/no-unused-properties
-		tags: { type: Array, required: true },
 		timestamp: { type: String, default: '' },
 		pages: { type: Object, required: true }
 	},

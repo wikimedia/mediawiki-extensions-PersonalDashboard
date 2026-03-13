@@ -5,8 +5,6 @@
 				<span class="ext-personal-dashboard-moderation-card-info-title">
 					<cdx-icon :icon="cdxIconEdit"></cdx-icon>
 					{{ userMessage }}
-					<change-number-mobile :oldlen :newlen></change-number-mobile>
-					{{ articleMessage }}
 				</span>
 			</div>
 		</template>
@@ -17,48 +15,20 @@
 const { defineComponent } = require( 'vue' );
 const { CdxCard, CdxIcon } = require( '../codex.js' );
 const { cdxIconEdit } = require( '../icons.json' );
-const ChangeNumberMobile = require( './ChangeNumberMobile.vue' );
 
 module.exports = defineComponent( {
 	name: 'ListCard',
-	components: { CdxCard, CdxIcon, ChangeNumberMobile },
+	components: { CdxCard, CdxIcon },
 	props: {
 		title: { type: String, required: true },
-		// eslint-disable-next-line vue/no-unused-properties
-		type: { type: String, required: true },
-		// eslint-disable-next-line vue/no-unused-properties
-		ns: { type: Number, required: true },
-		newlen: { type: Number, required: true },
-		// eslint-disable-next-line camelcase, vue/prop-name-casing,vue/no-unused-properties
-		old_revid: { type: Number, required: true },
-		oldlen: { type: Number, required: true },
-		// eslint-disable-next-line vue/no-unused-properties
-		pageid: { type: Number, required: true },
-		// eslint-disable-next-line vue/no-unused-properties
-		rcid: { type: Number, required: true },
-		// eslint-disable-next-line vue/no-unused-properties
-		revid: { type: Number, required: true },
-		// eslint-disable-next-line vue/no-unused-properties
-		temp: { type: String, default: '' },
-		user: { type: String, required: true },
-		// eslint-disable-next-line vue/no-unused-properties
-		parsedcomment: { type: String, required: true },
-		// eslint-disable-next-line vue/no-unused-properties
-		tags: { type: Array, required: true },
-		// eslint-disable-next-line vue/no-unused-properties
-		timestamp: { type: String, default: '' },
-		// eslint-disable-next-line vue/no-unused-properties
-		pages: { type: Object, required: true }
+		user: { type: String, required: true }
 	},
 	setup() {
 		return { cdxIconEdit };
 	},
 	computed: {
 		userMessage() {
-			return mw.message( 'personal-dashboard-risky-article-edits-mobile-user-text', [ this.user ] );
-		},
-		articleMessage() {
-			return mw.message( 'personal-dashboard-risky-article-edits-mobile-byte-text', [ this.title ] );
+			return mw.message( 'personal-dashboard-risky-article-edits-mobile-user-text', this.user, this.title );
 		}
 	}
 } );

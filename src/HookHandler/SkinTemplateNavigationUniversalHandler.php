@@ -58,15 +58,19 @@ class SkinTemplateNavigationUniversalHandler implements SkinTemplateNavigation__
 		$minimumEdits = max( $sktemplate->getConfig()->get( 'PersonalDashboardMinimumEdits' ), 0 );
 		$maximumEdits = max( $sktemplate->getConfig()->get( 'PersonalDashboardMaximumEdits' ), 0 );
 
+		$hasMinimum = $minimumEdits > 0;
+		$hasMaximum = $maximumEdits > 0;
+
 		// Always show if both the minimum and maximum thresholds are set to 0 (default value)
-		if ( $minimumEdits === 0 && $maximumEdits === 0 ) {
+		if ( !$hasMinimum && !$hasMaximum ) {
 			return true;
 		}
 
 		$editCount = $this->userEditTracker->getUserEditCount( $user );
 
 		// Never show if the user's edit count is not within the minimum and maximum thresholds
-		if ( $editCount < $minimumEdits || $editCount > $maximumEdits ) {
+		if ( ( $hasMinimum && $editCount < $minimumEdits ) ||
+			( $hasMaximum && $editCount > $maximumEdits ) ) {
 			return false;
 		}
 

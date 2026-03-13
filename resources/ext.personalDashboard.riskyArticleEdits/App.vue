@@ -38,7 +38,8 @@
 					v-for="rc in recentActivityResult.feed"
 					v-bind="rc"
 					:key="`${rendermode}-${rc.feedorigin}-${rc.revid}`"
-					:pages="recentActivityResult.pages">
+					:pages="recentActivityResult.pages"
+					:is-mobile="isMobile">
 				</list-card>
 			</template>
 		</div>

@@ -24,6 +24,9 @@ import RecentActivity from '/resources/ext.personalDashboard.riskyArticleEdits/A
 
 mw.user.options.set( 'personaldashboard-risky-articles-info', 0 );
 
+// Safely ignore error: Cannot find package 'ext.checkUser.userInfoCard'
+mw.loader.using = () => {};
+
 beforeEach( () => {
 	recentActivityResult.value = null;
 	loading.value = true;

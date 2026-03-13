@@ -38,6 +38,8 @@
 				</div>
 
 				<div class="ext-personal-dashboard-moderation-card-info-title-row">
+					<user-info-button v-if="!isMobile" :username="user"></user-info-button>
+
 					<creator-byline
 						:creator-name="user"
 						:creator-is-temp-account="isTempUser"
@@ -49,7 +51,7 @@
 </template>
 
 <script>
-const { defineComponent, toRaw } = require( 'vue' );
+const { defineComponent, defineAsyncComponent, toRaw } = require( 'vue' );
 const { CdxCard } = require( '../codex.js' );
 const ChangeNumber = require( './ChangeNumber.vue' );
 const CreatorByline = require( './CreatorByline.vue' );
@@ -57,7 +59,19 @@ const { formatRelativeTimeOrDate } = require( 'mediawiki.DateFormatter' );
 
 module.exports = defineComponent( {
 	name: 'ListCard',
-	components: { CdxCard, ChangeNumber, CreatorByline },
+	components: {
+		CdxCard,
+		ChangeNumber,
+		CreatorByline,
+		UserInfoButton: defineAsyncComponent( {
+			loader: () => new Promise( ( resolve ) => {
+				mw.loader.using( 'ext.checkUser.userInfoCard', ( require ) => {
+					resolve( require( 'ext.checkUser.userInfoCard' ).UserCardButton );
+				} );
+			} ),
+			onError() {}
+		} )
+	},
 	props: {
 		title: { type: String, required: true },
 		newlen: { type: Number, required: true },
@@ -70,7 +84,8 @@ module.exports = defineComponent( {
 		parsedcomment: { type: String, required: true },
 		timestamp: { type: String, default: '' },
 		pages: { type: Object, required: true },
-		feedorigin: { type: String, required: true }
+		feedorigin: { type: String, required: true },
+		isMobile: { type: Boolean, default: false }
 	},
 	setup() {
 		return {

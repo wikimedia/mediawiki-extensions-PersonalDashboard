@@ -2,6 +2,9 @@ import { test, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
 import ListCard from '/resources/ext.personalDashboard.riskyArticleEdits/components/ListCard.vue';
 
+// Safely ignore error: Cannot find package 'ext.checkUser.userInfoCard'
+mw.loader.using = () => {};
+
 test( 'mount component', () => {
 	const date = new Date( 2026, 1, 1, 3, 0 );
 
@@ -113,4 +116,62 @@ test( 'strips all html formatting from parsedcomment', () => {
 	} );
 
 	expect( wrapper.vm.comment ).toStrictEqual( 'Plain text heading, bold, and link.' );
+} );
+
+test( 'user info card visible on desktop', () => {
+	const wrapper = mount( ListCard, {
+		props: {
+			title: 'TestTitle',
+			newlen: 0,
+			// eslint-disable-next-line camelcase
+			old_revid: 0,
+			oldlen: 0,
+			pageid: 8675309,
+			revid: 0,
+			user: 'TestUser',
+			parsedcomment: 'TestComment',
+			timestamp: new Date().toISOString(),
+			tags: [],
+			pages: [],
+			feedorigin: 'recentchanges',
+			isMobile: false
+		},
+		global: {
+			stubs: {
+				UserInfoButton: true
+			}
+		}
+	} );
+
+	const button = wrapper.findComponent( { name: 'UserInfoButton' } );
+	expect( button.exists() ).toStrictEqual( true );
+} );
+
+test( 'user info card hidden on mobile', () => {
+	const wrapper = mount( ListCard, {
+		props: {
+			title: 'TestTitle',
+			newlen: 0,
+			// eslint-disable-next-line camelcase
+			old_revid: 0,
+			oldlen: 0,
+			pageid: 8675309,
+			revid: 0,
+			user: 'TestUser',
+			parsedcomment: 'TestComment',
+			timestamp: new Date().toISOString(),
+			tags: [],
+			pages: [],
+			feedorigin: 'recentchanges',
+			isMobile: true
+		},
+		global: {
+			stubs: {
+				UserInfoButton: true
+			}
+		}
+	} );
+
+	const button = wrapper.findComponent( { name: 'UserInfoButton' } );
+	expect( button.exists() ).toStrictEqual( false );
 } );

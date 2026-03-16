@@ -5,7 +5,6 @@
 		]
 	},
 	"personal-dashboard-risky-article-edits-mobile-summary-footer-link-text": "Vider plus modificationes",
-	"personal-dashboard-risky-article-edits-mobile-byte-text": "bytes in le articulo $1",
-	"personal-dashboard-risky-article-edits-mobile-user-text": "$1 ha cambiate",
+	"personal-dashboard-risky-article-edits-mobile-user-text": "$1 ha modificate le articulo $2",
 	"personal-dashboard-risky-article-edits-mobile-summary-footer-button-aria-label": "button pro navigar al modificationes recente"
 }

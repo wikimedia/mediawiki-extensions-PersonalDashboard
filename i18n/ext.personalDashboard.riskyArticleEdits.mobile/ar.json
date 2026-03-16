@@ -6,7 +6,6 @@
 		]
 	},
 	"personal-dashboard-risky-article-edits-mobile-summary-footer-link-text": "عرض المزيد من التعديلات",
-	"personal-dashboard-risky-article-edits-mobile-byte-text": "البايتات في مقالة $1",
-	"personal-dashboard-risky-article-edits-mobile-user-text": "$1 تغير",
+	"personal-dashboard-risky-article-edits-mobile-user-text": "$1 عدل المقالة $2",
 	"personal-dashboard-risky-article-edits-mobile-summary-footer-button-aria-label": "زر الانتقال إلى التغييرات الأخيرة"
 }

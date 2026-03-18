@@ -13,5 +13,6 @@
 	"personal-dashboard-risky-article-edits-footer-preamble": "Ver máis edicións na páxina dos [{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}} cambios recentes]",
 	"personal-dashboard-risky-article-edits-info-time-text-today": "$1, hoxe",
 	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Sen resumo de edición",
-	"personal-dashboard-risky-article-edits-info-button-aria-label": "botón de información"
+	"personal-dashboard-risky-article-edits-info-button-aria-label": "botón de información",
+	"personal-dashboard-risky-article-edits-progress-bar-aria-label": "barra de progreso en liña para indicar cando se cargan os cambios para a revisión"
 }

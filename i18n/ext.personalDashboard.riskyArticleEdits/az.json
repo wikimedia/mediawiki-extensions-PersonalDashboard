@@ -13,5 +13,6 @@
 	"personal-dashboard-risky-article-edits-footer-preamble": "[{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}} son dəyişikliklər səhifəsində] daha çox redaktəyə baxın.",
 	"personal-dashboard-risky-article-edits-info-time-text-today": "$1, Bu gün",
 	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Redaktə xülasəsi yoxdur",
-	"personal-dashboard-risky-article-edits-info-button-aria-label": "məlumat düyməsi"
+	"personal-dashboard-risky-article-edits-info-button-aria-label": "məlumat düyməsi",
+	"personal-dashboard-risky-article-edits-progress-bar-aria-label": "yoxlama üçün dəyişikliklərin yükləndiyini göstərmək üçün sətir içi irəliləyiş paneli"
 }

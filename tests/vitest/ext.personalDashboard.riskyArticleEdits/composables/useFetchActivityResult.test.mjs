@@ -150,11 +150,10 @@ test( 'fetchRecentActivity with error', async () => {
 	expect( error.value.message ).toBe( 'An error' );
 } );
 
-test( 'fetchRecentActivity with ORES data', async () => {
+test( 'fetchRecentActivity with revertrisklanguageagnostic model enabled', async () => {
 	mw.config.set( {
 		wgPersonalDashboardRiskyArticleEditsMlEnabled: true,
-		wgPersonalDashboardRiskyArticleEditsMlModel: 'test',
-		wgPersonalDashboardRiskyArticleEditsMlThreshold: { min: 0.5, max: 1 }
+		wgPersonalDashboardRiskyArticleEditsMlModel: 'revertrisklanguageagnostic'
 	} );
 	const recentchanges = [
 		{
@@ -172,7 +171,6 @@ test( 'fetchRecentActivity with ORES data', async () => {
 			user: 'user',
 			parsedcomment: 'comment',
 			tags: [],
-			oresscores: { test: { true: 0.1 } },
 			timestamp: ''
 		},
 		{
@@ -190,7 +188,6 @@ test( 'fetchRecentActivity with ORES data', async () => {
 			user: 'user',
 			parsedcomment: 'comment',
 			tags: [],
-			oresscores: { test: { true: 0.9 } },
 			timestamp: ''
 		}
 	];
@@ -200,12 +197,37 @@ test( 'fetchRecentActivity with ORES data', async () => {
 			pages: {}
 		}
 	};
+	const mockApiGet = vi.fn();
+	const expectedParams = {
+		action: 'query',
+		errorformat: 'plaintext',
+		errorlang: null,
+		errorsuselocal: true,
+		format: 'json',
+		formatversion: '2',
+		generator: 'recentchanges',
+		grcexcludeuser: 'TestUser',
+		grclimit: '500',
+		grcnamespace: '0',
+		grcprop: 'title|ids|sizes|flags|user|parsedcomment|tags|timestamp',
+		grcshow: '!bot|unpatrolled|revertrisklanguageagnostic',
+		grctype: 'edit',
+		list: 'recentchanges',
+		prop: 'description',
+		rcexcludeuser: 'TestUser',
+		rclimit: '500',
+		rcnamespace: '0',
+		rcprop: 'title|ids|sizes|flags|user|parsedcomment|tags|timestamp',
+		rcshow: '!bot|unpatrolled|revertrisklanguageagnostic',
+		rctype: 'edit'
+	};
 	window.mw = {
 		...window.mw,
 		// eslint-disable-next-line prefer-arrow-callback
 		Api: vi.fn().mockImplementation( function Api() {
+
 			return {
-				get: vi.fn().mockResolvedValue( mockResponse )
+				get: mockApiGet.mockResolvedValue( mockResponse )
 			};
 		} )
 	};
@@ -214,7 +236,184 @@ test( 'fetchRecentActivity with ORES data', async () => {
 	await fetchRecentActivity( 10 );
 	const result = recentActivityResult.value;
 
-	expect( result.query.recentchanges.length ).toEqual( 1 );
-	expect( result.query.recentchanges[ 0 ].revid ).toEqual( 58860 );
+	expect( result.query.recentchanges.length ).toEqual( 2 );
+	expect( mockApiGet ).toHaveBeenCalledWith( expectedParams );
+} );
 
+test( 'fetchRecentActivity with damaging model enabled', async () => {
+	mw.config.set( {
+		wgPersonalDashboardRiskyArticleEditsMlEnabled: true,
+		wgPersonalDashboardRiskyArticleEditsMlModel: 'damaging'
+	} );
+	const recentchanges = [
+		{
+			title: 'A title',
+			type: 'type',
+			ns: 0,
+			newlen: 22,
+			// eslint-disable-next-line camelcase
+			old_revid: 418549,
+			oldlen: 545,
+			pageid: 494,
+			rcid: 8947984,
+			revid: 58859,
+			temp: '',
+			user: 'user',
+			parsedcomment: 'comment',
+			tags: [],
+			timestamp: ''
+		},
+		{
+			title: 'A title',
+			type: 'type',
+			ns: 0,
+			newlen: 325,
+			// eslint-disable-next-line camelcase
+			old_revid: 58859,
+			oldlen: 22,
+			pageid: 494,
+			rcid: 8947986,
+			revid: 58860,
+			temp: '',
+			user: 'user',
+			parsedcomment: 'comment',
+			tags: [],
+			timestamp: ''
+		}
+	];
+	const mockResponse = {
+		query: {
+			recentchanges,
+			pages: {}
+		}
+	};
+	const mockApiGet = vi.fn();
+	const expectedParams = {
+		action: 'query',
+		errorformat: 'plaintext',
+		errorlang: null,
+		errorsuselocal: true,
+		format: 'json',
+		formatversion: '2',
+		generator: 'recentchanges',
+		grcexcludeuser: 'TestUser',
+		grclimit: '500',
+		grcnamespace: '0',
+		grcprop: 'title|ids|sizes|flags|user|parsedcomment|tags|timestamp',
+		grcshow: '!bot|unpatrolled|oresreview',
+		grctype: 'edit',
+		list: 'recentchanges',
+		prop: 'description',
+		rcexcludeuser: 'TestUser',
+		rclimit: '500',
+		rcnamespace: '0',
+		rcprop: 'title|ids|sizes|flags|user|parsedcomment|tags|timestamp',
+		rcshow: '!bot|unpatrolled|oresreview',
+		rctype: 'edit'
+	};
+	window.mw = {
+		...window.mw,
+		// eslint-disable-next-line prefer-arrow-callback
+		Api: vi.fn().mockImplementation( function Api() {
+			return {
+				get: mockApiGet.mockResolvedValue( mockResponse )
+			};
+		} )
+	};
+	expectTypeOf( fetchRecentActivity ).toExtend( 'asyncFunction' );
+
+	await fetchRecentActivity( 10 );
+	const result = recentActivityResult.value;
+
+	expect( result.query.recentchanges.length ).toEqual( 2 );
+	expect( mockApiGet ).toHaveBeenCalledWith( expectedParams );
+} );
+
+test( 'fetchRecentActivity with no model enabled', async () => {
+	mw.config.set( {
+		wgPersonalDashboardRiskyArticleEditsMlEnabled: false,
+		wgPersonalDashboardRiskyArticleEditsMlModel: null
+	} );
+	const recentchanges = [
+		{
+			title: 'A title',
+			type: 'type',
+			ns: 0,
+			newlen: 22,
+			// eslint-disable-next-line camelcase
+			old_revid: 418549,
+			oldlen: 545,
+			pageid: 494,
+			rcid: 8947984,
+			revid: 58859,
+			temp: '',
+			user: 'user',
+			parsedcomment: 'comment',
+			tags: [],
+			timestamp: ''
+		},
+		{
+			title: 'A title',
+			type: 'type',
+			ns: 0,
+			newlen: 325,
+			// eslint-disable-next-line camelcase
+			old_revid: 58859,
+			oldlen: 22,
+			pageid: 494,
+			rcid: 8947986,
+			revid: 58860,
+			temp: '',
+			user: 'user',
+			parsedcomment: 'comment',
+			tags: [],
+			timestamp: ''
+		}
+	];
+	const mockResponse = {
+		query: {
+			recentchanges,
+			pages: {}
+		}
+	};
+	const mockApiGet = vi.fn();
+	const expectedParams = {
+		action: 'query',
+		errorformat: 'plaintext',
+		errorlang: null,
+		errorsuselocal: true,
+		format: 'json',
+		formatversion: '2',
+		generator: 'recentchanges',
+		grcexcludeuser: 'TestUser',
+		grclimit: '500',
+		grcnamespace: '0',
+		grcprop: 'title|ids|sizes|flags|user|parsedcomment|tags|timestamp',
+		grcshow: '!bot|unpatrolled',
+		grctype: 'edit',
+		list: 'recentchanges',
+		prop: 'description',
+		rcexcludeuser: 'TestUser',
+		rclimit: '500',
+		rcnamespace: '0',
+		rcprop: 'title|ids|sizes|flags|user|parsedcomment|tags|timestamp',
+		rcshow: '!bot|unpatrolled',
+		rctype: 'edit'
+	};
+	window.mw = {
+		...window.mw,
+		// eslint-disable-next-line prefer-arrow-callback
+		Api: vi.fn().mockImplementation( function Api() {
+			return {
+				get: mockApiGet.mockResolvedValue( mockResponse )
+			};
+		} )
+	};
+	expectTypeOf( fetchRecentActivity ).toExtend( 'asyncFunction' );
+
+	await fetchRecentActivity( 10 );
+	const result = recentActivityResult.value;
+
+	expect( result.query.recentchanges.length ).toEqual( 2 );
+	expect( mockApiGet ).toHaveBeenCalledWith( expectedParams );
 } );

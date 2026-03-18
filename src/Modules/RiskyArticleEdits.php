@@ -143,15 +143,10 @@ class RiskyArticleEdits extends BaseModule {
 			) {
 				continue;
 			}
-			$filter = $filters[ $model ];
-			$threshold = $thresholds[ $model ][ $filter ];
-			if ( $threshold ) {
-				return [
+			return [
 				'wgPersonalDashboardRiskyArticleEditsMlModel' => $model,
-				'wgPersonalDashboardRiskyArticleEditsMlThreshold' => $threshold,
 				'wgPersonalDashboardRiskyArticleEditsMlEnabled' => true,
-				];
-			}
+			];
 		}
 		// fallback to ml disabled if no model is available
 		return $mlDisabledConf;

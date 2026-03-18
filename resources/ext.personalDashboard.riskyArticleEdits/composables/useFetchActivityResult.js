@@ -28,42 +28,7 @@ const handleApiData = ( data, limit ) => {
 	const filteredResults = data.query.recentchanges.filter(
 		( change ) => !excludeTags.some( ( tag ) => change.tags.includes( tag ) )
 	);
-
-	// Fallback if ML is not enabled
-	if ( !mw.config.get( 'wgPersonalDashboardRiskyArticleEditsMlEnabled' ) ) {
-		data.query.recentchanges = getRandomItems( filteredResults, limit );
-		return data;
-	}
-
-	const model = mw.config.get( 'wgPersonalDashboardRiskyArticleEditsMlModel' );
-	if ( !model ) {
-		mw.log.error( 'no model found' );
-		return data;
-	}
-
-	const { min: threshold } = mw.config.get( 'wgPersonalDashboardRiskyArticleEditsMlThreshold' ) || {};
-	if ( !threshold ) {
-		mw.log.error( `no ${ model } threshold found` );
-		return data;
-	}
-
-	const filteredByScore = filteredResults.filter(
-		( change ) => {
-			if ( change === null ) {
-				return false;
-			}
-			if ( change.oresscores === undefined ) {
-				mw.log.error( `no model scores for rcid ${ change.rcid }` );
-				return false;
-			}
-			if ( change.oresscores[ model ] === undefined ) {
-				mw.log.warn( `no ${ model } score for rcid ${ change.rcid }` );
-				return false;
-			}
-			return change.oresscores[ model ].true >= threshold;
-		}
-	);
-	data.query.recentchanges = getRandomItems( filteredByScore, limit );
+	data.query.recentchanges = getRandomItems( filteredResults, limit );
 	return data;
 };
 
@@ -98,10 +63,16 @@ const getParams = async () => {
 		params.rcshow += '|unpatrolled';
 		params.grcshow += '|unpatrolled';
 	}
-
 	if ( mw.config.get( 'wgPersonalDashboardRiskyArticleEditsMlEnabled' ) === true ) {
-		params.rcprop += '|oresscores';
-		params.grcprop += '|oresscores';
+		const model = mw.config.get( 'wgPersonalDashboardRiskyArticleEditsMlModel' );
+		if ( model === 'revertrisklanguageagnostic' ) {
+			params.rcshow += '|revertrisklanguageagnostic';
+			params.grcshow += '|revertrisklanguageagnostic';
+		}
+		if ( model === 'damaging' ) {
+			params.rcshow += '|oresreview';
+			params.grcshow += '|oresreview';
+		}
 	}
 
 	return params;

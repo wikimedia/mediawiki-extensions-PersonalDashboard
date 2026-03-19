@@ -2,10 +2,12 @@
 	"@metadata": {
 		"authors": [
 			"Asteralee",
-			"Beta16"
+			"Beta16",
+			"FL2226"
 		]
 	},
 	"personal-dashboard-risky-article-edits-subheader-info": "Aiuta a mantenere Wikipedia affidabile.",
 	"personal-dashboard-risky-article-edits-subheader-info-popover-title": "Come?",
-	"personal-dashboard-risky-article-edits-info-time-text-today": "$1 , oggi"
+	"personal-dashboard-risky-article-edits-info-time-text-today": "$1 , oggi",
+	"personal-dashboard-risky-article-edits-progress-bar-aria-label": "Barra di avanzamento in linea per indicare quando le modifiche vengono caricate  per la revisione"
 }

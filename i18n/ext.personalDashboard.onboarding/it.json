@@ -1,8 +1,10 @@
 {
 	"@metadata": {
 		"authors": [
-			"Asteralee"
+			"Asteralee",
+			"FL2226"
 		]
 	},
+	"personal-dashboard-onboarding-get-started-button": "Inizia",
 	"personal-dashboard-onboarding-step-1-title": "Benvenuto"
 }

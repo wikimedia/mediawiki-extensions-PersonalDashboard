@@ -7,6 +7,7 @@ use MediaWiki\Context\IContextSource;
 use MediaWiki\Html\Html;
 use Wikimedia\Rdbms\IConnectionProvider;
 use Wikimedia\Rdbms\IReadableDatabase;
+use Wikimedia\Timestamp\TimestampFormat;
 
 /**
  * Class for the Impact module.
@@ -53,21 +54,32 @@ class Impact extends BaseModule {
 		if ( $actorId < 1 ) {
 			return 0;
 		}
-
-		$revisionCount = $this->dbr
+		$revisionCount = 0;
+		$revertTagIds = $this->dbr
 			->newSelectQueryBuilder()
-			->field( '1' )
-			->table( 'revision' )
-			->join( 'change_tag', null, 'ct_rev_id = rev_id' )
-			->join( 'change_tag_def', null, 'ctd_id = ct_tag_id' )
+			->select( 'ctd_id' )
+			->from( 'change_tag_def' )
 			->where( [
-				'rev_actor' => $actorId,
 				'ctd_name' => [ 'mw-undo', 'mw-reverted', 'mw-manual-revert' ]
 			] )
-			->limit( 1000 )
 			->caller( __METHOD__ )
-			->fetchRowCount();
-
+			->fetchFieldValues();
+		if ( $revertTagIds ) {
+			$startTimestamp = wfTimestamp( TimestampFormat::MW, strtotime( '-30 days' ) );
+			$revisionCount = $this->dbr
+				->newSelectQueryBuilder()
+				->field( '1' )
+				->table( 'recentchanges' )
+				->join( 'change_tag', null, 'ct_rc_id = rc_id' )
+				->where( [
+					'rc_actor' => $actorId,
+					'ct_tag_id' => $revertTagIds,
+					$this->dbr->expr( 'rc_timestamp', '>=', $this->dbr->timestamp( $startTimestamp ) )
+				] )
+				->limit( 1000 )
+				->caller( __METHOD__ )
+				->fetchRowCount();
+		}
 		$loggingCount = $this->dbr
 			->newSelectQueryBuilder()
 			->field( '1' )

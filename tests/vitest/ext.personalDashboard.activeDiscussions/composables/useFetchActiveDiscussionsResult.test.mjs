@@ -7,10 +7,7 @@ const {
 } = useFetchActiveDiscussionsResult();
 
 mw.config.set( {
-	wgDBname: 'enwiki',
-	wgPersonalDashboardActiveDiscussionsPages: {
-		enwiki: [ 'Wikipedia:Village_pump' ]
-	}
+	wgPersonalDashboardActiveDiscussionsPages: [ 'Wikipedia:Village_pump' ]
 } );
 
 test( 'fetchActiveDiscussions with response', async () => {

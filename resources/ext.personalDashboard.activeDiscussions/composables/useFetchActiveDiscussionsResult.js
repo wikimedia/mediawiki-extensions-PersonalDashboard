@@ -9,12 +9,10 @@ const fetchActiveDiscussions = async ( limit ) => {
 	error.value = null;
 	try {
 		const api = new mw.Api();
-		const dbName = mw.config.get( 'wgDBname' );
 		const activeDiscussionsPages = mw.config.get( 'wgPersonalDashboardActiveDiscussionsPages' ) || [];
-		const wikiDiscussionPages = activeDiscussionsPages[ dbName ] || [];
 		let activeDiscussionsApiResult = [];
 		const activeDiscussions = [];
-		for ( const discussionPage of wikiDiscussionPages ) {
+		for ( const discussionPage of activeDiscussionsPages ) {
 			const params = {
 				action: 'discussiontoolspageinfo',
 				format: 'json',

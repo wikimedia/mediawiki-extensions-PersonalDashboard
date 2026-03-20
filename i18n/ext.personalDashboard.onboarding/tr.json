@@ -1,13 +1,14 @@
 {
 	"@metadata": {
 		"authors": [
-			"Samwalton9 (WMF)"
+			"Samwalton9 (WMF)",
+			"Wooze"
 		]
 	},
 	"personal-dashboard-onboarding-title": "Kontrol paneliniz",
 	"personal-dashboard-onboarding-dont-show-again": "Bir daha gösterme",
 	"personal-dashboard-onboarding-step-1-title": "Hoşgeldiniz",
-	"personal-dashboard-onboarding-step-1-body": "Düzenleme deneyiminizden ötürü, diğer katkı verenlerin düzenlemelerini incelemeye yardımcı olmanızı öneriyoruz. Bu merkez, incelemeniz gereken değişiklikleri göstermenin yanısıra kararlarınızı yönlenfdirebilecek politika ve kaynaklara da erişim sağlar ve  böylece Vikipedi'de gezinmenize yardımcı olur.",
+	"personal-dashboard-onboarding-step-1-body": "Düzenleme deneyiminizden ötürü, diğer katkı verenlerin düzenlemelerini incelemeye yardımcı olmanızı öneriyoruz. Bu merkez, incelemeniz gereken değişiklikleri göstermenin yanısıra kararlarınızı yönlendirebilecek politika ve kaynaklara da erişim sağlar ve  böylece Vikipedi'de gezinmenize yardımcı olur.",
 	"personal-dashboard-onboarding-step-1-alt": "Üç ayrı basitleştirilmiş kontrol paneli içeren bir sayfanın görselleştirmesi.",
 	"personal-dashboard-onboarding-step-2-title": "Özellikler",
 	"personal-dashboard-onboarding-step-2-body": "Bu ilk kontrol paneli sürümünde, göz atılması gereken düzenlemeleri gözden geçirebilir, ilgili politika ve yönergeleri öğrenebilir ve istatistikleri takip edebilirsiniz.",

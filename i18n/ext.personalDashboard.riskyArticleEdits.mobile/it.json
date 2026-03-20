@@ -1,8 +1,9 @@
 {
 	"@metadata": {
 		"authors": [
+			"Beta16",
 			"FL2226"
 		]
 	},
-	"personal-dashboard-risky-article-edits-mobile-user-text": "$1 ha modificato l'articolo $2"
+	"personal-dashboard-risky-article-edits-mobile-user-text": "$1 ha modificato la voce $2"
 }

@@ -9,10 +9,12 @@
 	"personal-dashboard-risky-article-edits-header": "Wijzigingen controleren",
 	"personal-dashboard-risky-article-edits-subheader": "Help Wikipedia betrouwbaar te houden door de volgende bewerkingen te bekijken, die mogelijk aandacht nodig hebben.",
 	"personal-dashboard-risky-article-edits-subheader-info": "Help mee om Wikipedia betrouwbaar te houden.",
+	"personal-dashboard-risky-article-edits-subheader-info-popover": "Een [$1 automatisch anti-vandalismehulpprogramma] markeert mogelijk riskante bewerkingen van andere bewerkers. Selecteer er een om de diff-weergave te openen en te beslissen of u de bewerking ongedaan wilt maken, wilt verbeteren of de bewerker wilt bedanken.",
 	"personal-dashboard-risky-article-edits-subheader-info-popover-title": "Hoe?",
 	"personal-dashboard-risky-article-edits-subheader-info-popover-confirm": "Begrepen",
 	"personal-dashboard-risky-article-edits-footer-preamble": "Bekijk meer bewerkingen op de [{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}} pagina met recente wijzigingen]",
 	"personal-dashboard-risky-article-edits-info-time-text-today": "$1, vandaag",
 	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Geen bewerkingssamenvatting",
-	"personal-dashboard-risky-article-edits-info-button-aria-label": "informatieknop"
+	"personal-dashboard-risky-article-edits-info-button-aria-label": "informatieknop",
+	"personal-dashboard-risky-article-edits-progress-bar-aria-label": "inline voortgangsbalk om te vermelden wanneer wijzigingen voor herziening worden geladen"
 }

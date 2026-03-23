@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Anerka",
 			"Hedda",
 			"Samwalton9 (WMF)"
 		]
@@ -14,5 +15,6 @@
 	"personal-dashboard-risky-article-edits-footer-preamble": "[{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}} Son değişiklikler sayfasında] daha fazla düzenleme görüntüle.",
 	"personal-dashboard-risky-article-edits-info-time-text-today": "$1, Bugün",
 	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Değişiklik özeti yok",
-	"personal-dashboard-risky-article-edits-info-button-aria-label": "bilgi butonu"
+	"personal-dashboard-risky-article-edits-info-button-aria-label": "bilgi butonu",
+	"personal-dashboard-risky-article-edits-progress-bar-aria-label": "İncelenebilecek değişikliklerin yüklendiğini gösteren satır içi ilerleme çubuğu."
 }

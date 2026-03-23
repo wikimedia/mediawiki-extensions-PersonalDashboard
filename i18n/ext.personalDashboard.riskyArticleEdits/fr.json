@@ -1,13 +1,19 @@
 {
 	"@metadata": {
 		"authors": [
+			"Eihel",
 			"Escargot bleu"
 		]
 	},
-	"personal-dashboard-risky-article-edits-header": "Relire les modifications",
+	"personal-dashboard-risky-article-edits-header": "Vérifier les modifications",
 	"personal-dashboard-risky-article-edits-subheader": "Aidez à maintenir Wikipédia fiable en relisant les modifications suivantes qui peuvent nécessiter votre attention.",
+	"personal-dashboard-risky-article-edits-subheader-info": "Aidez à préserver la fiabilité de Wikipédia.",
+	"personal-dashboard-risky-article-edits-subheader-info-popover": "Un [$1 outil antivandalisme automatisé] signale les modifications potentiellement problématiques d'autres contributeurs. Sélectionnez-en une pour ouvrir la vue des changements et décider d'annuler, d'améliorer ou de remercier le contributeur.",
+	"personal-dashboard-risky-article-edits-subheader-info-popover-title": "Comment ?",
+	"personal-dashboard-risky-article-edits-subheader-info-popover-confirm": "Compris !",
 	"personal-dashboard-risky-article-edits-footer-preamble": "Voir plus de modifications dans la [{{fullurl:Special:RecentChanges\n|revertrisklanguageagnostic=all}} page des modifications récentes]",
 	"personal-dashboard-risky-article-edits-info-time-text-today": "aujourd'hui à $1",
 	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Aucun résumé de modifications",
-	"personal-dashboard-risky-article-edits-info-button-aria-label": "bouton pour avoir plus d'informations"
+	"personal-dashboard-risky-article-edits-info-button-aria-label": "bouton pour avoir plus d'informations",
+	"personal-dashboard-risky-article-edits-progress-bar-aria-label": "Barre de progression indiquant le chargement des modifications à examiner"
 }

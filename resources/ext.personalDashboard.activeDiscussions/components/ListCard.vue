@@ -20,8 +20,10 @@
 					{{ discussionPage }}
 				</div>
 				<div class="ext-personal-dashboard-active-discussion-card-info-title-row">
+					<!-- eslint-disable-next-line max-len -->
 					<span class="ext-personal-dashboard-active-discussion-card-info-title-row-additional">
-						{{ latestComment }} <a @click="navigateToComment">{{ timestampFormatted }}</a>
+						{{ latestComment }}
+						<a @click="navigateToComment">{{ timestampFormatted }}</a>
 					</span>
 				</div>
 			</div>

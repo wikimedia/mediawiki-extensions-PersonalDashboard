@@ -1,6 +1,6 @@
 import { test, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
-import CreatorByline from '@resources/ext.personalDashboard.riskyArticleEdits/components/CreatorByline.vue';
+import CreatorByline from '/resources/ext.personalDashboard.riskyArticleEdits/components/CreatorByline.vue';
 
 test( 'mount component', () => {
 	const wrapper = mount( CreatorByline, {
@@ -21,7 +21,7 @@ test( 'uses temp user link class if user is temp', () => {
 		}
 	} );
 
-	expect( wrapper.vm.userPageClass ).toBe( 'mw-userlink mw-tempuserlink' );
+	expect( wrapper.vm.userPageClass ).toStrictEqual( 'mw-userlink mw-tempuserlink' );
 } );
 
 test( 'does not use temp user link class if user is not temp', () => {
@@ -32,5 +32,5 @@ test( 'does not use temp user link class if user is not temp', () => {
 		}
 	} );
 
-	expect( wrapper.vm.userPageClass ).toBe( 'mw-userlink' );
+	expect( wrapper.vm.userPageClass ).toStrictEqual( 'mw-userlink' );
 } );

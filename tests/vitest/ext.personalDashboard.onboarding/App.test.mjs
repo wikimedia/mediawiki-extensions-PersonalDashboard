@@ -1,6 +1,6 @@
 import { test, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
-import App from '@resources/ext.personalDashboard.onboarding/App.vue';
+import App from '/resources/ext.personalDashboard.onboarding/App.vue';
 
 test( 'mount component', () => {
 	const wrapper = mount( App );

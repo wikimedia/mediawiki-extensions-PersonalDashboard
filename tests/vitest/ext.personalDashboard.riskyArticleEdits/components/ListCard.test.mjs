@@ -1,10 +1,11 @@
 import { test, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
-import ListCard from '@resources/ext.personalDashboard.riskyArticleEdits/components/ListCard.vue';
+import ListCard from '/resources/ext.personalDashboard.riskyArticleEdits/components/ListCard.vue';
 
 test( 'mount component', () => {
 	const date = new Date();
 	date.setHours( 8, 25 );
+
 	const wrapper = mount( ListCard, {
 		props: {
 			title: 'TestTitle',
@@ -26,7 +27,8 @@ test( 'mount component', () => {
 					pageid: 8675309,
 					description: 'a description'
 				}
-			]
+			],
+			feedorigin: 'recentchanges'
 		}
 	} );
 
@@ -37,6 +39,7 @@ test( 'renders appropriate message when edit is made today', () => {
 	const date = new Date( 2026, 0, 31 );
 	date.setHours( 21, 25 );
 	const expectedDate = '3 hours ago';
+
 	const wrapper = mount( ListCard, {
 		props: {
 			title: 'TestTitle',
@@ -53,15 +56,18 @@ test( 'renders appropriate message when edit is made today', () => {
 			parsedcomment: 'TestComment',
 			tags: [ 'test' ],
 			timestamp: date.toISOString(),
-			pages: []
+			pages: [],
+			feedorigin: 'recentchanges'
 		}
 	} );
-	expect( expectedDate ).toBe( wrapper.vm.timestampFormatted );
+
+	expect( expectedDate ).toStrictEqual( wrapper.vm.timestampFormatted );
 } );
 
 test( 'renders timestamp without hours when edit is not made today', async () => {
 	const date = new Date( 2024, 11, 2, 4, 29 );
 	const expectedDate = '1 year ago';
+
 	const wrapper = mount( ListCard, {
 		props: {
 			title: 'TestTitle',
@@ -78,11 +84,12 @@ test( 'renders timestamp without hours when edit is not made today', async () =>
 			parsedcomment: 'TestComment',
 			tags: [ 'test' ],
 			timestamp: date.toISOString(),
-			pages: []
+			pages: [],
+			feedorigin: 'recentchanges'
 		}
 	} );
 
-	expect( expectedDate ).toBe( wrapper.vm.timestampFormatted );
+	expect( expectedDate ).toStrictEqual( wrapper.vm.timestampFormatted );
 } );
 
 test( 'strips all html formatting from parsedcomment', () => {
@@ -102,9 +109,10 @@ test( 'strips all html formatting from parsedcomment', () => {
 			parsedcomment: 'Plain text <h1>heading</h1>, <b>bold</b>, and <a href="#">link</a>.',
 			tags: [ 'test' ],
 			timestamp: new Date( 2024, 11, 2, 4, 29 ).toISOString(),
-			pages: []
+			pages: [],
+			feedorigin: 'recentchanges'
 		}
 	} );
 
-	expect( wrapper.vm.comment ).toBe( 'Plain text heading, bold, and link.' );
+	expect( wrapper.vm.comment ).toStrictEqual( 'Plain text heading, bold, and link.' );
 } );

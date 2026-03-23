@@ -24,6 +24,7 @@
 			class="ext-personal-dashboard-recent-activity-header-popover"
 			@primary="showPopover = false"
 		>
+			<!-- eslint-disable-next-line max-len -->
 			<div v-i18n-html:personal-dashboard-risky-article-edits-subheader-info-popover="[ popoverUrl ]"></div>
 		</cdx-popover>
 	</cdx-message>

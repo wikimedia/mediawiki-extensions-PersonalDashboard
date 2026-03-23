@@ -33,7 +33,7 @@ exports[`counters fallback to 0 if no config values 1`] = `
           </svg>
         </span>
         <a
-          href="/w/index.php?title=Special%3ALog&type=thanks&user=TestUser"
+          href="/w/index.php?title=Special%3ALog&type=thanks&user=Test+User"
           id="personal-dashboard-thanks-link"
           target="_blank"
         >
@@ -113,8 +113,12 @@ exports[`counters fallback to 0 if no config values 1`] = `
       </div>
     </div>
   </div>
-  <!--teleport start-->
-  <!--teleport end-->
+  <teleport-stub
+    disabled="false"
+    to="body"
+  >
+    <!--v-if-->
+  </teleport-stub>
   
 </div>
 `;
@@ -152,7 +156,7 @@ exports[`mount component 1`] = `
           </svg>
         </span>
         <a
-          href="/w/index.php?title=Special%3ALog&type=thanks&user=TestUser"
+          href="/w/index.php?title=Special%3ALog&type=thanks&user=Test+User"
           id="personal-dashboard-thanks-link"
           target="_blank"
         >
@@ -232,8 +236,12 @@ exports[`mount component 1`] = `
       </div>
     </div>
   </div>
-  <!--teleport start-->
-  <!--teleport end-->
+  <teleport-stub
+    disabled="false"
+    to="body"
+  >
+    <!--v-if-->
+  </teleport-stub>
   
 </div>
 `;

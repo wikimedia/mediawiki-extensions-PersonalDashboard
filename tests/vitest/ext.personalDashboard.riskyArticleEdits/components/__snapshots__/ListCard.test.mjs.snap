@@ -3,6 +3,7 @@
 exports[`mount component 1`] = `
 <a
   class="cdx-card cdx-card--is-link ext-personal-dashboard-moderation-card"
+  data-feedorigin="recentchanges"
   href="/w/index.php?title=TestTitle&curid=8675309&diff=0&oldid=0"
   ns="0"
   rcid="0"
@@ -71,7 +72,7 @@ exports[`mount component 1`] = `
           
           <a
             class="cdx-link mw-userlink"
-            href="/w/index.php?title=User%3ATestUser"
+            href="/wiki/User:TestUser"
             target="_blank"
           >
             TestUser

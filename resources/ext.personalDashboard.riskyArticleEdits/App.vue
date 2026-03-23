@@ -42,6 +42,7 @@
 			</template>
 		</div>
 		<template v-if="isMobile">
+			<!-- eslint-disable max-len -->
 			<span
 				v-if="rendermode === 'mobile-summary'"
 				class="ext-personal-dashboard-recent-activity-footer personal-dashboard-module-footer"
@@ -67,6 +68,7 @@
 					</template>
 				</cdx-card>
 			</span>
+			<!-- eslint-enable max-len -->
 		</template>
 	</div>
 </template>

@@ -1,6 +1,6 @@
 import { test, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
-import ChangeNumber from '@resources/ext.personalDashboard.riskyArticleEdits/components/ChangeNumber.vue';
+import ChangeNumber from '/resources/ext.personalDashboard.riskyArticleEdits/components/ChangeNumber.vue';
 
 test( 'mount component', () => {
 	const wrapper = mount( ChangeNumber, {
@@ -20,9 +20,10 @@ test( 'Change number is formatted correctly when no change', () => {
 			oldlen: 10
 		}
 	} );
-	expect( wrapper.vm.changeValue ).toBe( 0 );
-	expect( wrapper.vm.changeClass ).toBe( 'ext-personal-dashboard-moderation-card-info-change-number-none' );
-	expect( wrapper.vm.changeNumber ).toBe( '0' );
+
+	expect( wrapper.vm.changeValue ).toStrictEqual( 0 );
+	expect( wrapper.vm.changeClass ).toStrictEqual( 'ext-personal-dashboard-moderation-card-info-change-number-none' );
+	expect( wrapper.vm.changeNumber ).toStrictEqual( '0' );
 } );
 
 test( 'Change number is formatted correctly when negative change', () => {
@@ -32,9 +33,10 @@ test( 'Change number is formatted correctly when negative change', () => {
 			oldlen: 10
 		}
 	} );
-	expect( wrapper.vm.changeValue ).toBe( -5 );
-	expect( wrapper.vm.changeClass ).toBe( 'ext-personal-dashboard-moderation-card-info-change-number-negative' );
-	expect( wrapper.vm.changeNumber ).toBe( '-5' );
+
+	expect( wrapper.vm.changeValue ).toStrictEqual( -5 );
+	expect( wrapper.vm.changeClass ).toStrictEqual( 'ext-personal-dashboard-moderation-card-info-change-number-negative' );
+	expect( wrapper.vm.changeNumber ).toStrictEqual( '-5' );
 } );
 
 test( 'Change number is formatted correctly when positive change', () => {
@@ -44,7 +46,8 @@ test( 'Change number is formatted correctly when positive change', () => {
 			oldlen: 10
 		}
 	} );
-	expect( wrapper.vm.changeValue ).toBe( 5 );
-	expect( wrapper.vm.changeClass ).toBe( 'ext-personal-dashboard-moderation-card-info-change-number-positive' );
-	expect( wrapper.vm.changeNumber ).toBe( '+5' );
+
+	expect( wrapper.vm.changeValue ).toStrictEqual( 5 );
+	expect( wrapper.vm.changeClass ).toStrictEqual( 'ext-personal-dashboard-moderation-card-info-change-number-positive' );
+	expect( wrapper.vm.changeNumber ).toStrictEqual( '+5' );
 } );

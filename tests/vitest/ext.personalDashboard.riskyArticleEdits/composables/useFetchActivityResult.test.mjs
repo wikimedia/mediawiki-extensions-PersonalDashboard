@@ -1,5 +1,18 @@
-import { test, expectTypeOf, vi, expect } from 'vitest';
-import { default as useFetchActivityResult } from '@resources/ext.personalDashboard.riskyArticleEdits/composables/useFetchActivityResult.js';
+import { test, expect, vi } from 'vitest';
+import { default as useFetchActivityResult } from '/resources/ext.personalDashboard.riskyArticleEdits/composables/useFetchActivityResult.js';
+
+const logWarn = mw.log.warn;
+
+vi.spyOn( mw.log, 'warn' ).mockImplementation( ( ...args ) => {
+	const message = args[ 0 ];
+
+	if ( typeof message === 'string' && message.startsWith( 'unable to randomly sample array' ) ) {
+		return;
+	}
+
+	logWarn( ...args );
+} );
+
 const {
 	recentActivityResult,
 	error,
@@ -7,148 +20,109 @@ const {
 } = useFetchActivityResult();
 
 test( 'fetchRecentActivity with response', async () => {
-	const recentchanges = [ {
-		title: 'A title',
-		type: 'type',
-		ns: 0,
-		newlen: 22,
-		// eslint-disable-next-line camelcase
-		old_revid: 418549,
-		oldlen: 545,
-		pageid: 494,
-		rcid: 8947984,
-		revid: 58859,
-		temp: '',
-		user: 'user',
-		parsedcomment: 'comment',
-		tags: [],
-		timestamp: ''
-	} ];
 	const mockResponse = {
 		query: {
-			recentchanges: recentchanges,
-			pages: {}
+			recentchanges: [
+				{
+					title: 'A title',
+					type: 'type',
+					ns: 0,
+					newlen: 22,
+					// eslint-disable-next-line camelcase
+					old_revid: 418549,
+					oldlen: 545,
+					pageid: 494,
+					rcid: 8947984,
+					revid: 58859,
+					temp: '',
+					user: 'user',
+					parsedcomment: 'comment',
+					tags: [],
+					timestamp: ''
+				}
+			],
+			pages: {},
+			feed: []
 		}
 	};
-	window.mw = {
-		...window.mw,
-		// eslint-disable-next-line prefer-arrow-callback
-		Api: vi.fn().mockImplementation( function Api() {
-			return {
-				get: vi.fn().mockResolvedValue( mockResponse )
-			};
-		} )
-	};
-	expectTypeOf( fetchRecentActivity ).toExtend( 'asyncFunction' );
+
+	mw.Api.mock( mockResponse );
 
 	await fetchRecentActivity();
-	const result = recentActivityResult.value;
-
-	expect( mockResponse.query.recentchanges ).toEqual( result.recentchanges );
-	expect( mockResponse.query.pages ).toEqual( result.pages );
+	expect( recentActivityResult.value ).toEqual( mockResponse.query );
 } );
 
 test( 'fetchRecentActivity with limit', async () => {
-	const recentchanges = [
-		{
-			title: 'A title',
-			type: 'type',
-			ns: 0,
-			newlen: 22,
-			// eslint-disable-next-line camelcase
-			old_revid: 418549,
-			oldlen: 545,
-			pageid: 494,
-			rcid: 8947984,
-			revid: 58859,
-			temp: '',
-			user: 'user',
-			parsedcomment: 'comment',
-			tags: [],
-			timestamp: ''
-		},
-		{
-			title: 'A title',
-			type: 'type',
-			ns: 0,
-			newlen: 325,
-			// eslint-disable-next-line camelcase
-			old_revid: 58859,
-			oldlen: 22,
-			pageid: 494,
-			rcid: 8947986,
-			revid: 58860,
-			temp: '',
-			user: 'user',
-			parsedcomment: 'comment',
-			tags: [],
-			timestamp: ''
-		}
-	];
-	const mockResponse = {
+	mw.Api.mock( {
 		query: {
-			recentchanges: recentchanges,
+			recentchanges: [
+				{
+					title: 'A title',
+					type: 'type',
+					ns: 0,
+					newlen: 22,
+					// eslint-disable-next-line camelcase
+					old_revid: 418549,
+					oldlen: 545,
+					pageid: 494,
+					rcid: 8947984,
+					revid: 58859,
+					temp: '',
+					user: 'user',
+					parsedcomment: 'comment',
+					tags: [],
+					timestamp: ''
+				},
+				{
+					title: 'A title',
+					type: 'type',
+					ns: 0,
+					newlen: 325,
+					// eslint-disable-next-line camelcase
+					old_revid: 58859,
+					oldlen: 22,
+					pageid: 494,
+					rcid: 8947986,
+					revid: 58860,
+					temp: '',
+					user: 'user',
+					parsedcomment: 'comment',
+					tags: [],
+					timestamp: ''
+				}
+			],
 			pages: {}
 		}
-	};
-	window.mw = {
-		...window.mw,
-		// eslint-disable-next-line prefer-arrow-callback
-		Api: vi.fn().mockImplementation( function Api() {
-			return {
-				get: vi.fn().mockResolvedValue( mockResponse )
-			};
-		} )
-	};
-	expectTypeOf( fetchRecentActivity ).toExtend( 'asyncFunction' );
+	} );
 
 	await fetchRecentActivity( 1 );
-	const result = recentActivityResult.value;
-
-	expect( result.feed.length ).toEqual( 1 );
+	expect( recentActivityResult.value.feed.length ).toEqual( 1 );
 } );
 
 test( 'fetchRecentActivity with no changes', async () => {
 	const mockResponse = {
 		query: {
 			recentchanges: [],
-			pages: {}
+			pages: {},
+			feed: []
 		}
 	};
-	window.mw = {
-		...window.mw,
-		// eslint-disable-next-line prefer-arrow-callback
-		Api: vi.fn().mockImplementation( function Api() {
-			return {
-				get: vi.fn().mockResolvedValue( mockResponse )
-			};
-		} )
-	};
-	expectTypeOf( fetchRecentActivity ).toExtend( 'asyncFunction' );
+
+	mw.Api.mock( mockResponse );
 
 	await fetchRecentActivity();
-	const result = recentActivityResult.value;
-
-	expect( mockResponse.query.recentchanges ).toEqual( result.recentchanges );
-	expect( mockResponse.query.pages ).toEqual( result.pages );
+	expect( recentActivityResult.value ).toEqual( mockResponse.query );
 } );
 
 test( 'fetchRecentActivity with error', async () => {
-	window.mw = {
-		...window.mw,
-		// eslint-disable-next-line prefer-arrow-callback
-		Api: vi.fn().mockImplementation( function Api() {
-			return {
-				get: vi.fn().mockRejectedValue( 'An error' )
-			};
-		} )
-	};
-	expectTypeOf( fetchRecentActivity ).toExtend( 'asyncFunction' );
+	mw.Api.mock( () => {
+		throw new Error( 'An error' );
+	} );
+	const logError = vi.spyOn( mw.log, 'error' ).mockImplementationOnce( () => {} );
 
 	await fetchRecentActivity();
-
-	expect( error ).toBeTruthy();
-	expect( error.value.message ).toBe( 'An error' );
+	expect( error.value.message ).toStrictEqual( 'Error: An error' );
+	expect( logError ).toHaveBeenCalledExactlyOnceWith( 'Error: An error' );
 } );
 
 test( 'fetchRecentActivity with revertrisklanguageagnostic model enabled', async () => {
@@ -156,58 +130,16 @@ test( 'fetchRecentActivity with revertrisklanguageagnostic model enabled', async
 		wgPersonalDashboardRiskyArticleEditsMlEnabled: true,
 		wgPersonalDashboardRiskyArticleEditsMlModel: 'revertrisklanguageagnostic'
 	} );
-	const recentchanges = [
-		{
-			title: 'A title',
-			type: 'type',
-			ns: 0,
-			newlen: 22,
-			// eslint-disable-next-line camelcase
-			old_revid: 418549,
-			oldlen: 545,
-			pageid: 494,
-			rcid: 8947984,
-			revid: 58859,
-			temp: '',
-			user: 'user',
-			parsedcomment: 'comment',
-			tags: [],
-			timestamp: ''
-		},
-		{
-			title: 'A title',
-			type: 'type',
-			ns: 0,
-			newlen: 325,
-			// eslint-disable-next-line camelcase
-			old_revid: 58859,
-			oldlen: 22,
-			pageid: 494,
-			rcid: 8947986,
-			revid: 58860,
-			temp: '',
-			user: 'user',
-			parsedcomment: 'comment',
-			tags: [],
-			timestamp: ''
-		}
-	];
-	const mockResponse = {
-		query: {
-			recentchanges: recentchanges,
-			pages: {}
-		}
-	};
-	const mockApiGet = vi.fn();
+
 	const expectedParams = {
 		action: 'query',
 		errorformat: 'plaintext',
-		errorlang: null,
+		errorlang: 'en',
 		errorsuselocal: true,
 		format: 'json',
 		formatversion: '2',
 		generator: 'recentchanges',
-		grcexcludeuser: 'TestUser',
+		grcexcludeuser: 'Test User',
 		grclimit: '500',
 		grcnamespace: '0',
 		grcprop: 'title|ids|sizes|flags|user|parsedcomment|tags|timestamp',
@@ -215,30 +147,63 @@ test( 'fetchRecentActivity with revertrisklanguageagnostic model enabled', async
 		grctype: 'edit',
 		list: 'recentchanges',
 		prop: 'description',
-		rcexcludeuser: 'TestUser',
+		rcexcludeuser: 'Test User',
 		rclimit: '500',
 		rcnamespace: '0',
 		rcprop: 'title|ids|sizes|flags|user|parsedcomment|tags|timestamp',
 		rcshow: '!bot|unpatrolled|revertrisklanguageagnostic',
 		rctype: 'edit'
 	};
-	window.mw = {
-		...window.mw,
-		// eslint-disable-next-line prefer-arrow-callback
-		Api: vi.fn().mockImplementation( function Api() {
 
-			return {
-				get: mockApiGet.mockResolvedValue( mockResponse )
-			};
-		} )
+	const mockResponse = {
+		query: {
+			recentchanges: [
+				{
+					title: 'A title',
+					type: 'type',
+					ns: 0,
+					newlen: 22,
+					// eslint-disable-next-line camelcase
+					old_revid: 418549,
+					oldlen: 545,
+					pageid: 494,
+					rcid: 8947984,
+					revid: 58859,
+					temp: '',
+					user: 'user',
+					parsedcomment: 'comment',
+					tags: [],
+					timestamp: ''
+				},
+				{
+					title: 'A title',
+					type: 'type',
+					ns: 0,
+					newlen: 325,
+					// eslint-disable-next-line camelcase
+					old_revid: 58859,
+					oldlen: 22,
+					pageid: 494,
+					rcid: 8947986,
+					revid: 58860,
+					temp: '',
+					user: 'user',
+					parsedcomment: 'comment',
+					tags: [],
+					timestamp: ''
+				}
+			],
+			pages: {}
+		}
 	};
-	expectTypeOf( fetchRecentActivity ).toExtend( 'asyncFunction' );
+
+	mw.Api.mock( ( params ) => {
+		expect( params ).toStrictEqual( expectedParams );
+		return mockResponse;
+	} );
 
 	await fetchRecentActivity( 10 );
-	const result = recentActivityResult.value;
-
-	expect( result.feed.length ).toEqual( 2 );
-	expect( mockApiGet ).toHaveBeenCalledWith( expectedParams );
+	expect( recentActivityResult.value.feed.length ).toEqual( 2 );
 } );
 
 test( 'fetchRecentActivity with damaging model enabled', async () => {
@@ -246,58 +211,16 @@ test( 'fetchRecentActivity with damaging model enabled', async () => {
 		wgPersonalDashboardRiskyArticleEditsMlEnabled: true,
 		wgPersonalDashboardRiskyArticleEditsMlModel: 'damaging'
 	} );
-	const recentchanges = [
-		{
-			title: 'A title',
-			type: 'type',
-			ns: 0,
-			newlen: 22,
-			// eslint-disable-next-line camelcase
-			old_revid: 418549,
-			oldlen: 545,
-			pageid: 494,
-			rcid: 8947984,
-			revid: 58859,
-			temp: '',
-			user: 'user',
-			parsedcomment: 'comment',
-			tags: [],
-			timestamp: ''
-		},
-		{
-			title: 'A title',
-			type: 'type',
-			ns: 0,
-			newlen: 325,
-			// eslint-disable-next-line camelcase
-			old_revid: 58859,
-			oldlen: 22,
-			pageid: 494,
-			rcid: 8947986,
-			revid: 58860,
-			temp: '',
-			user: 'user',
-			parsedcomment: 'comment',
-			tags: [],
-			timestamp: ''
-		}
-	];
-	const mockResponse = {
-		query: {
-			recentchanges: recentchanges,
-			pages: {}
-		}
-	};
-	const mockApiGet = vi.fn();
+
 	const expectedParams = {
 		action: 'query',
 		errorformat: 'plaintext',
-		errorlang: null,
+		errorlang: 'en',
 		errorsuselocal: true,
 		format: 'json',
 		formatversion: '2',
 		generator: 'recentchanges',
-		grcexcludeuser: 'TestUser',
+		grcexcludeuser: 'Test User',
 		grclimit: '500',
 		grcnamespace: '0',
 		grcprop: 'title|ids|sizes|flags|user|parsedcomment|tags|timestamp',
@@ -305,29 +228,63 @@ test( 'fetchRecentActivity with damaging model enabled', async () => {
 		grctype: 'edit',
 		list: 'recentchanges',
 		prop: 'description',
-		rcexcludeuser: 'TestUser',
+		rcexcludeuser: 'Test User',
 		rclimit: '500',
 		rcnamespace: '0',
 		rcprop: 'title|ids|sizes|flags|user|parsedcomment|tags|timestamp',
 		rcshow: '!bot|unpatrolled|oresreview',
 		rctype: 'edit'
 	};
-	window.mw = {
-		...window.mw,
-		// eslint-disable-next-line prefer-arrow-callback
-		Api: vi.fn().mockImplementation( function Api() {
-			return {
-				get: mockApiGet.mockResolvedValue( mockResponse )
-			};
-		} )
+
+	const mockResponse = {
+		query: {
+			recentchanges: [
+				{
+					title: 'A title',
+					type: 'type',
+					ns: 0,
+					newlen: 22,
+					// eslint-disable-next-line camelcase
+					old_revid: 418549,
+					oldlen: 545,
+					pageid: 494,
+					rcid: 8947984,
+					revid: 58859,
+					temp: '',
+					user: 'user',
+					parsedcomment: 'comment',
+					tags: [],
+					timestamp: ''
+				},
+				{
+					title: 'A title',
+					type: 'type',
+					ns: 0,
+					newlen: 325,
+					// eslint-disable-next-line camelcase
+					old_revid: 58859,
+					oldlen: 22,
+					pageid: 494,
+					rcid: 8947986,
+					revid: 58860,
+					temp: '',
+					user: 'user',
+					parsedcomment: 'comment',
+					tags: [],
+					timestamp: ''
+				}
+			],
+			pages: {}
+		}
 	};
-	expectTypeOf( fetchRecentActivity ).toExtend( 'asyncFunction' );
+
+	mw.Api.mock( ( params ) => {
+		expect( params ).toStrictEqual( expectedParams );
+		return mockResponse;
+	} );
 
 	await fetchRecentActivity( 10 );
-	const result = recentActivityResult.value;
-
-	expect( result.feed.length ).toEqual( 2 );
-	expect( mockApiGet ).toHaveBeenCalledWith( expectedParams );
+	expect( recentActivityResult.value.feed.length ).toEqual( 2 );
 } );
 
 test( 'fetchRecentActivity with no model enabled', async () => {
@@ -335,58 +292,16 @@ test( 'fetchRecentActivity with no model enabled', async () => {
 		wgPersonalDashboardRiskyArticleEditsMlEnabled: false,
 		wgPersonalDashboardRiskyArticleEditsMlModel: null
 	} );
-	const recentchanges = [
-		{
-			title: 'A title',
-			type: 'type',
-			ns: 0,
-			newlen: 22,
-			// eslint-disable-next-line camelcase
-			old_revid: 418549,
-			oldlen: 545,
-			pageid: 494,
-			rcid: 8947984,
-			revid: 58859,
-			temp: '',
-			user: 'user',
-			parsedcomment: 'comment',
-			tags: [],
-			timestamp: ''
-		},
-		{
-			title: 'A title',
-			type: 'type',
-			ns: 0,
-			newlen: 325,
-			// eslint-disable-next-line camelcase
-			old_revid: 58859,
-			oldlen: 22,
-			pageid: 494,
-			rcid: 8947986,
-			revid: 58860,
-			temp: '',
-			user: 'user',
-			parsedcomment: 'comment',
-			tags: [],
-			timestamp: ''
-		}
-	];
-	const mockResponse = {
-		query: {
-			recentchanges: recentchanges,
-			pages: {}
-		}
-	};
-	const mockApiGet = vi.fn();
+
 	const expectedParams = {
 		action: 'query',
 		errorformat: 'plaintext',
-		errorlang: null,
+		errorlang: 'en',
 		errorsuselocal: true,
 		format: 'json',
 		formatversion: '2',
 		generator: 'recentchanges',
-		grcexcludeuser: 'TestUser',
+		grcexcludeuser: 'Test User',
 		grclimit: '500',
 		grcnamespace: '0',
 		grcprop: 'title|ids|sizes|flags|user|parsedcomment|tags|timestamp',
@@ -394,29 +309,63 @@ test( 'fetchRecentActivity with no model enabled', async () => {
 		grctype: 'edit',
 		list: 'recentchanges',
 		prop: 'description',
-		rcexcludeuser: 'TestUser',
+		rcexcludeuser: 'Test User',
 		rclimit: '500',
 		rcnamespace: '0',
 		rcprop: 'title|ids|sizes|flags|user|parsedcomment|tags|timestamp',
 		rcshow: '!bot|unpatrolled',
 		rctype: 'edit'
 	};
-	window.mw = {
-		...window.mw,
-		// eslint-disable-next-line prefer-arrow-callback
-		Api: vi.fn().mockImplementation( function Api() {
-			return {
-				get: mockApiGet.mockResolvedValue( mockResponse )
-			};
-		} )
+
+	const mockResponse = {
+		query: {
+			recentchanges: [
+				{
+					title: 'A title',
+					type: 'type',
+					ns: 0,
+					newlen: 22,
+					// eslint-disable-next-line camelcase
+					old_revid: 418549,
+					oldlen: 545,
+					pageid: 494,
+					rcid: 8947984,
+					revid: 58859,
+					temp: '',
+					user: 'user',
+					parsedcomment: 'comment',
+					tags: [],
+					timestamp: ''
+				},
+				{
+					title: 'A title',
+					type: 'type',
+					ns: 0,
+					newlen: 325,
+					// eslint-disable-next-line camelcase
+					old_revid: 58859,
+					oldlen: 22,
+					pageid: 494,
+					rcid: 8947986,
+					revid: 58860,
+					temp: '',
+					user: 'user',
+					parsedcomment: 'comment',
+					tags: [],
+					timestamp: ''
+				}
+			],
+			pages: {}
+		}
 	};
-	expectTypeOf( fetchRecentActivity ).toExtend( 'asyncFunction' );
+
+	mw.Api.mock( ( params ) => {
+		expect( params ).toStrictEqual( expectedParams );
+		return mockResponse;
+	} );
 
 	await fetchRecentActivity( 10 );
-	const result = recentActivityResult.value;
-
-	expect( result.feed.length ).toEqual( 2 );
-	expect( mockApiGet ).toHaveBeenCalledWith( expectedParams );
+	expect( recentActivityResult.value.feed.length ).toEqual( 2 );
 } );
 
 test( 'fetchRecentActivity with watchlist enabled', async () => {
@@ -425,83 +374,69 @@ test( 'fetchRecentActivity with watchlist enabled', async () => {
 		wgPersonalDashboardRiskyArticleEditsMlModel: null,
 		wgPersonalDashboardRiskyArticleEditsWlEnabled: true
 	} );
-	const recentchanges = [
-		{
-			title: 'A title',
-			type: 'type',
-			ns: 0,
-			newlen: 22,
-			// eslint-disable-next-line camelcase
-			old_revid: 418549,
-			oldlen: 545,
-			pageid: 494,
-			rcid: 8947984,
-			revid: 58859,
-			temp: '',
-			user: 'user',
-			parsedcomment: 'comment',
-			tags: [],
-			timestamp: ''
-		},
-		{
-			title: 'A title',
-			type: 'type',
-			ns: 0,
-			newlen: 325,
-			// eslint-disable-next-line camelcase
-			old_revid: 58859,
-			oldlen: 22,
-			pageid: 494,
-			rcid: 8947986,
-			revid: 58860,
-			temp: '',
-			user: 'user',
-			parsedcomment: 'comment',
-			tags: [],
-			timestamp: ''
-		}
-	];
-	const watchlist = [
-		{
-			title: 'Watched article',
-			type: 'type',
-			ns: 0,
-			newlen: 22,
-			// eslint-disable-next-line camelcase
-			old_revid: 123213,
-			oldlen: 321,
-			pageid: 494,
-			revid: 313132,
-			temp: '',
-			user: 'user',
-			parsedcomment: 'comment',
-			tags: [],
-			timestamp: ''
-		}
-	];
-	const mockResponse = {
+
+	mw.Api.mock( {
 		query: {
-			recentchanges: recentchanges,
-			watchlist: watchlist,
+			recentchanges: [
+				{
+					title: 'A title',
+					type: 'type',
+					ns: 0,
+					newlen: 22,
+					// eslint-disable-next-line camelcase
+					old_revid: 418549,
+					oldlen: 545,
+					pageid: 494,
+					rcid: 8947984,
+					revid: 58859,
+					temp: '',
+					user: 'user',
+					parsedcomment: 'comment',
+					tags: [],
+					timestamp: ''
+				},
+				{
+					title: 'A title',
+					type: 'type',
+					ns: 0,
+					newlen: 325,
+					// eslint-disable-next-line camelcase
+					old_revid: 58859,
+					oldlen: 22,
+					pageid: 494,
+					rcid: 8947986,
+					revid: 58860,
+					temp: '',
+					user: 'user',
+					parsedcomment: 'comment',
+					tags: [],
+					timestamp: ''
+				}
+			],
+			watchlist: [
+				{
+					title: 'Watched article',
+					type: 'type',
+					ns: 0,
+					newlen: 22,
+					// eslint-disable-next-line camelcase
+					old_revid: 123213,
+					oldlen: 321,
+					pageid: 494,
+					revid: 313132,
+					temp: '',
+					user: 'user',
+					parsedcomment: 'comment',
+					tags: [],
+					timestamp: ''
+				}
+			],
 			pages: {}
 		}
-	};
-	const mockApiGet = vi.fn();
-	window.mw = {
-		...window.mw,
-		// eslint-disable-next-line prefer-arrow-callback
-		Api: vi.fn().mockImplementation( function Api() {
-			return {
-				get: mockApiGet.mockResolvedValue( mockResponse )
-			};
-		} )
-	};
-	expectTypeOf( fetchRecentActivity ).toExtend( 'asyncFunction' );
+	} );
 
 	await fetchRecentActivity( 10 );
-	const result = recentActivityResult.value;
-
-	expect( result.feed.length ).toEqual( 3 );
+	expect( recentActivityResult.value.feed.length ).toEqual( 3 );
 } );
 
 test( 'fetchRecentActivity with watchlist enabled and two edits from same page', async () => {
@@ -510,100 +445,86 @@ test( 'fetchRecentActivity with watchlist enabled and two edits from same page',
 		wgPersonalDashboardRiskyArticleEditsMlModel: null,
 		wgPersonalDashboardRiskyArticleEditsWlEnabled: true
 	} );
-	const recentchanges = [
-		{
-			title: 'A title 123',
-			type: 'type',
-			ns: 0,
-			newlen: 22,
-			// eslint-disable-next-line camelcase
-			old_revid: 418549,
-			oldlen: 545,
-			pageid: 494,
-			rcid: 8947984,
-			revid: 58859,
-			temp: '',
-			user: 'user',
-			parsedcomment: 'comment',
-			tags: [],
-			timestamp: ''
-		},
-		{
-			title: 'A title',
-			type: 'type',
-			ns: 0,
-			newlen: 325,
-			// eslint-disable-next-line camelcase
-			old_revid: 58859,
-			oldlen: 22,
-			pageid: 494,
-			rcid: 8947986,
-			revid: 58860,
-			temp: '',
-			user: 'user',
-			parsedcomment: 'comment',
-			tags: [],
-			timestamp: ''
-		}
-	];
-	const watchlist = [
-		{
-			title: 'Watched article',
-			type: 'type',
-			ns: 0,
-			newlen: 22,
-			// eslint-disable-next-line camelcase
-			old_revid: 123213,
-			oldlen: 321,
-			pageid: 494,
-			revid: 313132,
-			temp: '',
-			user: 'user',
-			parsedcomment: 'comment',
-			tags: [],
-			timestamp: ''
-		},
-		{
-			title: 'A title',
-			type: 'type',
-			ns: 0,
-			newlen: 22,
-			// eslint-disable-next-line camelcase
-			old_revid: 418549,
-			oldlen: 545,
-			pageid: 494,
-			rcid: 8947984,
-			revid: 58859,
-			temp: '',
-			user: 'user',
-			parsedcomment: 'comment',
-			tags: [],
-			timestamp: ''
-		}
-	];
-	const mockResponse = {
+
+	mw.Api.mock( {
 		query: {
-			recentchanges: recentchanges,
-			watchlist: watchlist,
+			recentchanges: [
+				{
+					title: 'A title 123',
+					type: 'type',
+					ns: 0,
+					newlen: 22,
+					// eslint-disable-next-line camelcase
+					old_revid: 418549,
+					oldlen: 545,
+					pageid: 494,
+					rcid: 8947984,
+					revid: 58859,
+					temp: '',
+					user: 'user',
+					parsedcomment: 'comment',
+					tags: [],
+					timestamp: ''
+				},
+				{
+					title: 'A title',
+					type: 'type',
+					ns: 0,
+					newlen: 325,
+					// eslint-disable-next-line camelcase
+					old_revid: 58859,
+					oldlen: 22,
+					pageid: 494,
+					rcid: 8947986,
+					revid: 58860,
+					temp: '',
+					user: 'user',
+					parsedcomment: 'comment',
+					tags: [],
+					timestamp: ''
+				}
+			],
+			watchlist: [
+				{
+					title: 'Watched article',
+					type: 'type',
+					ns: 0,
+					newlen: 22,
+					// eslint-disable-next-line camelcase
+					old_revid: 123213,
+					oldlen: 321,
+					pageid: 494,
+					revid: 313132,
+					temp: '',
+					user: 'user',
+					parsedcomment: 'comment',
+					tags: [],
+					timestamp: ''
+				},
+				{
+					title: 'A title',
+					type: 'type',
+					ns: 0,
+					newlen: 22,
+					// eslint-disable-next-line camelcase
+					old_revid: 418549,
+					oldlen: 545,
+					pageid: 494,
+					rcid: 8947984,
+					revid: 58859,
+					temp: '',
+					user: 'user',
+					parsedcomment: 'comment',
+					tags: [],
+					timestamp: ''
+				}
+			],
 			pages: {}
 		}
-	};
-	const mockApiGet = vi.fn();
-	window.mw = {
-		...window.mw,
-		// eslint-disable-next-line prefer-arrow-callback
-		Api: vi.fn().mockImplementation( function Api() {
-			return {
-				get: mockApiGet.mockResolvedValue( mockResponse )
-			};
-		} )
-	};
-	expectTypeOf( fetchRecentActivity ).toExtend( 'asyncFunction' );
+	} );
 
 	await fetchRecentActivity( 10 );
-	const result = recentActivityResult.value;
-
-	expect( result.feed.length ).toEqual( 3 );
+	expect( recentActivityResult.value.feed.length ).toEqual( 3 );
 } );
 
 test( 'fetchRecentActivity with watchlist enabled and more than limit', async () => {
@@ -612,149 +533,135 @@ test( 'fetchRecentActivity with watchlist enabled and more than limit', async ()
 		wgPersonalDashboardRiskyArticleEditsMlModel: null,
 		wgPersonalDashboardRiskyArticleEditsWlEnabled: true
 	} );
-	const recentchanges = [
-		{
-			title: 'A title 123',
-			type: 'type',
-			ns: 0,
-			newlen: 22,
-			// eslint-disable-next-line camelcase
-			old_revid: 418549,
-			oldlen: 545,
-			pageid: 494,
-			rcid: 8947984,
-			revid: 58859,
-			temp: '',
-			user: 'user',
-			parsedcomment: 'comment',
-			tags: [],
-			timestamp: ''
-		},
-		{
-			title: 'A title',
-			type: 'type',
-			ns: 0,
-			newlen: 325,
-			// eslint-disable-next-line camelcase
-			old_revid: 58859,
-			oldlen: 22,
-			pageid: 494,
-			rcid: 8947986,
-			revid: 58860,
-			temp: '',
-			user: 'user',
-			parsedcomment: 'comment',
-			tags: [],
-			timestamp: ''
-		},
-		{
-			title: 'A title 783',
-			type: 'type',
-			ns: 0,
-			newlen: 325,
-			// eslint-disable-next-line camelcase
-			old_revid: 58859,
-			oldlen: 22,
-			pageid: 494,
-			rcid: 8947986,
-			revid: 58860,
-			temp: '',
-			user: 'user',
-			parsedcomment: 'comment',
-			tags: [],
-			timestamp: ''
-		}
-	];
-	const watchlist = [
-		{
-			title: 'Watched article',
-			type: 'type',
-			ns: 0,
-			newlen: 22,
-			// eslint-disable-next-line camelcase
-			old_revid: 123213,
-			oldlen: 321,
-			pageid: 494,
-			revid: 313132,
-			temp: '',
-			user: 'user',
-			parsedcomment: 'comment',
-			tags: [],
-			timestamp: ''
-		},
-		{
-			title: 'A title',
-			type: 'type',
-			ns: 0,
-			newlen: 22,
-			// eslint-disable-next-line camelcase
-			old_revid: 418549,
-			oldlen: 545,
-			pageid: 494,
-			rcid: 8947984,
-			revid: 58859,
-			temp: '',
-			user: 'user',
-			parsedcomment: 'comment',
-			tags: [],
-			timestamp: ''
-		},
-		{
-			title: 'A title 8712',
-			type: 'type',
-			ns: 0,
-			newlen: 325,
-			// eslint-disable-next-line camelcase
-			old_revid: 58859,
-			oldlen: 22,
-			pageid: 494,
-			rcid: 8947986,
-			revid: 58860,
-			temp: '',
-			user: 'user',
-			parsedcomment: 'comment',
-			tags: [],
-			timestamp: ''
-		},
-		{
-			title: 'A title 3489721',
-			type: 'type',
-			ns: 0,
-			newlen: 325,
-			// eslint-disable-next-line camelcase
-			old_revid: 58859,
-			oldlen: 22,
-			pageid: 494,
-			rcid: 8947986,
-			revid: 58860,
-			temp: '',
-			user: 'user',
-			parsedcomment: 'comment',
-			tags: [],
-			timestamp: ''
-		}
-	];
-	const mockResponse = {
+
+	mw.Api.mock( {
 		query: {
-			recentchanges: recentchanges,
-			watchlist: watchlist,
+			recentchanges: [
+				{
+					title: 'A title 123',
+					type: 'type',
+					ns: 0,
+					newlen: 22,
+					// eslint-disable-next-line camelcase
+					old_revid: 418549,
+					oldlen: 545,
+					pageid: 494,
+					rcid: 8947984,
+					revid: 58859,
+					temp: '',
+					user: 'user',
+					parsedcomment: 'comment',
+					tags: [],
+					timestamp: ''
+				},
+				{
+					title: 'A title',
+					type: 'type',
+					ns: 0,
+					newlen: 325,
+					// eslint-disable-next-line camelcase
+					old_revid: 58859,
+					oldlen: 22,
+					pageid: 494,
+					rcid: 8947986,
+					revid: 58860,
+					temp: '',
+					user: 'user',
+					parsedcomment: 'comment',
+					tags: [],
+					timestamp: ''
+				},
+				{
+					title: 'A title 783',
+					type: 'type',
+					ns: 0,
+					newlen: 325,
+					// eslint-disable-next-line camelcase
+					old_revid: 58859,
+					oldlen: 22,
+					pageid: 494,
+					rcid: 8947986,
+					revid: 58860,
+					temp: '',
+					user: 'user',
+					parsedcomment: 'comment',
+					tags: [],
+					timestamp: ''
+				}
+			],
+			watchlist: [
+				{
+					title: 'Watched article',
+					type: 'type',
+					ns: 0,
+					newlen: 22,
+					// eslint-disable-next-line camelcase
+					old_revid: 123213,
+					oldlen: 321,
+					pageid: 494,
+					revid: 313132,
+					temp: '',
+					user: 'user',
+					parsedcomment: 'comment',
+					tags: [],
+					timestamp: ''
+				},
+				{
+					title: 'A title',
+					type: 'type',
+					ns: 0,
+					newlen: 22,
+					// eslint-disable-next-line camelcase
+					old_revid: 418549,
+					oldlen: 545,
+					pageid: 494,
+					rcid: 8947984,
+					revid: 58859,
+					temp: '',
+					user: 'user',
+					parsedcomment: 'comment',
+					tags: [],
+					timestamp: ''
+				},
+				{
+					title: 'A title 8712',
+					type: 'type',
+					ns: 0,
+					newlen: 325,
+					// eslint-disable-next-line camelcase
+					old_revid: 58859,
+					oldlen: 22,
+					pageid: 494,
+					rcid: 8947986,
+					revid: 58860,
+					temp: '',
+					user: 'user',
+					parsedcomment: 'comment',
+					tags: [],
+					timestamp: ''
+				},
+				{
+					title: 'A title 3489721',
+					type: 'type',
+					ns: 0,
+					newlen: 325,
+					// eslint-disable-next-line camelcase
+					old_revid: 58859,
+					oldlen: 22,
+					pageid: 494,
+					rcid: 8947986,
+					revid: 58860,
+					temp: '',
+					user: 'user',
+					parsedcomment: 'comment',
+					tags: [],
+					timestamp: ''
+				}
+			],
 			pages: {}
 		}
-	};
-	const mockApiGet = vi.fn();
-	window.mw = {
-		...window.mw,
-		// eslint-disable-next-line prefer-arrow-callback
-		Api: vi.fn().mockImplementation( function Api() {
-			return {
-				get: mockApiGet.mockResolvedValue( mockResponse )
-			};
-		} )
-	};
-	expectTypeOf( fetchRecentActivity ).toExtend( 'asyncFunction' );
+	} );
 
 	await fetchRecentActivity( 6 );
-	const result = recentActivityResult.value;
-
-	expect( result.feed.length ).toEqual( 5 );
+	expect( recentActivityResult.value.feed.length ).toEqual( 5 );
 } );

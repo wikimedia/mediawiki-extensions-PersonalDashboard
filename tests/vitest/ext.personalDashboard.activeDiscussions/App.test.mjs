@@ -1,6 +1,6 @@
 import { test, expect, vi } from 'vitest';
 import { mount } from '@vue/test-utils';
-import App from '@resources/ext.personalDashboard.activeDiscussions/App.vue';
+import App from '/resources/ext.personalDashboard.activeDiscussions/App.vue';
 import { ref } from 'vue';
 
 const mockFetchActiveDiscussions = vi.fn();

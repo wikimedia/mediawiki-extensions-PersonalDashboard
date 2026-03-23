@@ -24,16 +24,18 @@ const fetchActiveDiscussions = async ( limit ) => {
 			activeDiscussionsApiResult = await api.get( params );
 
 			if ( activeDiscussionsApiResult.discussiontoolspageinfo === undefined ||
-					activeDiscussionsApiResult.discussiontoolspageinfo.threaditemshtml === undefined ) {
-				const errorMessage = 'No valid active discussions found';
-				mw.log.error( errorMessage );
+				activeDiscussionsApiResult.discussiontoolspageinfo.threaditemshtml === undefined ) {
+				const errorMessage = new Error( 'No valid active discussions found' );
+				mw.log.error( errorMessage.message );
 				error.value = errorMessage;
 				activeDiscussionsResult.value = [];
 				return;
 			}
 
-			for ( const apiResult of activeDiscussionsApiResult.discussiontoolspageinfo.threaditemshtml ) {
-				// We want discussions that have more that one author
+			const items = activeDiscussionsApiResult.discussiontoolspageinfo.threaditemshtml;
+
+			for ( const apiResult of items ) {
+				// We want discussions that have more than one author
 				if ( apiResult.authorCount > 1 ) {
 					activeDiscussions.push( {
 						discussionPage: discussionPage,

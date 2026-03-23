@@ -1,8 +1,8 @@
-import { test, expect, beforeEach, vi, afterEach } from 'vitest';
+import { test, expect, beforeEach, vi } from 'vitest';
 import { mount } from '@vue/test-utils';
 import { ref } from 'vue';
 
-vi.mock( '@resources/ext.personalDashboard.riskyArticleEdits/composables/useFetchActivityResult.js', () => {
+vi.mock( '/resources/ext.personalDashboard.riskyArticleEdits/composables/useFetchActivityResult.js', () => {
 	const mock = {
 		recentActivityResult: ref( null ),
 		loading: ref( true ),
@@ -12,7 +12,7 @@ vi.mock( '@resources/ext.personalDashboard.riskyArticleEdits/composables/useFetc
 	return { default: () => mock };
 } );
 
-import useFetchActivityResult from '@resources/ext.personalDashboard.riskyArticleEdits/composables/useFetchActivityResult.js';
+import useFetchActivityResult from '/resources/ext.personalDashboard.riskyArticleEdits/composables/useFetchActivityResult.js';
 const {
 	recentActivityResult,
 	loading,
@@ -20,22 +20,17 @@ const {
 	fetchRecentActivity
 } = useFetchActivityResult();
 
-import RecentActivity from '@resources/ext.personalDashboard.riskyArticleEdits/App.vue';
+import RecentActivity from '/resources/ext.personalDashboard.riskyArticleEdits/App.vue';
+
 mw.user.options.set( 'personaldashboard-risky-articles-info', 0 );
+
 beforeEach( () => {
 	recentActivityResult.value = null;
 	loading.value = true;
 	error.value = null;
 	fetchRecentActivity.mockReset();
-	// create teleport target for tests that require it
-	const el = document.createElement( 'div' );
-	el.classList = [ 'personal-dashboard-module-header' ];
-	document.body.appendChild( el );
 } );
-afterEach( () => {
-	// clean up teleport target
-	document.body.innerHTML = '';
-} );
+
 test( 'mount component', () => {
 	const wrapper = mount( RecentActivity );
 	expect( wrapper.element ).toMatchSnapshot();
@@ -43,46 +38,52 @@ test( 'mount component', () => {
 
 test( 'shows progress bar when loading', () => {
 	const wrapper = mount( RecentActivity );
-
-	expect( wrapper.find( '.cdx-progress-bar' ).exists() ).toBeTruthy();
+	expect( wrapper.find( '.cdx-progress-bar' ).exists() ).toStrictEqual( true );
 } );
 
 test( 'shows error message when there is one', () => {
 	loading.value = false;
-	error.value = {
-		message: 'An Error'
-	};
-	const wrapper = mount( RecentActivity );
+	error.value = new Error( 'An Error' );
 
+	const wrapper = mount( RecentActivity );
 	expect( wrapper.text() ).toContain( 'An Error' );
 } );
 
 test( 'shows up to 5 recent changes with information', () => {
-	mw.config.set( { wgMFMode: null } );
+	mw.config.set( 'wgMFMode', null );
 	loading.value = false;
 	recentActivityResult.value = {
-		feed: [ {
-			title: 'Article Title',
-			type: '',
-			ns: 0,
-			pageid: 15864,
-			revid: 2430984,
-			// eslint-disable-next-line camelcase
-			old_revid: 2394508293,
-			rcid: 2348,
-			user: 'User',
-			bot: false,
-			newlen: 250,
-			oldlen: 20,
-			temp: '',
-			parsedcomment: 'A comment',
-			tags: [],
-			timestamp: new Date( 2024, 11, 2 ).toISOString()
-		} ],
+		feed: [
+			{
+				title: 'Article Title',
+				type: '',
+				ns: 0,
+				pageid: 15864,
+				revid: 2430984,
+				// eslint-disable-next-line camelcase
+				old_revid: 2394508293,
+				rcid: 2348,
+				user: 'User',
+				bot: false,
+				newlen: 250,
+				oldlen: 20,
+				temp: '',
+				parsedcomment: 'A comment',
+				tags: [],
+				timestamp: new Date( 2024, 11, 2 ).toISOString(),
+				feedorigin: 'recentchanges'
+			}
+		],
 		pages: [
-			{ ns: 0, pageid: 15864, title: 'Article Title', description: 'A description' }
+			{
+				ns: 0,
+				pageid: 15864,
+				title: 'Article Title',
+				description: 'A description'
+			}
 		]
 	};
+
 	const wrapper = mount( RecentActivity );
 
 	expect( fetchRecentActivity ).toHaveBeenCalledWith( 5 );
@@ -94,31 +95,40 @@ test( 'shows up to 5 recent changes with information', () => {
 } );
 
 test( 'shows up to 10 recent changes with information when on mobile view', () => {
-	mw.config.set( { wgMFMode: true } );
+	mw.config.set( 'wgMFMode', true );
 	loading.value = false;
 	recentActivityResult.value = {
-		feed: [ {
-			title: 'Article Title',
-			type: '',
-			ns: 0,
-			pageid: 15864,
-			revid: 2430984,
-			// eslint-disable-next-line camelcase
-			old_revid: 2394508293,
-			rcid: 2348,
-			user: 'User',
-			bot: false,
-			newlen: 250,
-			oldlen: 20,
-			temp: '',
-			parsedcomment: 'A comment',
-			tags: [],
-			timestamp: new Date( 2024, 11, 2 ).toISOString()
-		} ],
+		feed: [
+			{
+				title: 'Article Title',
+				type: '',
+				ns: 0,
+				pageid: 15864,
+				revid: 2430984,
+				// eslint-disable-next-line camelcase
+				old_revid: 2394508293,
+				rcid: 2348,
+				user: 'User',
+				bot: false,
+				newlen: 250,
+				oldlen: 20,
+				temp: '',
+				parsedcomment: 'A comment',
+				tags: [],
+				timestamp: new Date( 2024, 11, 2 ).toISOString(),
+				feedorigin: 'recentchanges'
+			}
+		],
 		pages: [
-			{ ns: 0, pageid: 15864, title: 'Article Title', description: 'A description' }
+			{
+				ns: 0,
+				pageid: 15864,
+				title: 'Article Title',
+				description: 'A description'
+			}
 		]
 	};
+
 	const wrapper = mount( RecentActivity );
 
 	expect( fetchRecentActivity ).toHaveBeenCalledWith( 10 );
@@ -131,90 +141,58 @@ test( 'shows up to 10 recent changes with information when on mobile view', () =
 
 test( 'shows header message by default on mobile and updates preference when closed', async () => {
 	mw.user.options.set( 'personaldashboard-risky-articles-info', 1 );
-	mw.config.set( { wgMFMode: true } );
+	mw.config.set( 'wgMFMode', true );
 	loading.value = false;
-	const wrapper = mount( RecentActivity, {
-		global: {
-			directives: {
-				'i18n-html': {
-					mounted: () => {
-					},
-					updated: () => {
-					}
-				}
-			}
+	let closed = false;
+
+	mw.Api.mock( ( params, options ) => {
+		if ( options.type === 'POST' &&
+			params.action === 'options' &&
+			params.optionname === 'personaldashboard-risky-articles-info' &&
+			params.optionvalue === 0 ) {
+			closed = true;
 		}
 	} );
 
+	const wrapper = mount( RecentActivity );
+
 	const messageHeader = wrapper.find( '.ext-personal-dashboard-recent-activity-header' );
-	expect( messageHeader.exists() ).toBeTruthy();
+	expect( messageHeader.exists() ).toStrictEqual( true );
 
 	const dismissButton = wrapper.find( '.cdx-message__dismiss-button' );
 	await dismissButton.trigger( 'click' );
 
-	expect( mw.user.options.get( 'personaldashboard-risky-articles-info', 1 ), 0 );
+	expect( closed ).toStrictEqual( true );
 } );
 
 test( 'shows header message by default on non-mobile', () => {
 	mw.user.options.set( 'personaldashboard-risky-articles-info', 1 );
-	mw.config.set( { wgMFMode: null } );
+	mw.config.set( 'wgMFMode', null );
 	loading.value = false;
 
-	mount( RecentActivity, {
-		global: {
-			directives: {
-				'i18n-html': {
-					mounted: () => {
-					},
-					updated: () => {
-					}
-				}
-			}
-		}
-	} );
-
-	const messageHeader = document.querySelector( '.ext-personal-dashboard-recent-activity-header' );
-	expect( messageHeader ).not.toBeNull();
+	const wrapper = mount( RecentActivity );
+	expect( wrapper.findComponent( '.ext-personal-dashboard-recent-activity-header' ).exists() ).toStrictEqual( true );
 } );
 
 test( 'does not show header message by default on mobile summary rendermode', () => {
 	mw.user.options.set( 'personaldashboard-risky-articles-info', 1 );
-	mw.config.set( { wgMFMode: true } );
+	mw.config.set( 'wgMFMode', true );
 	loading.value = false;
 
 	const wrapper = mount( RecentActivity, {
 		props: {
 			rendermode: 'mobile-summary'
-		},
-		global: {
-			directives: {
-				'i18n-html': {
-					mounted: () => {
-					},
-					updated: () => {
-					}
-				}
-			}
 		}
 	} );
-	expect( wrapper.find( '.ext-personal-dashboard-recent-activity-header' ).exists() ).toBeFalsy();
+
+	expect( wrapper.find( '.ext-personal-dashboard-recent-activity-header' ).exists() ).toStrictEqual( false );
 } );
 
 test( 'does not show header message if preference is off', async () => {
-	mw.config.set( { wgMFMode: true } );
+	mw.config.set( 'wgMFMode', true );
 	mw.user.options.set( 'personaldashboard-risky-articles-info', 0 );
 	loading.value = false;
-	const wrapper = mount( RecentActivity, {
-		global: {
-			directives: {
-				'i18n-html': {
-					mounted: () => {
-					},
-					updated: () => {
-					}
-				}
-			}
-		}
-	} );
-	expect( wrapper.find( '.ext-personal-dashboard-recent-activity-header' ).exists() ).toBeFalsy();
+
+	const wrapper = mount( RecentActivity );
+	expect( wrapper.find( '.ext-personal-dashboard-recent-activity-header' ).exists() ).toStrictEqual( false );
 } );

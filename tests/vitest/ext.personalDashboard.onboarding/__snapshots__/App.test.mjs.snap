@@ -1,3 +1,190 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`mount component 1`] = `<!--teleport start-->`;
+exports[`mount component 1`] = `
+<teleport-stub
+  disabled="false"
+  to="body"
+>
+  <transition-stub
+    appear="true"
+    css="true"
+    name="cdx-dialog-fade"
+    persisted="false"
+  >
+    <div
+      class="cdx-dialog-backdrop"
+    >
+      <div
+        tabindex="0"
+      />
+      <div
+        aria-label="⧼personal-dashboard-onboarding-title⧽"
+        aria-modal="true"
+        class="cdx-dialog cdx-dialog--multi-step cdx-dialog--no-padding personal-dashboard-onboarding"
+        role="dialog"
+      >
+        <header
+          class="cdx-dialog__header"
+        >
+          
+          <div
+            class="cdx-dialog__header--default"
+          >
+            <div
+              class="cdx-dialog__header__title-group"
+            >
+              <h3
+                class="cdx-dialog__header__title"
+              >
+                ⧼personal-dashboard-onboarding-title⧽
+              </h3>
+              <div
+                class="cdx-dialog__header__stepper"
+              >
+                <div
+                  class="cdx-dialog__header__stepper__label"
+                >
+                  ⧼personal-dashboard-multi-step-dialog-progress⧽
+                </div>
+                
+                <div
+                  class="cdx-dialog__header__stepper__dot cdx-dialog__header__stepper__dot--active"
+                />
+                <div
+                  class="cdx-dialog__header__stepper__dot"
+                />
+                
+              </div>
+            </div>
+            <button
+              aria-label="⧼cdx-dialog-close-button-label⧽"
+              class="cdx-button cdx-button--action-default cdx-button--weight-quiet cdx-button--size-medium cdx-button--icon-only cdx-dialog__header__close-button"
+            >
+              
+              <span
+                class="cdx-icon cdx-icon--medium"
+              >
+                <svg
+                  aria-hidden="true"
+                  height="20"
+                  viewBox="0 0 20 20"
+                  width="20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <!--v-if-->
+                  <g>
+                    <path
+                      d="m4.34 2.93 12.73 12.73-1.41 1.41L2.93 4.35z"
+                    />
+                    <path
+                      d="M17.07 4.34 4.34 17.07l-1.41-1.41L15.66 2.93z"
+                    />
+                  </g>
+                </svg>
+              </span>
+              
+            </button>
+          </div>
+          
+        </header>
+        <div
+          class="cdx-dialog-focus-trap"
+          tabindex="-1"
+        />
+        <div
+          class="cdx-dialog__body cdx-scrollable-container"
+        >
+          
+          
+          <div>
+            
+            <img
+              alt="⧼personal-dashboard-onboarding-step-1-alt⧽"
+              src="/w/extensions/PersonalDashboard/resources/ext.personalDashboard.onboarding/images/1.svg"
+            />
+            <div
+              class="personal-dashboard-onboarding__text"
+            >
+              <h4>
+                ⧼personal-dashboard-onboarding-step-2-title⧽
+              </h4>
+              <p>
+                ⧼personal-dashboard-onboarding-step-1-body⧽
+              </p>
+            </div>
+            
+          </div>
+          <div
+            style="display: none;"
+          >
+            
+            <img
+              alt="⧼personal-dashboard-onboarding-step-3-alt⧽"
+              src="/w/extensions/PersonalDashboard/resources/ext.personalDashboard.onboarding/images/3.svg"
+            />
+            <div
+              class="personal-dashboard-onboarding__text"
+            >
+              <h4>
+                ⧼personal-dashboard-onboarding-step-3-title⧽
+              </h4>
+              <p>
+                ⧼personal-dashboard-onboarding-step-3-body⧽
+              </p>
+            </div>
+            
+          </div>
+          
+          
+        </div>
+        <footer
+          class="cdx-dialog__footer"
+        >
+          
+          <div
+            class="cdx-dialog__footer--default"
+          >
+            
+            
+            <div
+              class="cdx-dialog__footer__actions"
+            >
+              <button
+                aria-label="⧼personal-dashboard-multi-step-dialog-next-button⧽"
+                class="cdx-button cdx-button--action-progressive cdx-button--weight-primary cdx-button--size-medium cdx-button--framed cdx-button--icon-only"
+              >
+                
+                <span
+                  class="cdx-icon cdx-icon--medium"
+                >
+                  <svg
+                    aria-hidden="true"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    width="20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <!--v-if-->
+                    <g>
+                      <path
+                        d="M7 1 5.6 2.5 13 10l-7.4 7.5L7 19l9-9z"
+                      />
+                    </g>
+                  </svg>
+                </span>
+                
+              </button>
+              <!--v-if-->
+            </div>
+          </div>
+          
+        </footer>
+      </div>
+      <div
+        tabindex="0"
+      />
+      <div />
+    </div>
+  </transition-stub>
+</teleport-stub>
+`;

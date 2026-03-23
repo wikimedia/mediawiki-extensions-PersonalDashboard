@@ -1,6 +1,6 @@
 import { test, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
-import App from '@resources/ext.personalDashboard.impact/App.vue';
+import App from '/resources/ext.personalDashboard.impact/App.vue';
 
 test( 'mount component', () => {
 	mw.config.set( {

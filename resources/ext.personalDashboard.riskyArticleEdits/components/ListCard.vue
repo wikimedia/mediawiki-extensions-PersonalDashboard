@@ -100,7 +100,11 @@ module.exports = defineComponent( {
 		},
 		description() {
 			const pages = toRaw( this.pages );
-			const page = ( pages && pages[ 0 ] ) ? pages.find( ( obj ) => obj.pageid === this.pageid && obj.description ) : undefined;
+
+			const page = ( pages && pages[ 0 ] ) ?
+				pages.find( ( obj ) => obj.pageid === this.pageid && obj.description ) :
+				undefined;
+
 			return ( page && page.description ) ? page.description : '';
 		},
 		isTempUser() {

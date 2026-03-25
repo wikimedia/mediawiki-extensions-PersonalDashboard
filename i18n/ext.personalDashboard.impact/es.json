@@ -1,12 +1,13 @@
 {
 	"@metadata": {
 		"authors": [
+			"Kookoriko",
 			"Suecarmol"
 		]
 	},
 	"personal-dashboard-impact-title": "Tu impacto",
 	"personal-dashboard-impact-thanks-sent": "Agradecimientos enviados",
 	"personal-dashboard-impact-edits-reviewed": "Ediciones revisadas",
-	"personal-dashboard-impact-edits-reviewed-description": "Cuenta las ediciones que has revertido y los agradecimientos que has enviado.",
+	"personal-dashboard-impact-edits-reviewed-description": "Cuenta las ediciones que has revertido en los últimos 30 días y todos los agradecimientos que has enviado.",
 	"personal-dashboard-impact-info-button": "Etiqueta para el botón de información, que explica la categoría “Ediciones revisadas”."
 }

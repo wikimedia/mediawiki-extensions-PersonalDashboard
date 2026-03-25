@@ -21,24 +21,23 @@
 		</div>
 		<div
 			v-if="recentActivityResult &&
-				recentActivityResult.query &&
-				recentActivityResult.query.recentchanges &&
-				recentActivityResult.query.pages
+				recentActivityResult.feed &&
+				recentActivityResult.pages
 			">
 			<template v-if="isMobile && rendermode === 'mobile-summary'">
 				<list-card-mobile
-					v-for="rc in recentActivityResult.query.recentchanges.slice( 0, 1 )"
+					v-for="rc in recentActivityResult.feed.slice( 0, 1 )"
 					v-bind="rc"
 					:key="`${rendermode}-${rc.rcid}`"
-					:pages="recentActivityResult.query.pages">
+					:pages="recentActivityResult.pages">
 				</list-card-mobile>
 			</template>
 			<template v-else>
 				<list-card
-					v-for="rc in recentActivityResult.query.recentchanges.slice( 0, limit )"
+					v-for="rc in recentActivityResult.feed"
 					v-bind="rc"
 					:key="`${rendermode}-${rc.rcid}`"
-					:pages="recentActivityResult.query.pages">
+					:pages="recentActivityResult.pages">
 				</list-card>
 			</template>
 		</div>

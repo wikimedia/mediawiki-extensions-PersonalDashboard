@@ -2,7 +2,8 @@
 	<cdx-card
 		class="ext-personal-dashboard-moderation-card"
 		:url="diffUrl"
-		target="_blank">
+		target="_blank"
+		:data-feedorigin="feedorigin">
 		<template #description>
 			<div class="ext-personal-dashboard-moderation-card-info">
 				<div class="ext-personal-dashboard-moderation-card-info-title-row">
@@ -67,7 +68,8 @@ module.exports = defineComponent( {
 		user: { type: String, required: true },
 		parsedcomment: { type: String, required: true },
 		timestamp: { type: String, default: '' },
-		pages: { type: Object, required: true }
+		pages: { type: Object, required: true },
+		feedorigin: { type: String, required: true }
 	},
 	setup() {
 		return {
@@ -193,5 +195,4 @@ module.exports = defineComponent( {
 		margin-left: 2px;
 	}
 }
-
 </style>

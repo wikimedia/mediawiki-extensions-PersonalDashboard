@@ -61,29 +61,27 @@ test( 'shows up to 5 recent changes with information', () => {
 	mw.config.set( { wgMFMode: null } );
 	loading.value = false;
 	recentActivityResult.value = {
-		query: {
-			recentchanges: [ {
-				title: 'Article Title',
-				type: '',
-				ns: 0,
-				pageid: 15864,
-				revid: 2430984,
-				// eslint-disable-next-line camelcase
-				old_revid: 2394508293,
-				rcid: 2348,
-				user: 'User',
-				bot: false,
-				newlen: 250,
-				oldlen: 20,
-				temp: '',
-				parsedcomment: 'A comment',
-				tags: [],
-				timestamp: new Date( 2024, 11, 2 ).toISOString()
-			} ],
-			pages: [
-				{ ns: 0, pageid: 15864, title: 'Article Title', description: 'A description' }
-			]
-		}
+		feed: [ {
+			title: 'Article Title',
+			type: '',
+			ns: 0,
+			pageid: 15864,
+			revid: 2430984,
+			// eslint-disable-next-line camelcase
+			old_revid: 2394508293,
+			rcid: 2348,
+			user: 'User',
+			bot: false,
+			newlen: 250,
+			oldlen: 20,
+			temp: '',
+			parsedcomment: 'A comment',
+			tags: [],
+			timestamp: new Date( 2024, 11, 2 ).toISOString()
+		} ],
+		pages: [
+			{ ns: 0, pageid: 15864, title: 'Article Title', description: 'A description' }
+		]
 	};
 	const wrapper = mount( RecentActivity );
 
@@ -99,29 +97,27 @@ test( 'shows up to 10 recent changes with information when on mobile view', () =
 	mw.config.set( { wgMFMode: true } );
 	loading.value = false;
 	recentActivityResult.value = {
-		query: {
-			recentchanges: [ {
-				title: 'Article Title',
-				type: '',
-				ns: 0,
-				pageid: 15864,
-				revid: 2430984,
-				// eslint-disable-next-line camelcase
-				old_revid: 2394508293,
-				rcid: 2348,
-				user: 'User',
-				bot: false,
-				newlen: 250,
-				oldlen: 20,
-				temp: '',
-				parsedcomment: 'A comment',
-				tags: [],
-				timestamp: new Date( 2024, 11, 2 ).toISOString()
-			} ],
-			pages: [
-				{ ns: 0, pageid: 15864, title: 'Article Title', description: 'A description' }
-			]
-		}
+		feed: [ {
+			title: 'Article Title',
+			type: '',
+			ns: 0,
+			pageid: 15864,
+			revid: 2430984,
+			// eslint-disable-next-line camelcase
+			old_revid: 2394508293,
+			rcid: 2348,
+			user: 'User',
+			bot: false,
+			newlen: 250,
+			oldlen: 20,
+			temp: '',
+			parsedcomment: 'A comment',
+			tags: [],
+			timestamp: new Date( 2024, 11, 2 ).toISOString()
+		} ],
+		pages: [
+			{ ns: 0, pageid: 15864, title: 'Article Title', description: 'A description' }
+		]
 	};
 	const wrapper = mount( RecentActivity );
 

@@ -4,9 +4,16 @@
 			"Eduardoaddad"
 		]
 	},
+	"personal-dashboard-onboarding-title": "Seu painel de controle",
 	"personal-dashboard-onboarding-dont-show-again": "Não mostrar de novo",
 	"personal-dashboard-onboarding-get-started-button": "Começar",
 	"personal-dashboard-onboarding-step-1-title": "Bem-vindo(a)",
+	"personal-dashboard-onboarding-step-1-body": "Devido à sua experiência em edição, incentivamos você a ajudar a revisar as edições de outros colaboradores. Esta página central ajuda você a navegar pela Wikipédia, mostrando as alterações a serem revisadas, juntamente com políticas e recursos que podem orientar suas decisões",
+	"personal-dashboard-onboarding-step-1-alt": "Ilustração de uma página com três painéis simplificados separados no painel de controle.",
 	"personal-dashboard-onboarding-step-2-title": "Funcionalidades",
-	"personal-dashboard-onboarding-step-3-title": "Compartilhe seu feedback"
+	"personal-dashboard-onboarding-step-2-body": "Nesta primeira versão do painel, você pode revisar as edições que possam exigir atenção, conhecer as políticas e diretrizes relevantes e acompanhar as estatísticas pertinentes.",
+	"personal-dashboard-onboarding-step-2-alt": "Ilustração de três painéis simplificados do painel de controle sendo adicionados à página.",
+	"personal-dashboard-onboarding-step-3-title": "Compartilhe seu feedback",
+	"personal-dashboard-onboarding-step-3-body": "Nos próximos meses, pretendemos personalizar os recursos com base na sua atividade de edição. Enquanto isso, gostaríamos de saber a sua opinião. Para compartilhar seus comentários, disponibilizamos um link para uma pesquisa na parte superior da página.",
+	"personal-dashboard-onboarding-step-3-alt": "Ilustração de um painel simplificado, em que a parte superior da página apresenta uma seção em azul mais escuro para destacar o link de comentários."
 }

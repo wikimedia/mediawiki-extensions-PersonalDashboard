@@ -5,7 +5,10 @@
 		]
 	},
 	"personal-dashboard-beta-info-chip-text": "Beta",
+	"personal-dashboard-desc": "Um painel experimental para moderadores",
 	"personal-dashboard-link-title": "Painel de controle",
 	"personal-dashboard-module-no-js-fallback": "Por favor, ative o JavaScript para visualizar este componente.",
-	"personal-dashboard-specialpage-title": "{{GENDER:$1|Olá}}, {{bidi:$1}}!"
+	"personal-dashboard-specialpage-title": "{{GENDER:$1|Olá}}, {{bidi:$1}}!",
+	"personal-dashboard-survey-text": "[$1 Compartilhar seus comentários]",
+	"tooltip-pt-personaldashboard": "{{GENDER:|Seu}} painel de controle pessoal"
 }

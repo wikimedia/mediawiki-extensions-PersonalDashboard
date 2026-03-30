@@ -4,6 +4,14 @@
 			"Eduardoaddad"
 		]
 	},
+	"personal-dashboard-risky-article-edits-header": "Revisar alterações",
+	"personal-dashboard-risky-article-edits-subheader": "Ajude a manter a confiabilidade da Wikipédia revisando as seguintes edições que podem precisar de atenção.",
+	"personal-dashboard-risky-article-edits-subheader-info": "Ajude a manter a confiabilidade da Wikipédia.",
+	"personal-dashboard-risky-article-edits-subheader-info-popover": "Uma [$1 ferramenta automatizada antivandalismo] sinaliza edições potencialmente arriscadas feitas por outros editores. Selecione uma para abrir a visualização de diferenças e decidir se deseja desfazer, melhorar ou agradecer ao editor.",
 	"personal-dashboard-risky-article-edits-subheader-info-popover-title": "Como?",
-	"personal-dashboard-risky-article-edits-subheader-info-popover-confirm": "Entendi"
+	"personal-dashboard-risky-article-edits-subheader-info-popover-confirm": "Entendi",
+	"personal-dashboard-risky-article-edits-footer-preamble": "Veja mais edições na [{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}} página de alterações recentes]",
+	"personal-dashboard-risky-article-edits-info-time-text-today": "$1, Hoje",
+	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Sem resumo da edição",
+	"personal-dashboard-risky-article-edits-info-button-aria-label": "botão de informações"
 }

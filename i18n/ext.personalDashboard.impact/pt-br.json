@@ -5,5 +5,8 @@
 		]
 	},
 	"personal-dashboard-impact-title": "Seu impacto",
+	"personal-dashboard-impact-thanks-sent": "Agradecimentos enviados",
+	"personal-dashboard-impact-edits-reviewed": "Edições revisadas",
+	"personal-dashboard-impact-edits-reviewed-description": "Conta as edições que você reverteu nos últimos 30 dias e todos os agradecimentos que você enviou.",
 	"personal-dashboard-impact-info-button": "Informação"
 }

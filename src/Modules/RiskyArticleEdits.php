@@ -32,6 +32,11 @@ class RiskyArticleEdits extends BaseModule {
 	}
 
 	/** @inheritDoc */
+	protected function getSubheader() {
+		return ' ';
+	}
+
+	/** @inheritDoc */
 	protected function shouldHeaderIncludeIcon(): bool {
 		return false;
 	}
@@ -87,7 +92,7 @@ class RiskyArticleEdits extends BaseModule {
 			) .
 			Html::element( 'p',
 				[ 'class' => 'personal-dashboard-module-no-js-fallback' ],
-				$this->msg( 'personal-dashboard-impact-no-js-fallback' )->text()
+				$this->msg( 'personal-dashboard-module-no-js-fallback' )->text()
 			);
 	}
 

@@ -4,6 +4,7 @@
 		class="ext-personal-dashboard-recent-activity-header"
 		@user-dismissed="$emit( 'dismissed' )">
 		{{ message }}
+
 		<cdx-toggle-button
 			ref="triggerElement"
 			v-model="showPopover"
@@ -12,18 +13,17 @@
 			quiet>
 			{{ messagePopover }}
 		</cdx-toggle-button>
+
 		<cdx-popover
 			v-if="triggerElement"
 			v-model:open="showPopover"
 			:anchor="triggerElement"
 			:placement="popoverPlacement"
-			:render-in-place="true"
 			:primary-action="primaryAction"
 			:title="messagePopover"
 			:use-close-button="true"
 			class="ext-personal-dashboard-recent-activity-header-popover"
-			@primary="showPopover = false"
-		>
+			@primary="showPopover = false">
 			<!-- eslint-disable-next-line max-len -->
 			<div v-i18n-html:personal-dashboard-risky-article-edits-subheader-info-popover="[ popoverUrl ]"></div>
 		</cdx-popover>
@@ -74,24 +74,15 @@ module.exports = defineComponent( {
 @import 'mediawiki.skin.variables.less';
 
 .ext-personal-dashboard-recent-activity-header {
-	flex: 0 1 100%;
-	margin-top: 0.5em;
-	flex-grow: 1;
-	font-weight: @font-weight-normal;
-}
-
-.cdx-message__content {
-	.ext-personal-dashboard-recent-activity-header-link {
-		font-weight: @font-weight-bold;
-		padding: 0;
+	.cdx-toggle-button&-link {
 		color: @color-progressive;
+		padding: @spacing-0;
+		height: @size-125;
+		min-height: @size-125;
+	}
+
+	&-popover {
+		width: @size-3200;
 	}
 }
-
-.ext-personal-dashboard-recent-activity-header-popover {
-	.cdx-button--action-progressive {
-		margin-bottom: 0.85em;
-	}
-}
-
 </style>

@@ -64,7 +64,6 @@ class SpecialPersonalDashboard extends SpecialPage {
 		$out = $this->getContext()->getOutput();
 		$this->isMobile = Util::isMobile( $out->getSkin() );
 
-		$out->enableOOUI();
 		$out->addModuleStyles( 'ext.personalDashboard.styles' );
 
 		if ( ExtensionRegistry::getInstance()->isLoaded( 'WikimediaEvents' ) ) {
@@ -88,6 +87,15 @@ class SpecialPersonalDashboard extends SpecialPage {
 			$out->addModules( 'ext.personalDashboard.onboarding' );
 		}
 
+		$out->addJsConfigVars( [
+			'wgPersonalDashboardPageviewToken' => $this->pageviewToken,
+			'wgPersonalDashboardActiveDiscussionsPages' => $this->activeDiscussionsPages
+		] );
+
+		$out->addHTML( Html::openElement( 'div', [
+			'class' => 'personal-dashboard-container'
+		] ) );
+
 		$surveyLink = $this->createSurveyLinkBetaChip();
 
 		if ( $surveyLink ) {
@@ -97,15 +105,6 @@ class SpecialPersonalDashboard extends SpecialPage {
 				$out->setIndicators( [ 'mw-ext-personal-dashboard-survey' => $surveyLink ] );
 			}
 		}
-
-		$out->addJsConfigVars( [
-			'wgPersonalDashboardPageviewToken' => $this->pageviewToken,
-			'wgPersonalDashboardActiveDiscussionsPages' => $this->activeDiscussionsPages
-		] );
-
-		$out->addHTML( Html::openElement( 'div', [
-			'class' => 'personal-dashboard-container'
-		] ) );
 
 		$modules = $this->getModules( $this->isMobile, $par );
 
@@ -232,7 +231,7 @@ class SpecialPersonalDashboard extends SpecialPage {
 		$cdx = new Codex();
 		$betaChip = $cdx->infoChip()
 			->setStatus( 'notice' )
-			->setIcon( 'cdx-info-chip-css-icon--lab-flask' )
+			->setIcon( 'personal-dashboard-survey-icon' )
 			->setText( $this->msg( 'personal-dashboard-beta-info-chip-text' )->parse() )
 			->build()
 			->getHtml();

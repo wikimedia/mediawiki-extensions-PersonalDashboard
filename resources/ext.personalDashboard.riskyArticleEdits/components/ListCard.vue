@@ -3,6 +3,7 @@
 		class="ext-personal-dashboard-moderation-card"
 		:url="diffUrl"
 		target="_blank"
+		role="button"
 		:data-feedorigin="feedorigin">
 		<template #description>
 			<div class="ext-personal-dashboard-moderation-card-info">
@@ -125,11 +126,12 @@ module.exports = defineComponent( {
 	border-right: 0;
 	border-radius: 0;
 	border-bottom: 0;
-	border-top: 1px solid @border-color-subtle;
+	border-color: @border-color-subtle;
 	padding: 0.5rem;
 
 	&:hover {
 		background-color: @background-color-interactive;
+		border-color: @border-color-subtle;
 	}
 
 	.cdx-card__text {

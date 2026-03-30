@@ -43,8 +43,8 @@
 		:anchor="infoButton"
 		:title="msgEditsReviewed"
 		:icon="cdxIconInfoFilled"
-		use-close-button
-		placement="bottom-end">
+		:use-close-button="true"
+		placement="bottom">
 		{{ msgEditsReviewedDescription }}
 	</cdx-popover>
 </template>
@@ -126,6 +126,7 @@ module.exports = defineComponent( {
 		display: flex;
 		align-items: center;
 		gap: @spacing-50;
+		overflow-wrap: anywhere;
 
 		:nth-child( 1 ) {
 			color: @color-subtle;
@@ -140,11 +141,17 @@ module.exports = defineComponent( {
 
 	&__name {
 		display: flex;
+		align-items: center;
 		justify-content: space-between;
 		gap: @spacing-100;
+		overflow-wrap: anywhere;
 		color: @color-subtle;
 
-		.cdx-button:enabled {
+		> div {
+			align-self: start;
+		}
+
+		> .cdx-button:enabled {
 			color: @color-subtle;
 		}
 	}

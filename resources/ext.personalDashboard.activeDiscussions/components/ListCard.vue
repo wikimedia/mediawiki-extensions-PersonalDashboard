@@ -101,12 +101,13 @@ module.exports = defineComponent( {
 	border-right: 0;
 	border-radius: 0;
 	border-bottom: 0;
-	border-top: 1px solid @border-color-subtle;
+	border-color: @border-color-subtle;
 	padding: 0.5rem;
 	width: 100%;
 
 	&:hover {
 		background-color: @background-color-interactive;
+		border-color: @border-color-subtle;
 	}
 
 	.cdx-card__text {

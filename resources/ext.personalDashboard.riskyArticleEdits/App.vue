@@ -1,17 +1,18 @@
 <template>
 	<div ref="moduleRef">
-		<header-message
-			v-if="isMobile && showHeaderMessage && rendermode !== 'mobile-summary'"
-			class="ext-personal-dashboard-recent-activity-header-mobile"
-			:is-mobile="isMobile"
-			@dismissed="onHeaderMessageClose"></header-message>
-		<teleport
-			v-if="!isMobile && showHeaderMessage && rendermode !== 'mobile-summary'"
-			to=".personal-dashboard-module-header"
-		>
+		<template v-if="showHeaderMessage && rendermode !== 'mobile-summary'">
 			<header-message
-				@dismissed="onHeaderMessageClose"></header-message>
-		</teleport>
+				v-if="isMobile"
+				class="ext-personal-dashboard-recent-activity-header-mobile"
+				:is-mobile="isMobile"
+				@dismissed="onHeaderMessageClose">
+			</header-message>
+
+			<teleport v-else to=".personal-dashboard-module-subheader">
+				<header-message @dismissed="onHeaderMessageClose"></header-message>
+			</teleport>
+		</template>
+
 		<div v-if="loading">
 			<cdx-progress-bar inline :aria-label="progressBarAriaLabel"></cdx-progress-bar>
 		</div>

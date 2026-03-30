@@ -1,23 +1,26 @@
 <template>
-	<teleport to=".mw-body">
+	<teleport to="#mw-content-text">
 		<div
 			v-show="open.value"
 			:title="title"
 			:data-module-name="module"
 			:data-mode="rendermode"
-			:class="`personal-dashboard-container personal-dashboard-route open-${open.value}`"
-		>
+			:class="`personal-dashboard-container personal-dashboard-route open-${open.value}`">
 			<div :class="moduleClasses">
-				<span class="personal-dashboard-module-header">
+				<div class="personal-dashboard-module-header">
 					<cdx-icon
 						class="personal-dashboard-module-header-back-icon"
 						:icon="cdxIconArrowPrevious"
-						@click="$emit( 'close' )"
-					></cdx-icon>
+						@click="$emit( 'close' )">
+					</cdx-icon>
+
 					<div class="personal-dashboard-module-header-text">
 						{{ title }}
 					</div>
-				</span>
+
+					<div class="personal-dashboard-module-header-info-icon"></div>
+				</div>
+
 				<div class="personal-dashboard-module-body">
 					<slot>Module Content</slot>
 				</div>
@@ -28,11 +31,8 @@
 
 <script>
 const { defineComponent } = require( 'vue' );
-
 const { CdxIcon } = require( './codex.js' );
-const {
-	cdxIconArrowPrevious
-} = require( './icons.json' );
+const { cdxIconArrowPrevious } = require( './icons.json' );
 
 module.exports = defineComponent( {
 	components: {

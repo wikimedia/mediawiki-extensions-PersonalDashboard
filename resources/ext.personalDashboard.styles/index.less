@@ -1,0 +1,125 @@
+@import 'mediawiki.skin.variables.less';
+@import 'mediawiki.mixins';
+
+.personal-dashboard {
+	&-container {
+		display: flex;
+		gap: @spacing-100;
+
+		&__compact,
+		.skin-minerva & {
+			flex-direction: column;
+		}
+	}
+
+	&-group {
+		&-main,
+		&-sidebar {
+			&,
+			&-subgroup-primary,
+			&-subgroup-secondary {
+				display: flex;
+				flex-direction: column;
+				gap: @spacing-100;
+				overflow: hidden;
+			}
+		}
+
+		&-main {
+			flex: 2;
+		}
+
+		&-sidebar {
+			flex: 1;
+		}
+	}
+
+	&-module {
+		&-desktop,
+		&-mobile-summary {
+			border: @border-subtle;
+			border-radius: @border-radius-base;
+		}
+
+		&-header {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: @spacing-100;
+			margin: @spacing-100 @spacing-100 @spacing-50 @spacing-100;
+
+			&-text {
+				// Hard-coded instead of @font-size-medium due to T393629
+				font-size: 1rem;
+				font-weight: @font-weight-bold;
+				text-overflow: @text-overflow-ellipsis;
+				white-space: nowrap;
+				overflow: hidden;
+			}
+
+			&-nav-icon {
+				flex: none;
+				.cdx-mixin-css-icon( @cdx-icon-arrow-next );
+			}
+
+			&-info-icon {
+				width: @min-size-icon-medium;
+				height: @min-size-icon-medium;
+			}
+		}
+
+		&-subheader {
+			margin: @spacing-50 @spacing-100 @spacing-50 @spacing-100;
+		}
+
+		&-body {
+			margin: @spacing-100;
+		}
+
+		&-footer {
+			margin: @spacing-50 @spacing-100 @spacing-100 @spacing-100;
+		}
+
+		&-header,
+		&-subheader,
+		&-body,
+		&-footer {
+			.personal-dashboard-route & {
+				margin: @spacing-100 @spacing-0;
+			}
+		}
+
+		&-anchor {
+			color: inherit;
+			text-decoration: @text-decoration-none;
+		}
+
+		.client-js &-no-js-fallback {
+			display: none;
+		}
+	}
+
+	&-survey {
+		display: flex;
+		align-items: center;
+		gap: @spacing-50;
+
+		.external {
+			background: none;
+			padding-right: @spacing-0;
+		}
+
+		&-icon {
+			.cdx-mixin-css-icon( @cdx-icon-lab-flask, @color-icon-notice, @size-icon-small );
+		}
+	}
+
+	&-hide-all {
+		// stylelint-disable selector-max-id
+		> :not( #bodyContent ),
+		#mw-content-text > :not( .personal-dashboard-route.open-true ) {
+			// stylelint-enable selector-max-id
+			display: none;
+		}
+	}
+}

@@ -78,5 +78,10 @@ module.exports = defineComponent( {
 			border-bottom-right-radius: @border-radius-sharp;
 		}
 	}
+
+	// Revert a:not([href]) text color from Minerva
+	.skin-minerva &-examples-link {
+		color: @color-link;
+	}
 }
 </style>

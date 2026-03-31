@@ -3,6 +3,7 @@
 		<header-message
 			v-if="isMobile && showHeaderMessage && rendermode !== 'mobile-summary'"
 			class="ext-personal-dashboard-recent-activity-header-mobile"
+			:is-mobile="isMobile"
 			@dismissed="onHeaderMessageClose"></header-message>
 		<teleport
 			v-if="!isMobile && showHeaderMessage && rendermode !== 'mobile-summary'"

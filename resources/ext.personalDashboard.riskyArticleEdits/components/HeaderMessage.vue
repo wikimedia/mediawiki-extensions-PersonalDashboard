@@ -16,7 +16,7 @@
 			v-if="triggerElement"
 			v-model:open="showPopover"
 			:anchor="triggerElement"
-			placement="bottom"
+			:placement="popoverPlacement"
 			:render-in-place="true"
 			:primary-action="primaryAction"
 			:title="messagePopover"
@@ -36,6 +36,12 @@ const { CdxMessage, CdxPopover, CdxToggleButton } = require( '../codex.js' );
 module.exports = defineComponent( {
 	name: 'HeaderMessage',
 	components: { CdxMessage, CdxPopover, CdxToggleButton },
+	props: {
+		isMobile: {
+			type: Boolean,
+			default: false
+		}
+	},
 	emits: [ 'dismissed' ],
 	setup() {
 		const confirmMessage = mw.message( 'personal-dashboard-risky-article-edits-subheader-info-popover-confirm' );
@@ -55,6 +61,9 @@ module.exports = defineComponent( {
 		},
 		popoverUrl() {
 			return 'https://meta.wikimedia.org/wiki/Machine_learning_models/Production/Language-agnostic_revert_risk';
+		},
+		popoverPlacement() {
+			return this.isMobile ? 'right' : 'bottom';
 		}
 	}
 } );

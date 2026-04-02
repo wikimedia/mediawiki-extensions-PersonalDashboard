@@ -3,11 +3,12 @@
 		"authors": [
 			"Asteralee",
 			"Beta16",
+			"Daimona Eaytoy",
 			"FL2226"
 		]
 	},
 	"personal-dashboard-risky-article-edits-subheader-info": "Aiuta a mantenere Wikipedia affidabile.",
 	"personal-dashboard-risky-article-edits-subheader-info-popover-title": "Come?",
 	"personal-dashboard-risky-article-edits-info-time-text-today": "$1 , oggi",
-	"personal-dashboard-risky-article-edits-progress-bar-aria-label": "Barra di avanzamento in linea per indicare quando le modifiche vengono caricate  per la revisione"
+	"personal-dashboard-risky-article-edits-progress-bar-aria-label": "barra di avanzamento in linea per indicare quando vengono caricate le modifiche da revisionare"
 }

@@ -2,7 +2,6 @@
 
 namespace MediaWiki\Extension\PersonalDashboard\Modules;
 
-use MediaWiki\Config\Config;
 use MediaWiki\Context\IContextSource;
 use MediaWiki\Html\Html;
 
@@ -35,11 +34,8 @@ class Banner extends BaseModule {
 	}
 
 	/** @inheritDoc */
-	public function __construct(
-		IContextSource $context,
-		Config $wikiConfig,
-	) {
-		parent::__construct( 'banner', $context, $wikiConfig );
+	public function __construct() {
+		parent::__construct( 'banner' );
 	}
 
 	/** @inheritDoc */

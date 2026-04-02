@@ -18,7 +18,8 @@
 		"MediaWiki\\Extension\\PersonalDashboard\\": "src/"
 	},
 	"ServiceWiringFiles": [
-		"ServiceWiring.php"
+		"ServiceWiring.php",
+		"src/Modules/Wiring.php"
 	],
 	"SpecialPages": {
 		"PersonalDashboard": {
@@ -428,5 +429,16 @@
 	"DatabaseVirtualDomains": [
 		"virtual-dashboard"
 	],
+	"attributes": {
+		"PersonalDashboard": {
+			"Modules": [
+				"ext.personalDashboard.activeDiscussions",
+				"ext.personalDashboard.banner",
+				"ext.personalDashboard.impact",
+				"ext.personalDashboard.policiesGuidelines",
+				"ext.personalDashboard.riskyArticleEdits"
+			]
+		}
+	},
 	"manifest_version": 2
 }

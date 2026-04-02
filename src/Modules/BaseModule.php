@@ -2,8 +2,6 @@
 
 namespace MediaWiki\Extension\PersonalDashboard\Modules;
 
-use MediaWiki\Config\Config;
-use MediaWiki\Context\IContextSource;
 use MediaWiki\Extension\PersonalDashboard\Module;
 use MediaWiki\Html\Html;
 
@@ -21,9 +19,6 @@ abstract class BaseModule extends Module {
 	protected const MODULE_STATE_UNCONFIRMED = 'unconfirmed';
 	protected const MODULE_STATE_NOTRENDERED = 'notrendered';
 
-	/** @var Config */
-	private $wikiConfig;
-
 	/**
 	 * @var bool
 	 */
@@ -36,19 +31,13 @@ abstract class BaseModule extends Module {
 
 	/**
 	 * @param string $name Name of the module
-	 * @param IContextSource $ctx
-	 * @param Config $wikiConfig
 	 * @param bool $shouldWrapModuleWithLink
 	 */
 	public function __construct(
 		string $name,
-		IContextSource $ctx,
-		Config $wikiConfig,
 		bool $shouldWrapModuleWithLink = false
 	) {
-		parent::__construct( $name, $ctx );
-
-		$this->wikiConfig = $wikiConfig;
+		parent::__construct( $name );
 		$this->shouldWrapModuleWithLink = $shouldWrapModuleWithLink;
 	}
 
@@ -106,10 +95,6 @@ abstract class BaseModule extends Module {
 		$this->setMode( $mode );
 		$data[ 'renderMode' ] = $mode;
 		return $data;
-	}
-
-	final protected function getPersonalDashboardWikiConfig(): Config {
-		return $this->wikiConfig;
 	}
 
 	/**

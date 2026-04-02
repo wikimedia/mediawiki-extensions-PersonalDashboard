@@ -2,23 +2,14 @@
 
 namespace MediaWiki\Extension\PersonalDashboard\Modules;
 
-use MediaWiki\Config\Config;
-use MediaWiki\Context\IContextSource;
 use MediaWiki\Html\Html;
 
 /**
  * Class for the Active Discussions module.
  */
 class ActiveDiscussions extends BaseModule {
-	/**
-	 * @param IContextSource $ctx
-	 * @param Config $wikiConfig
-	 */
-	public function __construct(
-		IContextSource $ctx,
-		Config $wikiConfig
-	) {
-		parent::__construct( 'activeDiscussions', $ctx, $wikiConfig );
+	public function __construct() {
+		parent::__construct( 'activeDiscussions' );
 	}
 
 	/** @inheritDoc */

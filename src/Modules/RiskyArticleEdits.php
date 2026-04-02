@@ -2,8 +2,6 @@
 
 namespace MediaWiki\Extension\PersonalDashboard\Modules;
 
-use MediaWiki\Config\Config;
-use MediaWiki\Context\IContextSource;
 use MediaWiki\Html\Html;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\User\UserEditTracker;
@@ -14,16 +12,12 @@ use MediaWiki\User\UserEditTracker;
 class RiskyArticleEdits extends BaseModule {
 
 	/**
-	 * @param IContextSource $ctx
-	 * @param Config $wikiConfig
 	 * @param UserEditTracker $userEditTracker
 	 */
 	public function __construct(
-		private readonly IContextSource $ctx,
-		private readonly Config $wikiConfig,
 		private readonly UserEditTracker $userEditTracker
 	) {
-		parent::__construct( 'riskyArticleEdits', $ctx, $wikiConfig );
+		parent::__construct( 'riskyArticleEdits' );
 	}
 
 	/** @inheritDoc */
@@ -99,7 +93,8 @@ class RiskyArticleEdits extends BaseModule {
 	/** @inheritDoc */
 	protected function getJsConfigVars() {
 		// TODO: Remove this feature flag once watchlist changes are integrated to the feed completely
-		$watchListFeedEnabled = $this->ctx->getRequest()->getText( 'personaldashboard_riskyarticleedits_wlenabled' );
+		$watchListFeedEnabled = $this->getContext()->getRequest()
+							   ->getText( 'personaldashboard_riskyarticleedits_wlenabled' );
 		// fallback to ml disabled if ores isn't loaded and configured as expected
 		$config = $this->getConfig();
 		$mlDisabledConf = [
@@ -126,7 +121,7 @@ class RiskyArticleEdits extends BaseModule {
 		];
 		// get model from url param or config
 		$models = [];
-		$requestedModel = $this->ctx->getRequest()->getText( 'personaldashboard_riskyarticleedits_mlmodel' );
+		$requestedModel = $this->getContext()->getRequest()->getText( 'personaldashboard_riskyarticleedits_mlmodel' );
 		if ( $requestedModel !== '' ) {
 			$models[] = $requestedModel;
 		}

@@ -5,6 +5,7 @@ namespace MediaWiki\Extension\PersonalDashboard;
 use InvalidArgumentException;
 use MediaWiki\Config\Config;
 use MediaWiki\Context\IContextSource;
+use MediaWiki\Context\RequestContext;
 use MediaWiki\Html\Html;
 use MediaWiki\Message\Message;
 use MediaWiki\SpecialPage\SpecialPage;
@@ -29,7 +30,7 @@ abstract class Module implements IModule {
 		self::RENDER_MOBILE_DETAILS
 	];
 
-	private IContextSource $ctx;
+	protected IContextSource|null $context = null;
 
 	/** @var string Name of the module */
 	protected string $name;
@@ -38,15 +39,23 @@ abstract class Module implements IModule {
 	private string $mode;
 
 	public function __construct(
-		string $name,
-		IContextSource $ctx
+		string $name
 	) {
 		$this->name = $name;
-		$this->ctx = $ctx;
 	}
 
 	final protected function getContext(): IContextSource {
-		return $this->ctx;
+		if ( $this->context === null ) {
+			$this->context = RequestContext::getMain();
+		}
+		return $this->context;
+	}
+
+	/**
+	 * Override default context
+	 */
+	final public function setContext( IContextSource $context ): void {
+		$this->context = $context;
 	}
 
 	/**

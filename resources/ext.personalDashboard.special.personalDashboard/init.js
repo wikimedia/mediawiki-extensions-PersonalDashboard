@@ -49,7 +49,7 @@
 		const module = moduleEl.getAttribute( 'data-module-name' );
 		const jsModule = `ext.personalDashboard.${ module }`;
 		const hash = `#${ module }`;
-		const rendermode = mw.config.get( 'dashboardmodules' )[ module ].renderMode;
+		const rendermode = mw.config.get( 'dashboardmodules' )[ jsModule ].renderMode;
 		const title = moduleEl.querySelector( '.personal-dashboard-module-header-text' ).innerText;
 
 		mw.loader.using( jsModule ).then( ( require ) => {

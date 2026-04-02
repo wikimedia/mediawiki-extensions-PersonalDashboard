@@ -3,12 +3,8 @@
 namespace MediaWiki\Extension\PersonalDashboard;
 
 use MediaWiki\Context\IContextSource;
-use MediaWiki\Extension\PersonalDashboard\Modules\ActiveDiscussions;
-use MediaWiki\Extension\PersonalDashboard\Modules\Banner;
-use MediaWiki\Extension\PersonalDashboard\Modules\Impact;
-use MediaWiki\Extension\PersonalDashboard\Modules\PoliciesGuidelines;
-use MediaWiki\Extension\PersonalDashboard\Modules\RiskyArticleEdits;
 use MediaWiki\MediaWikiServices;
+use MediaWiki\Registration\ExtensionRegistry;
 use OutOfBoundsException;
 
 /**
@@ -17,9 +13,6 @@ use OutOfBoundsException;
 class PersonalDashboardModuleRegistry {
 
 	private MediaWikiServices $services;
-
-	/** @var callable[]|null id => factory method */
-	private ?array $wiring = null;
 
 	/** @var IModule[] id => module */
 	private array $modules = [];
@@ -30,20 +23,22 @@ class PersonalDashboardModuleRegistry {
 
 	/**
 	 * @param string $id
-	 * @param IContextSource $contextSource
+	 * @param IContextSource|null $context
 	 * @return IModule
 	 */
-	public function get( string $id, IContextSource $contextSource ): IModule {
+	public function getModule( string $id, ?IContextSource $context ): IModule {
 		if ( $this->modules[$id] ?? null ) {
 			return $this->modules[$id];
 		}
-		if ( $this->wiring === null ) {
-			$this->wiring = self::getWiring();
-		}
-		if ( !array_key_exists( $id, $this->wiring ) ) {
+		if ( !in_array( $id, self::getModuleIds() ) ) {
 			throw new OutOfBoundsException( 'Module not found: ' . $id );
 		}
-		$this->modules[$id] = $this->wiring[$id]( $this->services, $contextSource );
+
+		$moduleService = $this->services->getService( $id );
+		if ( $context !== null ) {
+			$moduleService->setContext( $context );
+		}
+		$this->modules[$id] = $moduleService;
 		return $this->modules[$id];
 	}
 
@@ -52,70 +47,7 @@ class PersonalDashboardModuleRegistry {
 	 * @return string[]
 	 */
 	public static function getModuleIds(): array {
-		return array_keys( self::getWiring() );
-	}
-
-	/**
-	 * Returns wiring callbacks for each module.
-	 * The callback receives the service container and the request context,
-	 * and must return a homepage module.
-	 * @return callable[] module id => callback
-	 */
-	private static function getWiring() {
-		return [
-			'activeDiscussions' => static function (
-				MediaWikiServices $services,
-				IContextSource $context
-			) {
-				$dashboardServices = PersonalDashboardServices::wrap( $services );
-				return new ActiveDiscussions(
-					$context,
-					$dashboardServices->getPersonalDashboardWikiConfig()
-				);
-			},
-			'banner' => static function (
-				MediaWikiServices $services,
-				IContextSource $context
-			) {
-				$dashboardServices = PersonalDashboardServices::wrap( $services );
-				return new Banner(
-					$context,
-					$dashboardServices->getPersonalDashboardWikiConfig(),
-				);
-			},
-			'impact' => static function (
-				MediaWikiServices $services,
-				IContextSource $context
-			) {
-				$dashboardServices = PersonalDashboardServices::wrap( $services );
-				return new Impact(
-					$context,
-					$dashboardServices->getPersonalDashboardWikiConfig(),
-					$services->getConnectionProvider()
-				);
-			},
-			'policiesGuidelines' => static function (
-				MediaWikiServices $services,
-				IContextSource $context
-			) {
-				$dashboardServices = PersonalDashboardServices::wrap( $services );
-				return new PoliciesGuidelines(
-					$context,
-					$dashboardServices->getPersonalDashboardWikiConfig()
-				);
-			},
-			'riskyArticleEdits' => static function (
-				MediaWikiServices $services,
-				IContextSource $context
-			) {
-				$dashboardServices = PersonalDashboardServices::wrap( $services );
-				return new RiskyArticleEdits(
-					$context,
-					$dashboardServices->getPersonalDashboardWikiConfig(),
-					$services->getUserEditTracker(),
-				);
-			},
-		];
+		return ExtensionRegistry::getInstance()->getAttribute( 'PersonalDashboardModules' );
 	}
 
 }

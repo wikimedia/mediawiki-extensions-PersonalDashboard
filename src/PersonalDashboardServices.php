@@ -34,10 +34,6 @@ class PersonalDashboardServices {
 		return $this->coreServices->get( 'PersonalDashboardConfig' );
 	}
 
-	public function getPersonalDashboardWikiConfig(): Config {
-		return $this->coreServices->get( 'PersonalDashboardCommunityConfig' );
-	}
-
 	public function getPersonalDashboardModuleRegistry(): PersonalDashboardModuleRegistry {
 		return $this->coreServices->get( 'PersonalDashboardModuleRegistry' );
 	}

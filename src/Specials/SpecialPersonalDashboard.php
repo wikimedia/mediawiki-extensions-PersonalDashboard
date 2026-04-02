@@ -152,11 +152,11 @@ class SpecialPersonalDashboard extends SpecialPage {
 	 */
 	private function getModules( bool $isMobile, $par = '' ) {
 		$moduleConfig = [
-			'banner' => true,
-			'riskyArticleEdits' => true,
-			'impact' => true,
-			'activeDiscussions' => true,
-			'policiesGuidelines' => true,
+			'ext.personalDashboard.banner' => true,
+			'ext.personalDashboard.riskyArticleEdits' => true,
+			'ext.personalDashboard.impact' => true,
+			'ext.personalDashboard.activeDiscussions' => true,
+			'ext.personalDashboard.policiesGuidelines' => true,
 		];
 
 		if ( $isMobile ) {
@@ -166,7 +166,7 @@ class SpecialPersonalDashboard extends SpecialPage {
 				->getText( 'personaldashboard_activediscussions_show' );
 
 			if ( $showActiveDiscussions !== 'true' ) {
-				unset( $moduleConfig['activeDiscussions'] );
+				unset( $moduleConfig['ext.personalDashboard.activeDiscussions'] );
 			}
 		}
 
@@ -179,7 +179,7 @@ class SpecialPersonalDashboard extends SpecialPage {
 		}
 		$modules = [];
 		foreach ( $moduleConfig as $moduleId => $_ ) {
-			$modules[$moduleId] = $this->moduleRegistry->get( $moduleId, $this->getContext() );
+			$modules[$moduleId] = $this->moduleRegistry->getModule( $moduleId, $this->getContext() );
 		}
 		return $modules;
 	}
@@ -194,16 +194,16 @@ class SpecialPersonalDashboard extends SpecialPage {
 
 		$moduleGrouping = [
 			'main' => [
-				'primary' => [ 'banner', 'riskyArticleEdits' ],
+				'primary' => [ 'ext.personalDashboard.banner', 'ext.personalDashboard.riskyArticleEdits' ],
 			],
 			'sidebar' => [
-				'primary' => [ 'impact' ],
-				'secondary' => [ 'policiesGuidelines' ],
+				'primary' => [ 'ext.personalDashboard.impact' ],
+				'secondary' => [ 'ext.personalDashboard.policiesGuidelines' ],
 			]
 		];
 
 		if ( $showActiveDiscussions === 'true' ) {
-			$moduleGrouping['main']['primary'][] = 'activeDiscussions';
+			$moduleGrouping['main']['primary'][] = 'ext.personalDashboard.activeDiscussions';
 			return $moduleGrouping;
 		}
 

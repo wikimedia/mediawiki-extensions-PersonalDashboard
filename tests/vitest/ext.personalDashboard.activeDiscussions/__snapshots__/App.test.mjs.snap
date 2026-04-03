@@ -5,7 +5,12 @@ exports[`mount component 1`] = `
   data-v-app=""
 >
   
-  <!--v-if-->
+  <div
+    class="personal-dashboard-active-discussions__container"
+  >
+    <!--v-if-->
+    <!--v-if-->
+  </div>
   <!--v-if-->
   
 </div>

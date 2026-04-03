@@ -1,5 +1,5 @@
 <template>
-	<div v-if="showActiveDiscussions" class="personal-dashboard-active-discussions__container">
+	<div class="personal-dashboard-active-discussions__container">
 		<div v-if="loading">
 			<cdx-progress-bar inline :aria-label="progressBarAriaLabel"></cdx-progress-bar>
 		</div>
@@ -54,7 +54,6 @@ module.exports = defineComponent( {
 		}
 	},
 	setup() {
-		const showActiveDiscussions = mw.config.get( 'wgPersonalDashboardShowActiveDiscussions' ) || false;
 		const isMobile = mw.config.get( 'wgMFMode' ) !== null;
 		const limit = isMobile ? 10 : 3;
 		const {
@@ -64,7 +63,6 @@ module.exports = defineComponent( {
 			fetchActiveDiscussions
 		} = useFetchActiveDiscussionsResult();
 		return {
-			showActiveDiscussions,
 			isMobile,
 			limit,
 			activeDiscussionsResult,

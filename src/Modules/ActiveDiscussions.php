@@ -50,15 +50,15 @@ class ActiveDiscussions extends BaseModule {
 	/** @inheritDoc */
 	protected function getMobileSummaryBody() {
 		return Html::rawElement( 'div',
-				[
-					'id' => 'active-discussions-vue-root',
-					'class' => [ 'ext-personal-dashboard-app-root' ],
-				],
-			) .
-			Html::element( 'p',
-				[ 'class' => 'personal-dashboard-module-no-js-fallback' ],
-				$this->msg( 'personal-dashboard-impact-no-js-fallback' )->text()
-			);
+			[
+				'id' => 'active-discussions-vue-root',
+				'class' => [ 'ext-personal-dashboard-app-root' ],
+			],
+		) .
+		Html::element( 'p',
+			[ 'class' => 'personal-dashboard-module-no-js-fallback' ],
+			$this->msg( 'personal-dashboard-impact-no-js-fallback' )->text()
+		);
 	}
 
 	/** @inheritDoc */

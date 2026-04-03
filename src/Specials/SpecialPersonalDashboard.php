@@ -145,19 +145,23 @@ class SpecialPersonalDashboard extends SpecialPage {
 	 * @return IModule[]
 	 */
 	private function getModules( bool $isMobile, $par = '' ) {
-		// TODO: Remove this variable. This is for the soft launch of the active discussions module
-		$showActiveDiscussions = $this->getContext()->getRequest()
-			->getText( 'personaldashboard_activediscussions_show' ) ?? false;
 		$moduleConfig = [
 			'banner' => true,
 			'riskyArticleEdits' => true,
 			'impact' => true,
-			'activeDiscussions' => (bool)$showActiveDiscussions,
+			'activeDiscussions' => true,
 			'policiesGuidelines' => true,
 		];
 
 		if ( $isMobile ) {
 			// mobile-specific modules can be added here
+			// TODO: Remove this feature flag for active discussions hard launch
+			$showActiveDiscussions = $this->getContext()->getRequest()
+				->getText( 'personaldashboard_activediscussions_show' );
+
+			if ( $showActiveDiscussions !== 'true' ) {
+				unset( $moduleConfig['activeDiscussions'] );
+			}
 		}
 
 		switch ( $par ) {
@@ -178,15 +182,26 @@ class SpecialPersonalDashboard extends SpecialPage {
 	 * @return string[][][]
 	 */
 	private function getModuleGroups(): array {
-		return [
+		// TODO: Remove this feature flag for active discussions hard launch
+		$showActiveDiscussions = $this->getContext()->getRequest()
+			->getText( 'personaldashboard_activediscussions_show' );
+
+		$moduleGrouping = [
 			'main' => [
-				'primary' => [ 'banner', 'riskyArticleEdits', 'activeDiscussions' ],
+				'primary' => [ 'banner', 'riskyArticleEdits' ],
 			],
 			'sidebar' => [
 				'primary' => [ 'impact' ],
 				'secondary' => [ 'policiesGuidelines' ],
 			]
 		];
+
+		if ( $showActiveDiscussions === 'true' ) {
+			$moduleGrouping['main']['primary'][] = 'activeDiscussions';
+			return $moduleGrouping;
+		}
+
+		return $moduleGrouping;
 	}
 
 	/**

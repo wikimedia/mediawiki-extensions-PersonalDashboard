@@ -90,7 +90,7 @@ test( 'shows up to 5 recent changes with information', () => {
 	expect( wrapper.text() ).toContain( 'A comment' );
 	expect( wrapper.text() ).toContain( 'A description' );
 	expect( wrapper.text() ).toContain( '+230' );
-	expect( wrapper.text() ).toContain( 'December 2024' );
+	expect( wrapper.text() ).toContain( '1 year ago' );
 } );
 
 test( 'shows up to 10 recent changes with information when on mobile view', () => {
@@ -126,7 +126,7 @@ test( 'shows up to 10 recent changes with information when on mobile view', () =
 	expect( wrapper.text() ).toContain( 'A comment' );
 	expect( wrapper.text() ).toContain( 'A description' );
 	expect( wrapper.text() ).toContain( '+230' );
-	expect( wrapper.text() ).toContain( 'December 2024' );
+	expect( wrapper.text() ).toContain( '1 year ago' );
 } );
 
 test( 'shows header message by default on mobile and updates preference when closed', async () => {

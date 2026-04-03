@@ -1,7 +1,6 @@
 import { test, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
 import ListCard from '@resources/ext.personalDashboard.riskyArticleEdits/components/ListCard.vue';
-import { formatDate } from 'mediawiki.DateFormatter';
 
 test( 'mount component', () => {
 	const date = new Date();
@@ -35,9 +34,9 @@ test( 'mount component', () => {
 } );
 
 test( 'renders appropriate message when edit is made today', () => {
-	const date = new Date();
-	date.setHours( 3, 25 );
-	const expectedDate = '⧼personal-dashboard-risky-article-edits-info-time-text-today⧽';
+	const date = new Date( 2026, 0, 31 );
+	date.setHours( 21, 25 );
+	const expectedDate = '3 hours ago';
 	const wrapper = mount( ListCard, {
 		props: {
 			title: 'TestTitle',
@@ -62,7 +61,7 @@ test( 'renders appropriate message when edit is made today', () => {
 
 test( 'renders timestamp without hours when edit is not made today', async () => {
 	const date = new Date( 2024, 11, 2, 4, 29 );
-	const expectedDate = formatDate( date );
+	const expectedDate = '1 year ago';
 	const wrapper = mount( ListCard, {
 		props: {
 			title: 'TestTitle',

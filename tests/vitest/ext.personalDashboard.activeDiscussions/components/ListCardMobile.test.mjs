@@ -4,7 +4,7 @@ import ListCardMobile from '@resources/ext.personalDashboard.activeDiscussions/c
 import { formatRelativeTimeOrDate } from 'mediawiki.DateFormatter';
 
 test( 'mount component', () => {
-	const date = new Date();
+	const date = new Date( 2026, 0, 31, 8, 25 );
 	date.setHours( 8, 25 );
 	const wrapper = mount( ListCardMobile, {
 		props: {
@@ -20,8 +20,8 @@ test( 'mount component', () => {
 } );
 
 test( 'renders appropriate message when edit is made today', () => {
-	const date = new Date();
-	date.setHours( 3, 25 );
+	const date = new Date( 2026, 0, 31 );
+	date.setHours( 21, 25 );
 	const expectedDate = '3 hours ago';
 	const wrapper = mount( ListCardMobile, {
 		props: {

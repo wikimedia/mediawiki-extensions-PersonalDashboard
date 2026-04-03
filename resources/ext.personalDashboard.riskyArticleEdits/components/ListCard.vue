@@ -52,7 +52,7 @@ const { defineComponent, toRaw } = require( 'vue' );
 const { CdxCard } = require( '../codex.js' );
 const ChangeNumber = require( './ChangeNumber.vue' );
 const CreatorByline = require( './CreatorByline.vue' );
-const { formatDate, formatTime } = require( 'mediawiki.DateFormatter' );
+const { formatRelativeTimeOrDate } = require( 'mediawiki.DateFormatter' );
 
 module.exports = defineComponent( {
 	name: 'ListCard',
@@ -96,14 +96,7 @@ module.exports = defineComponent( {
 		},
 		timestampFormatted() {
 			const changeDateTimestamp = new Date( Date.parse( this.timestamp ) );
-			const todayDate = new Date();
-			todayDate.setHours( 0, 0, 0, 0 );
-			if ( changeDateTimestamp >= todayDate ) {
-				return mw.msg( 'personal-dashboard-risky-article-edits-info-time-text-today',
-					[ formatTime( changeDateTimestamp ) ] );
-			} else {
-				return `${ formatDate( changeDateTimestamp ) }`;
-			}
+			return `${ formatRelativeTimeOrDate( changeDateTimestamp ) }`;
 		},
 		description() {
 			const pages = toRaw( this.pages );

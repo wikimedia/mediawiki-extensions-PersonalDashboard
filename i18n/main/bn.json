@@ -1,0 +1,14 @@
+{
+	"@metadata": {
+		"authors": [
+			"আফতাবুজ্জামান"
+		]
+	},
+	"personal-dashboard-beta-info-chip-text": "বেটা",
+	"personal-dashboard-desc": "মডারেটরদের জন্য একটি পরীক্ষামূলক ড্যাশবোর্ড",
+	"personal-dashboard-link-title": "ড্যাশবোর্ড",
+	"personal-dashboard-module-no-js-fallback": "এই উপাদানটি দেখার জন্য দয়া করে জাভাস্ক্রিপ্ট সক্রিয় করুন।",
+	"personal-dashboard-specialpage-title": "{{GENDER:$1|স্বাগতম}}, {{bidi:$1}}!",
+	"personal-dashboard-survey-text": "[$1 মতামত জানান]",
+	"tooltip-pt-personaldashboard": "{{GENDER:|আপনার}} ব্যক্তিগত ড্যাশবোর্ড"
+}

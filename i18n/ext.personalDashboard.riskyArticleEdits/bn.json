@@ -1,0 +1,14 @@
+{
+	"@metadata": {
+		"authors": [
+			"আফতাবুজ্জামান"
+		]
+	},
+	"personal-dashboard-risky-article-edits-header": "পরিবর্তন পর্যালোচনা করুন",
+	"personal-dashboard-risky-article-edits-subheader-info": "উইকিপিডিয়াকে নির্ভরযোগ্য রাখতে সহায়তা করুন।",
+	"personal-dashboard-risky-article-edits-subheader-info-popover-title": "কীভাবে?",
+	"personal-dashboard-risky-article-edits-subheader-info-popover-confirm": "বুঝেছি",
+	"personal-dashboard-risky-article-edits-info-time-text-today": "$1, আজ",
+	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "সম্পাদনা সারাংশ নেই",
+	"personal-dashboard-risky-article-edits-info-button-aria-label": "তথ্য আইকন"
+}

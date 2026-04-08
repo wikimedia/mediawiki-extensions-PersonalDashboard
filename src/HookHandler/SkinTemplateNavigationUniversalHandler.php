@@ -2,6 +2,7 @@
 
 namespace MediaWiki\Extension\PersonalDashboard\HookHandler;
 
+use MediaWiki\Deferred\DeferredUpdates;
 use MediaWiki\Hook\SkinTemplateNavigation__UniversalHook;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Skin\SkinTemplate;
@@ -76,8 +77,7 @@ class SkinTemplateNavigationUniversalHandler implements SkinTemplateNavigation__
 
 		// Persist the user's eligiblity state to skip redundant checks and ensure permanent access
 		$this->userOptionsManager->setOption( $user, 'personaldashboard-eligible', true );
-		$this->userOptionsManager->saveOptions( $user );
-
+		$this->saveUserOptionsDeferred( $this->userOptionsManager, $user );
 		return true;
 	}
 
@@ -113,5 +113,18 @@ class SkinTemplateNavigationUniversalHandler implements SkinTemplateNavigation__
 		return $sktemplate->getConfig()->get( 'PersonalDashboardBlueDot' ) &&
 			!$sktemplate->getTitle()->isSpecial( 'PersonalDashboard' ) &&
 			!$this->userOptionsManager->getBoolOption( $user, 'personaldashboard-visited' );
+	}
+
+	/**
+	 * @param UserOptionsManager $userOptionsManager
+	 * @param User $user
+	 * @return void
+	 */
+	private function saveUserOptionsDeferred( UserOptionsManager $userOptionsManager, User $user ): void {
+		DeferredUpdates::addCallableUpdate(
+			static function () use ( $userOptionsManager, $user ) {
+				$userOptionsManager->saveOptions( $user );
+			}
+		);
 	}
 }

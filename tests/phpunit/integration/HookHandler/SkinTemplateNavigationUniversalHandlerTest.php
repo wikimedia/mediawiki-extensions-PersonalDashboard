@@ -19,6 +19,7 @@ use MediaWikiIntegrationTestCase;
 class SkinTemplateNavigationUniversalHandlerTest extends MediaWikiIntegrationTestCase {
 	private HashConfig $configMock;
 	private User $userMock;
+	private UserOptionsManager $userOptionsManagerMock;
 	private SkinTemplate $skinTemplateMock;
 	private SkinTemplateNavigationUniversalHandler $handler;
 
@@ -57,8 +58,8 @@ class SkinTemplateNavigationUniversalHandlerTest extends MediaWikiIntegrationTes
 		$specialPageFactoryMock = $this->createMock( SpecialPageFactory::class );
 		$specialPageFactoryMock->method( 'getTitleForAlias' )->willReturn( $titleMock );
 
-		$userOptionsManagerMock = $this->createMock( UserOptionsManager::class );
-		$userOptionsManagerMock
+		$this->userOptionsManagerMock = $this->createMock( UserOptionsManager::class );
+		$this->userOptionsManagerMock
 			->method( 'getBoolOption' )
 			->willReturnReference( $this->hasVisited );
 
@@ -69,7 +70,7 @@ class SkinTemplateNavigationUniversalHandlerTest extends MediaWikiIntegrationTes
 
 		$this->handler = new SkinTemplateNavigationUniversalHandler(
 			$specialPageFactoryMock,
-			$userOptionsManagerMock,
+			$this->userOptionsManagerMock,
 			$userEditTrackerMock
 		);
 	}
@@ -87,11 +88,14 @@ class SkinTemplateNavigationUniversalHandlerTest extends MediaWikiIntegrationTes
 	/** @covers ::isMenuLinkVisible */
 	public function testHideLinkIfNotNamedUser() {
 		$this->isNamed = false;
+		$this->userOptionsManagerMock->expects( $this->never() )->method( 'saveOptions' );
 
 		$this->assertFalse( $this->handler->isMenuLinkVisible(
 			$this->skinTemplateMock,
 			$this->userMock
 		) );
+
+		$this->runDeferredUpdates();
 
 		$this->isNamed = true;
 	}
@@ -99,11 +103,14 @@ class SkinTemplateNavigationUniversalHandlerTest extends MediaWikiIntegrationTes
 	/** @covers ::isMenuLinkVisible */
 	public function testHideLinkIfDisabled() {
 		$this->configMock->set( 'PersonalDashboardUserMenu', false );
+		$this->userOptionsManagerMock->expects( $this->never() )->method( 'saveOptions' );
 
 		$this->assertFalse( $this->handler->isMenuLinkVisible(
 			$this->skinTemplateMock,
 			$this->userMock
 		) );
+
+		$this->runDeferredUpdates();
 
 		$this->configMock->set( 'PersonalDashboardUserMenu', true );
 	}
@@ -111,19 +118,25 @@ class SkinTemplateNavigationUniversalHandlerTest extends MediaWikiIntegrationTes
 	/** @covers ::isMenuLinkVisible */
 	public function testShowLinkIfPreviouslyEligible() {
 		$this->hasVisited = true;
+		$this->userOptionsManagerMock->expects( $this->never() )->method( 'saveOptions' );
 
 		$this->assertTrue( $this->handler->isMenuLinkVisible(
 			$this->skinTemplateMock,
 			$this->userMock
 		) );
 
+		$this->runDeferredUpdates();
+
 		$this->hasVisited = false;
 	}
 
 	/** @covers ::isMenuLinkVisible */
+
+	/** @covers ::saveUserOptionsDeferred */
 	public function testLinkThreshold() {
 		$this->configMock->set( 'PersonalDashboardMinimumEdits', 100 );
 		$this->configMock->set( 'PersonalDashboardMaximumEdits', 500 );
+		$this->userOptionsManagerMock->expects( $this->once() )->method( 'saveOptions' );
 
 		$this->editCount = 99;
 		$this->assertFalse( $this->handler->isMenuLinkVisible(
@@ -142,6 +155,8 @@ class SkinTemplateNavigationUniversalHandlerTest extends MediaWikiIntegrationTes
 			$this->skinTemplateMock,
 			$this->userMock
 		) );
+
+		$this->runDeferredUpdates();
 
 		$this->configMock->set( 'PersonalDashboardMinimumEdits', 0 );
 		$this->configMock->set( 'PersonalDashboardMaximumEdits', 0 );

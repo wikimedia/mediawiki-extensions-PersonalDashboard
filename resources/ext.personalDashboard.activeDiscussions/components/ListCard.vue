@@ -7,7 +7,7 @@
 			<div class="ext-personal-dashboard-active-discussion-card-info">
 				<div class="ext-personal-dashboard-active-discussion-card-info-title-row">
 					<div class="ext-personal-dashboard-active-discussion-card-info-title">
-						{{ discussionTitle }}
+						{{ discussionTitleFormatted }}
 					</div>
 					<div class="ext-personal-dashboard-active-discussions-icon-row">
 						<div class="ext-personal-dashboard-active-discussion-card-info-details">
@@ -57,6 +57,16 @@ module.exports = defineComponent( {
 		};
 	},
 	computed: {
+		discussionTitleFormatted() {
+			if ( !this.discussionTitle ) {
+				return '';
+			}
+
+			const temp = document.createElement( 'div' );
+			temp.innerHTML = this.discussionTitle;
+
+			return temp.innerText;
+		},
 		discussionUrl() {
 			return mw.util.getUrl( this.discussionPage + '#' + this.discussionTitle );
 		},

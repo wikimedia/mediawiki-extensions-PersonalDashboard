@@ -100,17 +100,6 @@ const getWLParams = async () => {
 		params.wlshow += '|!patrolled';
 	}
 
-	if ( mw.config.get( 'wgPersonalDashboardRiskyArticleEditsMlEnabled' ) === true ) {
-		const model = mw.config.get( 'wgPersonalDashboardRiskyArticleEditsMlModel' );
-		if ( model === 'revertrisklanguageagnostic' ) {
-			params.wlshow += '|revertrisklanguageagnostic';
-		}
-
-		if ( model === 'damaging' ) {
-			params.wlshow += '|oresreview';
-		}
-	}
-
 	return params;
 };
 

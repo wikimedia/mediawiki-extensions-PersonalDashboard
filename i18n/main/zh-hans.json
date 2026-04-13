@@ -2,8 +2,10 @@
 	"@metadata": {
 		"authors": [
 			"SaoMikoto",
-			"Saoutax"
+			"Saoutax",
+			"沈澄心"
 		]
 	},
+	"personal-dashboard-module-no-js-fallback": "请启用JavaScript以查看此组件。",
 	"personal-dashboard-survey-text": "[$1 分享反馈]"
 }

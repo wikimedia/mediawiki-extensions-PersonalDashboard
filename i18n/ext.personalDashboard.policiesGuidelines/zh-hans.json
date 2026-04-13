@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Peterxy12"
+			"Peterxy12",
+			"沈澄心"
 		]
 	},
 	"personal-dashboard-policies-guidelines-title": "方针与指引",
@@ -15,9 +16,18 @@
 	"personal-dashboard-policies-guidelines-verifiability-title": "可供查证",
 	"personal-dashboard-policies-guidelines-verifiability-example-1": "突发新闻。",
 	"personal-dashboard-policies-guidelines-verifiability-answer-1-label": "原则上不接受：",
+	"personal-dashboard-policies-guidelines-verifiability-example-2": "来自社交媒体帖子的内容。",
 	"personal-dashboard-policies-guidelines-verifiability-answer-2-label": "不可靠：",
+	"personal-dashboard-policies-guidelines-verifiability-answer-2-text": "来自社交媒体的内容通常不被接受。但如果是由业内知名专家发布，则可以考虑采用。",
+	"personal-dashboard-policies-guidelines-verifiability-example-3": "内容来自可信的学术期刊或书籍。",
 	"personal-dashboard-policies-guidelines-verifiability-answer-3-label": "可靠：",
+	"personal-dashboard-policies-guidelines-verifiability-answer-3-text": "内容应来自于可靠、独立、以事实核查与准确性著称的发表来源。",
 	"personal-dashboard-policies-guidelines-assume-good-faith-title": "假定善意",
+	"personal-dashboard-policies-guidelines-assume-good-faith-definition": "请记住，大多数用户都在努力改进维基百科，而不是故意降低其质量。",
+	"personal-dashboard-policies-guidelines-assume-good-faith-example-1": "“我简直不敢相信你竟然因为编辑格式不正确而搞砸了我的页面，给我停止编辑维基百科！”",
+	"personal-dashboard-policies-guidelines-assume-good-faith-answer-1-label": "非假定善意：",
+	"personal-dashboard-policies-guidelines-assume-good-faith-answer-1-text": "当有编者犯错时，请不要指责他们是恶意行事。",
+	"personal-dashboard-policies-guidelines-assume-good-faith-answer-2-label": "假定善意：",
 	"personal-dashboard-policies-guidelines-examples-button": "范例",
 	"personal-dashboard-policies-guidelines-examples-header": "范例：$1"
 }

@@ -1,10 +1,20 @@
 {
 	"@metadata": {
 		"authors": [
+			"Meno25",
 			"Mohammed Qays"
 		]
 	},
 	"personal-dashboard-onboarding-title": "لوحة التحكم الخاصة بك",
+	"personal-dashboard-onboarding-dont-show-again": "لا تظهر مرة أخرى",
+	"personal-dashboard-onboarding-get-started-button": "ابدأ الآن",
 	"personal-dashboard-onboarding-step-1-title": "أهلاً بك",
-	"personal-dashboard-onboarding-step-3-title": "شاركنا رأيك"
+	"personal-dashboard-onboarding-step-1-body": "بفضل خبرتك في التحرير، نشجعك على مراجعة تعديلات المساهمين الآخرين. تساعدك هذه المنصة المركزية على تصفح ويكيبيديا من خلال عرض التغييرات التي تحتاج إلى مراجعة إلى جانب السياسات والموارد التي يمكن أن ترشدك في اتخاذ قراراتك.",
+	"personal-dashboard-onboarding-step-1-alt": "رسم توضيحي لصفحة تحتوي على ثلاث لوحات تحكم مبسطة منفصلة.",
+	"personal-dashboard-onboarding-step-2-title": "سمات",
+	"personal-dashboard-onboarding-step-2-body": "في هذه النسخة الأولى من لوحة المعلومات، يمكنك مراجعة التعديلات التي قد تحتاج إلى اهتمام، والتعرف على السياسات والإرشادات ذات الصلة، وتتبع الإحصائيات ذات الصلة.",
+	"personal-dashboard-onboarding-step-2-alt": "رسم توضيحي لثلاث لوحات تحكم مبسطة يتم إضافتها إلى الصفحة.",
+	"personal-dashboard-onboarding-step-3-title": "شاركنا رأيك",
+	"personal-dashboard-onboarding-step-3-body": "خلال الأشهر القادمة، نعتزم تخصيص الميزات بناءً على نشاطك في التحرير. نرجو إعلامنا برأيك في هذه الأثناء. لمشاركة ملاحظاتك، أضفنا رابط استطلاع رأي أعلى الصفحة.",
+	"personal-dashboard-onboarding-step-3-alt": "رسم توضيحي للوحة تحكم مبسطة حيث يحتوي الجزء العلوي من الصفحة على قسم أزرق داكن للتأكيد على رابط التعليقات."
 }

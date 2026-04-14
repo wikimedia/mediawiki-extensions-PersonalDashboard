@@ -1,8 +1,13 @@
 {
 	"@metadata": {
 		"authors": [
+			"Meno25",
 			"Mohammed Qays"
 		]
 	},
-	"personal-dashboard-impact-title": "تأثيرك"
+	"personal-dashboard-impact-title": "تأثيرك",
+	"personal-dashboard-impact-thanks-sent": "تم إرسال الشكر",
+	"personal-dashboard-impact-edits-reviewed": "تمت مراجعة التعديلات",
+	"personal-dashboard-impact-edits-reviewed-description": "يحسب التعديلات التي قمت بإلغاءها في آخر 30 يومًا وجميع رسائل الشكر التي أرسلتها.",
+	"personal-dashboard-impact-info-button": "معلومات"
 }

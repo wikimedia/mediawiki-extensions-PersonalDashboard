@@ -1,0 +1,12 @@
+{
+	"@metadata": {
+		"authors": [
+			"Meno25"
+		]
+	},
+	"personal-dashboard-beta-info-chip-text": "بيتا",
+	"personal-dashboard-desc": "لوحة تحكم تجريبية للمشرفين",
+	"personal-dashboard-link-title": "لوحة التحكم",
+	"personal-dashboard-module-no-js-fallback": "يرجى تفعيل جافا سكريبت لعرض هذا المكون.",
+	"personal-dashboard-survey-text": "[ $1 مشاركة التعليقات]"
+}

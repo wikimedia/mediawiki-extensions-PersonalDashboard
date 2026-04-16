@@ -2,6 +2,7 @@
 use MediaWiki\Extension\PersonalDashboard\PersonalDashboardServices;
 use MediaWiki\Extension\PersonalDashboard\Specials\SpecialPersonalDashboard;
 use MediaWiki\Request\FauxRequest;
+use MediaWiki\Tests\Specials\SpecialPageTestBase;
 
 /**
  * @covers \MediaWiki\Extension\PersonalDashboard\Specials\SpecialPersonalDashboard

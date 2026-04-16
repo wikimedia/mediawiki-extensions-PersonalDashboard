@@ -3,8 +3,8 @@
 namespace MediaWiki\Extension\PersonalDashboard\HookHandler;
 
 use MediaWiki\Deferred\DeferredUpdates;
-use MediaWiki\Hook\SkinTemplateNavigation__UniversalHook;
 use MediaWiki\Registration\ExtensionRegistry;
+use MediaWiki\Skin\Hook\SkinTemplateNavigation__UniversalHook;
 use MediaWiki\Skin\SkinTemplate;
 use MediaWiki\SpecialPage\SpecialPageFactory;
 use MediaWiki\User\Options\UserOptionsManager;

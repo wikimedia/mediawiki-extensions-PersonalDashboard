@@ -13,6 +13,7 @@ use MediaWiki\Html\Html;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\User\Options\UserOptionsManager;
+use MediaWiki\Utils\MWCryptRand;
 use MediaWiki\WikiMap\WikiMap;
 use Throwable;
 use Wikimedia\Codex\Utility\Codex;
@@ -216,7 +217,7 @@ class SpecialPersonalDashboard extends SpecialPage {
 	 * @return string
 	 */
 	private function generatePageviewToken() {
-		return \Wikimedia\base_convert( \MWCryptRand::generateHex( 40 ), 16, 32, 32 );
+		return \Wikimedia\base_convert( MWCryptRand::generateHex( 40 ), 16, 32, 32 );
 	}
 
 	/**

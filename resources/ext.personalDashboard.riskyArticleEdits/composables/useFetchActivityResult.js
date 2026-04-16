@@ -6,11 +6,17 @@ const error = ref( null );
 // can't currently import with nested destruct due to our commonjs/es conversion for vitest
 const { utils } = require( 'ext.personalDashboard.common' );
 const { getRandomItems, handleApiErrors, parseApiStatus } = utils;
+const NUM_FEEDS = 2;
+const MAX_API_REQUESTS = 10;
+
+function initializeEmptyFeed( feed ) {
+	return feed === 'recentchanges' ?
+		{ query: { recentchanges: [], pages: [] } } : { query: { watchlist: [] } };
+}
 
 const handleApiData = ( data, limit, feed ) => {
 	if ( !data ) {
-		return feed === 'recentchanges' ?
-			{ query: { recentchanges: [], pages: [] } } : { query: { watchlist: [] } };
+		return initializeEmptyFeed( feed );
 	}
 
 	if ( data.warnings ) {
@@ -21,21 +27,28 @@ const handleApiData = ( data, limit, feed ) => {
 	}
 
 	if ( !data.query || !Array.isArray( data.query[ feed ] ) ) {
-		return feed === 'recentchanges' ?
-			{ query: { recentchanges: [], pages: [] } } : { query: { watchlist: [] } };
+		return initializeEmptyFeed( feed );
 	}
 
 	// Exclude specific tags
 	const excludeTags = [ 'mw-reverted', 'mw-rollback', 'mw-undo' ];
-	const filteredResults = data.query[ feed ].filter(
-		( change ) => !excludeTags.some( ( tag ) => change.tags.includes( tag ) )
-	).map( ( result ) => ( { ...result, feedorigin: feed } ) );
-	data.query[ feed ] = getRandomItems( filteredResults, limit );
-
-	return data;
+	const filteredResultsWithFeedOrigin = data.query[ feed ]
+		.filter(
+			( change ) => !excludeTags.some(
+				( tag ) => ( change.tags || [] ).includes( tag )
+			)
+		)
+		.map( ( result ) => ( { ...result, feedorigin: feed } ) );
+	return {
+		...data,
+		query: {
+			...data.query,
+			[ feed ]: filteredResultsWithFeedOrigin
+		}
+	};
 };
 
-const getRCParams = async () => {
+const getRCParams = async ( offset ) => {
 	const params = {
 		action: 'query',
 		prop: 'description',
@@ -61,7 +74,10 @@ const getRCParams = async () => {
 	};
 
 	const userRights = await mw.user.getRights();
-
+	if ( offset ) {
+		params.rccontinue = offset;
+		params.grccontinue = offset;
+	}
 	if ( userRights && userRights.includes( 'patrol' ) ) {
 		params.rcshow += '|unpatrolled';
 		params.grcshow += '|unpatrolled';
@@ -81,7 +97,7 @@ const getRCParams = async () => {
 	return params;
 };
 
-const getWLParams = async () => {
+const getWLParams = async ( offset ) => {
 	const params = {
 		action: 'query',
 		format: 'json',
@@ -95,6 +111,10 @@ const getWLParams = async () => {
 		wltype: 'edit'
 	};
 
+	if ( offset ) {
+		params.wlcontinue = offset;
+	}
+
 	const userRights = await mw.user.getRights();
 
 	if ( userRights && userRights.includes( 'patrol' ) ) {
@@ -104,60 +124,179 @@ const getWLParams = async () => {
 	return params;
 };
 
+function mergeRecentChangeData( rcData, moreRcData ) {
+	return {
+		...moreRcData,
+		query: {
+			...moreRcData.query,
+			pages: [
+				...rcData.query.pages,
+				...moreRcData.query.pages
+			],
+			recentchanges: [
+				...rcData.query.recentchanges,
+				...moreRcData.query.recentchanges
+			]
+		}
+	};
+}
+
+async function getRecentChangesData( api, limit, maxApiRequests, offset, rcData ) {
+	let apiRequestCount = 0;
+	let recentChangeData = rcData;
+	let rcChangesListLength = recentChangeData.query.recentchanges.length;
+	while ( offset &&
+	( apiRequestCount < maxApiRequests ) &&
+	( rcChangesListLength < limit ) ) {
+		const rcParams = await getRCParams( offset );
+		apiRequestCount++;
+		const moreRcData = await api.get( rcParams ).then(
+			( data ) => handleApiData( data, limit, 'recentchanges' ),
+			( code, data ) => handleApiErrors( code, data )
+		);
+		recentChangeData = mergeRecentChangeData( recentChangeData, moreRcData );
+		rcChangesListLength = recentChangeData.query.recentchanges.length;
+		offset = recentChangeData.continue ? recentChangeData.continue.rccontinue : undefined;
+	}
+	return recentChangeData;
+}
+
+function mergeWatchlistData( watchlistData, moreWatchlistData ) {
+	return {
+		...moreWatchlistData,
+		query: {
+			...moreWatchlistData.query,
+			watchlist: [
+				...watchlistData.query.watchlist,
+				...moreWatchlistData.query.watchlist
+			]
+		}
+	};
+}
+
+async function getWatchListData( api, limit, maxApiRequests, offset, wlData ) {
+	let apiRequestCount = 0;
+	let watchlistData = wlData;
+	let watchlistLength = watchlistData.query.watchlist.length;
+	while ( offset && ( apiRequestCount < maxApiRequests ) && ( watchlistLength < limit ) ) {
+		const wlParams = await getWLParams( offset );
+		apiRequestCount++;
+		const moreWatchlistData = await api.get( wlParams ).then(
+			( data ) => handleApiData( data, limit, 'watchlist' ),
+			( code, data ) => handleApiErrors( code, data )
+		);
+		watchlistData = mergeWatchlistData( watchlistData, moreWatchlistData );
+		watchlistLength = watchlistData.query.watchlist.length;
+		offset = watchlistData.continue ? watchlistData.continue.wlcontinue : undefined;
+	}
+	return watchlistData;
+}
+
+function filterOutDuplicateTitles( rcData, wlTitles ) {
+	const seenTitles = new Set();
+	const wlTitlesSet = new Set( wlTitles );
+	const filteredChanges = rcData.query.recentchanges
+		.filter( ( recentChange ) => wlTitles.length === 0 ||
+			!wlTitlesSet.has( recentChange.title ) )
+		.filter( ( recentChange ) => {
+			if ( seenTitles.has( recentChange.title ) ) {
+				return false;
+			}
+			seenTitles.add( recentChange.title );
+			return true;
+		} );
+	return {
+		...rcData,
+		query: {
+			...rcData.query,
+			recentchanges: filteredChanges
+		}
+	};
+}
+
+async function processRecentChanges( rcData, limit, api, maxApiRequests, wlTitles ) {
+	let data = filterOutDuplicateTitles( rcData, wlTitles );
+	if ( data.query.recentchanges.length < limit ) {
+		const offset =
+			data.continue ? data.continue.rccontinue : undefined;
+		data = await getRecentChangesData( api, limit, maxApiRequests, offset, data );
+		data = filterOutDuplicateTitles( data, wlTitles );
+	}
+	data.query.recentchanges = getRandomItems( data.query.recentchanges, limit );
+	return data;
+}
+
+async function processWatchlistChanges(
+	perFeedLimit,
+	wlData,
+	api,
+	maxApiRequests
+) {
+	let data = wlData;
+	const shouldFetchMore = data.query.watchlist.length > 0 &&
+		data.query.watchlist.length < perFeedLimit;
+	if ( shouldFetchMore ) {
+		const offset = data.continue ? data.continue.wlcontinue : undefined;
+		data = await getWatchListData( api, perFeedLimit, maxApiRequests, offset, data );
+	}
+	data.query.watchlist = getRandomItems( data.query.watchlist, perFeedLimit );
+	return data;
+}
+
+async function mergeFeeds( wlFeedEnabled, limit, api ) {
+	const perFeedLimit = wlFeedEnabled ? Math.ceil( limit / NUM_FEEDS ) : limit;
+	const rcParams = await getRCParams();
+	const rcData = await api.get( rcParams ).then(
+		( data ) => handleApiData( data, perFeedLimit, 'recentchanges' ),
+		( code, data ) => handleApiErrors( code, data )
+	);
+	if ( !wlFeedEnabled ) {
+		const processedRcData =
+			await processRecentChanges( rcData, perFeedLimit, api, MAX_API_REQUESTS, [] );
+		return { ...processedRcData.query, feed: processedRcData.query.recentchanges };
+	} else {
+		const wlParams = await getWLParams();
+		const wlData = await api.get( wlParams ).then(
+			( data ) => handleApiData( data, perFeedLimit, 'watchlist' ),
+			( code, data ) => handleApiErrors( code, data )
+		);
+		// maybe get more changes if needed
+		const processedWatchlistChanges = await processWatchlistChanges(
+			perFeedLimit,
+			wlData,
+			api,
+			MAX_API_REQUESTS );
+
+		const wlTitles = Array.from( wlData.query.watchlist, ( item ) => item.title );
+		// maybe get more changes
+		const amountToFill = Math.max(
+			perFeedLimit,
+			limit - processedWatchlistChanges.query.watchlist.length
+		);
+		const processedRcData = await processRecentChanges( rcData,
+			amountToFill,
+			api,
+			MAX_API_REQUESTS,
+			wlTitles );
+
+		return {
+			...processedRcData.query,
+			...processedWatchlistChanges.query,
+			feed: processedRcData.query.recentchanges
+				.concat( processedWatchlistChanges.query.watchlist )
+		};
+	}
+}
+
 const fetchRecentActivity = async ( limit ) => {
 	loading.value = true;
 	error.value = null;
 	const api = new mw.Api();
-	const rcParams = await getRCParams();
-	const wlParams = await getWLParams();
-	const wlFeedEnabled = mw.config.get( 'wgPersonalDashboardRiskyArticleEditsWlEnabled' ) || false;
-	let fullFeeds = {};
+	const wlFeedEnabled =
+		mw.config.get( 'wgPersonalDashboardRiskyArticleEditsWlEnabled' ) || false;
 	try {
-		const rcData = await api.get( rcParams ).then(
-			( data ) => handleApiData( data, limit, 'recentchanges' ),
-			( code, data ) => handleApiErrors( code, data )
-		);
-
-		if ( wlFeedEnabled ) {
-			const wlData = await api.get( wlParams ).then(
-				( data ) => handleApiData( data, limit, 'watchlist' ),
-				( code, data ) => handleApiErrors( code, data )
-			);
-			fullFeeds = { ...rcData.query, ...wlData.query };
-		} else {
-			fullFeeds = { ...rcData.query };
-		}
-		if ( wlFeedEnabled ) {
-			const halfLimit = Math.ceil( limit / 2 );
-			const wlList = fullFeeds.watchlist || [];
-			const rcList = fullFeeds.recentchanges || [];
-			const wlLength = wlList.length;
-			const rcLength = rcList.length;
-			const wlTitles = Array.from( wlList, ( item ) => item.title );
-
-			// Remove edits from pages that already exist in the watchlist
-			fullFeeds.recentchanges = fullFeeds.recentchanges.filter(
-				( item ) => !wlTitles.includes( item.title ) );
-
-			if ( wlLength < ( limit - halfLimit ) ) {
-				fullFeeds.recentchanges = fullFeeds.recentchanges.slice( 0,
-					halfLimit + ( halfLimit - wlLength ) );
-				fullFeeds.watchlist = fullFeeds.watchlist.slice( 0, wlLength );
-
-			} else if ( rcLength < ( limit - halfLimit ) ) {
-				fullFeeds.recentchanges = fullFeeds.recentchanges.slice( 0, rcLength );
-				fullFeeds.watchlist = fullFeeds.watchlist.slice( 0,
-					halfLimit + ( halfLimit - rcLength ) );
-			} else {
-				fullFeeds.recentchanges = fullFeeds.recentchanges.slice( 0, halfLimit );
-				fullFeeds.watchlist = fullFeeds.watchlist.slice( 0, limit - halfLimit );
-			}
-			fullFeeds.feed = fullFeeds.recentchanges.concat( fullFeeds.watchlist );
-		} else {
-			fullFeeds.recentchanges = fullFeeds.recentchanges.slice( 0, limit );
-			fullFeeds.feed = fullFeeds.recentchanges;
-		}
-
+		const fullFeeds = await mergeFeeds( wlFeedEnabled, limit, api );
+		fullFeeds.feed = fullFeeds.feed.slice( 0, limit );
 		fullFeeds.feed.sort( ( a, b ) => b.timestamp.localeCompare( a.timestamp ) );
 		recentActivityResult.value = fullFeeds;
 	} catch ( err ) {

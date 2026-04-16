@@ -40,6 +40,7 @@ const handleApiErrors = ( code, data ) => {
 			throw new Error( errors.join( '\n' ) );
 		}
 	}
+	throw new Error( code );
 };
 
 module.exports = { getRandomItems, handleApiErrors, parseApiStatus };

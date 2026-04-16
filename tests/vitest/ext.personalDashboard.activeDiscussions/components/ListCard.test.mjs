@@ -21,8 +21,7 @@ test( 'mount component', () => {
 } );
 
 test( 'renders appropriate message when edit is made today', () => {
-	const date = new Date( 2026, 0, 31 );
-	date.setHours( 21, 25 );
+	const date = new Date( 2026, 0, 31, 22, 0 );
 	const expectedDate = '3 hours ago';
 
 	const wrapper = mount( ListCard, {

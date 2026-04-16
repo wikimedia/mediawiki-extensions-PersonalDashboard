@@ -29,7 +29,7 @@
 				<list-card-mobile
 					v-for="rc in recentActivityResult.feed.slice( 0, 1 )"
 					v-bind="rc"
-					:key="`${rendermode}-${rc.rcid}`"
+					:key="`${rendermode}-${rc.feedorigin}-${rc.revid}`"
 					:pages="recentActivityResult.pages">
 				</list-card-mobile>
 			</template>
@@ -37,7 +37,7 @@
 				<list-card
 					v-for="rc in recentActivityResult.feed"
 					v-bind="rc"
-					:key="`${rendermode}-${rc.rcid}`"
+					:key="`${rendermode}-${rc.feedorigin}-${rc.revid}`"
 					:pages="recentActivityResult.pages">
 				</list-card>
 			</template>

@@ -3,8 +3,7 @@ import { mount } from '@vue/test-utils';
 import ListCard from '/resources/ext.personalDashboard.riskyArticleEdits/components/ListCard.vue';
 
 test( 'mount component', () => {
-	const date = new Date();
-	date.setHours( 8, 25 );
+	const date = new Date( 2026, 1, 1, 3, 0 );
 
 	const wrapper = mount( ListCard, {
 		props: {
@@ -36,8 +35,7 @@ test( 'mount component', () => {
 } );
 
 test( 'renders appropriate message when edit is made today', () => {
-	const date = new Date( 2026, 0, 31 );
-	date.setHours( 21, 25 );
+	const date = new Date( 2026, 0, 31, 22, 0 );
 	const expectedDate = '3 hours ago';
 
 	const wrapper = mount( ListCard, {

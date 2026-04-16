@@ -9,7 +9,8 @@ const { getRandomItems, handleApiErrors, parseApiStatus } = utils;
 
 const handleApiData = ( data, limit, feed ) => {
 	if ( !data ) {
-		return;
+		return feed === 'recentchanges' ?
+			{ query: { recentchanges: [], pages: [] } } : { query: { watchlist: [] } };
 	}
 
 	if ( data.warnings ) {
@@ -20,15 +21,15 @@ const handleApiData = ( data, limit, feed ) => {
 	}
 
 	if ( !data.query || !Array.isArray( data.query[ feed ] ) ) {
-		return data;
+		return feed === 'recentchanges' ?
+			{ query: { recentchanges: [], pages: [] } } : { query: { watchlist: [] } };
 	}
 
 	// Exclude specific tags
 	const excludeTags = [ 'mw-reverted', 'mw-rollback', 'mw-undo' ];
 	const filteredResults = data.query[ feed ].filter(
 		( change ) => !excludeTags.some( ( tag ) => change.tags.includes( tag ) )
-	);
-
+	).map( ( result ) => ( { ...result, feedorigin: feed } ) );
 	data.query[ feed ] = getRandomItems( filteredResults, limit );
 
 	return data;
@@ -125,17 +126,6 @@ const fetchRecentActivity = async ( limit ) => {
 			fullFeeds = { ...rcData.query, ...wlData.query };
 		} else {
 			fullFeeds = { ...rcData.query };
-		}
-
-		for ( const feed in fullFeeds ) {
-			// The pages object is not part of the feed, so no need to add feedorigin attribute
-			if ( feed === 'pages' ) {
-				continue;
-			}
-			for ( const f in fullFeeds[ feed ] ) {
-				// Add the feedorigin attribute to distinguish between feeds
-				fullFeeds[ feed ][ f ].feedorigin = feed;
-			}
 		}
 		if ( wlFeedEnabled ) {
 			const halfLimit = Math.ceil( limit / 2 );

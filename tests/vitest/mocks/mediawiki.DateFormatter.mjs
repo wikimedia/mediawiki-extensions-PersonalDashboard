@@ -10,7 +10,7 @@ export function formatTime( date ) {
 
 export function formatRelativeTimeOrDate( date ) {
 	// Making "today's" date fixed because otherwise we will have flaky tests
-	const dateNow = new Date( 2026, 1, 1 );
+	const dateNow = new Date( 2026, 1, 1, 1, 0 );
 	if ( typeof Intl === 'undefined' || typeof Intl.RelativeTimeFormat !== 'function' ) {
 		// Intl.RelativeTimeFormat() is not supported in Safari 11.1, iOS Safari 11.3-11.4
 		return 'invalid date';

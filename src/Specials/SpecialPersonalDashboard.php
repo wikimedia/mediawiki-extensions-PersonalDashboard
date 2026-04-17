@@ -7,7 +7,7 @@ use MediaWiki\Deferred\DeferredUpdates;
 use MediaWiki\Exception\ErrorPageError;
 use MediaWiki\Exception\UserNotLoggedIn;
 use MediaWiki\Extension\PersonalDashboard\IModule;
-use MediaWiki\Extension\PersonalDashboard\PersonalDashboardModuleRegistry;
+use MediaWiki\Extension\PersonalDashboard\PersonalDashboardModuleFactory;
 use MediaWiki\Extension\PersonalDashboard\Util;
 use MediaWiki\Html\Html;
 use MediaWiki\Registration\ExtensionRegistry;
@@ -31,7 +31,7 @@ class SpecialPersonalDashboard extends SpecialPage {
 	private bool $isMobile;
 
 	public function __construct(
-		private readonly PersonalDashboardModuleRegistry $moduleRegistry,
+		private readonly PersonalDashboardModuleFactory $moduleFactory,
 		private readonly UserOptionsManager $userOptionsManager,
 		private readonly StatsFactory $statsFactory,
 	) {
@@ -178,8 +178,9 @@ class SpecialPersonalDashboard extends SpecialPage {
 				break;
 		}
 		$modules = [];
+		$context = $this->getContext();
 		foreach ( $moduleConfig as $moduleId => $_ ) {
-			$modules[$moduleId] = $this->moduleRegistry->getModule( $moduleId, $this->getContext() );
+			$modules[$moduleId] = $this->moduleFactory->getModule( $moduleId, [ $context ] );
 		}
 		return $modules;
 	}

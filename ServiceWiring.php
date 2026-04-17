@@ -1,7 +1,7 @@
 <?php
 
 use MediaWiki\Config\Config;
-use MediaWiki\Extension\PersonalDashboard\PersonalDashboardModuleRegistry;
+use MediaWiki\Extension\PersonalDashboard\PersonalDashboardModuleFactory;
 use MediaWiki\MediaWikiServices;
 
 /** @phpcs-require-sorted-array */
@@ -15,10 +15,13 @@ return [
 		return $services->getConfigFactory()->makeConfig( 'PersonalDashboard' );
 	},
 
-	'PersonalDashboardModuleRegistry' => static function (
+	'PersonalDashboardModuleFactory' => static function (
 		MediaWikiServices $services
-	): PersonalDashboardModuleRegistry {
-		return new PersonalDashboardModuleRegistry( $services );
+	): PersonalDashboardModuleFactory {
+		return new PersonalDashboardModuleFactory(
+			$services->getExtensionRegistry(),
+			$services->getObjectFactory()
+		);
 	},
 
 ];

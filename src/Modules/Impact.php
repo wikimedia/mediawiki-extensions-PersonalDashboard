@@ -2,6 +2,7 @@
 
 namespace MediaWiki\Extension\PersonalDashboard\Modules;
 
+use MediaWiki\Context\IContextSource;
 use MediaWiki\Html\Html;
 use Wikimedia\Rdbms\IConnectionProvider;
 use Wikimedia\Rdbms\IReadableDatabase;
@@ -14,9 +15,10 @@ class Impact extends BaseModule {
 	private IReadableDatabase $dbr;
 
 	public function __construct(
-		IConnectionProvider $connectionProvider
+		IContextSource $context,
+		IConnectionProvider $connectionProvider,
 	) {
-		parent::__construct( 'impact', false );
+		parent::__construct( 'impact', $context );
 		$this->dbr = $connectionProvider->getReplicaDatabase();
 	}
 

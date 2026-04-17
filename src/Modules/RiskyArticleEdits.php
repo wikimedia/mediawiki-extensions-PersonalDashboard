@@ -2,22 +2,17 @@
 
 namespace MediaWiki\Extension\PersonalDashboard\Modules;
 
+use MediaWiki\Context\IContextSource;
 use MediaWiki\Html\Html;
 use MediaWiki\Registration\ExtensionRegistry;
-use MediaWiki\User\UserEditTracker;
 
 /**
  * Class for the RiskyArticleEdits module.
  */
 class RiskyArticleEdits extends BaseModule {
 
-	/**
-	 * @param UserEditTracker $userEditTracker
-	 */
-	public function __construct(
-		private readonly UserEditTracker $userEditTracker
-	) {
-		parent::__construct( 'riskyArticleEdits' );
+	public function __construct( IContextSource $context ) {
+		parent::__construct( 'riskyArticleEdits', $context );
 	}
 
 	/** @inheritDoc */

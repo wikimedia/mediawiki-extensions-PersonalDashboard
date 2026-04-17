@@ -2,14 +2,15 @@
 
 namespace MediaWiki\Extension\PersonalDashboard\Modules;
 
+use MediaWiki\Context\IContextSource;
 use MediaWiki\Html\Html;
 
 /**
  * Class for the Moderation module.
  */
 class PoliciesGuidelines extends BaseModule {
-	public function __construct() {
-		parent::__construct( 'policiesGuidelines' );
+	public function __construct( IContextSource $context ) {
+		parent::__construct( 'policiesGuidelines', $context );
 	}
 
 	/** @inheritDoc */

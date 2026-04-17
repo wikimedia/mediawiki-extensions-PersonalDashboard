@@ -34,8 +34,8 @@ class Banner extends BaseModule {
 	}
 
 	/** @inheritDoc */
-	public function __construct() {
-		parent::__construct( 'banner' );
+	public function __construct( $context ) {
+		parent::__construct( 'banner', $context );
 	}
 
 	/** @inheritDoc */

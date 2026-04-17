@@ -34,11 +34,11 @@ class PersonalDashboardServices {
 		return $this->coreServices->get( 'PersonalDashboardConfig' );
 	}
 
-	public function getPersonalDashboardModuleRegistry(): PersonalDashboardModuleRegistry {
-		return $this->coreServices->get( 'PersonalDashboardModuleRegistry' );
-	}
-
 	public function getLogger(): LoggerInterface {
 		return $this->coreServices->get( 'PersonalDashboardLogger' );
+	}
+
+	public function getPersonalDashboardModuleFactory(): PersonalDashboardModuleFactory {
+		return $this->coreServices->get( 'PersonalDashboardModuleFactory' );
 	}
 }

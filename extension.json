@@ -18,14 +18,13 @@
 		"MediaWiki\\Extension\\PersonalDashboard\\": "src/"
 	},
 	"ServiceWiringFiles": [
-		"ServiceWiring.php",
-		"src/Modules/Wiring.php"
+		"ServiceWiring.php"
 	],
 	"SpecialPages": {
 		"PersonalDashboard": {
 			"class": "MediaWiki\\Extension\\PersonalDashboard\\Specials\\SpecialPersonalDashboard",
 			"services": [
-				"PersonalDashboardModuleRegistry",
+				"PersonalDashboardModuleFactory",
 				"UserOptionsManager",
 				"StatsFactory"
 			]
@@ -431,13 +430,26 @@
 	],
 	"attributes": {
 		"PersonalDashboard": {
-			"Modules": [
-				"ext.personalDashboard.activeDiscussions",
-				"ext.personalDashboard.banner",
-				"ext.personalDashboard.impact",
-				"ext.personalDashboard.policiesGuidelines",
-				"ext.personalDashboard.riskyArticleEdits"
-			]
+			"Modules": {
+				"ext.personalDashboard.activeDiscussions": {
+					"class": "MediaWiki\\Extension\\PersonalDashboard\\Modules\\ActiveDiscussions"
+				},
+				"ext.personalDashboard.banner": {
+					"class": "MediaWiki\\Extension\\PersonalDashboard\\Modules\\Banner"
+				},
+				"ext.personalDashboard.impact": {
+					"class": "MediaWiki\\Extension\\PersonalDashboard\\Modules\\Impact",
+					"services": [
+						"ConnectionProvider"
+					]
+				},
+				"ext.personalDashboard.policiesGuidelines": {
+					"class": "MediaWiki\\Extension\\PersonalDashboard\\Modules\\PoliciesGuidelines"
+				},
+				"ext.personalDashboard.riskyArticleEdits": {
+					"class": "MediaWiki\\Extension\\PersonalDashboard\\Modules\\RiskyArticleEdits"
+				}
+			}
 		}
 	},
 	"manifest_version": 2

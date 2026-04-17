@@ -13,5 +13,6 @@
 	"personal-dashboard-risky-article-edits-footer-preamble": "Погледајте повеќе уредувања на страницата [{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}} скорешни промени]",
 	"personal-dashboard-risky-article-edits-info-time-text-today": "$1, денес",
 	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Нема опис на уредувањето",
-	"personal-dashboard-risky-article-edits-info-button-aria-label": "копче за информации"
+	"personal-dashboard-risky-article-edits-info-button-aria-label": "копче за информации",
+	"personal-dashboard-risky-article-edits-progress-bar-aria-label": "лента за напредок во редови која покажува вчитување на промените за преглед"
 }

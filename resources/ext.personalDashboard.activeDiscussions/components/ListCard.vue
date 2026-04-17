@@ -69,11 +69,21 @@ module.exports = defineComponent( {
 
 			return temp.innerText;
 		},
+		discussionPageFormatted() {
+			if ( !this.discussionPage ) {
+				return '';
+			}
+
+			const temp = document.createElement( 'div' );
+			temp.innerHTML = this.discussionPage;
+
+			return temp.innerText;
+		},
 		discussionUrl() {
-			return mw.util.getUrl( this.discussionPage + '#' + this.discussionTitle );
+			return mw.util.getUrl( this.discussionPageFormatted + '#' + this.discussionTitleFormatted );
 		},
 		commentUrl() {
-			return mw.util.getUrl( this.discussionPage + '#' + this.latestReplyId );
+			return mw.util.getUrl( this.discussionPageFormatted + '#' + this.latestReplyId );
 		},
 		timestampFormatted() {
 			const latestReplyTimestamp = new Date( Date.parse( this.latestReply ) );

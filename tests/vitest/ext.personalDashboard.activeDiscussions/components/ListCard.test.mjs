@@ -71,3 +71,35 @@ test( 'renders discussion title without html markup', async () => {
 
 	expect( 'Test Title' ).toStrictEqual( wrapper.vm.discussionTitleFormatted );
 } );
+
+test( 'renders discussion page without html markup', async () => {
+	const date = new Date( 2024, 11, 2, 4, 29 );
+	const wrapper = mount( ListCard, {
+		props: {
+			discussionTitle: 'Test Title',
+			discussionPage: 'Wikipedia:Village_pump_(idea_lab)#<span_id="id"></span>DiscussionPage',
+			commentCount: 12,
+			authorCount: 4,
+			latestReply: date.toISOString(),
+			latestReplyId: 'foo'
+		}
+	} );
+
+	expect( 'Wikipedia:Village_pump_(idea_lab)#DiscussionPage' ).toStrictEqual( wrapper.vm.discussionPageFormatted );
+} );
+
+test( 'renders discussion URL without html markup', async () => {
+	const date = new Date( 2024, 11, 2, 4, 29 );
+	const wrapper = mount( ListCard, {
+		props: {
+			discussionTitle: 'Test Title',
+			discussionPage: 'Wikipedia:Village_pump_(idea_lab)#<span_id="id"></span>DiscussionPage',
+			commentCount: 12,
+			authorCount: 4,
+			latestReply: date.toISOString(),
+			latestReplyId: 'foo'
+		}
+	} );
+
+	expect( '/wiki/Wikipedia:Village_pump_(idea_lab)#DiscussionPage#Test_Title' ).toStrictEqual( wrapper.vm.discussionUrl );
+} );

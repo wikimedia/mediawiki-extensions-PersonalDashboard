@@ -44,17 +44,4 @@ class SpecialPersonalDashboardTest extends SpecialPageTestBase {
 		$this->assertStringContainsString( 'https://www.mediawiki.org/wiki/Talk:Moderator_Tools/Dashboard',
 			$sp->createSurveyLinkBetaChip() );
 	}
-
-	public function testSavesPageVisitedUserOptionWhenVisited() {
-		$user = new TestUser( 'ATestUser' );
-		$req = new FauxRequest();
-
-		$this->executeSpecialPage( '', $req, null, $user->getUser() );
-		$this->runDeferredUpdates();
-
-		$actual = $this->getServiceContainer()
-			->getUserOptionsManager()
-			->getBoolOption( $user->getUser(), 'personaldashboard-visited' );
-		$this->assertSame( true, $actual );
-	}
 }

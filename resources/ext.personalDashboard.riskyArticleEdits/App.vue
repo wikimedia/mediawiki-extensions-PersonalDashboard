@@ -139,11 +139,20 @@ module.exports = defineComponent( {
 				optionvalue: 0,
 				formatversion: 2
 			} );
+		},
+		async markPersonalDashboardVisited() {
+			await api.postWithEditToken( {
+				action: 'options',
+				optionname: 'personaldashboard-visited',
+				optionvalue: '1',
+				formatversion: 2
+			} );
 		}
 	},
 	mounted() {
 		this.observer.observe( this.moduleRef );
 		this.fetchRecentActivity( this.limit );
+		this.markPersonalDashboardVisited();
 	}
 } );
 </script>

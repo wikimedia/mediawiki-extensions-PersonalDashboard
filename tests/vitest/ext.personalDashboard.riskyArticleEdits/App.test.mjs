@@ -35,16 +35,40 @@ beforeEach( () => {
 } );
 
 test( 'mount component', () => {
+	mw.Api.mock( ( params, options ) => {
+		if ( options.type === 'POST' &&
+			params.action === 'options' &&
+			params.optionname === 'personaldashboard-visited' &&
+			params.optionvalue === '1' ) {
+			return {};
+		}
+	} );
 	const wrapper = mount( RecentActivity );
 	expect( wrapper.element ).toMatchSnapshot();
 } );
 
 test( 'shows progress bar when loading', () => {
+	mw.Api.mock( ( params, options ) => {
+		if ( options.type === 'POST' &&
+			params.action === 'options' &&
+			params.optionname === 'personaldashboard-visited' &&
+			params.optionvalue === '1' ) {
+			return {};
+		}
+	} );
 	const wrapper = mount( RecentActivity );
 	expect( wrapper.find( '.cdx-progress-bar' ).exists() ).toStrictEqual( true );
 } );
 
 test( 'shows error message when there is one', () => {
+	mw.Api.mock( ( params, options ) => {
+		if ( options.type === 'POST' &&
+			params.action === 'options' &&
+			params.optionname === 'personaldashboard-visited' &&
+			params.optionvalue === '1' ) {
+			return {};
+		}
+	} );
 	loading.value = false;
 	error.value = new Error( 'An Error' );
 
@@ -154,6 +178,12 @@ test( 'shows header message by default on mobile and updates preference when clo
 			params.optionname === 'personaldashboard-risky-articles-info' &&
 			params.optionvalue === 0 ) {
 			closed = true;
+		}
+		if ( options.type === 'POST' &&
+			params.action === 'options' &&
+			params.optionname === 'personaldashboard-visited' &&
+			params.optionvalue === '1' ) {
+			return {};
 		}
 	} );
 

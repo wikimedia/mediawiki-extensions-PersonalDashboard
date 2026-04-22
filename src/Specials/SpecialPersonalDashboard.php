@@ -3,7 +3,6 @@
 namespace MediaWiki\Extension\PersonalDashboard\Specials;
 
 use MediaWiki\Config\ConfigException;
-use MediaWiki\Deferred\DeferredUpdates;
 use MediaWiki\Exception\ErrorPageError;
 use MediaWiki\Exception\UserNotLoggedIn;
 use MediaWiki\Extension\PersonalDashboard\IModule;
@@ -77,13 +76,6 @@ class SpecialPersonalDashboard extends SpecialPage {
 
 		$userOptionsManager = $this->userOptionsManager;
 		if ( !$userOptionsManager->getBoolOption( $user, 'personaldashboard-visited' ) ) {
-			$userOptionsManager->setOption( $user, 'personaldashboard-visited', true );
-			DeferredUpdates::addCallableUpdate(
-				static function () use ( $userOptionsManager, $user ) {
-					$userOptionsManager->saveOptions( $user );
-				}
-			);
-
 			$out->addHTML( Html::element( 'div', [ 'id' => 'personal-dashboard-onboarding' ] ) );
 			$out->addModules( 'ext.personalDashboard.onboarding' );
 		}

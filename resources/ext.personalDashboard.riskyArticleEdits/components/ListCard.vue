@@ -1,49 +1,52 @@
 <template>
 	<cdx-card
-		class="ext-personal-dashboard-moderation-card"
+		class="personal-dashboard-review-changes__card"
 		:url="diffUrl"
 		target="_blank"
 		role="button"
 		:data-feedorigin="feedorigin">
 		<template #description>
-			<div class="ext-personal-dashboard-moderation-card-info">
-				<div class="ext-personal-dashboard-moderation-card-info-title-row">
-					<span class="ext-personal-dashboard-moderation-card-info-title">
+			<div class="personal-dashboard-review-changes__card__container">
+				<div class="personal-dashboard-review-changes__card__header">
+					<div class="personal-dashboard-review-changes__card__title">
 						{{ title }}
-					</span>
-
-					<span class="ext-personal-dashboard-moderation-card-info-description">
-						{{ description }}
-					</span>
-
-					<span class="ext-personal-dashboard-moderation-card-info-title-row-additional">
-						{{ timestampFormatted }}
-					</span>
-				</div>
-
-				<div class="ext-personal-dashboard-moderation-card-info-title-row">
-					<change-number :oldlen :newlen></change-number>
-
-					<span class="ext-personal-dashboard-moderation-card-separator">∙</span>
-
-					<div v-if="comment" class="ext-personal-dashboard-moderation-card-comment">
-						{{ comment }}
 					</div>
 
-					<span
-						v-else
-						class="ext-personal-dashboard-moderation-card-missing-comment-message">
-						{{ missingCommentMessage }}
-					</span>
+					<div class="personal-dashboard-review-changes__card__description">
+						{{ description }}
+					</div>
 				</div>
 
-				<div class="ext-personal-dashboard-moderation-card-info-title-row">
-					<user-info-button v-if="!isMobile" :username="user"></user-info-button>
+				<div class="personal-dashboard-review-changes__card__subheader">
+					<div class="personal-dashboard-review-changes__card__icon">
+						<cdx-icon
+							v-if="isMobile || !showUserInfoCard"
+							:icon="userIcon"
+							size="small">
+						</cdx-icon>
 
-					<creator-byline
-						:creator-name="user"
-						:creator-is-temp-account="isTempUser"
-					></creator-byline>
+						<user-info-button v-else :username="user"></user-info-button>
+					</div>
+
+					<div class="personal-dashboard-review-changes__card__username">
+						{{ user }}
+					</div>
+
+					<div class="personal-dashboard-review-changes__card__separator">
+						⋅
+					</div>
+
+					<div class="personal-dashboard-review-changes__card__timestamp">
+						{{ timestampFormatted }}
+					</div>
+				</div>
+
+				<div v-if="comment" class="personal-dashboard-review-changes__card__summary">
+					{{ comment }}
+				</div>
+
+				<div v-else class="personal-dashboard-review-changes__card__summary--missing">
+					{{ missingCommentMessage }}
 				</div>
 			</div>
 		</template>
@@ -52,17 +55,15 @@
 
 <script>
 const { defineComponent, defineAsyncComponent, toRaw } = require( 'vue' );
-const { CdxCard } = require( '../codex.js' );
-const ChangeNumber = require( './ChangeNumber.vue' );
-const CreatorByline = require( './CreatorByline.vue' );
+const { CdxCard, CdxIcon } = require( '../codex.js' );
+const { cdxIconUserAvatar, cdxIconUserTemporary } = require( '../icons.json' );
 const { formatRelativeTimeOrDate } = require( 'mediawiki.DateFormatter' );
 
 module.exports = defineComponent( {
 	name: 'ListCard',
 	components: {
 		CdxCard,
-		ChangeNumber,
-		CreatorByline,
+		CdxIcon,
 		UserInfoButton: defineAsyncComponent( {
 			loader: () => new Promise( ( resolve ) => {
 				mw.loader.using( 'ext.checkUser.userInfoCard', ( require ) => {
@@ -74,10 +75,8 @@ module.exports = defineComponent( {
 	},
 	props: {
 		title: { type: String, required: true },
-		newlen: { type: Number, required: true },
 		// eslint-disable-next-line camelcase, vue/prop-name-casing
 		old_revid: { type: Number, required: true },
-		oldlen: { type: Number, required: true },
 		pageid: { type: Number, required: true },
 		revid: { type: Number, required: true },
 		user: { type: String, required: true },
@@ -89,6 +88,7 @@ module.exports = defineComponent( {
 	},
 	setup() {
 		return {
+			showUserInfoCard: mw.user.options.get( 'checkuser-userinfocard-enable' ),
 			missingCommentMessage: mw.msg( 'personal-dashboard-risky-article-edits-list-card-no-comment-message' )
 		};
 	},
@@ -123,8 +123,10 @@ module.exports = defineComponent( {
 
 			return ( page && page.description ) ? page.description : '';
 		},
-		isTempUser() {
-			return mw.util.isTemporaryUser( this.user );
+		userIcon() {
+			return mw.util.isTemporaryUser( this.user ) ?
+				cdxIconUserTemporary :
+				cdxIconUserAvatar;
 		}
 	},
 	mounted() {
@@ -136,77 +138,86 @@ module.exports = defineComponent( {
 <style lang="less">
 @import 'mediawiki.skin.variables.less';
 
-.cdx-card.ext-personal-dashboard-moderation-card {
-	border-left: 0;
-	border-right: 0;
-	border-radius: 0;
-	border-bottom: 0;
-	border-color: @border-color-subtle;
-	padding: 0.5rem;
+.personal-dashboard-review-changes__card {
+	&.cdx-card {
+		padding: @spacing-100;
+		border-color: transparent;
 
-	&:hover {
-		background-color: @background-color-interactive;
-		border-color: @border-color-subtle;
+		&:hover {
+			border-color: @border-color-subtle;
+		}
+
+		&:visited {
+			background-color: @background-color-neutral-subtle;
+		}
 	}
 
 	.cdx-card__text {
 		width: 100%;
 	}
 
-	&:last-child {
-		border-bottom: 1px solid @border-color-subtle;
+	.cdx-card__text__description {
+		margin-top: 0;
 	}
 
-	.ext-personal-dashboard-moderation-card-icon {
-		color: @color-subtle;
-	}
-
-	.ext-personal-dashboard-moderation-card-info {
+	&__container {
 		display: flex;
 		flex-direction: column;
-		gap: 0.44rem;
+		gap: @spacing-25;
+		color: @color-emphasized;
+		line-height: @line-height-x-small;
 	}
 
-	.ext-personal-dashboard-moderation-card-info-title-row {
+	&__header {
 		display: flex;
+		align-items: center;
+		gap: @spacing-35;
+	}
 
-		.ext-personal-dashboard-moderation-card-info-title {
-			font-weight: @font-weight-bold;
-			line-height: @line-height-medium;
-			color: @color-base;
+	&__title {
+		font-weight: @font-weight-bold;
+	}
+
+	&__title,
+	&__description,
+	&__username,
+	&__timestamp,
+	&__summary {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	&__subheader {
+		display: flex;
+		align-items: center;
+		gap: @spacing-25;
+	}
+
+	&__icon .cdx-icon {
+		color: @color-emphasized;
+	}
+
+	&__username a {
+		font-weight: @font-weight-bold;
+
+		&:hover,
+		&:focus {
+			text-decoration: none;
 		}
 
-		.ext-personal-dashboard-moderation-card-comment {
-			overflow: hidden;
-			text-overflow: ellipsis;
-			text-wrap: nowrap;
+		&:visited {
+			color: @color-emphasized;
 		}
 	}
 
-	.ext-personal-dashboard-moderation-card-info-title-row-additional {
-		margin-left: auto;
-	}
-
-	.ext-personal-dashboard-moderation-card-missing-comment-message {
+	&__summary--missing {
 		font-style: italic;
 	}
 
-	.ext-personal-dashboard-moderation-card-separator {
-		padding: 0 0.25rem;
-		font-weight: @font-weight-normal;
-	}
-
-	.ext-personal-dashboard-moderation-card-info-description {
-		line-height: @line-height-medium;
-		padding-left: 0.25rem;
-	}
-
-	.mw-tempuserlink {
-		background-color: @background-color-interactive;
-		outline: 2px solid @background-color-interactive;
-		border-radius: @border-radius-base;
-		white-space: nowrap;
-		margin-left: 2px;
+	&:visited &__container,
+	&:visited &__icon .cdx-icon {
+		color: @color-subtle;
 	}
 }
 </style>

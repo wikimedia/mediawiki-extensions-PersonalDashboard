@@ -19,11 +19,6 @@ class ActiveDiscussions extends BaseModule {
 	}
 
 	/** @inheritDoc */
-	protected function getSubheaderText() {
-		return $this->msg( 'personal-dashboard-active-discussions-description' )->text();
-	}
-
-	/** @inheritDoc */
 	protected function getBody() {
 		return implode( "\n", [
 			Html::rawElement( 'div',

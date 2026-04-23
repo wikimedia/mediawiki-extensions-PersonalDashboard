@@ -2,8 +2,9 @@
 
 exports[`mount component 1`] = `
 <a
-  class="cdx-card cdx-card--is-link ext-personal-dashboard-active-discussion-card"
+  class="cdx-card cdx-card--is-link personal-dashboard-active-discussions__card"
   href="/wiki/Wikipedia:Village_Pump#Test_Title"
+  role="button"
   target="_blank"
 >
   <!--v-if-->
@@ -21,48 +22,24 @@ exports[`mount component 1`] = `
     >
       
       <div
-        class="ext-personal-dashboard-active-discussion-card-info"
+        class="personal-dashboard-active-discussions__card__container"
       >
         <div
-          class="ext-personal-dashboard-active-discussion-card-info-title-row"
+          class="personal-dashboard-active-discussions__card__header"
         >
           <div
-            class="ext-personal-dashboard-active-discussion-card-info-title"
+            class="personal-dashboard-active-discussions__card__title"
           >
             Test Title
           </div>
           <div
-            class="ext-personal-dashboard-active-discussions-icon-row"
+            class="personal-dashboard-active-discussions__card__icons"
           >
             <div
-              class="ext-personal-dashboard-active-discussion-card-info-details"
+              class="personal-dashboard-active-discussions__card__comments"
             >
               <span
-                class="cdx-icon cdx-icon--medium"
-              >
-                <svg
-                  aria-hidden="true"
-                  height="20"
-                  viewBox="0 0 20 20"
-                  width="20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <!--v-if-->
-                  <g>
-                    <path
-                      d="M10 12.5c-5.92 0-9 3.5-9 5.5v1h18v-1c0-2-3.08-5.5-9-5.5"
-                    />
-                    <circle
-                      cx="10"
-                      cy="6"
-                      r="5"
-                    />
-                  </g>
-                </svg>
-              </span>
-               4 
-              <span
-                class="cdx-icon cdx-icon--medium"
+                class="cdx-icon cdx-icon--small"
               >
                 <svg
                   aria-hidden="true"
@@ -86,25 +63,51 @@ exports[`mount component 1`] = `
               </span>
                12
             </div>
+            <div
+              class="personal-dashboard-active-discussions__card__authors"
+            >
+              <span
+                class="cdx-icon cdx-icon--small"
+              >
+                <svg
+                  aria-hidden="true"
+                  height="20"
+                  viewBox="0 0 20 20"
+                  width="20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <!--v-if-->
+                  <g>
+                    <path
+                      d="M10 11c-5.92 0-8 3-8 5v3h16v-3c0-2-2.08-5-8-5"
+                    />
+                    <circle
+                      cx="10"
+                      cy="5.5"
+                      r="4.5"
+                    />
+                  </g>
+                </svg>
+              </span>
+               4
+            </div>
           </div>
         </div>
         <div
-          class="ext-personal-dashboard-active-discussion-card-info-title-row"
+          class="personal-dashboard-active-discussions__card__subheader"
         >
           Wikipedia:Village Pump
         </div>
         <div
-          class="ext-personal-dashboard-active-discussion-card-info-title-row"
+          class="personal-dashboard-active-discussions__card__latest"
         >
-          <!-- eslint-disable-next-line max-len -->
-          <span
-            class="ext-personal-dashboard-active-discussion-card-info-title-row-additional"
+          ⧼personal-dashboard-active-discussions-latest-comment⧽ 
+          <a
+            href="/wiki/Wikipedia:Village_Pump#foo"
+            target="_blank"
           >
-            ⧼personal-dashboard-active-discussions-latest-comment⧽ 
-            <a>
-              in 7 hours
-            </a>
-          </span>
+            in 7 hours
+          </a>
         </div>
       </div>
       

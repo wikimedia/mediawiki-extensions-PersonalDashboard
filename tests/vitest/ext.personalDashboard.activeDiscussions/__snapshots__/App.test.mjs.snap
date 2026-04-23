@@ -5,12 +5,20 @@ exports[`mount component 1`] = `
   data-v-app=""
 >
   
-  <div
-    class="personal-dashboard-active-discussions__container"
-  >
-    <!--v-if-->
-    <!--v-if-->
+  <div>
+    <div
+      aria-disabled="false"
+      aria-hidden="true"
+      aria-label="⧼personal-dashboard-active-discussions-progress-bar-aria-label⧽"
+      class="cdx-progress-bar cdx-progress-bar--inline cdx-progress-bar--enabled"
+      role="progressbar"
+    >
+      <div
+        class="cdx-progress-bar__bar"
+      />
+    </div>
   </div>
+  <!--v-if-->
   <!--v-if-->
   
 </div>

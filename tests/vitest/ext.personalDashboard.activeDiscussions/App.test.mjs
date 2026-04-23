@@ -1,19 +1,33 @@
-import { test, expect, vi } from 'vitest';
+import { vi, beforeEach, test, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
-import App from '/resources/ext.personalDashboard.activeDiscussions/App.vue';
 import { ref } from 'vue';
 
-const mockFetchActiveDiscussions = vi.fn();
-const loading = ref( true );
-const error = ref( null );
-const activeDiscussionsResult = ref( null );
+vi.mock( '/resources/ext.personalDashboard.activeDiscussions/composables/useFetchActiveDiscussionsResult.js', () => {
+	const mock = {
+		activeDiscussionsResult: ref( null ),
+		loading: ref( true ),
+		error: ref( null ),
+		fetchActiveDiscussions: vi.fn()
+	};
+	return { default: () => mock };
+} );
 
-vi.mock( 'ext.personalDashboard.common', () => ( { useFetchActiveDiscussionsResult: () => ( {
+import useFetchActiveDiscussionsResult from '/resources/ext.personalDashboard.activeDiscussions/composables/useFetchActiveDiscussionsResult.js';
+const {
 	activeDiscussionsResult,
 	loading,
 	error,
-	fetchActiveDiscussions: mockFetchActiveDiscussions
-} ) } ) );
+	fetchActiveDiscussions
+} = useFetchActiveDiscussionsResult();
+
+import ActiveDiscussions from '/resources/ext.personalDashboard.activeDiscussions/App.vue';
+
+beforeEach( () => {
+	activeDiscussionsResult.value = null;
+	loading.value = true;
+	error.value = null;
+	fetchActiveDiscussions.mockReset();
+} );
 
 test( 'mount component', () => {
 	const card = document.createElement( 'div' );
@@ -24,6 +38,6 @@ test( 'mount component', () => {
 	header.className = 'personal-dashboard-module-header';
 	card.appendChild( header );
 
-	const wrapper = mount( App );
+	const wrapper = mount( ActiveDiscussions );
 	expect( wrapper.element ).toMatchSnapshot();
 } );

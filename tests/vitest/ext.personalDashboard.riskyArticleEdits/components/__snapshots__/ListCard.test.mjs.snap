@@ -2,10 +2,12 @@
 
 exports[`mount component 1`] = `
 <a
-  class="cdx-card cdx-card--is-link ext-personal-dashboard-moderation-card"
+  class="cdx-card cdx-card--is-link personal-dashboard-review-changes__card"
   data-feedorigin="recentchanges"
   href="/w/index.php?title=TestTitle&curid=8675309&diff=0&oldid=0"
+  newlen="0"
   ns="0"
+  oldlen="0"
   rcid="0"
   role="button"
   tags="test"
@@ -27,60 +29,72 @@ exports[`mount component 1`] = `
     >
       
       <div
-        class="ext-personal-dashboard-moderation-card-info"
+        class="personal-dashboard-review-changes__card__container"
       >
         <div
-          class="ext-personal-dashboard-moderation-card-info-title-row"
+          class="personal-dashboard-review-changes__card__header"
         >
-          <span
-            class="ext-personal-dashboard-moderation-card-info-title"
+          <div
+            class="personal-dashboard-review-changes__card__title"
           >
             TestTitle
-          </span>
-          <span
-            class="ext-personal-dashboard-moderation-card-info-description"
+          </div>
+          <div
+            class="personal-dashboard-review-changes__card__description"
           >
             a description
-          </span>
-          <span
-            class="ext-personal-dashboard-moderation-card-info-title-row-additional"
-          >
-            in 2 hours
-          </span>
-        </div>
-        <div
-          class="ext-personal-dashboard-moderation-card-info-title-row"
-        >
-          <span
-            class="ext-personal-dashboard-moderation-card-info-change-number-none"
-          >
-            0
-          </span>
-          <span
-            class="ext-personal-dashboard-moderation-card-separator"
-          >
-            ∙
-          </span>
-          <div
-            class="ext-personal-dashboard-moderation-card-comment"
-          >
-            TestComment
           </div>
         </div>
         <div
-          class="ext-personal-dashboard-moderation-card-info-title-row"
+          class="personal-dashboard-review-changes__card__subheader"
         >
-          <!---->
-          
-          <a
-            class="cdx-link mw-userlink"
-            href="/wiki/User:TestUser"
-            target="_blank"
+          <div
+            class="personal-dashboard-review-changes__card__icon"
+          >
+            <span
+              class="cdx-icon cdx-icon--small"
+            >
+              <svg
+                aria-hidden="true"
+                height="20"
+                viewBox="0 0 20 20"
+                width="20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <!--v-if-->
+                <g>
+                  <path
+                    d="M10 11c-5.92 0-8 3-8 5v3h16v-3c0-2-2.08-5-8-5"
+                  />
+                  <circle
+                    cx="10"
+                    cy="5.5"
+                    r="4.5"
+                  />
+                </g>
+              </svg>
+            </span>
+          </div>
+          <div
+            class="personal-dashboard-review-changes__card__username"
           >
             TestUser
-          </a>
-          <!--v-if-->
-          
+          </div>
+          <div
+            class="personal-dashboard-review-changes__card__separator"
+          >
+             ⋅ 
+          </div>
+          <div
+            class="personal-dashboard-review-changes__card__timestamp"
+          >
+            in 2 hours
+          </div>
+        </div>
+        <div
+          class="personal-dashboard-review-changes__card__summary"
+        >
+          TestComment
         </div>
       </div>
       

@@ -1,40 +1,41 @@
 <template>
-	<div class="personal-dashboard-active-discussions__container">
-		<div v-if="loading">
-			<cdx-progress-bar inline :aria-label="progressBarAriaLabel"></cdx-progress-bar>
-		</div>
-
-		<div v-else-if="error">
-			<p>Error: {{ error.message }}</p>
-		</div>
-		<div v-if="activeDiscussionsResult">
-			<template v-if="isMobile && rendermode === 'mobile-summary'">
-				<list-card-mobile
-					v-for="ac in activeDiscussionsResult.slice( 0, 1 )"
-					v-bind="ac"
-					:key="ac.discussionTitle">
-				</list-card-mobile>
-			</template>
-			<template v-else>
-				<list-card
-					v-for="ac in activeDiscussionsResult"
-					v-bind="ac"
-					:key="ac.discussionTitle">
-				</list-card>
-			</template>
-		</div>
+	<div v-if="loading">
+		<cdx-progress-bar inline :aria-label="progressBarAriaLabel"></cdx-progress-bar>
 	</div>
 
-	<div v-if="isMobile">
-		<span class="ext-personal-dashboard-active-discussions-footer">
-			<cdx-button
-				id="personal-dashboard-go-to-active-discussions"
-				:aria-label="buttonAriaLabel"
-				action="progressive"
-				weight="primary">
-				{{ footerLinkText }}
-			</cdx-button>
-		</span>
+	<div v-else-if="error">
+		<p>Error: {{ error.message }}</p>
+	</div>
+
+	<template v-if="activeDiscussionsResult">
+		<div v-if="rendermode === 'mobile-summary'">
+			<list-card-mobile
+				v-for="ac in activeDiscussionsResult.slice( 0, 1 )"
+				v-bind="ac"
+				:key="ac.discussionTitle">
+			</list-card-mobile>
+		</div>
+
+		<div v-else class="personal-dashboard-active-discussions__container">
+			<list-card
+				v-for="ac in activeDiscussionsResult"
+				v-bind="ac"
+				:key="ac.discussionTitle"
+				:is-mobile="isMobile">
+			</list-card>
+		</div>
+	</template>
+
+	<div
+		v-if="rendermode === 'mobile-summary'"
+		class="personal-dashboard-active-discussions__footer">
+		<cdx-button
+			id="personal-dashboard-go-to-active-discussions"
+			:aria-label="buttonAriaLabel"
+			action="progressive"
+			weight="primary">
+			{{ footerLinkText }}
+		</cdx-button>
 	</div>
 </template>
 
@@ -56,12 +57,14 @@ module.exports = defineComponent( {
 	setup() {
 		const isMobile = mw.config.get( 'wgMFMode' ) !== null;
 		const limit = isMobile ? 10 : 3;
+
 		const {
 			activeDiscussionsResult,
 			loading,
 			error,
 			fetchActiveDiscussions
 		} = useFetchActiveDiscussionsResult();
+
 		return {
 			isMobile,
 			limit,
@@ -84,21 +87,42 @@ module.exports = defineComponent( {
 <style lang="less">
 @import 'mediawiki.skin.variables.less';
 
-.personal-dashboard-module-activeDiscussions {
-	.personal-dashboard-module-body {
-		padding-right: 1rem;
-	}
-}
+.personal-dashboard {
+	&-module {
+		&-activeDiscussions&-desktop & {
+			&-header {
+				border-bottom: @border-subtle;
+				margin: 0;
+				padding: @spacing-100;
+			}
 
-.ext-personal-dashboard-active-discussions-footer {
-	.cdx-button {
-		width: 100%;
-		max-width: none;
+			&-body {
+				margin: 0;
+			}
+		}
 	}
 
-	@media all and ( max-width: @max-width-breakpoint-mobile ) {
-		.cdx-button {
+	&-active-discussions {
+		&__container {
+			display: flex;
+			flex-direction: column;
+			gap: @spacing-25;
+			background: @background-color-neutral;
+			padding: @spacing-25;
+
+			.personal-dashboard-module-route-activeDiscussions & {
+				margin: @spacing-0;
+
+				@media screen and ( max-width: @max-width-breakpoint-mobile ) {
+					margin-left: -@spacing-100;
+					margin-right: -@spacing-100;
+				}
+			}
+		}
+
+		&__footer .cdx-button {
 			width: 100%;
+			max-width: none;
 		}
 	}
 }

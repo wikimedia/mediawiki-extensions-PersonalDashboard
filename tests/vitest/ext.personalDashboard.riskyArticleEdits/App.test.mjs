@@ -1,4 +1,4 @@
-import { test, expect, beforeEach, vi } from 'vitest';
+import { vi, beforeEach, test, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
 import { ref } from 'vue';
 
@@ -120,7 +120,6 @@ test( 'shows up to 5 recent changes with information', () => {
 	expect( wrapper.text() ).toContain( 'Article Title' );
 	expect( wrapper.text() ).toContain( 'A comment' );
 	expect( wrapper.text() ).toContain( 'A description' );
-	expect( wrapper.text() ).toContain( '+230' );
 	expect( wrapper.text() ).toContain( '1 year ago' );
 } );
 
@@ -165,7 +164,6 @@ test( 'shows up to 10 recent changes with information when on mobile view', () =
 	expect( wrapper.text() ).toContain( 'Article Title' );
 	expect( wrapper.text() ).toContain( 'A comment' );
 	expect( wrapper.text() ).toContain( 'A description' );
-	expect( wrapper.text() ).toContain( '+230' );
 	expect( wrapper.text() ).toContain( '1 year ago' );
 } );
 
@@ -193,7 +191,7 @@ test( 'shows header message by default on mobile and updates preference when clo
 
 	const wrapper = mount( RecentActivity );
 
-	const messageHeader = wrapper.find( '.ext-personal-dashboard-recent-activity-header' );
+	const messageHeader = wrapper.find( '.personal-dashboard-review-changes__message' );
 	expect( messageHeader.exists() ).toStrictEqual( true );
 
 	const dismissButton = wrapper.find( '.cdx-message__dismiss-button' );
@@ -208,7 +206,7 @@ test( 'shows header message by default on non-mobile', () => {
 	loading.value = false;
 
 	const wrapper = mount( RecentActivity );
-	expect( wrapper.findComponent( '.ext-personal-dashboard-recent-activity-header' ).exists() ).toStrictEqual( true );
+	expect( wrapper.findComponent( '.personal-dashboard-review-changes__message' ).exists() ).toStrictEqual( true );
 } );
 
 test( 'does not show header message by default on mobile summary rendermode', () => {
@@ -222,7 +220,7 @@ test( 'does not show header message by default on mobile summary rendermode', ()
 		}
 	} );
 
-	expect( wrapper.find( '.ext-personal-dashboard-recent-activity-header' ).exists() ).toStrictEqual( false );
+	expect( wrapper.find( '.personal-dashboard-review-changes__message' ).exists() ).toStrictEqual( false );
 } );
 
 test( 'does not show header message if preference is off', async () => {
@@ -231,5 +229,5 @@ test( 'does not show header message if preference is off', async () => {
 	loading.value = false;
 
 	const wrapper = mount( RecentActivity );
-	expect( wrapper.find( '.ext-personal-dashboard-recent-activity-header' ).exists() ).toStrictEqual( false );
+	expect( wrapper.find( '.personal-dashboard-review-changes__message' ).exists() ).toStrictEqual( false );
 } );

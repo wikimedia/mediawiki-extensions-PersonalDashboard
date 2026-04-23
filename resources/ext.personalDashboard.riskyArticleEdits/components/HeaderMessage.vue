@@ -1,33 +1,32 @@
 <template>
-	<cdx-message
-		:allow-user-dismiss="true"
-		class="ext-personal-dashboard-recent-activity-header"
-		@user-dismissed="$emit( 'dismissed' )">
-		{{ message }}
+	<div class="personal-dashboard-review-changes__message">
+		<cdx-message :allow-user-dismiss="true" @user-dismissed="$emit( 'dismissed' )">
+			{{ message }}
 
-		<cdx-toggle-button
-			ref="triggerElement"
-			v-model="showPopover"
-			:aria-label="buttonAriaLabel"
-			class="cdx-button--icon-only ext-personal-dashboard-recent-activity-header-link"
-			quiet>
-			{{ messagePopover }}
-		</cdx-toggle-button>
+			<cdx-toggle-button
+				ref="triggerElement"
+				v-model="showPopover"
+				:aria-label="buttonAriaLabel"
+				class="cdx-button--icon-only personal-dashboard-review-changes__message__link"
+				quiet>
+				{{ messagePopover }}
+			</cdx-toggle-button>
 
-		<cdx-popover
-			v-if="triggerElement"
-			v-model:open="showPopover"
-			:anchor="triggerElement"
-			:placement="popoverPlacement"
-			:primary-action="primaryAction"
-			:title="messagePopover"
-			:use-close-button="true"
-			class="ext-personal-dashboard-recent-activity-header-popover"
-			@primary="showPopover = false">
-			<!-- eslint-disable-next-line max-len -->
-			<div v-i18n-html:personal-dashboard-risky-article-edits-subheader-info-popover="[ popoverUrl ]"></div>
-		</cdx-popover>
-	</cdx-message>
+			<cdx-popover
+				v-if="triggerElement"
+				v-model:open="showPopover"
+				:anchor="triggerElement"
+				:placement="popoverPlacement"
+				:primary-action="primaryAction"
+				:title="messagePopover"
+				:use-close-button="true"
+				class="personal-dashboard-review-changes__message__popover"
+				@primary="showPopover = false">
+				<!-- eslint-disable-next-line max-len -->
+				<div v-i18n-html:personal-dashboard-risky-article-edits-subheader-info-popover="[ popoverUrl ]"></div>
+			</cdx-popover>
+		</cdx-message>
+	</div>
 </template>
 
 <script>
@@ -73,15 +72,18 @@ module.exports = defineComponent( {
 <style lang="less">
 @import 'mediawiki.skin.variables.less';
 
-.ext-personal-dashboard-recent-activity-header {
-	.cdx-toggle-button&-link {
+.personal-dashboard-review-changes__message {
+	background: @background-color-neutral;
+	padding: @spacing-25;
+
+	&__link:enabled {
 		color: @color-progressive;
 		padding: @spacing-0;
 		height: @size-125;
 		min-height: @size-125;
 	}
 
-	&-popover {
+	&__popover {
 		width: @size-3200;
 	}
 }

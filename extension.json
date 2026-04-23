@@ -294,8 +294,6 @@
 				"App.vue",
 				"components/ListCard.vue",
 				"components/ListCardMobile.vue",
-				"components/ChangeNumber.vue",
-				"components/CreatorByline.vue",
 				"components/HeaderMessage.vue",
 				"composables/useFetchActivityResult.js",
 				{
@@ -304,7 +302,8 @@
 					"callbackParam": [
 						"cdxIconArticle",
 						"cdxIconEdit",
-						"cdxIconUserActive",
+						"cdxIconUserAvatar",
+						"cdxIconUserTemporary",
 						"cdxIconTextSummary",
 						"cdxIconInfoFilled"
 					]
@@ -352,7 +351,7 @@
 					"name": "icons.json",
 					"callback": "MediaWiki\\ResourceLoader\\CodexModule::getIcons",
 					"callbackParam": [
-						"cdxIconUserActive",
+						"cdxIconUserAvatar",
 						"cdxIconSpeechBubble",
 						"cdxIconSpeechBubbles"
 					]

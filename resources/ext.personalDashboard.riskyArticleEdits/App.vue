@@ -3,7 +3,6 @@
 		<template v-if="showHeaderMessage && rendermode !== 'mobile-summary'">
 			<header-message
 				v-if="isMobile"
-				class="ext-personal-dashboard-recent-activity-header-mobile"
 				:is-mobile="isMobile"
 				@dismissed="onHeaderMessageClose">
 			</header-message>
@@ -20,20 +19,25 @@
 		<div v-if="error">
 			<p>Error: {{ error.message }}</p>
 		</div>
-		<div
+
+		<template
 			v-if="recentActivityResult &&
 				recentActivityResult.feed &&
-				recentActivityResult.pages
-			">
-			<template v-if="isMobile && rendermode === 'mobile-summary'">
+				recentActivityResult.pages">
+			<div
+				v-if="rendermode === 'mobile-summary'"
+				class="personal-dashboard-review-changes__container--mobile">
 				<list-card-mobile
 					v-for="rc in recentActivityResult.feed.slice( 0, 1 )"
 					v-bind="rc"
 					:key="`${rendermode}-${rc.feedorigin}-${rc.revid}`"
 					:pages="recentActivityResult.pages">
 				</list-card-mobile>
-			</template>
-			<template v-else>
+			</div>
+
+			<div
+				v-else
+				class="personal-dashboard-review-changes__container">
 				<list-card
 					v-for="rc in recentActivityResult.feed"
 					v-bind="rc"
@@ -41,43 +45,34 @@
 					:pages="recentActivityResult.pages"
 					:is-mobile="isMobile">
 				</list-card>
-			</template>
-		</div>
-		<template v-if="isMobile">
-			<!-- eslint-disable max-len -->
-			<span
-				v-if="rendermode === 'mobile-summary'"
-				class="ext-personal-dashboard-recent-activity-footer personal-dashboard-module-footer"
-			>
-				<cdx-button
-					:aria-label="buttonAriaLabel"
-					action="progressive"
-					weight="primary"
-				>
-					<span v-i18n-html:personal-dashboard-risky-article-edits-mobile-summary-footer-link-text></span>
-				</cdx-button>
-			</span>
-			<span
-				v-else-if="rendermode === 'mobile-details'"
-				class="ext-personal-dashboard-recent-activity-footer personal-dashboard-module-footer"
-			>
-				<cdx-card>
-					<template #description>
-						<span
-							id="personal-dashboard-go-to-recentchanges"
-							v-i18n-html:personal-dashboard-risky-article-edits-footer-preamble
-						></span>
-					</template>
-				</cdx-card>
-			</span>
-			<!-- eslint-enable max-len -->
+			</div>
 		</template>
+
+		<!-- eslint-disable max-len -->
+		<div v-if="rendermode === 'mobile-summary'">
+			<cdx-button
+				:aria-label="buttonAriaLabel"
+				action="progressive"
+				weight="primary">
+				<span v-i18n-html:personal-dashboard-risky-article-edits-mobile-summary-footer-link-text></span>
+			</cdx-button>
+		</div>
+
+		<div
+			v-else-if="rendermode === 'mobile-details'"
+			class="personal-dashboard-module-footer">
+			<span
+				id="personal-dashboard-go-to-recentchanges"
+				v-i18n-html:personal-dashboard-risky-article-edits-footer-preamble>
+			</span>
+		</div>
+		<!-- eslint-enable max-len -->
 	</div>
 </template>
 
 <script>
 const { defineComponent, ref } = require( 'vue' );
-const { CdxButton, CdxCard, CdxProgressBar } = require( './codex.js' );
+const { CdxButton, CdxProgressBar } = require( './codex.js' );
 const useFetchActivityResult = require( './composables/useFetchActivityResult.js' );
 const ListCard = require( './components/ListCard.vue' );
 const ListCardMobile = require( './components/ListCardMobile.vue' );
@@ -87,7 +82,6 @@ const api = new mw.Api();
 module.exports = defineComponent( {
 	components: {
 		CdxButton,
-		CdxCard,
 		CdxProgressBar,
 		HeaderMessage,
 		ListCard,
@@ -173,37 +167,53 @@ module.exports = defineComponent( {
 <style lang="less">
 @import 'mediawiki.skin.variables.less';
 
-.ext-personal-dashboard-recent-activity-header {
-	display: flex;
-	justify-content: space-between;
-}
+.personal-dashboard {
+	&-module {
+		&-riskyArticleEdits&-desktop & {
+			&-header {
+				border-bottom: @border-subtle;
+			}
 
-.personal-dashboard-module-body {
-	.ext-personal-dashboard-recent-activity-header-mobile {
-		margin-bottom: 0.75em;
-		margin-top: 0;
-	}
-}
+			&-footer {
+				border-top: @border-subtle;
+			}
 
-.ext-personal-dashboard-recent-activity-footer {
-	margin: auto;
+			&-header,
+			&-footer {
+				padding: @spacing-100;
+			}
 
-	a.external {
-		background-size: 0;
-	}
+			&-header,
+			&-subheader,
+			&-body,
+			&-footer {
+				margin: 0;
+			}
+		}
 
-	.cdx-button {
-		width: 100%;
-		max-width: none;
-	}
-
-	.cdx-card {
-		border: 0;
-	}
-
-	@media all and ( max-width: @max-width-breakpoint-mobile ) {
-		.cdx-button {
+		&-riskyArticleEdits &-body .cdx-button {
 			width: 100%;
+			max-width: none;
+		}
+	}
+
+	&-review-changes {
+		&__container {
+			display: flex;
+			flex-direction: column;
+			gap: @spacing-25;
+			background: @background-color-neutral;
+			padding: @spacing-25;
+		}
+	}
+
+	@media screen and ( max-width: @max-width-breakpoint-mobile ) {
+		&-module-route-riskyArticleEdits &-review-changes {
+			&__message,
+			&__container {
+				margin-left: -@spacing-100;
+				margin-right: -@spacing-100;
+			}
 		}
 	}
 }

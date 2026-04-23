@@ -24,13 +24,13 @@ test( 'does not remove message if no click on the dismiss button', async () => {
 test( 'closes popover when clicking on primary action button', async () => {
 	const wrapper = mount( HeaderMessage );
 
-	const infoLink = wrapper.find( '.ext-personal-dashboard-recent-activity-header-link' );
+	const infoLink = wrapper.find( '.personal-dashboard-review-changes__message__link' );
 	await infoLink.trigger( 'click' );
-	expect( wrapper.find( '.ext-personal-dashboard-recent-activity-header-popover' ).exists() ).toStrictEqual( true );
+	expect( wrapper.find( '.personal-dashboard-review-changes__message__popover' ).exists() ).toStrictEqual( true );
 
 	const dismissPopoverButton = wrapper.find( '.cdx-popover__footer__primary-action' );
 	await dismissPopoverButton.trigger( 'click' );
-	expect( wrapper.find( '.ext-personal-dashboard-recent-activity-header-popover' ).exists() ).toStrictEqual( false );
+	expect( wrapper.find( '.personal-dashboard-review-changes__message__popover' ).exists() ).toStrictEqual( false );
 } );
 
 test( 'places popover right when it is mobile to prevent overflow', async () => {
@@ -40,9 +40,9 @@ test( 'places popover right when it is mobile to prevent overflow', async () => 
 		}
 	} );
 
-	const infoLink = wrapper.find( '.ext-personal-dashboard-recent-activity-header-link' );
+	const infoLink = wrapper.find( '.personal-dashboard-review-changes__message__link' );
 	await infoLink.trigger( 'click' );
-	expect( wrapper.find( '.ext-personal-dashboard-recent-activity-header-popover' ).exists() ).toStrictEqual( true );
+	expect( wrapper.find( '.personal-dashboard-review-changes__message__popover' ).exists() ).toStrictEqual( true );
 
 	const infoMessage = wrapper.findComponent( CdxPopover );
 	expect( infoMessage.vm.placement ).toStrictEqual( 'right' );
@@ -51,9 +51,9 @@ test( 'places popover right when it is mobile to prevent overflow', async () => 
 test( 'places popover on bottom when it is not mobile', async () => {
 	const wrapper = mount( HeaderMessage );
 
-	const infoLink = wrapper.find( '.ext-personal-dashboard-recent-activity-header-link' );
+	const infoLink = wrapper.find( '.personal-dashboard-review-changes__message__link' );
 	await infoLink.trigger( 'click' );
-	expect( wrapper.find( '.ext-personal-dashboard-recent-activity-header-popover' ).exists() ).toStrictEqual( true );
+	expect( wrapper.find( '.personal-dashboard-review-changes__message__popover' ).exists() ).toStrictEqual( true );
 
 	const infoMessage = wrapper.findComponent( CdxPopover );
 	expect( infoMessage.vm.placement ).toStrictEqual( 'bottom' );

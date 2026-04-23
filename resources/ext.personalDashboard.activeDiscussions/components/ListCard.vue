@@ -1,30 +1,42 @@
 <template>
 	<cdx-card
-		class="ext-personal-dashboard-active-discussion-card"
+		class="personal-dashboard-active-discussions__card"
 		:url="discussionUrl"
-		target="_blank">
+		target="_blank"
+		role="button">
 		<template #description>
-			<div class="ext-personal-dashboard-active-discussion-card-info">
-				<div class="ext-personal-dashboard-active-discussion-card-info-title-row">
-					<div class="ext-personal-dashboard-active-discussion-card-info-title">
+			<div class="personal-dashboard-active-discussions__card__container">
+				<div class="personal-dashboard-active-discussions__card__header">
+					<div class="personal-dashboard-active-discussions__card__title">
 						{{ discussionTitleFormatted }}
 					</div>
-					<div class="ext-personal-dashboard-active-discussions-icon-row">
-						<div class="ext-personal-dashboard-active-discussion-card-info-details">
-							<cdx-icon :icon="cdxIconUserActive"></cdx-icon> {{ authorCount }}
-							<cdx-icon :icon="cdxIconSpeechBubble"></cdx-icon> {{ commentCount }}
+
+					<div class="personal-dashboard-active-discussions__card__icons">
+						<div class="personal-dashboard-active-discussions__card__comments">
+							<cdx-icon :icon="cdxIconSpeechBubble" size="small"></cdx-icon>
+							{{ commentCount }}
+						</div>
+
+						<div class="personal-dashboard-active-discussions__card__authors">
+							<cdx-icon :icon="cdxIconUserAvatar" size="small"></cdx-icon>
+							{{ authorCount }}
 						</div>
 					</div>
 				</div>
-				<div class="ext-personal-dashboard-active-discussion-card-info-title-row">
-					{{ discussionPage }}
+
+				<div class="personal-dashboard-active-discussions__card__subheader">
+					{{ discussionPageFormatted }}
 				</div>
-				<div class="ext-personal-dashboard-active-discussion-card-info-title-row">
-					<!-- eslint-disable-next-line max-len -->
-					<span class="ext-personal-dashboard-active-discussion-card-info-title-row-additional">
-						{{ latestComment }}
-						<a @click="navigateToComment">{{ timestampFormatted }}</a>
-					</span>
+
+				<div class="personal-dashboard-active-discussions__card__latest">
+					{{ latestComment }}
+					<span v-if="isMobile">{{ timestampFormatted }}</span>
+					<a
+						v-else
+						:href="commentUrl"
+						target="_blank">
+						{{ timestampFormatted }}
+					</a>
 				</div>
 			</div>
 		</template>
@@ -34,10 +46,7 @@
 <script>
 const { defineComponent } = require( 'vue' );
 const { CdxCard, CdxIcon } = require( '../codex.js' );
-const {
-	cdxIconUserActive,
-	cdxIconSpeechBubble
-} = require( '../icons.json' );
+const { cdxIconUserAvatar, cdxIconSpeechBubble } = require( '../icons.json' );
 const { formatRelativeTimeOrDate } = require( 'mediawiki.DateFormatter' );
 
 module.exports = defineComponent( {
@@ -49,12 +58,13 @@ module.exports = defineComponent( {
 		commentCount: { type: Number, required: true },
 		authorCount: { type: Number, required: true },
 		latestReply: { type: String, required: true },
-		latestReplyId: { type: String, required: true }
+		latestReplyId: { type: String, required: true },
+		isMobile: { type: Boolean, default: false }
 	},
 	setup() {
 		return {
 			latestComment: mw.msg( 'personal-dashboard-active-discussions-latest-comment' ),
-			cdxIconUserActive,
+			cdxIconUserAvatar,
 			cdxIconSpeechBubble
 		};
 	},
@@ -90,13 +100,6 @@ module.exports = defineComponent( {
 			return `${ formatRelativeTimeOrDate( latestReplyTimestamp ) }`;
 		}
 	},
-	methods: {
-		navigateToComment() {
-			event.preventDefault();
-			event.stopPropagation();
-			window.open( this.commentUrl, '_blank', 'noopener noreferrer' );
-		}
-	},
 	mounted() {
 		mw.hook( 'personaldashboard.activediscussions.listcard.loaded' ).fire();
 	}
@@ -106,98 +109,60 @@ module.exports = defineComponent( {
 <style lang="less">
 @import 'mediawiki.skin.variables.less';
 
-.cdx-card.ext-personal-dashboard-active-discussion-card {
-	border-left: 0;
-	border-right: 0;
-	border-radius: 0;
-	border-bottom: 0;
-	border-color: @border-color-subtle;
-	padding: 0.5rem;
-	width: 100%;
+.personal-dashboard-active-discussions__card {
+	&.cdx-card {
+		padding: @spacing-100;
+		border-color: transparent;
 
-	&:hover {
-		background-color: @background-color-interactive;
-		border-color: @border-color-subtle;
+		&:hover {
+			border-color: @border-color-subtle;
+		}
 	}
 
 	.cdx-card__text {
 		width: 100%;
 	}
 
-	&:last-child {
-		border-bottom: 1px solid @border-color-subtle;
+	.cdx-card__text__description {
+		margin-top: 0;
 	}
 
-	.ext-personal-dashboard-active-discussion-card-icon {
-		color: @color-subtle;
-	}
-
-	.ext-personal-dashboard-active-discussion-card-info {
+	&__container {
 		display: flex;
 		flex-direction: column;
-		gap: 0.44rem;
+		gap: @spacing-25;
+		color: @color-subtle;
+		line-height: @line-height-x-small;
 	}
 
-	.ext-personal-dashboard-active-discussion-card-info-title-row {
+	&__header {
 		display: flex;
+		align-items: center;
 		justify-content: space-between;
-		flex-wrap: wrap;
+		gap: @spacing-35;
 
-		.ext-personal-dashboard-active-discussion-card-info-title {
-			font-weight: @font-weight-bold;
-			line-height: @line-height-medium;
-			color: @color-base;
-			width: 80%;
-			overflow: hidden;
-			text-overflow: ellipsis;
-			text-wrap: nowrap;
-		}
-
-		.ext-personal-dashboard-active-discussion-card-info-details {
-			line-height: @line-height-medium;
-			padding-left: 0.75rem;
-		}
-
-		.ext-personal-dashboard-active-discussion-card-comment {
-			overflow: hidden;
-			text-overflow: ellipsis;
-			text-wrap: nowrap;
+		.skin-minerva & {
+			flex-direction: column;
+			align-items: start;
 		}
 	}
 
-	.ext-personal-dashboard-active-discussion-card-info-title-row-additional {
-		a {
-			.cdx-mixin-link-base();
-			text-decoration: underline;
-		}
-		margin-right: auto;
+	&__title {
+		color: @color-base;
+		font-weight: @font-weight-bold;
 	}
 
-	.ext-personal-dashboard-active-discussion-card-missing-comment-message {
-		font-style: italic;
+	&__subheader {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
 	}
 
-	.ext-personal-dashboard-active-discussion-card-separator {
-		padding: 0 0.25rem;
-		font-weight: @font-weight-normal;
+	&__icons {
+		display: flex;
+		align-items: center;
+		gap: @spacing-50;
+		white-space: nowrap;
 	}
 }
-
-.skin-minerva {
-	.cdx-card.ext-personal-dashboard-active-discussion-card {
-		.ext-personal-dashboard-active-discussion-card-info {
-			.ext-personal-dashboard-active-discussion-card-info-title-row {
-				&:first-child {
-					display: flex;
-					flex-direction: column;
-				}
-
-				.ext-personal-dashboard-active-discussion-card-info-title {
-					width: 100%;
-				}
-			}
-		}
-	}
-}
-
 </style>

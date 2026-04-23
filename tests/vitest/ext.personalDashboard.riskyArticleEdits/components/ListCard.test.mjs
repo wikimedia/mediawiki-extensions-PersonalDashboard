@@ -119,6 +119,8 @@ test( 'strips all html formatting from parsedcomment', () => {
 } );
 
 test( 'user info card visible on desktop', () => {
+	mw.user.options.set( 'checkuser-userinfocard-enable', true );
+
 	const wrapper = mount( ListCard, {
 		props: {
 			title: 'TestTitle',

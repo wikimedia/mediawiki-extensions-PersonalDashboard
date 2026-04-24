@@ -2,7 +2,6 @@
 
 namespace MediaWiki\Extension\PersonalDashboard\HookHandler;
 
-use MediaWiki\Deferred\DeferredUpdates;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Skin\Hook\SkinTemplateNavigation__UniversalHook;
 use MediaWiki\Skin\SkinTemplate;
@@ -23,13 +22,16 @@ class SkinTemplateNavigationUniversalHandler implements SkinTemplateNavigation__
 	/** @inheritDoc */
 	public function onSkinTemplateNavigation__Universal( $sktemplate, &$links ): void {
 		$user = $sktemplate->getUser();
+		$menuLinkVisible = $this->isMenuLinkVisible( $sktemplate, $user );
+		$output = $sktemplate->getOutput();
 
-		if ( !$this->isMenuLinkVisible( $sktemplate, $user ) ) {
+		$output->addJsConfigVars( [ 'wgPersonalDashboardMenuVisible' => $menuLinkVisible ] );
+
+		if ( !$menuLinkVisible ) {
 			return;
 		}
 
 		$this->addToUserMenu( $sktemplate, $links );
-		$output = $sktemplate->getOutput();
 
 		if ( $this->isBlueDotVisible( $sktemplate, $user ) ) {
 			$output->addModules( 'ext.personalDashboard.blueDot' );
@@ -51,8 +53,9 @@ class SkinTemplateNavigationUniversalHandler implements SkinTemplateNavigation__
 			return false;
 		}
 
+		$isUserEligible = $this->userOptionsManager->getBoolOption( $user, 'personaldashboard-eligible' );
 		// Always show if the user was previously eligible to see the user menu link
-		if ( $this->userOptionsManager->getBoolOption( $user, 'personaldashboard-eligible' ) ) {
+		if ( $isUserEligible ) {
 			return true;
 		}
 
@@ -68,16 +71,12 @@ class SkinTemplateNavigationUniversalHandler implements SkinTemplateNavigation__
 		}
 
 		$editCount = $this->userEditTracker->getUserEditCount( $user );
-
 		// Never show if the user's edit count is not within the minimum and maximum thresholds
 		if ( ( $hasMinimum && $editCount < $minimumEdits ) ||
 			( $hasMaximum && $editCount > $maximumEdits ) ) {
 			return false;
 		}
 
-		// Persist the user's eligiblity state to skip redundant checks and ensure permanent access
-		$this->userOptionsManager->setOption( $user, 'personaldashboard-eligible', true );
-		$this->saveUserOptionsDeferred( $this->userOptionsManager, $user );
 		return true;
 	}
 
@@ -113,18 +112,5 @@ class SkinTemplateNavigationUniversalHandler implements SkinTemplateNavigation__
 		return $sktemplate->getConfig()->get( 'PersonalDashboardBlueDot' ) &&
 			!$sktemplate->getTitle()->isSpecial( 'PersonalDashboard' ) &&
 			!$this->userOptionsManager->getBoolOption( $user, 'personaldashboard-visited' );
-	}
-
-	/**
-	 * @param UserOptionsManager $userOptionsManager
-	 * @param User $user
-	 * @return void
-	 */
-	private function saveUserOptionsDeferred( UserOptionsManager $userOptionsManager, User $user ): void {
-		DeferredUpdates::addCallableUpdate(
-			static function () use ( $userOptionsManager, $user ) {
-				$userOptionsManager->saveOptions( $user );
-			}
-		);
 	}
 }

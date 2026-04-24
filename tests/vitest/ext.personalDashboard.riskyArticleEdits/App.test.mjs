@@ -38,7 +38,8 @@ test( 'mount component', () => {
 	mw.Api.mock( ( params, options ) => {
 		if ( options.type === 'POST' &&
 			params.action === 'options' &&
-			params.optionname === 'personaldashboard-visited' &&
+			( params.optionname === 'personaldashboard-visited' ||
+			params.optionname === 'personaldashboard-eligible' ) &&
 			params.optionvalue === '1' ) {
 			return {};
 		}
@@ -51,7 +52,8 @@ test( 'shows progress bar when loading', () => {
 	mw.Api.mock( ( params, options ) => {
 		if ( options.type === 'POST' &&
 			params.action === 'options' &&
-			params.optionname === 'personaldashboard-visited' &&
+			( params.optionname === 'personaldashboard-visited' ||
+			params.optionname === 'personaldashboard-eligible' ) &&
 			params.optionvalue === '1' ) {
 			return {};
 		}
@@ -64,7 +66,8 @@ test( 'shows error message when there is one', () => {
 	mw.Api.mock( ( params, options ) => {
 		if ( options.type === 'POST' &&
 			params.action === 'options' &&
-			params.optionname === 'personaldashboard-visited' &&
+			( params.optionname === 'personaldashboard-visited' ||
+			params.optionname === 'personaldashboard-eligible' ) &&
 			params.optionvalue === '1' ) {
 			return {};
 		}
@@ -181,7 +184,8 @@ test( 'shows header message by default on mobile and updates preference when clo
 		}
 		if ( options.type === 'POST' &&
 			params.action === 'options' &&
-			params.optionname === 'personaldashboard-visited' &&
+			( params.optionname === 'personaldashboard-visited' ||
+			params.optionname === 'personaldashboard-eligible' ) &&
 			params.optionvalue === '1' ) {
 			return {};
 		}

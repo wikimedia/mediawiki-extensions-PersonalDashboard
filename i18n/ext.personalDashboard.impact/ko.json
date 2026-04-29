@@ -1,8 +1,13 @@
 {
 	"@metadata": {
 		"authors": [
+			"Tensama0415",
 			"Ykhwong"
 		]
 	},
+	"personal-dashboard-impact-title": "당신의 영향력",
+	"personal-dashboard-impact-thanks-sent": "표해진 감사 수",
+	"personal-dashboard-impact-edits-reviewed": "검토한 편집 수",
+	"personal-dashboard-impact-edits-reviewed-description": "지난 30일 동안 되돌린 편집 횟수와 표해진 감사 수를 집계합니다.",
 	"personal-dashboard-impact-info-button": "정보"
 }

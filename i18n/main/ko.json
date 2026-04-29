@@ -1,9 +1,15 @@
 {
 	"@metadata": {
 		"authors": [
+			"Tensama0415",
 			"Ykhwong"
 		]
 	},
 	"personal-dashboard-beta-info-chip-text": "베타",
-	"personal-dashboard-survey-text": "[$1 피드백 공유]"
+	"personal-dashboard-desc": "관리자를 위한 실험적인 대시보드",
+	"personal-dashboard-link-title": "대시보드",
+	"personal-dashboard-module-no-js-fallback": "이 구성 요소를 보려면 자바스크립트를 활성화해 주십시오.",
+	"personal-dashboard-specialpage-title": "{{GENDER:$1|안녕하세요}}, {{bidi:$1}}님!",
+	"personal-dashboard-survey-text": "[$1 피드백 공유]",
+	"tooltip-pt-personaldashboard": "{{GENDER:|당신의}} 개인 대시보드"
 }

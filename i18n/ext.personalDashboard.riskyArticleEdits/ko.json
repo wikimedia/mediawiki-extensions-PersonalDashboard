@@ -1,9 +1,13 @@
 {
 	"@metadata": {
 		"authors": [
+			"Tensama0415",
 			"Ykhwong"
 		]
 	},
+	"personal-dashboard-risky-article-edits-header": "변경사항 검토",
 	"personal-dashboard-risky-article-edits-subheader-info": "위키백과의 신뢰성을 유지하는 데 도움을 주세요.",
-	"personal-dashboard-risky-article-edits-subheader-info-popover-confirm": "알겠습니다"
+	"personal-dashboard-risky-article-edits-subheader-info-popover-confirm": "알겠습니다",
+	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "편집 요약 없음",
+	"personal-dashboard-risky-article-edits-info-button-aria-label": "정보 버튼"
 }

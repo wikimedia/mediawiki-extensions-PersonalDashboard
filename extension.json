@@ -448,6 +448,35 @@
 				"ext.personalDashboard.riskyArticleEdits": {
 					"class": "MediaWiki\\Extension\\PersonalDashboard\\Modules\\RiskyArticleEdits"
 				}
+			},
+			"ModuleGroups": {
+				"ext.personalDashboard.newModerators": {
+					"main": {
+						"primary": {
+							"ext.personalDashboard.banner": {
+								"enabled": true
+							},
+							"ext.personalDashboard.riskyArticleEdits": {
+								"enabled": true
+							},
+							"ext.personalDashboard.activeDiscussions": {
+								"enabled": false
+							}
+						}
+					},
+					"sidebar": {
+						"primary": {
+							"ext.personalDashboard.impact": {
+								"enabled": true
+							}
+						},
+						"secondary": {
+							"ext.personalDashboard.policiesGuidelines": {
+								"enabled": true
+							}
+						}
+					}
+				}
 			}
 		}
 	},

@@ -3,6 +3,7 @@
 namespace MediaWiki\Extension\PersonalDashboard\Specials;
 
 use MediaWiki\Config\ConfigException;
+use MediaWiki\Context\IContextSource;
 use MediaWiki\Exception\ErrorPageError;
 use MediaWiki\Exception\UserNotLoggedIn;
 use MediaWiki\Extension\PersonalDashboard\IModule;
@@ -99,7 +100,7 @@ class SpecialPersonalDashboard extends SpecialPage {
 			}
 		}
 
-		$modules = $this->getModules( $this->isMobile, $par );
+		$modules = $this->getModules();
 
 		if ( $this->isMobile ) {
 			if (
@@ -138,69 +139,56 @@ class SpecialPersonalDashboard extends SpecialPage {
 	}
 
 	/**
-	 * @param bool $isMobile
-	 * @param string|null $par Path passed into SpecialPersonalDashboard::execute()
-	 * @return IModule[]
+	 * @param string $moduleName
+	 * @param array $moduleConfig
+	 * @param IContextSource $context
+	 * @return ?IModule
 	 */
-	private function getModules( bool $isMobile, $par = '' ) {
-		$moduleConfig = [
-			'ext.personalDashboard.banner' => true,
-			'ext.personalDashboard.riskyArticleEdits' => true,
-			'ext.personalDashboard.impact' => true,
-			'ext.personalDashboard.activeDiscussions' => true,
-			'ext.personalDashboard.policiesGuidelines' => true,
-		];
-
-		if ( $isMobile ) {
-			// mobile-specific modules can be added here
-			// TODO: Remove this feature flag for active discussions hard launch
-			$showActiveDiscussions = $this->getContext()->getRequest()
-				->getText( 'personaldashboard_activediscussions_show' );
-
-			if ( $showActiveDiscussions !== 'true' ) {
-				unset( $moduleConfig['ext.personalDashboard.activeDiscussions'] );
+	private function getRequestedModule( string $moduleName, array $moduleConfig, IContextSource $context ) {
+		// $moduleConfig['enabled'] may be overriden by URL query param
+		$moduleUrlParam = $this->getContext()->getRequest()->getText( $moduleName );
+		if ( $moduleUrlParam !== '' ) {
+			$moduleOverride = filter_var( $moduleUrlParam, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE );
+			if ( $moduleOverride !== null ) {
+				$moduleConfig['enabled'] = $moduleOverride;
 			}
 		}
-
-		switch ( $par ) {
-			// subpage-specific modules can be added here
-			case '':
-				break;
-			default:
-				break;
+		if ( !$moduleConfig || !$moduleConfig['enabled'] || $moduleConfig['enabled'] !== true ) {
+			return;
 		}
+		return $this->moduleFactory->getModule( $moduleName, [ $context ] );
+	}
+
+	/**
+	 * @return IModule[]
+	 */
+	private function getModules() {
 		$modules = [];
 		$context = $this->getContext();
-		foreach ( $moduleConfig as $moduleId => $_ ) {
-			$modules[$moduleId] = $this->moduleFactory->getModule( $moduleId, [ $context ] );
+		foreach ( $this->getModuleGroups() as $_group => $subGroups ) {
+			foreach ( $subGroups as $_subGroup => $moduleConfigs ) {
+				foreach ( $moduleConfigs as $moduleName => $moduleConfig ) {
+					/** @var ?IModule $module */
+					$module = $this->getRequestedModule( $moduleName, (array)$moduleConfig, $context );
+					if ( !$module ) {
+						continue;
+					}
+					$modules[ $moduleName ] = $module;
+				}
+			}
 		}
 		return $modules;
 	}
 
 	/**
+	 * @param string $name key of registered module group in extension.json
 	 * @return string[][][]
 	 */
-	private function getModuleGroups(): array {
-		// TODO: Remove this feature flag for active discussions hard launch
-		$showActiveDiscussions = $this->getContext()->getRequest()
-			->getText( 'personaldashboard_activediscussions_show' );
-
-		$moduleGrouping = [
-			'main' => [
-				'primary' => [ 'ext.personalDashboard.banner', 'ext.personalDashboard.riskyArticleEdits' ],
-			],
-			'sidebar' => [
-				'primary' => [ 'ext.personalDashboard.impact' ],
-				'secondary' => [ 'ext.personalDashboard.policiesGuidelines' ],
-			]
-		];
-
-		if ( $showActiveDiscussions === 'true' ) {
-			$moduleGrouping['main']['primary'][] = 'ext.personalDashboard.activeDiscussions';
-			return $moduleGrouping;
-		}
-
-		return $moduleGrouping;
+	private function getModuleGroups( $name = 'ext.personalDashboard.newModerators' ): array {
+		$registry = ExtensionRegistry::getInstance()->getAttribute( 'PersonalDashboardModuleGroups' );
+		$moduleGroups = $registry[$name];
+		// print_r($moduleGroups);
+		return $moduleGroups;
 	}
 
 	/**
@@ -240,19 +228,19 @@ class SpecialPersonalDashboard extends SpecialPage {
 
 	private function renderDesktop() {
 		$out = $this->getContext()->getOutput();
-		$modules = $this->getModules( false );
 		$out->addBodyClasses( 'personal-dashboard-desktop' );
+		$context = $this->getContext();
 		foreach ( $this->getModuleGroups() as $group => $subGroups ) {
 			$out->addHTML( Html::openElement( 'div', [
 				'class' => "personal-dashboard-group-$group"
 			] ) );
-			foreach ( $subGroups as $subGroup => $moduleNames ) {
+			foreach ( $subGroups as $subGroup => $moduleConfigs ) {
 				$out->addHTML( Html::openElement( 'div', [
 					'class' => "personal-dashboard-group-$group-subgroup-$subGroup"
 				] ) );
-				foreach ( $moduleNames as $moduleName ) {
-					/** @var IModule $module */
-					$module = $modules[$moduleName] ?? null;
+				foreach ( $moduleConfigs as $moduleName => $moduleConfig ) {
+					/** @var ?IModule $module */
+					$module = $this->getRequestedModule( $moduleName, (array)$moduleConfig, $context );
 					if ( !$module ) {
 						continue;
 					}
@@ -294,7 +282,7 @@ class SpecialPersonalDashboard extends SpecialPage {
 
 	private function renderMobileSummary() {
 		$out = $this->getContext()->getOutput();
-		$modules = $this->getModules( true );
+		$modules = $this->getModules();
 		$out->addBodyClasses( [
 			'personal-dashboard-mobile-summary',
 		] );

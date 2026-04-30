@@ -49,16 +49,6 @@ class ActiveDiscussions extends BaseModule {
 	}
 
 	/** @inheritDoc */
-	protected function getJsConfigVars() {
-		$showActiveDiscussions = $this->getContext()->getRequest()
-			->getText( 'personaldashboard_activediscussions_show' );
-
-		return [
-			'wgPersonalDashboardShowActiveDiscussions' => $showActiveDiscussions
-		];
-	}
-
-	/** @inheritDoc */
 	protected function getModules() {
 		return [ 'ext.personalDashboard.activeDiscussions' ];
 	}

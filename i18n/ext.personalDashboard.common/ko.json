@@ -1,8 +1,12 @@
 {
 	"@metadata": {
 		"authors": [
-			"Ykhwong"
+			"Ykhwong",
+			"Tensama0415"
 		]
 	},
+	"personal-dashboard-multi-step-dialog-progress": "$2 중 $1",
+	"personal-dashboard-multi-step-dialog-next-button": "다음",
+	"personal-dashboard-multi-step-dialog-previous-button": "이전",
 	"personal-dashboard-multi-step-dialog-got-it-button": "알겠습니다"
 }

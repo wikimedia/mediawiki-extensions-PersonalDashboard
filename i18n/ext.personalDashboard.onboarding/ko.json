@@ -1,8 +1,14 @@
 {
 	"@metadata": {
 		"authors": [
+			"Tensama0415",
 			"Ykhwong"
 		]
 	},
-	"personal-dashboard-onboarding-get-started-button": "시작하기"
+	"personal-dashboard-onboarding-title": "대시보드",
+	"personal-dashboard-onboarding-dont-show-again": "다시 보지 않음",
+	"personal-dashboard-onboarding-get-started-button": "시작하기",
+	"personal-dashboard-onboarding-step-1-title": "환영합니다",
+	"personal-dashboard-onboarding-step-2-title": "기능",
+	"personal-dashboard-onboarding-step-3-title": "의견 공유하기"
 }

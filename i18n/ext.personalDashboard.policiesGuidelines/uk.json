@@ -4,5 +4,18 @@
 			"Repakr"
 		]
 	},
-	"personal-dashboard-policies-guidelines-examples-button": "Приклади"
+	"personal-dashboard-policies-guidelines-title": "Правила і настанови",
+	"personal-dashboard-policies-guidelines-body": "Перевірте, що є прийнятним та очікуваним у Вікіпедії.",
+	"personal-dashboard-policies-guidelines-mobile-summary": "Перегляньте найкращі практики для створення безкоштовної та надійної енциклопедії.",
+	"personal-dashboard-policies-guidelines-neutral-point-of-view-title": "Нейтральна точка зору",
+	"personal-dashboard-policies-guidelines-neutral-point-of-view-definition": "Вміст статті повинен чесно представити всі існуючі точки зору пропорційно та без упереджень.",
+	"personal-dashboard-policies-guidelines-neutral-point-of-view-example-1": "Нью-Йорк Янкіз — найкраща бейсбольна команда в історії.",
+	"personal-dashboard-policies-guidelines-neutral-point-of-view-answer-1-label": "Не нейтрально:",
+	"personal-dashboard-policies-guidelines-neutral-point-of-view-answer-1-text": "Це думка, яку не можна підкріпити надійними джерелами. Натомість Ви можете написати «Нью-Йорк Янкіз виграли 26 чемпіонатів Світової серії, що майже в тричі більше, ніж у будь-якої іншої команди».",
+	"personal-dashboard-policies-guidelines-neutral-point-of-view-answer-2-label": "Нейтрально:",
+	"personal-dashboard-policies-guidelines-no-original-research-title": "Жодних оригінальних досліджень",
+	"personal-dashboard-policies-guidelines-verifiability-title": "Перевірність",
+	"personal-dashboard-policies-guidelines-assume-good-faith-title": "Припускайте добрі наміри",
+	"personal-dashboard-policies-guidelines-examples-button": "Приклади",
+	"personal-dashboard-policies-guidelines-examples-header": "Приклад $1"
 }

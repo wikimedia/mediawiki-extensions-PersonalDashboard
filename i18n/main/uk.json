@@ -5,5 +5,6 @@
 		]
 	},
 	"personal-dashboard-beta-info-chip-text": "Бета",
-	"personal-dashboard-module-no-js-fallback": "Щоб переглянути цей компонент, будь ласка, увімкніть JavaScript."
+	"personal-dashboard-module-no-js-fallback": "Щоб переглянути цей компонент, будь ласка, увімкніть JavaScript.",
+	"personal-dashboard-survey-text": "[$1 Поділитися відгуком]"
 }

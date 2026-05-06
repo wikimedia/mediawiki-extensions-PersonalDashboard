@@ -45,12 +45,12 @@ module.exports = defineComponent( {
 		}
 
 		return {
-			/* eslint-disable mediawiki/msg-doc */
+
 			msgHeader: mw.msg( `${ msgPrefix }examples-header`, this.step ),
 			msgExample: mw.msg( `${ msgPrefix }${ this.name }-example-${ this.step }` ),
 			msgAnswerLabel: mw.msg( `${ msgPrefix }${ this.name }-answer-${ this.step }-label` ),
 			msgAnswerText: mw.msg( `${ msgPrefix }${ this.name }-answer-${ this.step }-text` ),
-			/* eslint-enable mediawiki/msg-doc */
+
 			iconClass: `personal-dashboard-policies-guidelines__icon--${ this.icon }`,
 			iconData
 		};

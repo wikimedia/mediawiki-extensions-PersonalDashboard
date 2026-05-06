@@ -59,11 +59,11 @@ module.exports = defineComponent( {
 		return {
 			open: false,
 			step: 1,
-			/* eslint-disable mediawiki/msg-doc */
+
 			msgTitle: mw.msg( `${ msgPrefix }${ this.name }-title` ),
 			msgDefinition: mw.msg( `${ msgPrefix }${ this.name }-definition` ),
 			msgButton: mw.msg( `${ msgPrefix }examples-button` )
-			/* eslint-enable mediawiki/msg-doc */
+
 		};
 	}
 } );

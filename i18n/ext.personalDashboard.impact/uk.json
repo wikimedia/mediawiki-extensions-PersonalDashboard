@@ -4,5 +4,9 @@
 			"Repakr"
 		]
 	},
-	"personal-dashboard-impact-title": "Ваш вплив"
+	"personal-dashboard-impact-title": "Ваш вплив",
+	"personal-dashboard-impact-thanks-sent": "Подяк відправлено",
+	"personal-dashboard-impact-edits-reviewed": "Редагувань перевірено",
+	"personal-dashboard-impact-edits-reviewed-description": "Враховує редагування, які Ви відкотили за останні 30 днів, та усі подяки, які Ви відправили.",
+	"personal-dashboard-impact-info-button": "Інформація"
 }

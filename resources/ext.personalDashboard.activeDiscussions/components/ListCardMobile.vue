@@ -4,7 +4,7 @@
 		<template #description>
 			<div class="ext-personal-dashboard-active-discussions-card-info-title-row">
 				<div class="ext-personal-dashboard-active-discussions-page">
-					<cdx-icon :icon="cdxIconSpeechBubbles"></cdx-icon> {{ discussionTitle }}
+					<cdx-icon :icon="cdxIconSpeechBubbles"></cdx-icon> {{ discussionTitleFormatted }}
 				</div>
 				<div class="ext-personal-dashboard-active-discussions-latest-comment">
 					{{ latestComment }}
@@ -37,6 +37,16 @@ module.exports = defineComponent( {
 		};
 	},
 	computed: {
+		discussionTitleFormatted() {
+			if ( !this.discussionTitle ) {
+				return '';
+			}
+
+			const temp = document.createElement( 'div' );
+			temp.innerHTML = this.discussionTitle;
+
+			return temp.innerText;
+		},
 		commentUrl() {
 			return mw.util.getUrl( this.discussionPage + '#' + this.latestReplyId );
 		},

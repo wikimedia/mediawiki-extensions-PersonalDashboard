@@ -460,7 +460,7 @@
 								"enabled": true
 							},
 							"ext.personalDashboard.activeDiscussions": {
-								"enabled": false
+								"enabled": true
 							}
 						}
 					},

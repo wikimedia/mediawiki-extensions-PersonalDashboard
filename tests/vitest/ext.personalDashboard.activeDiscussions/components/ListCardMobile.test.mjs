@@ -55,3 +55,19 @@ test( 'renders timestamp without hours when edit is not made today', async () =>
 
 	expect( expectedDate ).toStrictEqual( wrapper.vm.timestampFormatted );
 } );
+
+test( 'renders discussion title without html markup', async () => {
+	const date = new Date( 2024, 11, 2, 4, 29 );
+	const wrapper = mount( ListCardMobile, {
+		props: {
+			discussionTitle: '<a title="Markup" class="mw-redirect">Test Title</a>',
+			discussionPage: 'Wikipedia:Village Pump',
+			commentCount: 12,
+			authorCount: 4,
+			latestReply: date.toISOString(),
+			latestReplyId: 'foo'
+		}
+	} );
+
+	expect( 'Test Title' ).toStrictEqual( wrapper.vm.discussionTitleFormatted );
+} );

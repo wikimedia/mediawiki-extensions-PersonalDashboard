@@ -1,0 +1,30 @@
+{
+	"@metadata": {
+		"authors": [
+			"Tensama0415"
+		]
+	},
+	"personal-dashboard-policies-guidelines-title": "정책 및 지침",
+	"personal-dashboard-policies-guidelines-neutral-point-of-view-title": "중립적 시각",
+	"personal-dashboard-policies-guidelines-neutral-point-of-view-answer-1-label": "중립이 아님:",
+	"personal-dashboard-policies-guidelines-neutral-point-of-view-answer-2-label": "중립:",
+	"personal-dashboard-policies-guidelines-no-original-research-title": "독자 연구 금지",
+	"personal-dashboard-policies-guidelines-no-original-research-answer-1-label": "독자 연구가 포함됨:",
+	"personal-dashboard-policies-guidelines-no-original-research-answer-2-label": "독자 연구가 포함됨:",
+	"personal-dashboard-policies-guidelines-verifiability-title": "확인 가능",
+	"personal-dashboard-policies-guidelines-verifiability-definition": "새로운 추가 사항은 인용과 정보의 출처를 제시해야 합니다.",
+	"personal-dashboard-policies-guidelines-verifiability-example-1": "뉴스 속보.",
+	"personal-dashboard-policies-guidelines-verifiability-answer-1-label": "대부분 용납되지 않는 것:",
+	"personal-dashboard-policies-guidelines-verifiability-answer-1-text": "뉴스 속보는 종종 부정확합니다. 위키백과에 세부 사항을 추가하기 전에 사건 발행 후 하루 또는 이틀을 기다리는 것이 좋습니다. 이것은 언론인들에게 더 많은 정보를 수집하고 수사 당국이 공식 발표를 할 수 있는 시간을 제공합니다.",
+	"personal-dashboard-policies-guidelines-verifiability-example-2": "소셜 미디어 게시물에서 얻은 내용.",
+	"personal-dashboard-policies-guidelines-verifiability-answer-2-label": "신뢰성 없음:",
+	"personal-dashboard-policies-guidelines-verifiability-answer-2-text": "소셜 미디어의 콘텐츠는 대부분 허용되지 않습니다. 인정받는 주제에 관한 전문가의 발표가 있을 경우 고려될 수 있습니다.",
+	"personal-dashboard-policies-guidelines-verifiability-example-3": "믿을만한 학술지나 책의 내용",
+	"personal-dashboard-policies-guidelines-verifiability-answer-3-label": "신뢰성 있음:",
+	"personal-dashboard-policies-guidelines-verifiability-answer-3-text": "콘텐츠는 사실 확인과 정확성에 대한 명성을 가진 신뢰할 수 있고 독립적이고 출판된 출처로부터 제공되어야 합니다.",
+	"personal-dashboard-policies-guidelines-assume-good-faith-title": "좋은 뜻으로 보기",
+	"personal-dashboard-policies-guidelines-assume-good-faith-answer-1-label": "좋은 뜻으로 보지 않음:",
+	"personal-dashboard-policies-guidelines-assume-good-faith-answer-2-label": "좋은 뜻으로 봄:",
+	"personal-dashboard-policies-guidelines-examples-button": "예시",
+	"personal-dashboard-policies-guidelines-examples-header": "예: $1"
+}

@@ -73,14 +73,6 @@ class SpecialPersonalDashboard extends SpecialPage {
 			] );
 		}
 
-		$user = $this->getUser();
-
-		$userOptionsManager = $this->userOptionsManager;
-		if ( !$userOptionsManager->getBoolOption( $user, 'personaldashboard-visited' ) ) {
-			$out->addHTML( Html::element( 'div', [ 'id' => 'personal-dashboard-onboarding' ] ) );
-			$out->addModules( 'ext.personalDashboard.onboarding' );
-		}
-
 		$out->addJsConfigVars( [
 			'wgPersonalDashboardPageviewToken' => $this->pageviewToken,
 			'wgPersonalDashboardActiveDiscussionsPages' => $this->activeDiscussionsPages

@@ -442,6 +442,12 @@
 						"ConnectionProvider"
 					]
 				},
+				"ext.personalDashboard.onboarding": {
+					"class": "MediaWiki\\Extension\\PersonalDashboard\\Modules\\Onboarding",
+					"services": [
+						"UserOptionsManager"
+					]
+				},
 				"ext.personalDashboard.policiesGuidelines": {
 					"class": "MediaWiki\\Extension\\PersonalDashboard\\Modules\\PoliciesGuidelines"
 				},
@@ -451,6 +457,13 @@
 			},
 			"ModuleGroups": {
 				"ext.personalDashboard.newModerators": {
+					"utils": {
+						"hidden": {
+							"ext.personalDashboard.onboarding": {
+								"enabled": true
+							}
+						}
+					},
 					"main": {
 						"primary": {
 							"ext.personalDashboard.banner": {

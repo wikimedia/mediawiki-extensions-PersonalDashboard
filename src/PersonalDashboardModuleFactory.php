@@ -40,7 +40,7 @@ class PersonalDashboardModuleFactory {
 				$spec,
 				[
 					'extraArgs' => $args,
-					'assertClass' => Modules\BaseModule::class,
+					'assertClass' => IModule::class,
 				],
 			);
 		}

@@ -3,6 +3,7 @@
 exports[`mount component 1`] = `
 <div>
   <div>
+    
     <div
       aria-disabled="false"
       aria-hidden="true"
@@ -14,9 +15,18 @@ exports[`mount component 1`] = `
         class="cdx-progress-bar__bar"
       />
     </div>
+    <!--v-if-->
+    
   </div>
   <!--v-if-->
-  <!--v-if-->
+  
+  <div
+    class="personal-dashboard-review-changes__container"
+  >
+    
+    
+  </div>
+  
   <!-- eslint-disable max-len -->
   <!--v-if-->
   <!-- eslint-enable max-len -->

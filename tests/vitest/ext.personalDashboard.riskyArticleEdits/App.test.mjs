@@ -1,24 +1,21 @@
 import { vi, beforeEach, test, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
-import { ref } from 'vue';
+import { createPinia, setActivePinia } from 'pinia';
 
-vi.mock( '/resources/ext.personalDashboard.riskyArticleEdits/composables/useFetchActivityResult.js', () => {
-	const mock = {
-		recentActivityResult: ref( null ),
-		loading: ref( true ),
-		error: ref( null ),
+vi.mock( '/resources/ext.personalDashboard.riskyArticleEdits/store/reviewChangesStore.js', () => {
+	const mockStore = {
+		feed: [],
+		pages: [],
+		isLoading: true,
+		error: null,
+		hasFeed: false,
 		fetchRecentActivity: vi.fn()
 	};
-	return { default: () => mock };
+	return { useReviewChangesStore: () => mockStore };
 } );
 
-import useFetchActivityResult from '/resources/ext.personalDashboard.riskyArticleEdits/composables/useFetchActivityResult.js';
-const {
-	recentActivityResult,
-	loading,
-	error,
-	fetchRecentActivity
-} = useFetchActivityResult();
+import { useReviewChangesStore } from '/resources/ext.personalDashboard.riskyArticleEdits/store/reviewChangesStore.js';
+const store = useReviewChangesStore();
 
 import RecentActivity from '/resources/ext.personalDashboard.riskyArticleEdits/App.vue';
 
@@ -28,10 +25,13 @@ mw.user.options.set( 'personaldashboard-risky-articles-info', 0 );
 mw.loader.using = () => {};
 
 beforeEach( () => {
-	recentActivityResult.value = null;
-	loading.value = true;
-	error.value = null;
-	fetchRecentActivity.mockReset();
+	setActivePinia( createPinia() );
+	store.feed = [];
+	store.pages = [];
+	store.isLoading = true;
+	store.error = null;
+	store.hasFeed = false;
+	store.fetchRecentActivity.mockReset();
 } );
 
 test( 'mount component', () => {
@@ -45,8 +45,8 @@ test( 'shows progress bar when loading', () => {
 } );
 
 test( 'shows error message when there is one', () => {
-	loading.value = false;
-	error.value = new Error( 'An Error' );
+	store.isLoading = false;
+	store.error = new Error( 'An Error' );
 
 	const wrapper = mount( RecentActivity );
 	expect( wrapper.text() ).toContain( 'An Error' );
@@ -54,42 +54,41 @@ test( 'shows error message when there is one', () => {
 
 test( 'shows up to 5 recent changes with information', () => {
 	mw.config.set( 'wgMFMode', null );
-	loading.value = false;
-	recentActivityResult.value = {
-		feed: [
-			{
-				title: 'Article Title',
-				type: '',
-				ns: 0,
-				pageid: 15864,
-				revid: 2430984,
-				// eslint-disable-next-line camelcase
-				old_revid: 2394508293,
-				rcid: 2348,
-				user: 'User',
-				bot: false,
-				newlen: 250,
-				oldlen: 20,
-				temp: '',
-				parsedcomment: 'A comment',
-				tags: [],
-				timestamp: new Date( 2024, 11, 2 ).toISOString(),
-				feedorigin: 'recentchanges'
-			}
-		],
-		pages: [
-			{
-				ns: 0,
-				pageid: 15864,
-				title: 'Article Title',
-				description: 'A description'
-			}
-		]
-	};
+	store.isLoading = false;
+	store.hasFeed = true;
+	store.feed = [
+		{
+			title: 'Article Title',
+			type: '',
+			ns: 0,
+			pageid: 15864,
+			revid: 2430984,
+			// eslint-disable-next-line camelcase
+			old_revid: 2394508293,
+			rcid: 2348,
+			user: 'User',
+			bot: false,
+			newlen: 250,
+			oldlen: 20,
+			temp: '',
+			parsedcomment: 'A comment',
+			tags: [],
+			timestamp: new Date( 2024, 11, 2 ).toISOString(),
+			feedorigin: 'recentchanges'
+		}
+	];
+	store.pages = [
+		{
+			ns: 0,
+			pageid: 15864,
+			title: 'Article Title',
+			description: 'A description'
+		}
+	];
 
 	const wrapper = mount( RecentActivity );
 
-	expect( fetchRecentActivity ).toHaveBeenCalledWith( 5 );
+	expect( store.fetchRecentActivity ).toHaveBeenCalledWith( 5 );
 	expect( wrapper.text() ).toContain( 'Article Title' );
 	expect( wrapper.text() ).toContain( 'A comment' );
 	expect( wrapper.text() ).toContain( 'A description' );
@@ -98,42 +97,41 @@ test( 'shows up to 5 recent changes with information', () => {
 
 test( 'shows up to 10 recent changes with information when on mobile view', () => {
 	mw.config.set( 'wgMFMode', true );
-	loading.value = false;
-	recentActivityResult.value = {
-		feed: [
-			{
-				title: 'Article Title',
-				type: '',
-				ns: 0,
-				pageid: 15864,
-				revid: 2430984,
-				// eslint-disable-next-line camelcase
-				old_revid: 2394508293,
-				rcid: 2348,
-				user: 'User',
-				bot: false,
-				newlen: 250,
-				oldlen: 20,
-				temp: '',
-				parsedcomment: 'A comment',
-				tags: [],
-				timestamp: new Date( 2024, 11, 2 ).toISOString(),
-				feedorigin: 'recentchanges'
-			}
-		],
-		pages: [
-			{
-				ns: 0,
-				pageid: 15864,
-				title: 'Article Title',
-				description: 'A description'
-			}
-		]
-	};
+	store.isLoading = false;
+	store.hasFeed = true;
+	store.feed = [
+		{
+			title: 'Article Title',
+			type: '',
+			ns: 0,
+			pageid: 15864,
+			revid: 2430984,
+			// eslint-disable-next-line camelcase
+			old_revid: 2394508293,
+			rcid: 2348,
+			user: 'User',
+			bot: false,
+			newlen: 250,
+			oldlen: 20,
+			temp: '',
+			parsedcomment: 'A comment',
+			tags: [],
+			timestamp: new Date( 2024, 11, 2 ).toISOString(),
+			feedorigin: 'recentchanges'
+		}
+	];
+	store.pages = [
+		{
+			ns: 0,
+			pageid: 15864,
+			title: 'Article Title',
+			description: 'A description'
+		}
+	];
 
 	const wrapper = mount( RecentActivity );
 
-	expect( fetchRecentActivity ).toHaveBeenCalledWith( 10 );
+	expect( store.fetchRecentActivity ).toHaveBeenCalledWith( 10 );
 	expect( wrapper.text() ).toContain( 'Article Title' );
 	expect( wrapper.text() ).toContain( 'A comment' );
 	expect( wrapper.text() ).toContain( 'A description' );
@@ -143,7 +141,7 @@ test( 'shows up to 10 recent changes with information when on mobile view', () =
 test( 'does not show header message by default on mobile summary rendermode', () => {
 	mw.user.options.set( 'personaldashboard-risky-articles-info', 1 );
 	mw.config.set( 'wgMFMode', true );
-	loading.value = false;
+	store.isLoading = false;
 
 	const wrapper = mount( RecentActivity, {
 		props: {
@@ -157,7 +155,7 @@ test( 'does not show header message by default on mobile summary rendermode', ()
 test( 'does not show header message if preference is off', async () => {
 	mw.config.set( 'wgMFMode', true );
 	mw.user.options.set( 'personaldashboard-risky-articles-info', 0 );
-	loading.value = false;
+	store.isLoading = false;
 
 	const wrapper = mount( RecentActivity );
 	expect( wrapper.find( '.personal-dashboard-review-changes__message' ).exists() ).toStrictEqual( false );

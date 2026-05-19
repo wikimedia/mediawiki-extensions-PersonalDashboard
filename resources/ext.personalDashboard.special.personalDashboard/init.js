@@ -24,13 +24,15 @@
 	}
 
 	const { createMwApp, defineComponent, h, ref, render } = require( 'vue' );
+	const { createPinia } = require( 'pinia' );
+	const pinia = createPinia();
 	const ModuleRoute = require( './ModuleRoute.vue' );
 	const contentRoot = document.getElementById( 'content' );
 	const bodySelector = '.personal-dashboard-module-body';
 	const navSelector = '.personal-dashboard-module-header-nav-icon';
 	const rootSelector = '.ext-personal-dashboard-app-root';
 	const navModuleList = [];
-	const app = createMwApp( {} );
+	const app = createMwApp( {} ).use( pinia );
 
 	for ( const moduleEl of modules ) {
 		// skip modules that are already wrapped in an anchor

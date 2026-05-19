@@ -115,6 +115,7 @@
 			],
 			"dependencies": [
 				"vue",
+				"pinia",
 				"ext.personalDashboard.common"
 			]
 		},
@@ -294,7 +295,10 @@
 				"App.vue",
 				"components/ListCard.vue",
 				"components/ListCardMobile.vue",
-				"composables/useFetchActivityResult.js",
+				"store/reviewChangesStore.js",
+				"composables/useWatchlistFeed.js",
+				"composables/useRecentChangesFeed.js",
+				"utils/feedHelpers.js",
 				{
 					"name": "icons.json",
 					"callback": "MediaWiki\\ResourceLoader\\CodexModule::getIcons",
@@ -324,6 +328,7 @@
 			],
 			"dependencies": [
 				"vue",
+				"pinia",
 				"mediawiki.DateFormatter",
 				"ext.personalDashboard.common"
 			]

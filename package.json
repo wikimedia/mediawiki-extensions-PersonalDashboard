@@ -22,7 +22,7 @@
 		"eslint-config-wikimedia": "0.32.4",
 		"grunt-banana-checker": "^0.13.0",
 		"stylelint-config-wikimedia": "^0.18.0",
-		"vitest-plugin-mediawiki": "git+https://gitlab.wikimedia.org/repos/modtools/vitest-plugin.git#v0.1.16"
+		"vitest-plugin-mediawiki": "git+https://gitlab.wikimedia.org/repos/modtools/vitest-plugin.git#v0.1.17"
 	},
 	"overrides": {
 		"eslint-config-wikimedia": {

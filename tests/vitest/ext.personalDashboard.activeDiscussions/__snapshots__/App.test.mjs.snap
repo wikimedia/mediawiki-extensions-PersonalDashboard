@@ -6,6 +6,7 @@ exports[`mount component 1`] = `
 >
   
   <div>
+    
     <div
       aria-disabled="false"
       aria-hidden="true"
@@ -17,6 +18,8 @@ exports[`mount component 1`] = `
         class="cdx-progress-bar__bar"
       />
     </div>
+    <!--v-if-->
+    
   </div>
   <!--v-if-->
   <!--v-if-->

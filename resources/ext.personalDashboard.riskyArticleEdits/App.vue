@@ -1,25 +1,23 @@
 <template>
 	<div ref="moduleRef">
-		<div v-if="loading">
+		<div v-if="reviewChangesStore.isLoading">
 			<cdx-progress-bar inline :aria-label="progressBarAriaLabel"></cdx-progress-bar>
 		</div>
 
-		<div v-if="error">
-			<p>Error: {{ error.message }}</p>
+		<div v-if="reviewChangesStore.error">
+			<p>Error: {{ reviewChangesStore.error.message }}</p>
 		</div>
 
 		<template
-			v-if="recentActivityResult &&
-				recentActivityResult.feed &&
-				recentActivityResult.pages">
+			v-if="reviewChangesStore && reviewChangesStore.feed && reviewChangesStore.pages">
 			<div
 				v-if="rendermode === 'mobile-summary'"
 				class="personal-dashboard-review-changes__container--mobile">
 				<list-card-mobile
-					v-for="rc in recentActivityResult.feed.slice( 0, 1 )"
+					v-for="rc in reviewChangesStore.feed.slice( 0, 1 )"
 					v-bind="rc"
 					:key="`${rendermode}-${rc.feedorigin}-${rc.revid}`"
-					:pages="recentActivityResult.pages">
+					:pages="reviewChangesStore.pages">
 				</list-card-mobile>
 			</div>
 
@@ -27,10 +25,10 @@
 				v-else
 				class="personal-dashboard-review-changes__container">
 				<list-card
-					v-for="rc in recentActivityResult.feed"
+					v-for="rc in reviewChangesStore.feed"
 					v-bind="rc"
 					:key="`${rendermode}-${rc.feedorigin}-${rc.revid}`"
-					:pages="recentActivityResult.pages"
+					:pages="reviewChangesStore.pages"
 					:is-mobile="isMobile">
 				</list-card>
 			</div>
@@ -61,7 +59,7 @@
 <script>
 const { defineComponent, ref } = require( 'vue' );
 const { CdxButton, CdxProgressBar } = require( './codex.js' );
-const useFetchActivityResult = require( './composables/useFetchActivityResult.js' );
+const { useReviewChangesStore } = require( './store/reviewChangesStore.js' );
 const ListCard = require( './components/ListCard.vue' );
 const ListCardMobile = require( './components/ListCardMobile.vue' );
 
@@ -89,29 +87,21 @@ module.exports = defineComponent( {
 
 		const isMobile = mw.config.get( 'wgMFMode' ) !== null;
 		const limit = isMobile ? 10 : 5;
-		const {
-			recentActivityResult,
-			loading,
-			error,
-			fetchRecentActivity
-		} = useFetchActivityResult();
+		const reviewChangesStore = useReviewChangesStore();
 
 		return {
 			moduleRef,
 			observer,
 			isMobile,
 			limit,
-			recentActivityResult,
-			loading,
-			error,
-			fetchRecentActivity,
+			reviewChangesStore,
 			buttonAriaLabel: mw.msg( 'personal-dashboard-risky-article-edits-mobile-summary-footer-link-text' ),
 			progressBarAriaLabel: mw.msg( 'personal-dashboard-risky-article-edits-progress-bar-aria-label' )
 		};
 	},
 	mounted() {
 		this.observer.observe( this.moduleRef );
-		this.fetchRecentActivity( this.limit );
+		this.reviewChangesStore.fetchRecentActivity( this.limit );
 	}
 } );
 </script>

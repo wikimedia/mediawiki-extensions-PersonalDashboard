@@ -457,38 +457,75 @@
 			},
 			"ModuleGroups": {
 				"ext.personalDashboard.newModerators": {
-					"utils": {
-						"hidden": {
-							"ext.personalDashboard.onboarding": {
-								"enabled": true
-							}
-						}
-					},
-					"main": {
-						"primary": {
-							"ext.personalDashboard.banner": {
-								"enabled": true
-							},
-							"ext.personalDashboard.riskyArticleEdits": {
-								"enabled": true
-							},
-							"ext.personalDashboard.activeDiscussions": {
-								"enabled": true
-							}
-						}
-					},
-					"sidebar": {
-						"primary": {
-							"ext.personalDashboard.impact": {
-								"enabled": true
-							}
+					"version": 0,
+					"groups": [
+						{
+							"name": "utils",
+							"enabled": true,
+							"subgroups": [
+								{
+									"name": "hidden",
+									"enabled": true,
+									"modules": [
+										{
+											"name": "ext.personalDashboard.onboarding",
+											"enabled": true
+										}
+									]
+								}
+							]
 						},
-						"secondary": {
-							"ext.personalDashboard.policiesGuidelines": {
-								"enabled": true
-							}
+						{
+							"name": "main",
+							"enabled": true,
+							"subgroups": [
+								{
+									"name": "primary",
+									"enabled": true,
+									"modules": [
+										{
+											"name": "ext.personalDashboard.banner",
+											"enabled": true
+										},
+										{
+											"name": "ext.personalDashboard.riskyArticleEdits",
+											"enabled": true
+										},
+										{
+											"name": "ext.personalDashboard.activeDiscussions",
+											"enabled": true
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "sidebar",
+							"enabled": true,
+							"subgroups": [
+								{
+									"name": "primary",
+									"enabled": true,
+									"modules": [
+										{
+											"name": "ext.personalDashboard.impact",
+											"enabled": true
+										}
+									]
+								},
+								{
+									"name": "secondary",
+									"enabled": true,
+									"modules": [
+										{
+											"name": "ext.personalDashboard.policiesGuidelines",
+											"enabled": true
+										}
+									]
+								}
+							]
 						}
-					}
+					]
 				}
 			}
 		}

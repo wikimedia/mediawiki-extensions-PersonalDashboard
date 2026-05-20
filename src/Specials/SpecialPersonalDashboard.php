@@ -131,24 +131,23 @@ class SpecialPersonalDashboard extends SpecialPage {
 	}
 
 	/**
-	 * @param string $moduleName
 	 * @param array $moduleConfig
 	 * @param IContextSource $context
 	 * @return ?IModule
 	 */
-	private function getRequestedModule( string $moduleName, array $moduleConfig, IContextSource $context ) {
+	private function getRequestedModule( array $moduleConfig, IContextSource $context ) {
 		// $moduleConfig['enabled'] may be overriden by URL query param
-		$moduleUrlParam = $this->getContext()->getRequest()->getText( $moduleName );
+		$moduleUrlParam = $this->getContext()->getRequest()->getText( $moduleConfig[ 'name' ] );
 		if ( $moduleUrlParam !== '' ) {
 			$moduleOverride = filter_var( $moduleUrlParam, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE );
 			if ( $moduleOverride !== null ) {
 				$moduleConfig['enabled'] = $moduleOverride;
 			}
 		}
-		if ( !$moduleConfig || !$moduleConfig['enabled'] || $moduleConfig['enabled'] !== true ) {
+		if ( !$moduleConfig || !array_key_exists( 'enabled', $moduleConfig ) || $moduleConfig['enabled'] !== true ) {
 			return;
 		}
-		return $this->moduleFactory->getModule( $moduleName, [ $context ] );
+		return $this->moduleFactory->getModule( $moduleConfig[ 'name' ], [ $context ] );
 	}
 
 	/**
@@ -157,15 +156,15 @@ class SpecialPersonalDashboard extends SpecialPage {
 	private function getModules() {
 		$modules = [];
 		$context = $this->getContext();
-		foreach ( $this->getModuleGroups() as $_group => $subGroups ) {
-			foreach ( $subGroups as $_subGroup => $moduleConfigs ) {
-				foreach ( $moduleConfigs as $moduleName => $moduleConfig ) {
+		foreach ( $this->getModuleGroups()[ 'groups' ] as $groupConfig ) {
+			foreach ( (array)$groupConfig[ 'subgroups' ] as $subGroup ) {
+				foreach ( $subGroup[ 'modules' ] as $moduleConfig ) {
 					/** @var ?IModule $module */
-					$module = $this->getRequestedModule( $moduleName, (array)$moduleConfig, $context );
+					$module = $this->getRequestedModule( $moduleConfig, $context );
 					if ( !$module ) {
 						continue;
 					}
-					$modules[ $moduleName ] = $module;
+					$modules[ $moduleConfig[ 'name' ] ] = $module;
 				}
 			}
 		}
@@ -179,7 +178,6 @@ class SpecialPersonalDashboard extends SpecialPage {
 	private function getModuleGroups( $name = 'ext.personalDashboard.newModerators' ): array {
 		$registry = ExtensionRegistry::getInstance()->getAttribute( 'PersonalDashboardModuleGroups' );
 		$moduleGroups = $registry[$name];
-		// print_r($moduleGroups);
 		return $moduleGroups;
 	}
 
@@ -222,21 +220,20 @@ class SpecialPersonalDashboard extends SpecialPage {
 		$out = $this->getContext()->getOutput();
 		$out->addBodyClasses( 'personal-dashboard-desktop' );
 		$context = $this->getContext();
-		foreach ( $this->getModuleGroups() as $group => $subGroups ) {
+		foreach ( $this->getModuleGroups()[ 'groups' ] as $group ) {
 			$out->addHTML( Html::openElement( 'div', [
-				'class' => "personal-dashboard-group-$group"
+				'class' => "personal-dashboard-group-{$group[ 'name' ]}"
 			] ) );
-			foreach ( $subGroups as $subGroup => $moduleConfigs ) {
+			foreach ( (array)$group[ 'subgroups' ] as $subGroup ) {
 				$out->addHTML( Html::openElement( 'div', [
-					'class' => "personal-dashboard-group-$group-subgroup-$subGroup"
+					'class' => "personal-dashboard-group-{$group[ 'name' ]}-subgroup-{$subGroup[ 'name' ]}"
 				] ) );
-				foreach ( $moduleConfigs as $moduleName => $moduleConfig ) {
+				foreach ( $subGroup[ 'modules' ] as $moduleConfig ) {
 					/** @var ?IModule $module */
-					$module = $this->getRequestedModule( $moduleName, (array)$moduleConfig, $context );
+					$module = $this->getRequestedModule( $moduleConfig, $context );
 					if ( !$module ) {
 						continue;
 					}
-
 					$startTime = microtime( true );
 
 					$module->setPageURL( $this->getPageTitle()->getLinkURL() );
@@ -244,7 +241,7 @@ class SpecialPersonalDashboard extends SpecialPage {
 					$out->addHTML( $html );
 
 					$this->recordModuleRenderingTime(
-						$moduleName,
+						$moduleConfig[ 'name' ],
 						IModule::RENDER_DESKTOP,
 						microtime( true ) - $startTime
 					);

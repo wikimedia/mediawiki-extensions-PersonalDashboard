@@ -175,10 +175,16 @@ class SpecialPersonalDashboard extends SpecialPage {
 	 * @param string $name key of registered module group in extension.json
 	 * @return string[][][]
 	 */
-	private function getModuleGroups( $name = 'ext.personalDashboard.newModerators' ): array {
+	private function getModuleGroups( $name = 'default' ): array {
 		$registry = ExtensionRegistry::getInstance()->getAttribute( 'PersonalDashboardModuleGroups' );
-		$moduleGroups = $registry[$name];
-		return $moduleGroups;
+		// $moduleGroup may be overriden by URL query param
+		$nameOverride = $this->getContext()->getRequest()->getText( 'moduleGroup' );
+		if ( $nameOverride !== '' ) {
+			if ( array_key_exists( $nameOverride, $registry ) ) {
+				return $registry[ $nameOverride ];
+			}
+		}
+		return $registry[ $name ];
 	}
 
 	/**

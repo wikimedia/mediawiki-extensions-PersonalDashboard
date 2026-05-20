@@ -23,16 +23,19 @@
 <script>
 const { defineComponent, ref } = require( 'vue' );
 const { MultiStepDialog } = require( 'ext.personalDashboard.common' );
+const api = new mw.Api();
 
 module.exports = defineComponent( {
 	name: 'OnboardingDialog',
 	components: { MultiStepDialog },
 	setup() {
+		const isMenuLinkVisible = mw.config.get( 'wgPersonalDashboardMenuVisible' );
 		const bannerPath = mw.config.get( 'wgExtensionAssetsPath' ) +
 			'/PersonalDashboard/resources/ext.personalDashboard.onboarding/images/';
 		const msgPrefix = 'personal-dashboard-onboarding-step-';
 
 		return {
+			isMenuLinkVisible,
 			open: ref( true ),
 			step: ref( 1 ),
 			steps: [
@@ -60,6 +63,30 @@ module.exports = defineComponent( {
 			msgTitle: mw.msg( 'personal-dashboard-onboarding-title' ),
 			msgGetStartedButton: mw.msg( 'personal-dashboard-onboarding-get-started-button' )
 		};
+	},
+	methods: {
+		async markPersonalDashboardVisited() {
+			await api.postWithEditToken( {
+				action: 'options',
+				optionname: 'personaldashboard-visited',
+				optionvalue: '1',
+				formatversion: 2
+			} );
+		},
+		async markPersonalDashboardEligible() {
+			await api.postWithEditToken( {
+				action: 'options',
+				optionname: 'personaldashboard-eligible',
+				optionvalue: '1',
+				formatversion: 2
+			} );
+		}
+	},
+	mounted() {
+		this.markPersonalDashboardVisited();
+		if ( this.isMenuLinkVisible ) {
+			this.markPersonalDashboardEligible();
+		}
 	}
 } );
 </script>

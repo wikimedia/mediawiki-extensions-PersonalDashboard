@@ -104,7 +104,6 @@ module.exports = defineComponent( {
 
 		const isMobile = mw.config.get( 'wgMFMode' ) !== null;
 		const limit = isMobile ? 10 : 5;
-		const isMenuLinkVisible = mw.config.get( 'wgPersonalDashboardMenuVisible' );
 		const {
 			recentActivityResult,
 			loading,
@@ -117,7 +116,6 @@ module.exports = defineComponent( {
 			observer,
 			isMobile,
 			limit,
-			isMenuLinkVisible,
 			recentActivityResult,
 			loading,
 			error,
@@ -135,31 +133,11 @@ module.exports = defineComponent( {
 				optionvalue: 0,
 				formatversion: 2
 			} );
-		},
-		async markPersonalDashboardVisited() {
-			await api.postWithEditToken( {
-				action: 'options',
-				optionname: 'personaldashboard-visited',
-				optionvalue: '1',
-				formatversion: 2
-			} );
-		},
-		async markPersonalDashboardEligible() {
-			await api.postWithEditToken( {
-				action: 'options',
-				optionname: 'personaldashboard-eligible',
-				optionvalue: '1',
-				formatversion: 2
-			} );
 		}
 	},
 	mounted() {
 		this.observer.observe( this.moduleRef );
 		this.fetchRecentActivity( this.limit );
-		this.markPersonalDashboardVisited();
-		if ( this.isMenuLinkVisible ) {
-			this.markPersonalDashboardEligible();
-		}
 	}
 } );
 </script>

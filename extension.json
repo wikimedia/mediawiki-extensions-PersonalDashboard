@@ -451,12 +451,16 @@
 				"ext.personalDashboard.policiesGuidelines": {
 					"class": "MediaWiki\\Extension\\PersonalDashboard\\Modules\\PoliciesGuidelines"
 				},
+				"ext.personalDashboard.returnToHomepage": {
+					"class": "MediaWiki\\Extension\\PersonalDashboard\\Modules\\ReturnToHomepage"
+				},
 				"ext.personalDashboard.riskyArticleEdits": {
 					"class": "MediaWiki\\Extension\\PersonalDashboard\\Modules\\RiskyArticleEdits"
 				}
 			},
 			"ModuleGroups": {
-				"ext.personalDashboard.newModerators": {
+				"default": {
+					"description": "The Moderator Tools default Personal Dashboard experience",
 					"version": 0,
 					"groups": [
 						{
@@ -519,6 +523,32 @@
 									"modules": [
 										{
 											"name": "ext.personalDashboard.policiesGuidelines",
+											"enabled": true
+										}
+									]
+								}
+							]
+						}
+					]
+				},
+				"T426615": {
+					"description": "An A/B test linking to PersonalDashboard Review Changes module from Newcomer Homepage",
+					"version": 0,
+					"groups": [
+						{
+							"name": "main",
+							"enabled": true,
+							"subgroups": [
+								{
+									"name": "primary",
+									"enabled": true,
+									"modules": [
+										{
+											"name": "ext.personalDashboard.riskyArticleEdits",
+											"enabled": true
+										},
+										{
+											"name": "ext.personalDashboard.returnToHomepage",
 											"enabled": true
 										}
 									]

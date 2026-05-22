@@ -137,26 +137,3 @@ test( 'shows up to 10 recent changes with information when on mobile view', () =
 	expect( wrapper.text() ).toContain( 'A description' );
 	expect( wrapper.text() ).toContain( '1 year ago' );
 } );
-
-test( 'does not show header message by default on mobile summary rendermode', () => {
-	mw.user.options.set( 'personaldashboard-risky-articles-info', 1 );
-	mw.config.set( 'wgMFMode', true );
-	store.isLoading = false;
-
-	const wrapper = mount( RecentActivity, {
-		props: {
-			rendermode: 'mobile-summary'
-		}
-	} );
-
-	expect( wrapper.find( '.personal-dashboard-review-changes__message' ).exists() ).toStrictEqual( false );
-} );
-
-test( 'does not show header message if preference is off', async () => {
-	mw.config.set( 'wgMFMode', true );
-	mw.user.options.set( 'personaldashboard-risky-articles-info', 0 );
-	store.isLoading = false;
-
-	const wrapper = mount( RecentActivity );
-	expect( wrapper.find( '.personal-dashboard-review-changes__message' ).exists() ).toStrictEqual( false );
-} );

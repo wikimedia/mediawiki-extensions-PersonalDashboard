@@ -4,19 +4,19 @@
 			<cdx-progress-bar inline :aria-label="progressBarAriaLabel"></cdx-progress-bar>
 		</div>
 
-		<div v-if="reviewChangesStore.error">
+		<div v-else-if="reviewChangesStore.error">
 			<p>Error: {{ reviewChangesStore.error.message }}</p>
 		</div>
 
 		<template
-			v-if="reviewChangesStore && reviewChangesStore.feed && reviewChangesStore.pages">
+			v-else-if="reviewChangesStore &&
+				reviewChangesStore.feed &&
+				reviewChangesStore.pages">
 			<div
 				v-if="rendermode === 'mobile-summary'"
 				class="personal-dashboard-review-changes__container--mobile">
 				<list-card-mobile
-					v-for="rc in reviewChangesStore.feed.slice( 0, 1 )"
-					v-bind="rc"
-					:key="`${rendermode}-${rc.feedorigin}-${rc.revid}`"
+					v-bind="reviewChangesStore.feed[ 0 ]"
 					:pages="reviewChangesStore.pages">
 				</list-card-mobile>
 			</div>

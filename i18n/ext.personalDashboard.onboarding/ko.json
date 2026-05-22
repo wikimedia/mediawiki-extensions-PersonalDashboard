@@ -9,6 +9,12 @@
 	"personal-dashboard-onboarding-dont-show-again": "다시 보지 않음",
 	"personal-dashboard-onboarding-get-started-button": "시작하기",
 	"personal-dashboard-onboarding-step-1-title": "환영합니다",
+	"personal-dashboard-onboarding-step-1-body": "당신의 편집 경험을 고려하여 다른 기여자의 편집 내용을 검토해 주시기를 권장합니다. 이 중앙 허브는 검토할 변경 사항과 함께 결정을 내리는 데 도움이 되는 정책 및 자료를 보여줌으로써 위키백과를 쉽게 탐색할 수 있도록 도와줍니다.",
+	"personal-dashboard-onboarding-step-1-alt": "세 개의 개별적인 간소화된 대시보드 패널로 구성된 문서의 일러스트입니다.",
 	"personal-dashboard-onboarding-step-2-title": "기능",
-	"personal-dashboard-onboarding-step-3-title": "의견 공유하기"
+	"personal-dashboard-onboarding-step-2-body": "이 첫 번째 버전의 대시보드에서는 주의가 필요한 편집사항을 검토하고, 관련 정책 및 지침을 확인하고, 관련 통계를 추적할 수 있습니다.",
+	"personal-dashboard-onboarding-step-2-alt": "세 개의 간소화된 대시보드 패널이 문서에 추가되는 모습을 보여주는 그림입니다.",
+	"personal-dashboard-onboarding-step-3-title": "의견 공유하기",
+	"personal-dashboard-onboarding-step-3-body": "향후 몇 달에 걸쳐 사용자의 편집 활동을 기반으로 기능을 개인화할 계획입니다. 그동안 여러분의 의견을 들려주세요. 피드백을 공유하시려면 문서 상단에 있는 설문 조사 링크를 이용해 주세요.",
+	"personal-dashboard-onboarding-step-3-alt": "문서 상단에 피드백 링크를 강조하는 진한 파란색 영역이 있는 간소화된 대시보드의 그림입니다."
 }

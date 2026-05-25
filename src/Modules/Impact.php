@@ -18,7 +18,7 @@ class Impact extends BaseModule {
 		IContextSource $context,
 		IConnectionProvider $connectionProvider,
 	) {
-		parent::__construct( 'impact', $context );
+		parent::__construct( $context );
 		$this->dbr = $connectionProvider->getReplicaDatabase();
 	}
 

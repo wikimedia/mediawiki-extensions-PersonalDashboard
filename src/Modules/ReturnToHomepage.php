@@ -39,6 +39,10 @@ class ReturnToHomepage implements IModule {
 	}
 
 	/** @inheritDoc */
+	public function setName( string $name ) {
+	}
+
+	/** @inheritDoc */
 	public function getJsData( $mode ) {
 		return [];
 	}

@@ -10,7 +10,7 @@ use MediaWiki\Html\Html;
  */
 class PoliciesGuidelines extends BaseModule {
 	public function __construct( IContextSource $context ) {
-		parent::__construct( 'policiesGuidelines', $context );
+		parent::__construct( $context );
 	}
 
 	/** @inheritDoc */

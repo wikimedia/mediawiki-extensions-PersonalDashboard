@@ -27,6 +27,10 @@ class Onboarding implements IModule {
 	}
 
 	/** @inheritDoc */
+	public function setName( $name ) {
+	}
+
+	/** @inheritDoc */
 	public function render( $mode ) {
 		$user = $this->context->getUser();
 		$userOptionsManager = $this->userOptionsManager;

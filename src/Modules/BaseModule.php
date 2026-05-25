@@ -38,16 +38,13 @@ abstract class BaseModule implements IModule {
 	private $pageURL = null;
 
 	/**
-	 * @param string $name Name of the module
 	 * @param IContextSource $context
 	 * @param bool $shouldWrapModuleWithLink
 	 */
 	public function __construct(
-		string $name,
 		IContextSource $context,
 		bool $shouldWrapModuleWithLink = false,
 	) {
-		$this->name = $name;
 		$this->context = $context;
 		$this->shouldWrapModuleWithLink = $shouldWrapModuleWithLink;
 	}
@@ -58,6 +55,11 @@ abstract class BaseModule implements IModule {
 	 */
 	public function setPageURL( string $url ): void {
 		$this->pageURL = $url;
+	}
+
+	/** @inheritDoc */
+	public function setName( string $name ): void {
+		$this->name = $name;
 	}
 
 	/**
@@ -133,6 +135,7 @@ abstract class BaseModule implements IModule {
 		return $this->mode;
 	}
 
+	/** @inheritDoc */
 	final protected function getName(): string {
 		return $this->name;
 	}

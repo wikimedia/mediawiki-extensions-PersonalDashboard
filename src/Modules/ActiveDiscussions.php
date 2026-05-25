@@ -10,7 +10,7 @@ use MediaWiki\Html\Html;
  */
 class ActiveDiscussions extends BaseModule {
 	public function __construct( IContextSource $context ) {
-		parent::__construct( 'activeDiscussions', $context );
+		parent::__construct( $context );
 	}
 
 	/** @inheritDoc */

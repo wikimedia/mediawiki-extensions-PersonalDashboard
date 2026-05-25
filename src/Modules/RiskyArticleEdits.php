@@ -12,7 +12,7 @@ use MediaWiki\Registration\ExtensionRegistry;
 class RiskyArticleEdits extends BaseModule {
 
 	public function __construct( IContextSource $context ) {
-		parent::__construct( 'riskyArticleEdits', $context );
+		parent::__construct( $context );
 	}
 
 	/** @inheritDoc */

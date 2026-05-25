@@ -35,7 +35,11 @@ class PersonalDashboardModuleFactory {
 			$this->logger->error( "PersonalDashboard: module $name is not supported", [] );
 		}
 		if ( !array_key_exists( $name, $this->modules ) ) {
-			$spec = $this->registry[ $name ];
+			if ( array_key_exists( $name, $this->registry ) ) {
+				$spec = $this->registry[ $name ];
+			} else {
+				$spec = $this->registry[ 'ext.personalDashboard.placeholder' ];
+			}
 			$this->modules[ $name ] = $this->objectFactory->createObject(
 				$spec,
 				[
@@ -43,6 +47,7 @@ class PersonalDashboardModuleFactory {
 					'assertClass' => IModule::class,
 				],
 			);
+			$this->modules[ $name ]->setName( $name );
 		}
 		return $this->modules[ $name ];
 	}

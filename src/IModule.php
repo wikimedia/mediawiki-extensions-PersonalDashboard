@@ -40,4 +40,11 @@ interface IModule {
 	 * @return void
 	 */
 	public function setPageURL( string $url );
+
+	/**
+	 * Sets the module name.
+	 * @param string $name module name
+	 * @return void
+	 */
+	public function setName( string $name );
 }

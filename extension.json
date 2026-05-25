@@ -443,6 +443,9 @@
 						"ConnectionProvider"
 					]
 				},
+				"ext.personalDashboard.placeholder": {
+					"class": "MediaWiki\\Extension\\PersonalDashboard\\Modules\\Placeholder"
+				},
 				"ext.personalDashboard.onboarding": {
 					"class": "MediaWiki\\Extension\\PersonalDashboard\\Modules\\Onboarding",
 					"services": [
@@ -531,6 +534,29 @@
 							]
 						}
 					]
+				},
+				"null": {
+					"description": "Null module test",
+					"version": 0,
+					"groups": [
+						{
+							"name": "main",
+							"enabled": true,
+							"subgroups": [
+								{
+									"name": "primary",
+									"enabled": true,
+									"modules": [
+										{
+											"name": "ext.personalDashboard.example",
+											"enabled": true
+										}
+									]
+								}
+							]
+						}
+					]
+
 				},
 				"T426615": {
 					"description": "An A/B test linking to PersonalDashboard Review Changes module from Newcomer Homepage",

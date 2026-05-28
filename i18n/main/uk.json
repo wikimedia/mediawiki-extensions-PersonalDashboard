@@ -6,5 +6,6 @@
 	},
 	"personal-dashboard-beta-info-chip-text": "Бета",
 	"personal-dashboard-module-no-js-fallback": "Щоб переглянути цей компонент, будь ласка, увімкніть JavaScript.",
+	"personal-dashboard-specialpage-title": "{{GENDER:$1|Привіт}}, {{bidi:$1}}!",
 	"personal-dashboard-survey-text": "[$1 Поділитися відгуком]"
 }

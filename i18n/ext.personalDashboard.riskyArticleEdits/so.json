@@ -4,8 +4,15 @@
 			"AhmedG612"
 		]
 	},
+	"personal-dashboard-risky-article-edits-header": "Dib u eeg isbeddellada",
+	"personal-dashboard-risky-article-edits-subheader": "Ka caawi ilaalinta kalsoonida Wikipedia adigoo dib u eegaya isbeddellada soo socda ee u baahan feejignaan.",
 	"personal-dashboard-risky-article-edits-subheader-info": "Ka caawi in Wikipedia uu ahaado mid lagu kalsoonaan karo.",
 	"personal-dashboard-risky-article-edits-subheader-info-popover": "[$1 aalad otomaatig ah oo ka hortagta kharribaadda] waxay calaamadisaa isbeddello halis u muuqda oo ay sameeyeen tifaftirayaal kale. Dooro mid si aad u furto aragtida isbeddelka oo aad go'aansato inaad ka noqoto, hagaajiso, ama u mahadceliso tifaftiraha.",
+	"personal-dashboard-risky-article-edits-subheader-info-popover-title": "Sidee?",
 	"personal-dashboard-risky-article-edits-subheader-info-popover-confirm": "Waan fahmay",
+	"personal-dashboard-risky-article-edits-footer-preamble": "Eeg isbeddello dheeraad ah bogga [{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}} isbeddellada ugu dambeeyay]",
+	"personal-dashboard-risky-article-edits-info-time-text-today": "$1, Maanta",
+	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Ma jiro koobitaanka wax ka beddelka",
+	"personal-dashboard-risky-article-edits-info-button-aria-label": "badhanka macluumaadka",
 	"personal-dashboard-risky-article-edits-progress-bar-aria-label": "bar horumar oo dhexda ku jirta oo muujisa marka isbeddellada dib u eegista lagu soo shubo"
 }

@@ -21,8 +21,8 @@ class RiskyArticleEdits extends BaseModule {
 	}
 
 	/** @inheritDoc */
-	protected function getSubheader() {
-		return ' ';
+	protected function getSubheaderText() {
+		return $this->msg( 'personal-dashboard-risky-article-edits-subheader-info' )->text();
 	}
 
 	/** @inheritDoc */

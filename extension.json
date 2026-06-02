@@ -294,7 +294,6 @@
 				"App.vue",
 				"components/ListCard.vue",
 				"components/ListCardMobile.vue",
-				"components/HeaderMessage.vue",
 				"composables/useFetchActivityResult.js",
 				{
 					"name": "icons.json",
@@ -317,9 +316,6 @@
 				"personal-dashboard-risky-article-edits-list-card-no-comment-message",
 				"personal-dashboard-risky-article-edits-mobile-summary-footer-link-text",
 				"personal-dashboard-risky-article-edits-mobile-user-text",
-				"personal-dashboard-risky-article-edits-subheader-info-popover-title",
-				"personal-dashboard-risky-article-edits-subheader-info-popover",
-				"personal-dashboard-risky-article-edits-subheader-info-popover-confirm",
 				"personal-dashboard-risky-article-edits-subheader-info",
 				"tag-mw-reverted",
 				"tag-mw-rollback",

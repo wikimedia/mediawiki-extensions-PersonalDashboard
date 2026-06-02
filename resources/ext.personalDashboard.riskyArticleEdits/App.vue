@@ -1,17 +1,5 @@
 <template>
 	<div ref="moduleRef">
-		<template v-if="showHeaderMessage && rendermode !== 'mobile-summary'">
-			<header-message
-				v-if="isMobile"
-				:is-mobile="isMobile"
-				@dismissed="onHeaderMessageClose">
-			</header-message>
-
-			<teleport v-else to=".personal-dashboard-module-subheader">
-				<header-message @dismissed="onHeaderMessageClose"></header-message>
-			</teleport>
-		</template>
-
 		<div v-if="loading">
 			<cdx-progress-bar inline :aria-label="progressBarAriaLabel"></cdx-progress-bar>
 		</div>
@@ -76,14 +64,11 @@ const { CdxButton, CdxProgressBar } = require( './codex.js' );
 const useFetchActivityResult = require( './composables/useFetchActivityResult.js' );
 const ListCard = require( './components/ListCard.vue' );
 const ListCardMobile = require( './components/ListCardMobile.vue' );
-const HeaderMessage = require( './components/HeaderMessage.vue' );
-const api = new mw.Api();
 
 module.exports = defineComponent( {
 	components: {
 		CdxButton,
 		CdxProgressBar,
-		HeaderMessage,
 		ListCard,
 		ListCardMobile
 	},
@@ -121,19 +106,8 @@ module.exports = defineComponent( {
 			error,
 			fetchRecentActivity,
 			buttonAriaLabel: mw.msg( 'personal-dashboard-risky-article-edits-mobile-summary-footer-link-text' ),
-			progressBarAriaLabel: mw.msg( 'personal-dashboard-risky-article-edits-progress-bar-aria-label' ),
-			showHeaderMessage: mw.user.options.get( 'personaldashboard-risky-articles-info', 0 )
+			progressBarAriaLabel: mw.msg( 'personal-dashboard-risky-article-edits-progress-bar-aria-label' )
 		};
-	},
-	methods: {
-		async onHeaderMessageClose() {
-			await api.postWithEditToken( {
-				action: 'options',
-				optionname: 'personaldashboard-risky-articles-info',
-				optionvalue: 0,
-				formatversion: 2
-			} );
-		}
 	},
 	mounted() {
 		this.observer.observe( this.moduleRef );
@@ -148,24 +122,14 @@ module.exports = defineComponent( {
 .personal-dashboard {
 	&-module {
 		&-riskyArticleEdits&-desktop & {
-			&-header {
-				border-bottom: @border-subtle;
-			}
-
 			&-footer {
 				border-top: @border-subtle;
-			}
-
-			&-header,
-			&-footer {
 				padding: @spacing-100;
+				margin: 0;
 			}
 
-			&-header,
-			&-subheader,
-			&-body,
-			&-footer {
-				margin: 0;
+			&-body {
+				margin: @spacing-100 0 0 0;
 			}
 		}
 

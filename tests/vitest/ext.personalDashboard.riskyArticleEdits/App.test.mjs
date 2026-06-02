@@ -140,41 +140,6 @@ test( 'shows up to 10 recent changes with information when on mobile view', () =
 	expect( wrapper.text() ).toContain( '1 year ago' );
 } );
 
-test( 'shows header message by default on mobile and updates preference when closed', async () => {
-	mw.user.options.set( 'personaldashboard-risky-articles-info', 1 );
-	mw.config.set( 'wgMFMode', true );
-	loading.value = false;
-	let closed = false;
-
-	mw.Api.mock( ( params, options ) => {
-		if ( options.type === 'POST' &&
-			params.action === 'options' &&
-			params.optionname === 'personaldashboard-risky-articles-info' &&
-			params.optionvalue === 0 ) {
-			closed = true;
-		}
-	} );
-
-	const wrapper = mount( RecentActivity );
-
-	const messageHeader = wrapper.find( '.personal-dashboard-review-changes__message' );
-	expect( messageHeader.exists() ).toStrictEqual( true );
-
-	const dismissButton = wrapper.find( '.cdx-message__dismiss-button' );
-	await dismissButton.trigger( 'click' );
-
-	expect( closed ).toStrictEqual( true );
-} );
-
-test( 'shows header message by default on non-mobile', () => {
-	mw.user.options.set( 'personaldashboard-risky-articles-info', 1 );
-	mw.config.set( 'wgMFMode', null );
-	loading.value = false;
-
-	const wrapper = mount( RecentActivity );
-	expect( wrapper.findComponent( '.personal-dashboard-review-changes__message' ).exists() ).toStrictEqual( true );
-} );
-
 test( 'does not show header message by default on mobile summary rendermode', () => {
 	mw.user.options.set( 'personaldashboard-risky-articles-info', 1 );
 	mw.config.set( 'wgMFMode', true );

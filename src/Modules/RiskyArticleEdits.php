@@ -87,14 +87,10 @@ class RiskyArticleEdits extends BaseModule {
 
 	/** @inheritDoc */
 	protected function getJsConfigVars() {
-		// TODO: Remove this feature flag once watchlist changes are integrated to the feed completely
-		$watchListFeedEnabled = $this->getContext()->getRequest()
-							   ->getText( 'personaldashboard_riskyarticleedits_wlenabled' );
 		// fallback to ml disabled if ores isn't loaded and configured as expected
 		$config = $this->getConfig();
 		$mlDisabledConf = [
 				'wgPersonalDashboardRiskyArticleEditsMlEnabled' => false,
-				'wgPersonalDashboardRiskyArticleEditsWlEnabled' => (bool)$watchListFeedEnabled
 		];
 		if (
 			!ExtensionRegistry::getInstance()->isLoaded( 'ORES' ) ||
@@ -144,7 +140,6 @@ class RiskyArticleEdits extends BaseModule {
 			return [
 				'wgPersonalDashboardRiskyArticleEditsMlModel' => $model,
 				'wgPersonalDashboardRiskyArticleEditsMlEnabled' => true,
-				'wgPersonalDashboardRiskyArticleEditsWlEnabled' => (bool)$watchListFeedEnabled
 			];
 		}
 		// fallback to ml disabled if no model is available

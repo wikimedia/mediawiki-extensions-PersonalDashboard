@@ -55,11 +55,11 @@ const useReviewChangesStore = defineStore( 'reviewChanges', {
 
 	actions: {
 		/**
-		 * Fetch and merge the RC and (optionally) watchlist feeds, then
+		 * Fetch and merge the RC and watchlist feeds, then
 		 * commit the result to state.
 		 *
-		 * When the watchlist feed is enabled, watchlist titles are passed to
-		 * the RC composable so it can exclude duplicates before sampling.
+		 * Watchlist titles are passed to the RC composable so it can exclude
+		 * duplicates before sampling.
 		 *
 		 * @param {number} limit Total number of feed items to display
 		 * @return {Promise<void>}
@@ -68,24 +68,16 @@ const useReviewChangesStore = defineStore( 'reviewChanges', {
 			this.isLoading = true;
 			this.error = null;
 
-			const wlFeedEnabled =
-				mw.config.get( 'wgPersonalDashboardRiskyArticleEditsWlEnabled' ) || false;
-			const perFeedLimit = wlFeedEnabled ? Math.ceil( limit / NUM_FEEDS ) : limit;
+			const perFeedLimit = Math.ceil( limit / NUM_FEEDS );
 
 			const { fetchWatchlistItems } = useWatchlistFeed();
 			const { fetchRecentChangesItems } = useRecentChangesFeed();
 
 			try {
-				let wlItems = [];
-
-				if ( wlFeedEnabled ) {
-					wlItems = await fetchWatchlistItems( perFeedLimit, MAX_API_REQUESTS );
-				}
+				const wlItems = await fetchWatchlistItems( perFeedLimit, MAX_API_REQUESTS );
 
 				const wlTitles = wlItems.map( ( item ) => item.title );
-				const amountToFill = wlFeedEnabled ?
-					Math.max( perFeedLimit, limit - wlItems.length ) :
-					limit;
+				const amountToFill = Math.max( perFeedLimit, limit - wlItems.length );
 
 				const { items: rcItems, pages } = await fetchRecentChangesItems(
 					amountToFill, MAX_API_REQUESTS, wlTitles

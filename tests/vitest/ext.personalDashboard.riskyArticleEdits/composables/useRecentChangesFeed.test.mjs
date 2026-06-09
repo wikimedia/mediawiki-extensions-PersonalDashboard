@@ -44,6 +44,7 @@ beforeEach( () => {
 	mw.user.getRights = () => [];
 	mw.config.set( 'wgPersonalDashboardRiskyArticleEditsMlEnabled', false );
 	mw.config.set( 'wgPersonalDashboardRiskyArticleEditsMlModel', null );
+	mw.config.set( 'wgOresModels', null );
 } );
 
 afterEach( () => {
@@ -237,9 +238,10 @@ describe( 'API params', () => {
 		expect( capturedParams.grcshow ).not.toContain( 'unpatrolled' );
 	} );
 
-	test( 'adds revertrisklanguageagnostic filter when ML model is set', async () => {
+	test( 'adds revertrisklanguageagnostic filter when ML model is set and model is available', async () => {
 		mw.config.set( 'wgPersonalDashboardRiskyArticleEditsMlEnabled', true );
 		mw.config.set( 'wgPersonalDashboardRiskyArticleEditsMlModel', 'revertrisklanguageagnostic' );
+		mw.config.set( 'wgOresModels', { revertrisklanguageagnostic: {} } );
 		let capturedParams = null;
 		mw.Api.mock( ( params ) => {
 			capturedParams = params;
@@ -253,9 +255,10 @@ describe( 'API params', () => {
 		expect( capturedParams.grcshow ).toContain( 'revertrisklanguageagnostic' );
 	} );
 
-	test( 'adds oresreview filter when ML model is damaging', async () => {
+	test( 'adds oresreview filter when ML model is damaging and model is available', async () => {
 		mw.config.set( 'wgPersonalDashboardRiskyArticleEditsMlEnabled', true );
 		mw.config.set( 'wgPersonalDashboardRiskyArticleEditsMlModel', 'damaging' );
+		mw.config.set( 'wgOresModels', { damaging: {} } );
 		let capturedParams = null;
 		mw.Api.mock( ( params ) => {
 			capturedParams = params;
@@ -267,6 +270,23 @@ describe( 'API params', () => {
 
 		expect( capturedParams.rcshow ).toContain( 'oresreview' );
 		expect( capturedParams.grcshow ).toContain( 'oresreview' );
+	} );
+
+	test( 'does not add ML filters when the requested model is not registered in wgOresModels', async () => {
+		mw.config.set( 'wgPersonalDashboardRiskyArticleEditsMlEnabled', true );
+		mw.config.set( 'wgPersonalDashboardRiskyArticleEditsMlModel', 'revertrisklanguageagnostic' );
+		mw.config.set( 'wgOresModels', {} );
+		let capturedParams = null;
+		mw.Api.mock( ( params ) => {
+			capturedParams = params;
+			return makeApiResponse( [] );
+		} );
+
+		const { fetchRecentChangesItems } = useRecentChangesFeed();
+		await fetchRecentChangesItems( 5, 10, [] );
+
+		expect( capturedParams.rcshow ).not.toContain( 'revertrisklanguageagnostic' );
+		expect( capturedParams.grcshow ).not.toContain( 'revertrisklanguageagnostic' );
 	} );
 
 	test( 'does not add ML filters when ML is disabled', async () => {

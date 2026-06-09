@@ -119,7 +119,7 @@
 			}
 
 			if ( root ) {
-				const vnode = h( Module, { rendermode, open } );
+				const vnode = h( Module, { rendermode } );
 				// eslint-disable-next-line no-underscore-dangle
 				vnode.appContext = app._context;
 				render( vnode, root );

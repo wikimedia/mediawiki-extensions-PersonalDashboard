@@ -60,11 +60,14 @@ async function getRCParams( offset ) {
 	}
 	if ( mw.config.get( 'wgPersonalDashboardRiskyArticleEditsMlEnabled' ) === true ) {
 		const model = mw.config.get( 'wgPersonalDashboardRiskyArticleEditsMlModel' );
-		if ( model === 'revertrisklanguageagnostic' ) {
+		// The filter values are only accepted by the API when ORES has registered
+		// the underlying model, surfaced via wgOresModels.
+		const oresModels = mw.config.get( 'wgOresModels' ) || {};
+		if ( model === 'revertrisklanguageagnostic' && oresModels.revertrisklanguageagnostic ) {
 			params.rcshow += '|revertrisklanguageagnostic';
 			params.grcshow += '|revertrisklanguageagnostic';
 		}
-		if ( model === 'damaging' ) {
+		if ( model === 'damaging' && oresModels.damaging ) {
 			params.rcshow += '|oresreview';
 			params.grcshow += '|oresreview';
 		}

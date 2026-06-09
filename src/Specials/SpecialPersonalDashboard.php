@@ -26,8 +26,6 @@ class SpecialPersonalDashboard extends SpecialPage {
 	 */
 	private string $pageviewToken;
 
-	private array $activeDiscussionsPages;
-
 	private bool $isMobile;
 
 	public function __construct(
@@ -37,7 +35,6 @@ class SpecialPersonalDashboard extends SpecialPage {
 	) {
 		parent::__construct( 'PersonalDashboard' );
 		$this->pageviewToken = $this->generatePageviewToken();
-		$this->activeDiscussionsPages = $this->getConfig()->get( 'PersonalDashboardActiveDiscussionsPages' );
 	}
 
 	/** @inheritDoc */
@@ -75,7 +72,6 @@ class SpecialPersonalDashboard extends SpecialPage {
 
 		$out->addJsConfigVars( [
 			'wgPersonalDashboardPageviewToken' => $this->pageviewToken,
-			'wgPersonalDashboardActiveDiscussionsPages' => $this->activeDiscussionsPages
 		] );
 
 		$out->addHTML( Html::openElement( 'div', [

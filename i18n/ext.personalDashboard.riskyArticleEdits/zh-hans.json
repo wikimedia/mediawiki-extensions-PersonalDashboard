@@ -1,13 +1,21 @@
 {
 	"@metadata": {
 		"authors": [
+			"GuoPC",
 			"Peterxy",
 			"Peterxy12",
 			"Plana"
 		]
 	},
 	"personal-dashboard-risky-article-edits-header": "检查更改",
+	"personal-dashboard-risky-article-edits-subheader": "请审核以下可能需注意的编辑内容，以帮助维持维基百科的可靠性。",
+	"personal-dashboard-risky-article-edits-subheader-info": "这些编辑是由其他用户做出的。请及时了解最新动态并审核这些编辑来帮助维持维基百科的质量。",
+	"personal-dashboard-risky-article-edits-subheader-info-popover": "[$1 自动防篡改工具]会标记其他编辑者可能存在风险的编辑。选择其中一个即可打开差异视图，并决定撤销、改进或感谢编辑者。",
+	"personal-dashboard-risky-article-edits-subheader-info-popover-title": "如何使用？",
+	"personal-dashboard-risky-article-edits-subheader-info-popover-confirm": "明白了",
+	"personal-dashboard-risky-article-edits-footer-preamble": "在[{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}} 最近更改页面]查看更多编辑内容",
 	"personal-dashboard-risky-article-edits-info-time-text-today": "$1，今天",
 	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "无编辑摘要",
-	"personal-dashboard-risky-article-edits-info-button-aria-label": "信息按钮"
+	"personal-dashboard-risky-article-edits-info-button-aria-label": "信息按钮",
+	"personal-dashboard-risky-article-edits-progress-bar-aria-label": "指示待审核更改加载时机的内联进度条"
 }

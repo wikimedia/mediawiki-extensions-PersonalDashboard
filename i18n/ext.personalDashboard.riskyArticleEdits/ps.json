@@ -1,0 +1,13 @@
+{
+	"@metadata": {
+		"authors": [
+			"شاه زمان پټان"
+		]
+	},
+	"personal-dashboard-risky-article-edits-header": "د بدلونونو بياکتنه",
+	"personal-dashboard-risky-article-edits-subheader-info-popover-title": "څنگه؟",
+	"personal-dashboard-risky-article-edits-subheader-info-popover-confirm": "وپوهېدم",
+	"personal-dashboard-risky-article-edits-info-time-text-today": "$1، نن",
+	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "د سمون لنډیز نشته",
+	"personal-dashboard-risky-article-edits-info-button-aria-label": "مالوماتو تڼۍ"
+}

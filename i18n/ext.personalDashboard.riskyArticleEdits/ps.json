@@ -5,9 +5,14 @@
 		]
 	},
 	"personal-dashboard-risky-article-edits-header": "د بدلونونو بياکتنه",
+	"personal-dashboard-risky-article-edits-subheader": "د لاندې سمونونو بياکتنې سره چې ښايي پاملرنې ته اړتيا ولري، د ويکي‌پېډيا باور وړ ساتلو کې مرسته وکړئ.",
+	"personal-dashboard-risky-article-edits-subheader-info": "دا سمونونه د نورو کارنانو له خوا شوې دي. له موږ سره پاتې شئ او د بياکتنې له لارې د ويکي‌پېډيا څرنگوالي ښه ساتلو کې مرسته وکړئ.",
+	"personal-dashboard-risky-article-edits-subheader-info-popover": "د [$1 خپلکاره ورانکارۍ ضد اوزار] د نورو سمونگرانو څخه شوني گواښونکي سمونونه په نښه کوي. د توپير کتلو يو غوره او پرانېځئ او پرېکړه وکړئ چې ناکړ، ښه‌کول، يا له سمونگر مننه وشي.",
 	"personal-dashboard-risky-article-edits-subheader-info-popover-title": "څنگه؟",
 	"personal-dashboard-risky-article-edits-subheader-info-popover-confirm": "وپوهېدم",
+	"personal-dashboard-risky-article-edits-footer-preamble": "نور سمونونه په [{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}} ورستيو بدلونونو مخ] کې وگورئ",
 	"personal-dashboard-risky-article-edits-info-time-text-today": "$1، نن",
 	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "د سمون لنډیز نشته",
-	"personal-dashboard-risky-article-edits-info-button-aria-label": "مالوماتو تڼۍ"
+	"personal-dashboard-risky-article-edits-info-button-aria-label": "مالوماتو تڼۍ",
+	"personal-dashboard-risky-article-edits-progress-bar-aria-label": "په‌ليکه بهير پټه ترڅو وښيي کله چې د بياکتنې لپاره بدلونونه بارېږي"
 }

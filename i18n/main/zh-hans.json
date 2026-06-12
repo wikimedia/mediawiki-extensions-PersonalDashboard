@@ -3,9 +3,15 @@
 		"authors": [
 			"SaoMikoto",
 			"Saoutax",
-			"沈澄心"
+			"沈澄心",
+			"GuoPC"
 		]
 	},
+	"personal-dashboard-beta-info-chip-text": "测试",
+	"personal-dashboard-desc": "一个面向版主的实验性面板",
+	"personal-dashboard-link-title": "面板",
 	"personal-dashboard-module-no-js-fallback": "请启用JavaScript以查看此组件。",
-	"personal-dashboard-survey-text": "[$1 分享反馈]"
+	"personal-dashboard-specialpage-title": "{{GENDER:$1|您好}}，{{bidi:$1}}！",
+	"personal-dashboard-survey-text": "[$1 分享反馈]",
+	"tooltip-pt-personaldashboard": "{{GENDER:|您的}}个人面板"
 }

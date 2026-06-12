@@ -1,0 +1,14 @@
+{
+	"@metadata": {
+		"authors": [
+			"شاه زمان پټان"
+		]
+	},
+	"personal-dashboard-beta-info-chip-text": "ازمېښتي",
+	"personal-dashboard-desc": "مديرانو لپاره يو ازمېښتي ليددړه",
+	"personal-dashboard-link-title": "ليددړه",
+	"personal-dashboard-module-no-js-fallback": "د دې ټوټې کتلو لپاره مهرباني وکړئ جاواسکريپټ چارن کړئ.",
+	"personal-dashboard-specialpage-title": "{{GENDER:$1|سلام}}، {{bidi:$1}}!",
+	"personal-dashboard-survey-text": "[$1 غبرگون شريکول]",
+	"tooltip-pt-personaldashboard": "{{GENDER:|ستاسو}} ځانواله ليددړه"
+}

@@ -62,21 +62,12 @@ class SpecialPersonalDashboard extends SpecialPage {
 		$out = $this->getContext()->getOutput();
 		$this->isMobile = Util::isMobile( $out->getSkin() );
 
+		$out->addModules( 'ext.personalDashboard.special' );
 		$out->addModuleStyles( 'ext.personalDashboard.styles' );
 
 		if ( ExtensionRegistry::getInstance()->isLoaded( 'WikimediaEvents' ) ) {
-			$out->addModules( [
-				'ext.wikimediaEvents.personalDashboard'
-			] );
+			$out->addModules( 'ext.wikimediaEvents.personalDashboard' );
 		}
-
-		$out->addJsConfigVars( [
-			'wgPersonalDashboardPageviewToken' => $this->pageviewToken,
-		] );
-
-		$out->addHTML( Html::openElement( 'div', [
-			'class' => 'personal-dashboard-container'
-		] ) );
 
 		$surveyLink = $this->createSurveyLinkBetaChip();
 
@@ -88,6 +79,11 @@ class SpecialPersonalDashboard extends SpecialPage {
 			}
 		}
 
+		$out->addHTML( Html::rawElement( 'div', [
+			'id' => 'personal-dashboard-root'
+		] ) );
+
+		$groups = $this->getModuleGroups()['groups'];
 		$modules = $this->getModules();
 
 		if ( $this->isMobile ) {
@@ -96,18 +92,39 @@ class SpecialPersonalDashboard extends SpecialPage {
 				$modules[$par]->supports( IModule::RENDER_MOBILE_DETAILS )
 			) {
 				$mode = IModule::RENDER_MOBILE_DETAILS;
-				$this->renderMobileDetails( $modules[$par] );
 			} else {
 				$mode = IModule::RENDER_MOBILE_SUMMARY;
-				$this->renderMobileSummary();
 			}
 		} else {
 			$mode = IModule::RENDER_DESKTOP;
-			$this->renderDesktop();
 		}
 
-		$out->addHTML( Html::closeElement( 'div' ) );
-		$this->outputJsData( $mode, $modules );
+		foreach ( $groups as &$group ) {
+			foreach ( $group['subgroups'] as &$subgroup ) {
+				foreach ( $subgroup['modules'] as &$module ) {
+					$resolved = $modules[ $module['name'] ] ?? null;
+					$enabled = $module['enabled'] = $resolved?->supports( $mode );
+
+					if ( !$resolved || !$enabled ) {
+						continue;
+					}
+
+					// Initial per-module state flows in via getJsData; a module
+					// that returns 'body' opts itself in to server-rendering.
+					foreach ( $this->getModuleJsDataSafe( $resolved, $mode ) as $key => $value ) {
+						$module[ $key ] = $value;
+					}
+
+					$out->addJsConfigVars( $resolved->getJsConfigVars() );
+				}
+			}
+		}
+
+		$out->addJsConfigVars( [
+			'wgPersonalDashboardGroups' => $groups,
+			'wgPersonalDashboardPageviewToken' => $this->pageviewToken
+		] );
+
 		$platform = ( $this->isMobile ? 'mobile' : 'desktop' );
 		$overallSsrTimeInSeconds = microtime( true ) - $startTime;
 		$this->statsFactory->withComponent( 'PersonalDashboard' )
@@ -169,7 +186,6 @@ class SpecialPersonalDashboard extends SpecialPage {
 
 	/**
 	 * @param string $name key of registered module group in extension.json
-	 * @return string[][][]
 	 */
 	private function getModuleGroups( $name = 'default' ): array {
 		$registry = ExtensionRegistry::getInstance()->getAttribute( 'PersonalDashboardModuleGroups' );
@@ -315,27 +331,23 @@ class SpecialPersonalDashboard extends SpecialPage {
 	}
 
 	/**
-	 * @param string $mode One of RENDER_DESKTOP, RENDER_MOBILE_SUMMARY, RENDER_MOBILE_DETAILS
-	 * @param IModule[] $modules
+	 * Get the module's getJsData() result, catching exceptions by default.
+	 *
+	 * If PersonalDashboardDeveloperSetup is on, then throw the exceptions.
+	 * @param IModule $module
+	 * @param string $mode
+	 * @throws Throwable
+	 * @return array
 	 */
-	private function outputJsData( $mode, array $modules ) {
-		$out = $this->getContext()->getOutput();
-		$out->addModules( 'ext.personalDashboard.special.personalDashboard' );
-
-		$data = [];
-		foreach ( $modules as $moduleName => $module ) {
-			try {
-				$data[$moduleName] = $module->getJsData( $mode );
-			} catch ( Throwable $throwable ) {
-				if ( $this->getConfig()->get( 'PersonalDashboardDeveloperSetup' ) ) {
-					throw $throwable;
-				}
-				Util::logException( $throwable, [ 'origin' => __METHOD__ ] );
+	private function getModuleJsDataSafe( IModule $module, string $mode ): array {
+		try {
+			return $module->getJsData( $mode );
+		} catch ( Throwable $throwable ) {
+			if ( $this->getConfig()->get( 'PersonalDashboardDeveloperSetup' ) ) {
+				throw $throwable;
 			}
-		}
-		$out->addJsConfigVars( 'dashboardmodules', $data );
-		if ( $mode === IModule::RENDER_MOBILE_SUMMARY ) {
-			$out->addJsConfigVars( 'dashboardmobile', true );
+			Util::logException( $throwable, [ 'origin' => __METHOD__ ] );
+			return [];
 		}
 	}
 }

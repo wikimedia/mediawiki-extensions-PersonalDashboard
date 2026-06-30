@@ -4,7 +4,6 @@ namespace MediaWiki\Extension\PersonalDashboard\Modules;
 
 use MediaWiki\Context\IContextSource;
 use MediaWiki\Extension\PersonalDashboard\IModule;
-use MediaWiki\Html\Html;
 use MediaWiki\User\Options\UserOptionsManager;
 
 /**
@@ -32,13 +31,6 @@ class Onboarding implements IModule {
 
 	/** @inheritDoc */
 	public function render( $mode ) {
-		$user = $this->context->getUser();
-		$userOptionsManager = $this->userOptionsManager;
-		if ( !$userOptionsManager->getBoolOption( $user, 'personaldashboard-visited' ) ) {
-			$out = $this->context->getOutput();
-			$out->addModules( 'ext.personalDashboard.onboarding' );
-			return Html::element( 'div', [ 'id' => 'personal-dashboard-onboarding' ] );
-		}
 		return '';
 	}
 
@@ -48,8 +40,15 @@ class Onboarding implements IModule {
 	}
 
 	/** @inheritDoc */
+	public function getJsConfigVars() {
+		return [];
+	}
+
+	/** @inheritDoc */
 	public function supports( $mode ) {
-		return true;
+		return !$this->userOptionsManager->getBoolOption(
+			$this->context->getUser(),
+			'personaldashboard-visited' );
 	}
 
 	/** @inheritDoc */

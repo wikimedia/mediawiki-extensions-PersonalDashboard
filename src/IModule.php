@@ -26,6 +26,13 @@ interface IModule {
 	public function getJsData( $mode );
 
 	/**
+	 * Override this function to provide JS config vars needed by this module.
+	 *
+	 * @return array
+	 */
+	public function getJsConfigVars();
+
+	/**
 	 * Whether this module supports the given mode. If this returns false, render() and
 	 * getJsData() should not be called with this mode.
 	 * @param string $mode One of RENDER_* constants

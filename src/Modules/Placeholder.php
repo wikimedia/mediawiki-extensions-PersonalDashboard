@@ -25,9 +25,6 @@ class Placeholder implements IModule {
 
 	/** @inheritDoc */
 	public function render( $mode ): string {
-		if ( !$this->supports( $mode ) ) {
-			return '';
-		}
 		return Html::rawElement(
 			'div',
 			[
@@ -51,10 +48,12 @@ class Placeholder implements IModule {
 
 	/** @inheritDoc */
 	public function getJsData( $mode ): array {
-		if ( !$this->supports( $mode ) ) {
-			return [];
-		}
-		return [ 'renderMode' => $mode ];
+		return [ 'html' => $mode ];
+	}
+
+	/** @inheritDoc */
+	public function getJsConfigVars() {
+		return [];
 	}
 
 	/** @inheritDoc */

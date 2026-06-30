@@ -54,7 +54,7 @@ class ActiveDiscussions extends BaseModule {
 	}
 
 	/** @inheritDoc */
-	protected function getJsConfigVars() {
+	public function getJsConfigVars() {
 		return [
 			'wgPersonalDashboardActiveDiscussionsPages' =>
 				$this->getConfig()->get( 'PersonalDashboardActiveDiscussionsPages' ),

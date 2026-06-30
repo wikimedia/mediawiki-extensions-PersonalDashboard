@@ -88,7 +88,7 @@ class RiskyArticleEdits extends BaseModule {
 	}
 
 	/** @inheritDoc */
-	protected function getJsConfigVars() {
+	public function getJsConfigVars() {
 		// fallback to ml disabled if ores isn't loaded and configured as expected
 		$config = $this->getConfig();
 		$mlDisabledConf = [

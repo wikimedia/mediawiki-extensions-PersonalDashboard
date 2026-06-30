@@ -202,18 +202,18 @@ abstract class BaseModule implements IModule {
 			return [];
 		}
 
-		$data = [];
-		if ( $this->canRender()
-			&& $mode == self::RENDER_MOBILE_SUMMARY
-		) {
-			$data = [
-				'rlModules' => $this->getModules(),
-				'heading' => $this->getHeaderText(),
-			];
-		}
 		$this->setMode( $mode );
-		$data[ 'renderMode' ] = $mode;
-		return $data;
+
+		return [
+			'enabled' => $this->shouldRender(),
+			'header' => $this->getHeaderText(),
+			'subheader' => $this->getSubheaderText(),
+			'body' => $mode === self::RENDER_MOBILE_SUMMARY ?
+				$this->getMobileSummaryBody() :
+				$this->getBody(),
+			'footer' => $this->getFooter(),
+			'expandable' => $this->shouldWrapModuleWithLink(),
+		];
 	}
 
 	/**
@@ -241,7 +241,7 @@ abstract class BaseModule implements IModule {
 	 *
 	 * @return array
 	 */
-	protected function getJsConfigVars() {
+	public function getJsConfigVars() {
 		return [];
 	}
 

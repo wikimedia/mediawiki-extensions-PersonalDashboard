@@ -17,9 +17,6 @@ class ReturnToHomepage implements IModule {
 
 	/** @inheritDoc */
 	public function render( $mode ) {
-		if ( !ExtensionRegistry::getInstance()->isLoaded( 'GrowthExperiments' ) ) {
-			return '';
-		}
 		$linkUrl = SpecialPage::getTitleFor( 'Homepage' )
 			->getFullURL( [ 'source' => 'specialpersonaldashboard' ] );
 		$linkEl = Html::rawElement(
@@ -48,8 +45,13 @@ class ReturnToHomepage implements IModule {
 	}
 
 	/** @inheritDoc */
+	public function getJsConfigVars() {
+		return [];
+	}
+
+	/** @inheritDoc */
 	public function supports( $mode ) {
-		return true;
+		return ExtensionRegistry::getInstance()->isLoaded( 'GrowthExperiments' );
 	}
 
 	/** @inheritDoc */

@@ -1,0 +1,184 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`mount component 1`] = `
+<div
+  data-v-app=""
+>
+  
+  <teleport-stub
+    disabled="false"
+    to="body"
+  >
+    <transition-stub
+      appear="true"
+      css="true"
+      name="cdx-dialog-fade"
+      persisted="false"
+    >
+      <!--v-if-->
+    </transition-stub>
+  </teleport-stub>
+  <div
+    class="personal-dashboard-container"
+  >
+    
+    <div
+      class="personal-dashboard-group-A"
+    >
+      
+      <div
+        class="personal-dashboard-group-A-subgroup-AA"
+      >
+        
+        <div
+          class="personal-dashboard-module personal-dashboard-module-desktop personal-dashboard-module-default personal-dashboard-module-AAA"
+        >
+          <!--v-if-->
+          <!--v-if-->
+          <div
+            class="personal-dashboard-module-body"
+          >
+            <!---->
+          </div>
+          <!-- eslint-disable vue/no-v-html -->
+          <!--v-if-->
+          <!-- eslint-enable vue/no-v-html -->
+        </div>
+        <div
+          class="personal-dashboard-module personal-dashboard-module-desktop personal-dashboard-module-default personal-dashboard-module-AAB"
+          style="display: none;"
+        >
+          <!--v-if-->
+          <!--v-if-->
+          <div
+            class="personal-dashboard-module-body"
+          >
+            <!---->
+          </div>
+          <!-- eslint-disable vue/no-v-html -->
+          <!--v-if-->
+          <!-- eslint-enable vue/no-v-html -->
+        </div>
+        
+      </div>
+      <div
+        class="personal-dashboard-group-A-subgroup-AB"
+        style="display: none;"
+      >
+        
+        <div
+          class="personal-dashboard-module personal-dashboard-module-desktop personal-dashboard-module-default personal-dashboard-module-ABA"
+        >
+          <!--v-if-->
+          <!--v-if-->
+          <div
+            class="personal-dashboard-module-body"
+          >
+            <!---->
+          </div>
+          <!-- eslint-disable vue/no-v-html -->
+          <!--v-if-->
+          <!-- eslint-enable vue/no-v-html -->
+        </div>
+        <div
+          class="personal-dashboard-module personal-dashboard-module-desktop personal-dashboard-module-default personal-dashboard-module-ABB"
+          style="display: none;"
+        >
+          <!--v-if-->
+          <!--v-if-->
+          <div
+            class="personal-dashboard-module-body"
+          >
+            <!---->
+          </div>
+          <!-- eslint-disable vue/no-v-html -->
+          <!--v-if-->
+          <!-- eslint-enable vue/no-v-html -->
+        </div>
+        
+      </div>
+      
+    </div>
+    <div
+      class="personal-dashboard-group-B"
+      style="display: none;"
+    >
+      
+      <div
+        class="personal-dashboard-group-B-subgroup-BA"
+      >
+        
+        <div
+          class="personal-dashboard-module personal-dashboard-module-desktop personal-dashboard-module-default personal-dashboard-module-BAA"
+        >
+          <!--v-if-->
+          <!--v-if-->
+          <div
+            class="personal-dashboard-module-body"
+          >
+            <!---->
+          </div>
+          <!-- eslint-disable vue/no-v-html -->
+          <!--v-if-->
+          <!-- eslint-enable vue/no-v-html -->
+        </div>
+        <div
+          class="personal-dashboard-module personal-dashboard-module-desktop personal-dashboard-module-default personal-dashboard-module-BAB"
+          style="display: none;"
+        >
+          <!--v-if-->
+          <!--v-if-->
+          <div
+            class="personal-dashboard-module-body"
+          >
+            <!---->
+          </div>
+          <!-- eslint-disable vue/no-v-html -->
+          <!--v-if-->
+          <!-- eslint-enable vue/no-v-html -->
+        </div>
+        
+      </div>
+      <div
+        class="personal-dashboard-group-B-subgroup-BB"
+        style="display: none;"
+      >
+        
+        <div
+          class="personal-dashboard-module personal-dashboard-module-desktop personal-dashboard-module-default personal-dashboard-module-BBA"
+        >
+          <!--v-if-->
+          <!--v-if-->
+          <div
+            class="personal-dashboard-module-body"
+          >
+            <!---->
+          </div>
+          <!-- eslint-disable vue/no-v-html -->
+          <!--v-if-->
+          <!-- eslint-enable vue/no-v-html -->
+        </div>
+        <div
+          class="personal-dashboard-module personal-dashboard-module-desktop personal-dashboard-module-default personal-dashboard-module-BBB"
+          style="display: none;"
+        >
+          <!--v-if-->
+          <!--v-if-->
+          <div
+            class="personal-dashboard-module-body"
+          >
+            <!---->
+          </div>
+          <!-- eslint-disable vue/no-v-html -->
+          <!--v-if-->
+          <!-- eslint-enable vue/no-v-html -->
+        </div>
+        
+      </div>
+      
+    </div>
+    
+  </div>
+  
+</div>
+`;

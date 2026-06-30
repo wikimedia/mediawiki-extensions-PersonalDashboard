@@ -121,7 +121,7 @@ class Impact extends BaseModule {
 	}
 
 	/** @inheritDoc */
-	protected function getJsConfigVars() {
+	public function getJsConfigVars() {
 		$actorId = $this->getUser()->getActorId();
 		$thanksCount = $this->getThanksCount( $actorId );
 		$reviewCount = $this->getReviewCount( $actorId );

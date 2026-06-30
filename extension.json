@@ -96,8 +96,8 @@
 				"dots.less"
 			]
 		},
-		"ext.personalDashboard.special.personalDashboard": {
-			"localBasePath": "resources/ext.personalDashboard.special.personalDashboard",
+		"ext.personalDashboard.special": {
+			"localBasePath": "resources/ext.personalDashboard.special",
 			"class": "MediaWiki\\ResourceLoader\\CodexModule",
 			"codexComponents": [
 				"CdxButton",
@@ -106,21 +106,24 @@
 			],
 			"packageFiles": [
 				"init.js",
-				"ModuleRoute.vue",
+				"App.vue",
+				"Dashboard.vue",
+				"ModuleAnchor.vue",
+				"ModuleCard.vue",
+				"ModuleDialog.vue",
+				"ModuleViewport.vue",
 				{
 					"name": "icons.json",
 					"callback": "MediaWiki\\ResourceLoader\\CodexModule::getIcons",
 					"callbackParam": [
-						"cdxIconClose",
-						"cdxIconNext",
 						"cdxIconArrowPrevious"
 					]
 				}
 			],
 			"dependencies": [
 				"vue",
-				"pinia",
-				"ext.personalDashboard.common"
+				"vue-router",
+				"pinia"
 			]
 		},
 		"ext.personalDashboard.common": {
@@ -178,7 +181,6 @@
 				"personal-dashboard-onboarding-step-3-alt"
 			],
 			"packageFiles": [
-				"init.js",
 				"App.vue"
 			]
 		},
@@ -475,9 +477,10 @@
 						{
 							"name": "utils",
 							"enabled": true,
+							"hidden": true,
 							"subgroups": [
 								{
-									"name": "hidden",
+									"name": "startup",
 									"enabled": true,
 									"modules": [
 										{
@@ -502,11 +505,13 @@
 										},
 										{
 											"name": "ext.personalDashboard.riskyArticleEdits",
-											"enabled": true
+											"enabled": true,
+											"style": "thin"
 										},
 										{
 											"name": "ext.personalDashboard.activeDiscussions",
-											"enabled": true
+											"enabled": true,
+											"style": "thin"
 										}
 									]
 								}
@@ -532,7 +537,8 @@
 									"modules": [
 										{
 											"name": "ext.personalDashboard.policiesGuidelines",
-											"enabled": true
+											"enabled": true,
+											"styleMobile": "minimized"
 										}
 									]
 								}

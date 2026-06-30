@@ -44,7 +44,7 @@ class ReturnToHomepage implements IModule {
 
 	/** @inheritDoc */
 	public function getJsData( $mode ) {
-		return [];
+		return [ 'html' => $this->render( $mode ) ];
 	}
 
 	/** @inheritDoc */

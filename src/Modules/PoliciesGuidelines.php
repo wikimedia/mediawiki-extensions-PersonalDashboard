@@ -10,7 +10,7 @@ use MediaWiki\Html\Html;
  */
 class PoliciesGuidelines extends BaseModule {
 	public function __construct( IContextSource $context ) {
-		parent::__construct( $context );
+		parent::__construct( $context, true );
 	}
 
 	/** @inheritDoc */
@@ -20,7 +20,9 @@ class PoliciesGuidelines extends BaseModule {
 
 	/** @inheritDoc */
 	protected function getSubheaderText() {
-		return $this->msg( 'personal-dashboard-policies-guidelines-body' )->text();
+		return $this->msg( $this->getMode() === self::RENDER_DESKTOP ?
+			'personal-dashboard-policies-guidelines-body' :
+			'personal-dashboard-policies-guidelines-mobile-summary' )->text();
 	}
 
 	/** @inheritDoc */
@@ -55,6 +57,6 @@ class PoliciesGuidelines extends BaseModule {
 
 	/** @inheritDoc */
 	protected function getModules() {
-		return [ 'ext.personalDashboard.policiesGuidelines', 'ext.personalDashboard.policiesGuidelines' ];
+		return [ 'ext.personalDashboard.policiesGuidelines' ];
 	}
 }

@@ -8,7 +8,7 @@ const compat = new FlatCompat( {
 } );
 
 export default defineConfig( [
-	globalIgnores( [ 'coverage/', 'vendor/' ] ),
+	globalIgnores( [ 'coverage/', 'resources/lib/', 'vendor/' ] ),
 	{
 		extends: compat.extends(
 			'wikimedia/client/common',
@@ -28,6 +28,11 @@ export default defineConfig( [
 			'wikimedia/vue3/common',
 			'wikimedia/language/es2018',
 			'wikimedia/mediawiki/common'
-		)
+		),
+		rules: {
+			'vue/no-undef-components': [ 'error', {
+				ignorePatterns: [ '^router-.+$' ]
+			} ]
+		}
 	}
 ] );

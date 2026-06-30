@@ -49,11 +49,15 @@
 		},
 		"preferences": {
 			"class": "MediaWiki\\Extension\\PersonalDashboard\\HookHandler\\GetPreferencesHandler"
+		},
+		"modules": {
+			"class": "MediaWiki\\Extension\\PersonalDashboard\\HookHandler\\ResourceLoaderRegisterModulesHandler"
 		}
 	},
 	"Hooks": {
 		"GetPreferences": "preferences",
-		"SkinTemplateNavigation::Universal": "skintemplatenav-universal"
+		"SkinTemplateNavigation::Universal": "skintemplatenav-universal",
+		"ResourceLoaderRegisterModules": "modules"
 	},
 	"MessagesDirs": {
 		"PersonalDashboard": [
@@ -383,6 +387,7 @@
 			]
 		}
 	},
+	"ForeignResourcesDir": "resources/lib",
 	"config": {
 		"PersonalDashboardDeveloperSetup": {
 			"description": "Catch fewer errors for easier troubleshooting",

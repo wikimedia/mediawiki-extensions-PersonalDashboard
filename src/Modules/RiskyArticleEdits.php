@@ -12,7 +12,7 @@ use MediaWiki\Registration\ExtensionRegistry;
 class RiskyArticleEdits extends BaseModule {
 
 	public function __construct( IContextSource $context ) {
-		parent::__construct( $context );
+		parent::__construct( $context, true );
 	}
 
 	/** @inheritDoc */
@@ -22,7 +22,9 @@ class RiskyArticleEdits extends BaseModule {
 
 	/** @inheritDoc */
 	protected function getSubheaderText() {
-		return $this->msg( 'personal-dashboard-risky-article-edits-subheader-info' )->text();
+		return $this->getMode() !== self::RENDER_DESKTOP ? '' : $this->msg(
+			'personal-dashboard-risky-article-edits-subheader-info'
+		)->text();
 	}
 
 	/** @inheritDoc */
@@ -48,7 +50,7 @@ class RiskyArticleEdits extends BaseModule {
 
 	/** @inheritDoc */
 	protected function getFooter() {
-		return Html::rawElement(
+		return $this->getMode() !== self::RENDER_DESKTOP ? '' : Html::rawElement(
 			'div',
 			[ 'id' => 'personal-dashboard-go-to-recentchanges' ],
 			$this->msg( 'personal-dashboard-risky-article-edits-footer-preamble' )->parse()

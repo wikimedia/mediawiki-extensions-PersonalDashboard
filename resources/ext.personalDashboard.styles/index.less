@@ -10,6 +10,10 @@
 		.skin-minerva & {
 			flex-direction: column;
 		}
+
+		.skin-minerva & {
+			margin-top: @spacing-100;
+		}
 	}
 
 	&-group {
@@ -80,18 +84,38 @@
 			margin: @spacing-50 @spacing-100 @spacing-100 @spacing-100;
 		}
 
-		&-header,
-		&-subheader,
-		&-body,
-		&-footer {
-			.personal-dashboard-route & {
-				margin: @spacing-100 @spacing-0;
+		&-none {
+			border: @spacing-0;
+			border-radius: @spacing-0;
+		}
+
+		&-none &-body {
+			margin: @spacing-0;
+		}
+
+		&-thin&-desktop &-body {
+			margin-left: @spacing-0;
+			margin-right: @spacing-0;
+
+			&:first-child {
+				margin-top: @spacing-0;
+			}
+
+			&:last-child {
+				margin-bottom: @spacing-0;
 			}
 		}
 
 		&-anchor {
-			color: inherit;
-			text-decoration: @text-decoration-none;
+			&:active,
+			&:hover,
+			&:link,
+			&:visited,
+			&:visited:active,
+			&:visited:hover {
+				color: inherit;
+				text-decoration: @text-decoration-none;
+			}
 		}
 
 		.client-js &-no-js-fallback {
@@ -111,15 +135,6 @@
 
 		&-icon {
 			.cdx-mixin-css-icon( @cdx-icon-lab-flask, @color-icon-notice, @size-icon-small );
-		}
-	}
-
-	&-hide-all {
-		// stylelint-disable selector-max-id
-		> :not( #bodyContent ),
-		#mw-content-text > :not( .personal-dashboard-route.open-true ) {
-			// stylelint-enable selector-max-id
-			display: none;
 		}
 	}
 }

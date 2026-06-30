@@ -1,5 +1,5 @@
 <template>
-	<div ref="moduleRef" class="personal-dashboard-policies-guidelines__container">
+	<div class="personal-dashboard-policies-guidelines__container">
 		<div class="personal-dashboard-policies-guidelines__list">
 			<list-card
 				v-for="( steps, name ) in cards"
@@ -12,7 +12,7 @@
 </template>
 
 <script>
-const { defineComponent, ref } = require( 'vue' );
+const { defineComponent } = require( 'vue' );
 const ListCard = require( './components/ListCard.vue' );
 
 module.exports = defineComponent( {
@@ -26,18 +26,6 @@ module.exports = defineComponent( {
 	},
 	setup() {
 		return {
-			moduleRef: ref(),
-			// eslint-disable-next-line compat/compat
-			observer: new IntersectionObserver( ( entries ) => {
-				if ( entries[ 0 ].isIntersecting ) {
-					mw.hook( 'personaldashboard.policymodule.loaded' ).fire();
-				}
-			} )
-		};
-
-	},
-	data() {
-		return {
 			cards: {
 				'neutral-point-of-view': [ 'error', 'success' ],
 				'no-original-research': [ 'error', 'error' ],
@@ -45,9 +33,6 @@ module.exports = defineComponent( {
 				'assume-good-faith': [ 'error', 'success' ]
 			}
 		};
-	},
-	mounted() {
-		this.observer.observe( this.moduleRef );
 	}
 } );
 </script>
@@ -56,12 +41,6 @@ module.exports = defineComponent( {
 @import 'mediawiki.skin.variables.less';
 
 .personal-dashboard-policies-guidelines {
-	&__container > p {
-		margin-top: @spacing-0;
-		margin-bottom: 1em;
-		padding: 0;
-	}
-
 	&__list {
 		.cdx-card {
 			border-color: @border-color-subtle;

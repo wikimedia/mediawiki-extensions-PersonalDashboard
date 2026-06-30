@@ -12,6 +12,40 @@ test( 'mount component', () => {
 			return {};
 		}
 	} );
-	const wrapper = mount( App );
+
+	const wrapper = mount( App, {
+		global: {
+			mocks: {
+				$route: {
+					path: '/'
+				}
+			}
+		}
+	} );
+
 	expect( wrapper.element ).toMatchSnapshot();
+} );
+
+test( 'dialog is suppressed on deep-link route', () => {
+	mw.Api.mock( ( params, options ) => {
+		if ( options.type === 'POST' &&
+			params.action === 'options' &&
+			( params.optionname === 'personaldashboard-visited' ||
+				params.optionname === 'personaldashboard-eligible' ) &&
+			params.optionvalue === '1' ) {
+			return {};
+		}
+	} );
+
+	const wrapper = mount( App, {
+		global: {
+			mocks: {
+				$route: {
+					path: '/ext.personalDashboard.impact'
+				}
+			}
+		}
+	} );
+
+	expect( wrapper.find( '.personal-dashboard-onboarding' ).exists() ).toBe( false );
 } );

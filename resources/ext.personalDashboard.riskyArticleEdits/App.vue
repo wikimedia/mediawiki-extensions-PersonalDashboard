@@ -35,7 +35,9 @@
 		</template>
 
 		<!-- eslint-disable max-len -->
-		<div v-if="rendermode === 'mobile-summary'">
+		<div
+			v-if="rendermode === 'mobile-summary'"
+			class="personal-dashboard-review-changes__footer">
 			<cdx-button
 				:aria-label="buttonAriaLabel"
 				action="progressive"
@@ -122,11 +124,6 @@ module.exports = defineComponent( {
 				margin: @spacing-100 0 0 0;
 			}
 		}
-
-		&-riskyArticleEdits &-body .cdx-button {
-			width: 100%;
-			max-width: none;
-		}
 	}
 
 	&-review-changes {
@@ -136,6 +133,11 @@ module.exports = defineComponent( {
 			gap: @spacing-25;
 			background: @background-color-neutral;
 			padding: @spacing-25;
+		}
+
+		&__footer .cdx-button {
+			width: 100%;
+			max-width: none;
 		}
 	}
 

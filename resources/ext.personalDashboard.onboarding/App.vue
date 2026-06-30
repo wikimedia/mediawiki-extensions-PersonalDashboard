@@ -36,7 +36,7 @@ module.exports = defineComponent( {
 
 		return {
 			isMenuLinkVisible,
-			open: ref( true ),
+			openInternal: ref( true ),
 			step: ref( 1 ),
 			steps: [
 				{
@@ -63,6 +63,16 @@ module.exports = defineComponent( {
 			msgTitle: mw.msg( 'personal-dashboard-onboarding-title' ),
 			msgGetStartedButton: mw.msg( 'personal-dashboard-onboarding-get-started-button' )
 		};
+	},
+	computed: {
+		open: {
+			get() {
+				return this.$route.path === '/' && this.openInternal;
+			},
+			set( value ) {
+				this.openInternal = value;
+			}
+		}
 	},
 	methods: {
 		async markPersonalDashboardVisited() {

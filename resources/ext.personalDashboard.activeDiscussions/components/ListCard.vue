@@ -99,9 +99,6 @@ module.exports = defineComponent( {
 			const latestReplyTimestamp = new Date( Date.parse( this.latestReply ) );
 			return `${ formatRelativeTimeOrDate( latestReplyTimestamp ) }`;
 		}
-	},
-	mounted() {
-		mw.hook( 'personaldashboard.activediscussions.listcard.loaded' ).fire();
 	}
 } );
 </script>

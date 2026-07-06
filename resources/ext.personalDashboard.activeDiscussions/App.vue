@@ -79,7 +79,6 @@ module.exports = defineComponent( {
 	},
 	mounted() {
 		this.fetchActiveDiscussions( this.limit );
-		mw.hook( 'personaldashboard.activediscussions.loaded' ).fire();
 	}
 } );
 </script>

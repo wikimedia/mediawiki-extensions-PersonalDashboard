@@ -61,9 +61,6 @@ module.exports = defineComponent( {
 			event.stopPropagation();
 			window.open( this.commentUrl, '_blank', 'noopener noreferrer' );
 		}
-	},
-	mounted() {
-		mw.hook( 'personaldashboard.activediscussions.listcard.loaded' ).fire();
 	}
 } );
 </script>

@@ -112,6 +112,7 @@
 				"ModuleCard.vue",
 				"ModuleDialog.vue",
 				"ModuleViewport.vue",
+				"instrumentation/onPersonalDashboardBaseline.js",
 				{
 					"name": "icons.json",
 					"callback": "MediaWiki\\ResourceLoader\\CodexModule::getIcons",

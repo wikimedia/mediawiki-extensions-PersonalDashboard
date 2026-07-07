@@ -65,10 +65,6 @@ class SpecialPersonalDashboard extends SpecialPage {
 		$out->addModules( 'ext.personalDashboard.special' );
 		$out->addModuleStyles( 'ext.personalDashboard.styles' );
 
-		if ( ExtensionRegistry::getInstance()->isLoaded( 'WikimediaEvents' ) ) {
-			$out->addModules( 'ext.wikimediaEvents.personalDashboard' );
-		}
-
 		$surveyLink = $this->createSurveyLinkBetaChip();
 
 		if ( $surveyLink ) {

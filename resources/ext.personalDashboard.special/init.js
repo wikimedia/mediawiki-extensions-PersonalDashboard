@@ -4,6 +4,11 @@ const { createPinia } = require( 'pinia' );
 const App = require( './App.vue' );
 const Dashboard = require( './Dashboard.vue' );
 
+// Personal Dashboard health-metrics instrumentation. Self-contained: it wires
+// up its own hooks and soft-loads TestKitchen, so we only need to require it
+// here to run it.
+require( './instrumentation/onPersonalDashboardBaseline.js' );
+
 function lazyLoader( name ) {
 	return () => new Promise( ( resolve ) => {
 		mw.loader.using( name, ( require ) => {

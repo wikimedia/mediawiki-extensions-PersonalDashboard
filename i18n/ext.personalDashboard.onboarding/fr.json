@@ -1,10 +1,12 @@
 {
 	"@metadata": {
 		"authors": [
-			"Escargot bleu"
+			"Escargot bleu",
+			"SleaY"
 		]
 	},
 	"personal-dashboard-onboarding-title": "Votre tableau de bord",
 	"personal-dashboard-onboarding-dont-show-again": "Ne plus afficher",
-	"personal-dashboard-onboarding-step-1-title": "Bienvenue"
+	"personal-dashboard-onboarding-step-1-title": "Bienvenue",
+	"personal-dashboard-onboarding-step-2-title": "Fonctionnalités"
 }

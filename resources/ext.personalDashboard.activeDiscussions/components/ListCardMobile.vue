@@ -1,14 +1,15 @@
 <template>
-	<cdx-card
-		class="ext-personal-dashboard-active-discussion-mobile-summary">
+	<cdx-card class="ext-personal-dashboard-active-discussion-mobile-summary">
 		<template #description>
 			<div class="ext-personal-dashboard-active-discussions-card-info-title-row">
 				<div class="ext-personal-dashboard-active-discussions-page">
-					<cdx-icon :icon="cdxIconSpeechBubbles"></cdx-icon> {{ discussionTitleFormatted }}
+					<cdx-icon :icon="cdxIconSpeechBubbles"></cdx-icon>
+					{{ discussionTitleFormatted }}
 				</div>
+
 				<div class="ext-personal-dashboard-active-discussions-latest-comment">
 					{{ latestComment }}
-					<a @click="navigateToComment">{{ timestampFormatted }}</a>
+					<span>{{ timestampFormatted }}</span>
 				</div>
 			</div>
 		</template>
@@ -24,11 +25,10 @@ const { formatRelativeTimeOrDate } = require( 'mediawiki.DateFormatter' );
 module.exports = defineComponent( {
 	name: 'ListCard',
 	components: { CdxCard, CdxIcon },
+	inheritAttrs: false,
 	props: {
 		discussionTitle: { type: String, required: true },
-		discussionPage: { type: String, required: true },
-		latestReply: { type: String, required: true },
-		latestReplyId: { type: String, required: true }
+		latestReply: { type: String, required: true }
 	},
 	setup() {
 		return {
@@ -47,19 +47,9 @@ module.exports = defineComponent( {
 
 			return temp.innerText;
 		},
-		commentUrl() {
-			return mw.util.getUrl( this.discussionPage + '#' + this.latestReplyId );
-		},
 		timestampFormatted() {
 			const latestReplyTimestamp = new Date( Date.parse( this.latestReply ) );
 			return `${ formatRelativeTimeOrDate( latestReplyTimestamp ) }`;
-		}
-	},
-	methods: {
-		navigateToComment() {
-			event.preventDefault();
-			event.stopPropagation();
-			window.open( this.commentUrl, '_blank', 'noopener noreferrer' );
 		}
 	}
 } );

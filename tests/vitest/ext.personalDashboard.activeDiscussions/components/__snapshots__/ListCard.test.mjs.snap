@@ -51,12 +51,7 @@ exports[`mount component 1`] = `
                   <!--v-if-->
                   <g>
                     <path
-                      d="M6 14H0v6z"
-                    />
-                    <rect
-                      height="16"
-                      rx="2"
-                      width="20"
+                      d="M19 16H7.352l-3.75 3H1V1h18zm-16 .918 3.375-2.7.274-.218H17V3H3z"
                     />
                   </g>
                 </svg>
@@ -79,12 +74,12 @@ exports[`mount component 1`] = `
                   <!--v-if-->
                   <g>
                     <path
-                      d="M10 11c-5.92 0-8 3-8 5v3h16v-3c0-2-2.08-5-8-5"
+                      d="M12 11a6 6 0 016 6v2H2v-2a6 6 0 016-6z"
                     />
                     <circle
                       cx="10"
-                      cy="5.5"
-                      r="4.5"
+                      cy="5"
+                      r="4"
                     />
                   </g>
                 </svg>

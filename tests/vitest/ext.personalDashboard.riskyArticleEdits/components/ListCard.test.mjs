@@ -2,6 +2,17 @@ import { test, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
 import ListCard from '/resources/ext.personalDashboard.riskyArticleEdits/components/ListCard.vue';
 
+function hasVisited( wrapper ) {
+	return wrapper.classes( 'personal-dashboard-review-changes__card--visited' );
+}
+
+function getOtherLinks( wrapper ) {
+	return [
+		wrapper.find( '.personal-dashboard-review-changes__card__title' ),
+		wrapper.find( '.personal-dashboard-review-changes__card__username' )
+	];
+}
+
 // Safely ignore error: Cannot find package 'ext.checkUser.userInfoCard'
 mw.loader.using = () => {};
 
@@ -116,6 +127,109 @@ test( 'strips all html formatting from parsedcomment', () => {
 	} );
 
 	expect( wrapper.vm.comment ).toStrictEqual( 'Plain text heading, bold, and link.' );
+} );
+
+test( 'sets visited on primary link click', async () => {
+	const wrapper = mount( ListCard, {
+		props: {
+			title: 'TestTitle',
+			newlen: 0,
+			// eslint-disable-next-line camelcase
+			old_revid: 0,
+			oldlen: 0,
+			pageid: 8675309,
+			revid: 0,
+			user: 'TestUser',
+			parsedcomment: 'TestComment',
+			timestamp: new Date().toISOString(),
+			tags: [],
+			pages: [],
+			feedorigin: 'recentchanges',
+			isMobile: false
+		},
+		global: {
+			stubs: {
+				UserInfoButton: true
+			}
+		}
+	} );
+
+	expect( hasVisited( wrapper ) ).toStrictEqual( false );
+
+	// Remove href for testing only, otherwise happy-dom will fetch\
+	const link = wrapper.find( '.personal-dashboard-review-changes__card__link' );
+	link.element.removeAttribute( 'href' );
+
+	await link.trigger( 'click' );
+	expect( hasVisited( wrapper ) ).toStrictEqual( true );
+} );
+
+test( 'does not set visited on other link clicks', async () => {
+	const wrapper = mount( ListCard, {
+		props: {
+			title: 'TestTitle',
+			newlen: 0,
+			// eslint-disable-next-line camelcase
+			old_revid: 0,
+			oldlen: 0,
+			pageid: 8675309,
+			revid: 0,
+			user: 'TestUser',
+			parsedcomment: 'TestComment',
+			timestamp: new Date().toISOString(),
+			tags: [],
+			pages: [],
+			feedorigin: 'recentchanges',
+			isMobile: false
+		},
+		global: {
+			stubs: {
+				UserInfoButton: true
+			}
+		}
+	} );
+
+	expect( hasVisited( wrapper ) ).toStrictEqual( false );
+
+	for ( const link of getOtherLinks( wrapper ) ) {
+		// Remove href for testing only, otherwise happy-dom will fetch
+		link.element.removeAttribute( 'href' );
+
+		await link.trigger( 'click' );
+		expect( hasVisited( wrapper ) ).toStrictEqual( false );
+	}
+} );
+
+test( 'title and username are not links on mobile', async () => {
+	const wrapper = mount( ListCard, {
+		props: {
+			title: 'TestTitle',
+			newlen: 0,
+			// eslint-disable-next-line camelcase
+			old_revid: 0,
+			oldlen: 0,
+			pageid: 8675309,
+			revid: 0,
+			user: 'TestUser',
+			parsedcomment: 'TestComment',
+			timestamp: new Date().toISOString(),
+			tags: [],
+			pages: [],
+			feedorigin: 'recentchanges',
+			isMobile: true
+		},
+		global: {
+			stubs: {
+				UserInfoButton: true
+			}
+		}
+	} );
+
+	expect( hasVisited( wrapper ) ).toStrictEqual( false );
+
+	for ( const link of getOtherLinks( wrapper ) ) {
+		expect( link.element.tagName ).toStrictEqual( 'DIV' );
+	}
 } );
 
 test( 'user info card visible on desktop', () => {

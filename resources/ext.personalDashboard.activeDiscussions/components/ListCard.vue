@@ -30,7 +30,11 @@
 
 				<div class="personal-dashboard-active-discussions__card__latest">
 					{{ latestComment }}
-					<span v-if="isMobile">{{ timestampFormatted }}</span>
+
+					<span v-if="isMobile">
+						{{ timestampFormatted }}
+					</span>
+
 					<a
 						v-else
 						:href="commentUrl"

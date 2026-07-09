@@ -1,16 +1,32 @@
 <template>
 	<cdx-card
 		class="personal-dashboard-review-changes__card"
-		:url="diffUrl"
-		target="_blank"
-		role="button"
+		:class="{ 'personal-dashboard-review-changes__card--visited': hasVisited }"
 		:data-feedorigin="feedorigin">
 		<template #description>
 			<div class="personal-dashboard-review-changes__card__container">
+				<a
+					class="personal-dashboard-review-changes__card__link"
+					:href="diffUrl"
+					target="_blank"
+					:aria-label="ariaLabel"
+					@click="onClick">
+				</a>
+
 				<div class="personal-dashboard-review-changes__card__header">
-					<div class="personal-dashboard-review-changes__card__title">
+					<div
+						v-if="isMobile"
+						class="personal-dashboard-review-changes__card__title">
 						{{ title }}
 					</div>
+
+					<a
+						v-else
+						:href="titleUrl"
+						target="_blank"
+						class="personal-dashboard-review-changes__card__title">
+						{{ title }}
+					</a>
 
 					<div class="personal-dashboard-review-changes__card__description">
 						{{ description }}
@@ -28,9 +44,19 @@
 						<user-info-button v-else :username="user"></user-info-button>
 					</div>
 
-					<div class="personal-dashboard-review-changes__card__username">
+					<div
+						v-if="isMobile"
+						class="personal-dashboard-review-changes__card__username">
 						{{ user }}
 					</div>
+
+					<a
+						v-else
+						:href="userUrl"
+						target="_blank"
+						class="personal-dashboard-review-changes__card__username">
+						{{ user }}
+					</a>
 
 					<div class="personal-dashboard-review-changes__card__separator">
 						⋅
@@ -54,7 +80,7 @@
 </template>
 
 <script>
-const { defineComponent, defineAsyncComponent, toRaw } = require( 'vue' );
+const { defineComponent, defineAsyncComponent, ref, toRaw } = require( 'vue' );
 const { CdxCard, CdxIcon } = require( '../codex.js' );
 const { cdxIconUserAvatar, cdxIconUserTemporary } = require( '../icons.json' );
 const { formatRelativeTimeOrDate } = require( 'mediawiki.DateFormatter' );
@@ -88,17 +114,27 @@ module.exports = defineComponent( {
 	},
 	setup() {
 		return {
+			hasVisited: ref( false ),
 			showUserInfoCard: mw.user.options.get( 'checkuser-userinfocard-enable' ),
 			missingCommentMessage: mw.msg( 'personal-dashboard-risky-article-edits-list-card-no-comment-message' )
 		};
 	},
 	computed: {
 		diffUrl() {
-			return mw.util.getUrl( this.title, {
+			return new mw.Title( this.title ).getUrl( {
 				curid: this.pageid,
 				diff: this.revid,
 				oldid: this.old_revid
 			} );
+		},
+		ariaLabel() {
+			return mw.msg( 'personal-dashboard-risky-article-edits-list-card-aria-label', this.title );
+		},
+		titleUrl() {
+			return new mw.Title( this.title ).getUrl();
+		},
+		userUrl() {
+			return new mw.Title( this.user, 2 ).getUrl();
 		},
 		comment() {
 			if ( !this.parsedcomment ) {
@@ -129,6 +165,11 @@ module.exports = defineComponent( {
 				cdxIconUserAvatar;
 		}
 	},
+	methods: {
+		onClick() {
+			this.hasVisited = true;
+		}
+	},
 	mounted() {
 		mw.hook( 'personaldashboard.recentactivity.listcard.loaded' ).fire();
 	}
@@ -139,33 +180,62 @@ module.exports = defineComponent( {
 @import 'mediawiki.skin.variables.less';
 
 .personal-dashboard-review-changes__card {
-	&.cdx-card {
+	.cdx-card& {
+		position: relative;
+		color: @color-emphasized;
 		padding: @spacing-100;
-		border-color: transparent;
+		border-color: @border-color-transparent;
+
+		a {
+			color: inherit;
+		}
 
 		&:hover {
 			border-color: @border-color-subtle;
 		}
 
-		&:visited {
+		&--visited {
+			color: @color-subtle;
 			background-color: @background-color-neutral-subtle;
 		}
 	}
 
 	.cdx-card__text {
-		width: 100%;
-	}
+		width: @size-full;
 
-	.cdx-card__text__description {
-		margin-top: 0;
+		&__title,
+		&__description {
+			color: inherit;
+		}
+
+		&__description {
+			margin-top: @spacing-0;
+		}
 	}
 
 	&__container {
 		display: flex;
 		flex-direction: column;
 		gap: @spacing-25;
-		color: @color-emphasized;
 		line-height: @line-height-x-small;
+	}
+
+	&__link {
+		position: absolute;
+		inset: 0;
+		z-index: 0;
+	}
+
+	a&__title,
+	a&__username,
+	&__icon .cdx-button {
+		position: relative;
+		z-index: 1;
+	}
+
+	&__container &__icon .cdx-icon,
+	.cdx-button:enabled {
+		color: inherit;
 	}
 
 	&__header {
@@ -174,7 +244,8 @@ module.exports = defineComponent( {
 		gap: @spacing-35;
 	}
 
-	&__title {
+	&__title,
+	&__username {
 		font-weight: @font-weight-bold;
 	}
 
@@ -192,32 +263,19 @@ module.exports = defineComponent( {
 		display: flex;
 		align-items: center;
 		gap: @spacing-25;
+		height: 20px;
 	}
 
-	&__icon .cdx-icon {
-		color: @color-emphasized;
-	}
-
-	&__username a {
-		font-weight: @font-weight-bold;
-
-		&:hover,
-		&:focus {
-			text-decoration: none;
-		}
-
-		&:visited {
-			color: @color-emphasized;
-		}
+	&__icon .cdx-button:enabled {
+		margin-left: -6px;
 	}
 
 	&__summary--missing {
 		font-style: italic;
 	}
 
-	&:visited &__container,
-	&:visited &__icon .cdx-icon {
-		color: @color-subtle;
+	&--visited &__container &__username {
+		font-weight: @font-weight-normal;
 	}
 }
 </style>

@@ -12,6 +12,7 @@
 	"personal-dashboard-risky-article-edits-subheader-info-popover-confirm": "Confirmation button text on the recent activity module info popover.",
 	"personal-dashboard-risky-article-edits-footer-preamble": "Text for the footer of the recent activity module",
 	"personal-dashboard-risky-article-edits-info-time-text-today": "Text for displaying the time if a change was made that day \n\nParameters:\n* $1 - the timestamp formatted",
+	"personal-dashboard-risky-article-edits-list-card-aria-label": "aria-label for the invisible link covering the list card that opens the diff view.\n\nParameters:\n* $1 - Article title",
 	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Text for the Recent activity module list card when there is no edit summary",
 	"personal-dashboard-risky-article-edits-info-button-aria-label": "aria-label for the information button in the header message which opens a popover",
 	"personal-dashboard-risky-article-edits-progress-bar-aria-label": "aria-label for the loading progress bar"

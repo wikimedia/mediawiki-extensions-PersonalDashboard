@@ -27,13 +27,26 @@ exports[`counters fallback to 0 if no config values 1`] = `
             <!--v-if-->
             <g>
               <path
-                d="M18 0H2a2 2 0 00-2 2v18l4-4h14a2 2 0 002-2V2a2 2 0 00-2-2m-4 4a1.5 1.5 0 11-1.5 1.5A1.5 1.5 0 0114 4M6 4a1.5 1.5 0 11-1.5 1.5A1.5 1.5 0 016 4m4 8c-2.61 0-4.83-.67-5.65-3h11.3c-.82 2.33-3.04 3-5.65 3"
+                d="M15 9c-.82 2.33-2.39 3-5 3s-4.18-.67-5-3z"
+              />
+              <path
+                d="M19 16H7.352l-3.75 3H1V1h18zm-16 .918 3.375-2.7.274-.218H17V3H3z"
+              />
+              <circle
+                cx="6.5"
+                cy="6.5"
+                r="1.5"
+              />
+              <circle
+                cx="13.5"
+                cy="6.5"
+                r="1.5"
               />
             </g>
           </svg>
         </span>
         <a
-          href="/w/index.php?title=Special%3ALog&type=thanks&user=Test+User"
+          href="/w/index.php?title=Special:Log&type=thanks&user=Test+User"
           id="personal-dashboard-thanks-link"
           target="_blank"
         >
@@ -70,7 +83,7 @@ exports[`counters fallback to 0 if no config values 1`] = `
             <!--v-if-->
             <g>
               <path
-                d="m.29 12.71 1.42-1.42 2.22 2.22 8.3-10.14 1.54 1.26-9.7 11.86zM12 10h5v2h-5zm-3 4h5v2H9zm6-8h5v2h-5z"
+                d="M14 17h-4v-2h4zm2.404-13.163L6.22 16.8H4.9L.1 13.2l1.2-1.6 4.02 3.015 9.517-12.02zM17 13h-4v-2h4zm3-4h-4V7h4z"
               />
             </g>
           </svg>
@@ -103,7 +116,10 @@ exports[`counters fallback to 0 if no config values 1`] = `
               <!--v-if-->
               <g>
                 <path
-                  d="M4 10a6 6 0 1012 0 6 6 0 00-12 0m6-8a8 8 0 110 16 8 8 0 010-16m1 7v5H9V9zm0-1V6H9v2z"
+                  d="M11 13h1v2H8v-2h1v-2H8V9h3zm0-6H9V5h2z"
+                />
+                <path
+                  d="M10 1a9 9 0 110 18 9 9 0 010-18m0 2a7 7 0 100 14 7 7 0 000-14"
                 />
               </g>
             </svg>
@@ -159,13 +175,26 @@ exports[`mount component 1`] = `
             <!--v-if-->
             <g>
               <path
-                d="M18 0H2a2 2 0 00-2 2v18l4-4h14a2 2 0 002-2V2a2 2 0 00-2-2m-4 4a1.5 1.5 0 11-1.5 1.5A1.5 1.5 0 0114 4M6 4a1.5 1.5 0 11-1.5 1.5A1.5 1.5 0 016 4m4 8c-2.61 0-4.83-.67-5.65-3h11.3c-.82 2.33-3.04 3-5.65 3"
+                d="M15 9c-.82 2.33-2.39 3-5 3s-4.18-.67-5-3z"
+              />
+              <path
+                d="M19 16H7.352l-3.75 3H1V1h18zm-16 .918 3.375-2.7.274-.218H17V3H3z"
+              />
+              <circle
+                cx="6.5"
+                cy="6.5"
+                r="1.5"
+              />
+              <circle
+                cx="13.5"
+                cy="6.5"
+                r="1.5"
               />
             </g>
           </svg>
         </span>
         <a
-          href="/w/index.php?title=Special%3ALog&type=thanks&user=Test+User"
+          href="/w/index.php?title=Special:Log&type=thanks&user=Test+User"
           id="personal-dashboard-thanks-link"
           target="_blank"
         >
@@ -202,7 +231,7 @@ exports[`mount component 1`] = `
             <!--v-if-->
             <g>
               <path
-                d="m.29 12.71 1.42-1.42 2.22 2.22 8.3-10.14 1.54 1.26-9.7 11.86zM12 10h5v2h-5zm-3 4h5v2H9zm6-8h5v2h-5z"
+                d="M14 17h-4v-2h4zm2.404-13.163L6.22 16.8H4.9L.1 13.2l1.2-1.6 4.02 3.015 9.517-12.02zM17 13h-4v-2h4zm3-4h-4V7h4z"
               />
             </g>
           </svg>
@@ -235,7 +264,10 @@ exports[`mount component 1`] = `
               <!--v-if-->
               <g>
                 <path
-                  d="M4 10a6 6 0 1012 0 6 6 0 00-12 0m6-8a8 8 0 110 16 8 8 0 010-16m1 7v5H9V9zm0-1V6H9v2z"
+                  d="M11 13h1v2H8v-2h1v-2H8V9h3zm0-6H9V5h2z"
+                />
+                <path
+                  d="M10 1a9 9 0 110 18 9 9 0 010-18m0 2a7 7 0 100 14 7 7 0 000-14"
                 />
               </g>
             </svg>

@@ -1,17 +1,14 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`mount component 1`] = `
-<a
-  class="cdx-card cdx-card--is-link personal-dashboard-review-changes__card"
+<span
+  class="cdx-card personal-dashboard-review-changes__card"
   data-feedorigin="recentchanges"
-  href="/w/index.php?title=TestTitle&curid=8675309&diff=0&oldid=0"
   newlen="0"
   ns="0"
   oldlen="0"
   rcid="0"
-  role="button"
   tags="test"
-  target="_blank"
   type="TestType"
 >
   <!--v-if-->
@@ -31,14 +28,22 @@ exports[`mount component 1`] = `
       <div
         class="personal-dashboard-review-changes__card__container"
       >
+        <a
+          aria-label="⧼personal-dashboard-risky-article-edits-list-card-aria-label⧽"
+          class="personal-dashboard-review-changes__card__link"
+          href="/w/index.php?title=TestTitle&curid=8675309&diff=0&oldid=0"
+          target="_blank"
+        />
         <div
           class="personal-dashboard-review-changes__card__header"
         >
-          <div
+          <a
             class="personal-dashboard-review-changes__card__title"
+            href="/wiki/TestTitle"
+            target="_blank"
           >
             TestTitle
-          </div>
+          </a>
           <div
             class="personal-dashboard-review-changes__card__description"
           >
@@ -64,22 +69,24 @@ exports[`mount component 1`] = `
                 <!--v-if-->
                 <g>
                   <path
-                    d="M10 11c-5.92 0-8 3-8 5v3h16v-3c0-2-2.08-5-8-5"
+                    d="M12 11a6 6 0 016 6v2H2v-2a6 6 0 016-6z"
                   />
                   <circle
                     cx="10"
-                    cy="5.5"
-                    r="4.5"
+                    cy="5"
+                    r="4"
                   />
                 </g>
               </svg>
             </span>
           </div>
-          <div
+          <a
             class="personal-dashboard-review-changes__card__username"
+            href="/wiki/User:TestUser"
+            target="_blank"
           >
             TestUser
-          </div>
+          </a>
           <div
             class="personal-dashboard-review-changes__card__separator"
           >
@@ -101,5 +108,5 @@ exports[`mount component 1`] = `
     </span>
     <!--v-if-->
   </span>
-</a>
+</span>
 `;

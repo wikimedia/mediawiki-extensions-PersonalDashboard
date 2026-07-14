@@ -1,4 +1,9 @@
 {
 	"extends": "stylelint-config-wikimedia",
-	"ignoreFiles": [ "{coverage,vendor}/**" ]
+	"ignoreFiles": [
+		"{coverage,vendor}/**"
+	],
+	"rules": {
+		"no-descending-specificity": null
+	}
 }

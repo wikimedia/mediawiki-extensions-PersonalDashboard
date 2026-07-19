@@ -21,18 +21,28 @@ function lazyLoader( name ) {
 // Flatten the server's group tree to the islands the client owns: enabled
 // modules whose body the client fills in. A server-rendered module keeps its
 // PHP-emitted body and is left untouched.
+//
+// A focused render emits only the focused module's frame as the whole page, so
+// the other card islands have no slot to teleport into and would mount in place,
+// stacked atop it. Drop them here. A behavior-only island (onboarding) owns no
+// card anywhere and always mounts.
 const islands = [];
 const groups = mw.config.get( 'wgPersonalDashboardGroups', [] );
+const focused = mw.config.get( 'wgPersonalDashboardFocusedModule', null );
 for ( const group of groups ) {
 	for ( const subgroup of group.subgroups ) {
 		for ( const module of subgroup.modules ) {
-			if ( module.enabled && !module.serverRendered ) {
-				islands.push( {
-					name: module.name,
-					header: module.header || '',
-					component: defineAsyncComponent( lazyLoader( module.name ) )
-				} );
+			if ( !module.enabled || module.serverRendered ) {
+				continue;
 			}
+			if ( focused && module.name !== focused && !module.behaviourOnly ) {
+				continue;
+			}
+			islands.push( {
+				name: module.name,
+				header: module.header || '',
+				component: defineAsyncComponent( lazyLoader( module.name ) )
+			} );
 		}
 	}
 }

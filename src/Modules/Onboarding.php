@@ -36,7 +36,9 @@ class Onboarding implements IModule {
 
 	/** @inheritDoc */
 	public function getJsData( string $platform ): array {
-		return [];
+		// A behaviour-only island: it owns no card, so the coordinator keeps
+		// mounting it even where the slot-bearing card islands are dropped.
+		return [ 'behaviourOnly' => true ];
 	}
 
 	/** @inheritDoc */

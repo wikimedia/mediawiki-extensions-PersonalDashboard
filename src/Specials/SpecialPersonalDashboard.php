@@ -124,7 +124,11 @@ class SpecialPersonalDashboard extends SpecialPage {
 			// The rendering platform the server resolved from the skin. The client
 			// consumes this rather than re-sniffing the skin, so server and client
 			// render for the same platform.
-			'wgPersonalDashboardPlatform' => $platform
+			'wgPersonalDashboardPlatform' => $platform,
+			// The module the server rendered as the whole page, or null for the
+			// grouped dashboard. Only this module has a mount slot on a focused
+			// render, so the dashboard app drops the other card islands.
+			'wgPersonalDashboardFocusedModule' => $focused ? $par : null
 		] );
 
 		$overallSsrTimeInSeconds = microtime( true ) - $startTime;

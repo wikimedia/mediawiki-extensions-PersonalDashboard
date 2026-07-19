@@ -1,4 +1,4 @@
-const { createMwApp } = require( 'vue' );
+const { createMwApp, defineAsyncComponent } = require( 'vue' );
 const { createRouter, createWebHashHistory } = require( 'vue-router' );
 const { createPinia } = require( 'pinia' );
 const App = require( './App.vue' );
@@ -18,43 +18,38 @@ function lazyLoader( name ) {
 	} );
 }
 
-const groups = mw.config.get( 'wgPersonalDashboardGroups', [] )
-	.filter( ( g ) => g.enabled );
-const modules = [];
-
-// Bind component refs in place. The same module objects appear in `groups`,
-// so Dashboard's template picks up `.component` via the v-for tree.
+// Flatten the server's group tree to the islands the client owns: enabled
+// modules whose body the client fills in. A server-rendered module keeps its
+// PHP-emitted body and is left untouched.
+const islands = [];
+const groups = mw.config.get( 'wgPersonalDashboardGroups', [] );
 for ( const group of groups ) {
-	for ( const subgroup of group.subgroups.filter( ( s ) => s.enabled ) ) {
-		for ( const module of subgroup.modules.filter( ( m ) => m.enabled ) ) {
-			// Server-rendered modules have no JS to load; the viewport v-htmls
-			// their content directly. The route still needs a component so
-			// Vue Router can resolve navigation to /<name>.
-			if ( module.html ) {
-				module.component = () => ( { template: module.html } );
-				module.style = 'none';
-			} else {
-				module.component = lazyLoader( module.name );
+	for ( const subgroup of group.subgroups ) {
+		for ( const module of subgroup.modules ) {
+			if ( module.enabled && !module.serverRendered ) {
+				islands.push( {
+					name: module.name,
+					header: module.header || '',
+					component: defineAsyncComponent( lazyLoader( module.name ) )
+				} );
 			}
-
-			modules.push( module );
 		}
 	}
 }
+
+const islandNames = new Set( islands.map( ( island ) => island.name ) );
+
+// The rendering platform the server resolved from the skin; the client trusts
+// it rather than re-sniffing, so both sides render for the same platform.
+const platform = mw.config.get( 'wgPersonalDashboardPlatform', 'desktop' );
 
 const router = createRouter( {
 	history: createWebHashHistory(),
 	routes: [
 		{
-			path: '/',
+			path: '/:module?',
 			component: Dashboard,
-			props: { groups },
-			children: modules.map( ( module ) => ( {
-				path: module.name,
-				name: module.name,
-				component: module.component,
-				meta: module
-			} ) )
+			props: { islands, platform }
 		}
 	]
 } );
@@ -63,3 +58,37 @@ createMwApp( App )
 	.use( router )
 	.use( createPinia() )
 	.mount( '#personal-dashboard-root' );
+
+const container = document.querySelector( '.personal-dashboard-container' );
+if ( container ) {
+	// A mobile expandable card is a server <a> to a focused page: the real page
+	// it falls through to with no JS. With JS, a plain click anywhere in that
+	// card opens the module in the dialog instead. The whole summary card is one
+	// tap target, same as the anchor it wraps; a desktop card has no anchor, so
+	// its in-body links are never caught here.
+	container.addEventListener( 'click', ( e ) => {
+		// Leave modified and non-primary clicks to the browser so the anchor's
+		// real href still opens the focused page in a new tab.
+		if ( e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey ) {
+			return;
+		}
+		const card = e.target.closest( '[data-module-name]' );
+		if ( !card || !card.closest( 'a' ) || !islandNames.has( card.dataset.moduleName ) ) {
+			return;
+		}
+		e.preventDefault();
+		router.push( '/' + card.dataset.moduleName );
+	} );
+
+	// Desktop responsive breakpoint. The server owns this container now, so we
+	// observe it from here rather than a Vue component that no longer renders it.
+	if ( platform !== 'mobile' ) {
+		new ResizeObserver( ( entries ) => {
+			const entry = entries[ 0 ];
+			entry.target.classList.toggle(
+				'personal-dashboard-container__compact',
+				entry.contentBoxSize[ 0 ].inlineSize < 800
+			);
+		} ).observe( container );
+	}
+}

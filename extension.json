@@ -108,10 +108,8 @@
 				"init.js",
 				"App.vue",
 				"Dashboard.vue",
-				"ModuleAnchor.vue",
-				"ModuleCard.vue",
+				"IslandMount.vue",
 				"ModuleDialog.vue",
-				"ModuleViewport.vue",
 				"instrumentation/onPersonalDashboardBaseline.js",
 				{
 					"name": "icons.json",

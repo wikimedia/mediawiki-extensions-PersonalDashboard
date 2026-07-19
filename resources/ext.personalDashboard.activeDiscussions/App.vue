@@ -8,7 +8,7 @@
 	</div>
 
 	<template v-if="activeDiscussionsResult">
-		<div v-if="rendermode === 'mobile-summary'">
+		<div v-if="isSummary">
 			<list-card-mobile
 				v-for="ac in activeDiscussionsResult.slice( 0, 1 )"
 				v-bind="ac"
@@ -27,7 +27,7 @@
 	</template>
 
 	<div
-		v-if="rendermode === 'mobile-summary'"
+		v-if="isSummary"
 		class="personal-dashboard-active-discussions__footer">
 		<cdx-button
 			id="personal-dashboard-go-to-active-discussions"
@@ -48,10 +48,13 @@ const useFetchActiveDiscussionsResult = require( './composables/useFetchActiveDi
 
 module.exports = defineComponent( {
 	components: { ListCard, ListCardMobile, CdxButton, CdxProgressBar },
+	// Branches on detail only (compact summary vs full); the dashboard app's
+	// platform prop stays off the markup.
+	inheritAttrs: false,
 	props: {
-		rendermode: {
+		detail: {
 			type: String,
-			default: ''
+			default: 'full'
 		}
 	},
 	setup() {
@@ -76,6 +79,11 @@ module.exports = defineComponent( {
 			buttonAriaLabel: mw.msg( 'personal-dashboard-active-discussions-mobile-summary-footer-button-aria-label' ),
 			progressBarAriaLabel: mw.msg( 'personal-dashboard-active-discussions-progress-bar-aria-label' )
 		};
+	},
+	computed: {
+		isSummary() {
+			return this.detail === 'compact';
+		}
 	},
 	mounted() {
 		this.fetchActiveDiscussions( this.limit );

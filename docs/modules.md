@@ -41,10 +41,10 @@ If a group references a name that isn't registered, `PersonalDashboardModuleFact
 
 Modules implement `MediaWiki\Extension\PersonalDashboard\IModule`. Six methods:
 
-- `render($mode)`: returns the module's HTML for one of `RENDER_DESKTOP`, `RENDER_MOBILE_SUMMARY`, `RENDER_MOBILE_DETAILS` (constants on `IModule`).
-- `getJsData($mode)`: return value is packed into `wgPersonalDashboardGroups` on the page for Vue components to read.
+- `render($platform)`: returns the module's server-side card frame for one of `PLATFORM_DESKTOP` or `PLATFORM_MOBILE` (constants on `IModule`). Platform is the only rendering distinction the server cares about; the detail level within a platform (a compact summary versus the full view) is derived client-side and never reaches PHP.
+- `getJsData($platform)`: return value is packed into `wgPersonalDashboardGroups` on the page for the client to read. It carries what the client needs to mount and coordinate the module (enabled, header, expandable, serverRendered), not the body or footer HTML.
 - `getJsConfigVars()`: additional `mw.config` keys the module's client-side code needs.
-- `supports($mode)`: return false to skip a mode.
+- `supports($platform)`: return false to skip a platform.
 - `setName($name)`, `setPageURL($url)`: called by the factory and the special page before render; typically empty stubs.
 
 For BoilerPlate, the class lives at `src/ModuleExample.php` under `MediaWiki\Extension\BoilerPlate\`. `./src/Modules/ReturnToHomepage.php` is the smallest working example in Personal Dashboard: no context, no services, `render()` returns a static link.
@@ -54,13 +54,17 @@ If the module needs a context or services, the constructor takes an `IContextSou
 Personal Dashboard's own modules extend an internal helper, `MediaWiki\Extension\PersonalDashboard\Modules\BaseModule`, that composes `render()` from a header/subheader/body/footer skeleton so subclasses only supply the pieces. The helper isn't part of the platform contract, but it's a decent example of what a helper can look like. Typical overrides:
 
 - `getHeaderText()`: the card title as a string.
-- `getBody()`: HTML for the module's content, usually a mounting `<div>` for the Vue app plus a no-JS fallback message.
 - `getModules()`: ResourceLoader module names to load for this module.
 - `getJsConfigVars()`: additional `mw.config` keys the module's client-side code needs.
 
+By default BaseModule emits a card frame whose body is an empty mount slot; the module's Vue app teleports its content into that slot once it loads. This is an *island* module, the common case. Two overrides opt out of it:
+
+- `serverRendered()`: return true for a module whose whole body is server HTML with no client mount. The client leaves it in place.
+- `getBody()`: the server-rendered body HTML. Consulted only when `serverRendered()` is true; override one without the other and the body silently never renders.
+
 The [PoC](https://gerrit.wikimedia.org/r/c/mediawiki/extensions/BoilerPlate/+/1295084)'s `src/ModuleExample.php` extends BaseModule; `./src/Modules/Impact.php` does the same with a database-backed body.
 
-Client-side (Vue) modules use the same registration path. `render()` (or `getBody()` if you extend BaseModule) emits a mounting div; a matching ResourceLoader module registered under `ResourceModules` in the same extension's `./extension.json` loads the Vue app. `./src/Modules/RiskyArticleEdits.php` paired with `./resources/ext.personalDashboard.riskyArticleEdits/` is the fullest in-tree example.
+Client-side (Vue) modules are the island default: BaseModule emits the mount slot, and a matching ResourceLoader module registered under `ResourceModules` in the same extension's `./extension.json` supplies the Vue app the dashboard teleports in. The app receives a `platform` prop and derives its own detail level; it needs no PHP beyond the frame. `./src/Modules/RiskyArticleEdits.php` paired with `./resources/ext.personalDashboard.riskyArticleEdits/` is the fullest in-tree example.
 
 ## Show it on the dashboard
 
@@ -88,7 +92,7 @@ Registering the group is the platform mechanism today, but there is no stable us
 All shipped modules live in Personal Dashboard itself and use the same registration mechanism a third-party extension would.
 
 - `./src/Modules/ReturnToHomepage.php`: smallest server-side module; implements `IModule` directly.
-- `./src/Modules/Banner.php`: static content from a wiki message; extends `BaseModule`.
+- `./src/Modules/Banner.php`: static content from a wiki message; server-rendered (no client mount), extends `BaseModule`.
 - `./src/Modules/Impact.php`: DB-backed, passes data to Vue via `getJsData()`; extends `BaseModule`.
 - `./src/Modules/RiskyArticleEdits.php`: full client-side Vue module, the Review Changes experience; extends `BaseModule`.
 - `./src/Modules/Placeholder.php`: fallback used when a registered module fails to load; implements `IModule` directly.

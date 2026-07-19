@@ -360,6 +360,7 @@ abstract class BaseModule implements IModule {
 			$this->shouldWrapModuleWithLink()
 		) {
 			return Html::rawElement( 'a', [
+				'class' => self::BASE_CSS_CLASS . '-anchor',
 				'href' => $this->getPageURL() . '/' . $this->getName(),
 			], $moduleContent );
 		}

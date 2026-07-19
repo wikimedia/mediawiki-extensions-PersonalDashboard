@@ -61,13 +61,9 @@ const {
 
 module.exports = defineComponent( {
 	components: { CdxButton, CdxIcon, CdxPopover },
-	props: {
-		// eslint-disable-next-line vue/no-unused-properties
-		rendermode: {
-			type: String,
-			default: ''
-		}
-	},
+	// Content-only island: it doesn't vary by platform or detail level, so the
+	// dashboard app's platform/detail props stay off its markup.
+	inheritAttrs: false,
 	setup() {
 		const thanksCount = mw.config.get( 'wgPersonalDashboardImpactThanksCount', 0 );
 		const reviewCount = mw.config.get( 'wgPersonalDashboardImpactReviewCount', 0 );

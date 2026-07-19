@@ -118,7 +118,11 @@ class SpecialPersonalDashboard extends SpecialPage {
 
 		$out->addJsConfigVars( [
 			'wgPersonalDashboardGroups' => $groups,
-			'wgPersonalDashboardPageviewToken' => $this->pageviewToken
+			'wgPersonalDashboardPageviewToken' => $this->pageviewToken,
+			// The rendering platform the server resolved from the skin. The client
+			// consumes this rather than re-sniffing the skin, so server and client
+			// render for the same platform.
+			'wgPersonalDashboardPlatform' => $platform
 		] );
 
 		$overallSsrTimeInSeconds = microtime( true ) - $startTime;

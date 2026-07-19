@@ -1,7 +1,7 @@
 <template>
 	<cdx-dialog
 		v-model:open="openInternal"
-		:title="dialogTitle"
+		:title="title"
 		:use-close-button="true"
 		class="personal-dashboard-dialog">
 		<template #header>
@@ -14,7 +14,7 @@
 
 			<div class="cdx-dialog__header__title-group">
 				<h2 class="cdx-dialog__header__title">
-					{{ dialogTitle }}
+					{{ title }}
 				</h2>
 			</div>
 
@@ -41,6 +41,10 @@ module.exports = defineComponent( {
 		open: {
 			type: Boolean,
 			required: true
+		},
+		title: {
+			type: String,
+			default: ''
 		}
 	},
 	emits: [ 'update:open' ],
@@ -58,9 +62,6 @@ module.exports = defineComponent( {
 			set( value ) {
 				this.$emit( 'update:open', value );
 			}
-		},
-		dialogTitle() {
-			return ( this.$route.meta || {} ).header || '';
 		}
 	}
 } );

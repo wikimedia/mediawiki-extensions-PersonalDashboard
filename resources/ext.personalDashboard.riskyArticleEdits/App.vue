@@ -13,7 +13,7 @@
 				reviewChangesStore.feed &&
 				reviewChangesStore.pages">
 			<div
-				v-if="rendermode === 'mobile-summary'"
+				v-if="isSummary"
 				class="personal-dashboard-review-changes__container--mobile">
 				<list-card-mobile
 					v-bind="reviewChangesStore.feed[ 0 ]"
@@ -27,7 +27,7 @@
 				<list-card
 					v-for="rc in reviewChangesStore.feed"
 					v-bind="rc"
-					:key="`${rendermode}-${rc.feedorigin}-${rc.revid}`"
+					:key="`${detail}-${rc.feedorigin}-${rc.revid}`"
 					:pages="reviewChangesStore.pages"
 					:is-mobile="isMobile">
 				</list-card>
@@ -36,7 +36,7 @@
 
 		<!-- eslint-disable max-len -->
 		<div
-			v-if="rendermode === 'mobile-summary'"
+			v-if="isSummary"
 			class="personal-dashboard-review-changes__footer">
 			<cdx-button
 				:aria-label="buttonAriaLabel"
@@ -47,7 +47,7 @@
 		</div>
 
 		<div
-			v-else-if="rendermode === 'mobile-details'"
+			v-else-if="isMobileDetails"
 			class="personal-dashboard-module-footer">
 			<span
 				id="personal-dashboard-go-to-recentchanges"
@@ -73,9 +73,13 @@ module.exports = defineComponent( {
 		ListCardMobile
 	},
 	props: {
-		rendermode: {
+		platform: {
 			type: String,
-			default: ''
+			default: 'desktop'
+		},
+		detail: {
+			type: String,
+			default: 'full'
 		}
 	},
 	setup() {
@@ -100,6 +104,14 @@ module.exports = defineComponent( {
 			buttonAriaLabel: mw.msg( 'personal-dashboard-risky-article-edits-mobile-summary-footer-link-text' ),
 			progressBarAriaLabel: mw.msg( 'personal-dashboard-risky-article-edits-progress-bar-aria-label' )
 		};
+	},
+	computed: {
+		isSummary() {
+			return this.detail === 'compact';
+		},
+		isMobileDetails() {
+			return this.platform === 'mobile' && this.detail === 'full';
+		}
 	},
 	mounted() {
 		this.observer.observe( this.moduleRef );

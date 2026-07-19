@@ -17,13 +17,9 @@ const ListCard = require( './components/ListCard.vue' );
 
 module.exports = defineComponent( {
 	components: { ListCard },
-	props: {
-		// eslint-disable-next-line vue/no-unused-properties
-		rendermode: {
-			type: String,
-			default: ''
-		}
-	},
+	// Content-only island: it consumes no rendering axis, so the coordinator's
+	// platform/detail props stay off its markup.
+	inheritAttrs: false,
 	setup() {
 		return {
 			cards: {

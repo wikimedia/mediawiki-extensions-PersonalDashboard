@@ -233,7 +233,9 @@ describe( 'API params', () => {
 
 describe( 'pagination', () => {
 	test( 'does not paginate when the first response meets the limit', async () => {
-		const rawItems = Array.from( { length: 5 }, ( _, i ) => makeRawWatchlistItem( { revid: i + 1 } )
+		const rawItems = Array.from(
+			{ length: 5 },
+			( _, i ) => makeRawWatchlistItem( { revid: i + 1 } )
 		);
 		let callCount = 0;
 		mw.Api.mock( () => {

@@ -13,7 +13,9 @@ vi.mock(
 
 vi.mock(
 	'/resources/ext.personalDashboard.riskyArticleEdits/composables/useRecentChangesFeed.js',
-	() => ( { useRecentChangesFeed: () => ( { fetchRecentChangesItems: mockFetchRecentChangesItems } ) } )
+	() => ( {
+		useRecentChangesFeed: () => ( { fetchRecentChangesItems: mockFetchRecentChangesItems } )
+	} )
 );
 
 import { useReviewChangesStore } from '/resources/ext.personalDashboard.riskyArticleEdits/store/reviewChangesStore.js';

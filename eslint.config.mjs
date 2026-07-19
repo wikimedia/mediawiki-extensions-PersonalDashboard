@@ -34,5 +34,11 @@ export default defineConfig( [
 				ignorePatterns: [ '^router-.+$' ]
 			} ]
 		}
+	},
+	{
+		// Parse TypeScript-style JSDoc types (e.g. import('./x.js').Foo), so
+		// shared typedefs can live in one file and be referenced by import.
+		// Must come after the wikimedia presets, which default to 'jsdoc' mode.
+		settings: { jsdoc: { mode: 'typescript' } }
 	}
 ] );

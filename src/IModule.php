@@ -17,9 +17,10 @@ interface IModule {
 	 *
 	 * For an island module (the BaseModule default) this is the Codex-styled
 	 * header, subheader, an empty mount slot, and footer; the body is filled in
-	 * client-side once the module's Vue island loads. For a server-rendered
-	 * module (a static banner, a plain link) this is the module's full body,
-	 * with no slot.
+	 * client-side once the module's Vue island loads. A server-rendered module
+	 * emits its full body with no slot instead, either static and left untouched
+	 * (a banner, a plain link) or progressively enhanced by a behavior module
+	 * that adds interactivity to the server DOM.
 	 *
 	 * @param string $platform One of the PLATFORM_* constants
 	 * @return string HTML for the card frame

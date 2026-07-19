@@ -36,6 +36,18 @@ abstract class BaseModule implements IModule {
 	private $pageURL = null;
 
 	/**
+	 * @var bool Whether the module is rendering as the whole focused page.
+	 */
+	private bool $focused = false;
+
+	/**
+	 * @var string The focused page's deep route below the module name (a policy,
+	 * an example), or empty. A progressively enhanced module reads it to open to
+	 * the matching content server-side; the client router owns anything deeper.
+	 */
+	private string $focusedSubPath = '';
+
+	/**
 	 * @param IContextSource $context
 	 * @param bool $shouldWrapModuleWithLink
 	 */
@@ -58,6 +70,51 @@ abstract class BaseModule implements IModule {
 	/** @inheritDoc */
 	public function setName( string $name ): void {
 		$this->name = $name;
+	}
+
+	/**
+	 * Mark this module as rendering the focused page: the whole-page view a single
+	 * module gets on its own subpath. A progressively enhanced module uses this to
+	 * emit deep content inline for no-JS visitors that it otherwise leaves to a
+	 * client-side dialog.
+	 */
+	public function setFocused( bool $focused ): void {
+		$this->focused = $focused;
+	}
+
+	/**
+	 * @return bool Whether the module is rendering as the whole focused page.
+	 */
+	protected function isFocused(): bool {
+		return $this->focused;
+	}
+
+	/**
+	 * Set the focused page's deep route below the module name. The special page
+	 * parses it off the subpage and hands it in; the module opens to the matching
+	 * content for a no-JS visitor.
+	 */
+	public function setFocusedSubPath( string $subPath ): void {
+		$this->focusedSubPath = $subPath;
+	}
+
+	/**
+	 * @return string The focused page's deep route below the module name, or
+	 * empty. The no-JS content a progressively enhanced module opens to; the
+	 * client router owns anything deeper.
+	 */
+	protected function getFocusedSubPath(): string {
+		return $this->focusedSubPath;
+	}
+
+	/**
+	 * @return bool Whether this module reads a focused subpath (a deep route below
+	 * its name). Default false: behind any other module a trailing path is
+	 * meaningless, so the special page lets such a URL fall through to the grouped
+	 * dashboard. A module that renders deep server-side content overrides to true.
+	 */
+	public function acceptsFocusedSubPath(): bool {
+		return false;
 	}
 
 	/**
@@ -273,12 +330,16 @@ abstract class BaseModule implements IModule {
 	}
 
 	/**
-	 * Whether this module renders its whole body server-side.
+	 * Whether this module renders its whole body server-side. Three kinds of
+	 * module share this one flag:
 	 *
-	 * An island module (the default) emits a frame with an empty slot that its Vue
-	 * component fills in client-side. A server-rendered module emits its full body
-	 * from render() and is left untouched by the client. Override to return true for
-	 * static, JS-free modules.
+	 *  - Island (the default, false): the frame carries an empty slot that the
+	 *    module's Vue component fills in client-side.
+	 *  - Server-static (true, no getModules()): render() emits the full body and
+	 *    the client leaves it alone (Banner, ReturnToHomepage).
+	 *  - Progressively enhanced (true, with getModules()): render() emits the full
+	 *    body and the module ships a behavior module that runs against that server
+	 *    DOM, adding interactivity without re-rendering it (PoliciesGuidelines).
 	 *
 	 * @return bool
 	 */

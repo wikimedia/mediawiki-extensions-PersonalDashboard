@@ -39,6 +39,21 @@ class PlaceholderTest extends MediaWikiUnitTestCase {
 		$this->assertStringContainsString( 'data-platform="mobile"', $html );
 	}
 
+	public function testGetJsDataReportsServerRendered() {
+		$module = new Placeholder();
+
+		// serverRendered => true is the load-bearing key: it tells the client to
+		// leave the placeholder frame alone rather than mount an island over it.
+		$this->assertEqualsCanonicalizing(
+			[
+				'enabled' => true,
+				'expandable' => false,
+				'serverRendered' => true,
+			],
+			$module->getJsData( 'desktop' )
+		);
+	}
+
 	public function testSupportsBothPlatforms() {
 		$module = new Placeholder();
 

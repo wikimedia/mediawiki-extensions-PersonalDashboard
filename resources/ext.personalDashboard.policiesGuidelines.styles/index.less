@@ -1,0 +1,50 @@
+@import 'mediawiki.skin.variables.less';
+@import 'mediawiki.mixins';
+
+// The policy accordions themselves are Codex's cdx-accordion (summary header,
+// disclosure chevron, open/close all provided). This styles only the
+// worked-examples walkthrough disclosed inside each one.
+.personal-dashboard-policies-guidelines {
+	&__list {
+		display: flex;
+		flex-direction: column;
+		gap: @spacing-50;
+	}
+
+	&__step {
+		h4 {
+			margin: @spacing-0;
+			padding: @spacing-0;
+		}
+
+		p {
+			margin: @spacing-0;
+			padding: @spacing-50 @spacing-0;
+		}
+	}
+
+	&__answer {
+		display: flex;
+		gap: @spacing-50;
+
+		&__text {
+			overflow: hidden;
+			overflow-wrap: break-word;
+		}
+	}
+
+	// The walkthrough draws its status icons as CSS-only Codex icons.
+	&__step-icon {
+		&--success {
+			.cdx-mixin-css-icon( @cdx-icon-success, @color-icon-success );
+		}
+
+		&--warning {
+			.cdx-mixin-css-icon( @cdx-icon-alert, @color-icon-warning );
+		}
+
+		&--error {
+			.cdx-mixin-css-icon( @cdx-icon-error, @color-icon-error );
+		}
+	}
+}

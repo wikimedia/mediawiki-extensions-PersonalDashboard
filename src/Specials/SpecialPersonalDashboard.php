@@ -7,6 +7,7 @@ use MediaWiki\Context\IContextSource;
 use MediaWiki\Exception\ErrorPageError;
 use MediaWiki\Exception\UserNotLoggedIn;
 use MediaWiki\Extension\PersonalDashboard\IModule;
+use MediaWiki\Extension\PersonalDashboard\Modules\BaseModule;
 use MediaWiki\Extension\PersonalDashboard\PersonalDashboardModuleFactory;
 use MediaWiki\Extension\PersonalDashboard\Util;
 use MediaWiki\Html\Html;
@@ -82,12 +83,13 @@ class SpecialPersonalDashboard extends SpecialPage {
 		// The Vue app mounts here and teleports each island into its server slot.
 		$out->addHTML( Html::element( 'div', [ 'id' => 'personal-dashboard-root' ] ) );
 
-		// A module name in $par focuses that single module: the real page a
-		// mobile expandable card's anchor falls through to when JS is off. With
-		// JS the click is intercepted and the module opens in a dialog instead.
-		// Desktop has no such anchor, and an unknown or unsupported module has no
-		// frame to show, so both fall through to the full grouped dashboard.
-		$focused = ( $par !== '' && $this->isMobile && isset( $modules[$par] )
+		// A module name in $par focuses that single module as the whole page: the
+		// real page a card's in-body link falls through to with no JS, whether a
+		// mobile expandable card's anchor or a "see examples" link. With JS the
+		// click is intercepted and the module opens in a dialog instead. An unknown
+		// or unsupported module has no frame to show, so it falls through to the
+		// full grouped dashboard.
+		$focused = ( $par !== '' && isset( $modules[$par] )
 			&& $modules[$par]->supports( $platform ) ) ? $modules[$par] : null;
 		if ( $focused ) {
 			$this->renderFocusedFrame( $platform, $par, $focused );
@@ -280,6 +282,11 @@ class SpecialPersonalDashboard extends SpecialPage {
 		$out = $this->getContext()->getOutput();
 		$out->addBodyClasses( [ 'personal-dashboard-' . $platform, 'personal-dashboard-focused' ] );
 		$out->addHTML( Html::openElement( 'div', [ 'class' => 'personal-dashboard-container' ] ) );
+		// A progressively enhanced module renders its deep no-JS content only when
+		// it is the whole focused page, not in its dashboard card.
+		if ( $module instanceof BaseModule ) {
+			$module->setFocused( true );
+		}
 		$this->emitModuleFrame( $platform, $name, $module );
 		$out->addHTML( Html::closeElement( 'div' ) );
 		$this->emitNoJsNotice();

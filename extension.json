@@ -214,74 +214,6 @@
 				}
 			]
 		},
-		"ext.personalDashboard.policiesGuidelines": {
-			"localBasePath": "resources/ext.personalDashboard.policiesGuidelines",
-			"remoteExtPath": "PersonalDashboard/resources/personalDashboard.policiesGuidelines",
-			"class": "MediaWiki\\ResourceLoader\\CodexModule",
-			"codexComponents": [
-				"CdxCard",
-				"CdxIcon"
-			],
-			"dependencies": [
-				"vue",
-				"ext.personalDashboard.common"
-			],
-			"messages": [
-				"personal-dashboard-policies-guidelines-title",
-				"personal-dashboard-policies-guidelines-body",
-				"personal-dashboard-policies-guidelines-neutral-point-of-view-title",
-				"personal-dashboard-policies-guidelines-neutral-point-of-view-definition",
-				"personal-dashboard-policies-guidelines-neutral-point-of-view-example-1",
-				"personal-dashboard-policies-guidelines-neutral-point-of-view-answer-1-label",
-				"personal-dashboard-policies-guidelines-neutral-point-of-view-answer-1-text",
-				"personal-dashboard-policies-guidelines-neutral-point-of-view-example-2",
-				"personal-dashboard-policies-guidelines-neutral-point-of-view-answer-2-label",
-				"personal-dashboard-policies-guidelines-neutral-point-of-view-answer-2-text",
-				"personal-dashboard-policies-guidelines-no-original-research-title",
-				"personal-dashboard-policies-guidelines-no-original-research-definition",
-				"personal-dashboard-policies-guidelines-no-original-research-example-1",
-				"personal-dashboard-policies-guidelines-no-original-research-answer-1-label",
-				"personal-dashboard-policies-guidelines-no-original-research-answer-1-text",
-				"personal-dashboard-policies-guidelines-no-original-research-example-2",
-				"personal-dashboard-policies-guidelines-no-original-research-answer-2-label",
-				"personal-dashboard-policies-guidelines-no-original-research-answer-2-text",
-				"personal-dashboard-policies-guidelines-verifiability-title",
-				"personal-dashboard-policies-guidelines-verifiability-definition",
-				"personal-dashboard-policies-guidelines-verifiability-example-1",
-				"personal-dashboard-policies-guidelines-verifiability-answer-1-label",
-				"personal-dashboard-policies-guidelines-verifiability-answer-1-text",
-				"personal-dashboard-policies-guidelines-verifiability-example-2",
-				"personal-dashboard-policies-guidelines-verifiability-answer-2-label",
-				"personal-dashboard-policies-guidelines-verifiability-answer-2-text",
-				"personal-dashboard-policies-guidelines-verifiability-example-3",
-				"personal-dashboard-policies-guidelines-verifiability-answer-3-label",
-				"personal-dashboard-policies-guidelines-verifiability-answer-3-text",
-				"personal-dashboard-policies-guidelines-assume-good-faith-title",
-				"personal-dashboard-policies-guidelines-assume-good-faith-definition",
-				"personal-dashboard-policies-guidelines-assume-good-faith-example-1",
-				"personal-dashboard-policies-guidelines-assume-good-faith-answer-1-label",
-				"personal-dashboard-policies-guidelines-assume-good-faith-answer-1-text",
-				"personal-dashboard-policies-guidelines-assume-good-faith-example-2",
-				"personal-dashboard-policies-guidelines-assume-good-faith-answer-2-label",
-				"personal-dashboard-policies-guidelines-assume-good-faith-answer-2-text",
-				"personal-dashboard-policies-guidelines-examples-button",
-				"personal-dashboard-policies-guidelines-examples-header"
-			],
-			"packageFiles": [
-				"App.vue",
-				"components/ExampleStep.vue",
-				"components/ListCard.vue",
-				{
-					"name": "icons.json",
-					"callback": "MediaWiki\\ResourceLoader\\CodexModule::getIcons",
-					"callbackParam": [
-						"cdxIconAlert",
-						"cdxIconError",
-						"cdxIconSuccess"
-					]
-				}
-			]
-		},
 		"ext.personalDashboard.riskyArticleEdits": {
 			"localBasePath": "resources/ext.personalDashboard.riskyArticleEdits",
 			"remoteExtPath": "PersonalDashboard/resources/personalDashboard.riskyArticleEdits",
@@ -387,6 +319,18 @@
 			"codexStyleOnly": true,
 			"codexComponents": [
 				"CdxInfoChip"
+			],
+			"styles": [
+				"index.less"
+			]
+		},
+		"ext.personalDashboard.policiesGuidelines.styles": {
+			"localBasePath": "resources/ext.personalDashboard.policiesGuidelines.styles",
+			"remoteExtPath": "PersonalDashboard/resources/personalDashboard.policiesGuidelines.styles",
+			"class": "MediaWiki\\ResourceLoader\\CodexModule",
+			"codexStyleOnly": true,
+			"codexComponents": [
+				"CdxAccordion"
 			],
 			"styles": [
 				"index.less"

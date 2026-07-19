@@ -6,9 +6,10 @@ use MediaWiki\Extension\PersonalDashboard\IModule;
 use MediaWiki\Html\Html;
 
 /**
- * Minimal IModule implementation for Vue-only modules that handle
- * all rendering client-side. Emits only the app root div that
- * init.js expects to mount into.
+ * Minimal IModule implementation substituted for an unregistered module: a frame
+ * with an empty body. It reports serverRendered() so the client leaves it be,
+ * rather than flattening it into an island that lazy-loads a module that was never
+ * registered.
  */
 class Placeholder implements IModule {
 
@@ -51,7 +52,7 @@ class Placeholder implements IModule {
 		return [
 			'enabled' => true,
 			'expandable' => false,
-			'serverRendered' => false,
+			'serverRendered' => true,
 		];
 	}
 

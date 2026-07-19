@@ -3,7 +3,6 @@
 namespace MediaWiki\Extension\PersonalDashboard\Modules;
 
 use MediaWiki\Context\IContextSource;
-use MediaWiki\Html\Html;
 use Wikimedia\Rdbms\IConnectionProvider;
 use Wikimedia\Rdbms\IReadableDatabase;
 use Wikimedia\Timestamp\TimestampFormat;
@@ -97,22 +96,6 @@ class Impact extends BaseModule {
 	/** @inheritDoc */
 	protected function getHeaderText() {
 		return $this->msg( 'personal-dashboard-impact-title' )->text();
-	}
-
-	/** @inheritDoc */
-	protected function getBody() {
-		return implode( "\n", [
-			Html::rawElement( 'div',
-				[
-					'id' => 'impact-vue-root',
-					'class' => [ 'ext-personal-dashboard-app-root' ],
-				],
-			),
-			Html::element( 'p',
-				[ 'class' => 'personal-dashboard-module-no-js-fallback' ],
-				$this->msg( 'personal-dashboard-module-no-js-fallback' )->text()
-			)
-		] );
 	}
 
 	/** @inheritDoc */

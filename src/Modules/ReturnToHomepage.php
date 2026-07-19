@@ -16,7 +16,7 @@ class ReturnToHomepage implements IModule {
 	}
 
 	/** @inheritDoc */
-	public function render( $mode ) {
+	public function render( string $platform ): string {
 		$linkUrl = SpecialPage::getTitleFor( 'Homepage' )
 			->getFullURL( [ 'source' => 'specialpersonaldashboard' ] );
 		$linkEl = Html::rawElement(
@@ -40,8 +40,13 @@ class ReturnToHomepage implements IModule {
 	}
 
 	/** @inheritDoc */
-	public function getJsData( $mode ) {
-		return [ 'html' => $this->render( $mode ) ];
+	public function getJsData( string $platform ): array {
+		// Server-rendered: render() output stays in the server DOM and the client
+		// leaves it alone, so no body travels in the bootstrap.
+		return [
+			'enabled' => true,
+			'serverRendered' => true,
+		];
 	}
 
 	/** @inheritDoc */
@@ -50,7 +55,7 @@ class ReturnToHomepage implements IModule {
 	}
 
 	/** @inheritDoc */
-	public function supports( $mode ) {
+	public function supports( string $platform ): bool {
 		return ExtensionRegistry::getInstance()->isLoaded( 'GrowthExperiments' );
 	}
 

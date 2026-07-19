@@ -61,6 +61,7 @@ class SpecialPersonalDashboard extends SpecialPage {
 
 		$out = $this->getContext()->getOutput();
 		$this->isMobile = Util::isMobile( $out->getSkin() );
+		$platform = $this->isMobile ? IModule::PLATFORM_MOBILE : IModule::PLATFORM_DESKTOP;
 
 		$out->addModules( 'ext.personalDashboard.special' );
 		$out->addModuleStyles( 'ext.personalDashboard.styles' );
@@ -75,39 +76,37 @@ class SpecialPersonalDashboard extends SpecialPage {
 			}
 		}
 
-		$out->addHTML( Html::rawElement( 'div', [
-			'id' => 'personal-dashboard-root'
-		] ) );
-
 		$groups = $this->getModuleGroups()['groups'];
 		$modules = $this->getModules();
 
-		if ( $this->isMobile ) {
-			if (
-				array_key_exists( $par, $modules ) &&
-				$modules[$par]->supports( IModule::RENDER_MOBILE_DETAILS )
-			) {
-				$mode = IModule::RENDER_MOBILE_DETAILS;
-			} else {
-				$mode = IModule::RENDER_MOBILE_SUMMARY;
-			}
+		// The Vue app mounts here and teleports each island into its server slot.
+		$out->addHTML( Html::element( 'div', [ 'id' => 'personal-dashboard-root' ] ) );
+
+		// A module name in $par focuses that single module: the real page a
+		// mobile expandable card's anchor falls through to when JS is off. With
+		// JS the click is intercepted and the module opens in a dialog instead.
+		// Desktop has no such anchor, and an unknown or unsupported module has no
+		// frame to show, so both fall through to the full grouped dashboard.
+		$focused = ( $par !== '' && $this->isMobile && isset( $modules[$par] )
+			&& $modules[$par]->supports( $platform ) ) ? $modules[$par] : null;
+		if ( $focused ) {
+			$this->renderFocusedFrame( $platform, $par, $focused );
 		} else {
-			$mode = IModule::RENDER_DESKTOP;
+			$this->renderGroupedFrames( $platform, $groups, $modules );
 		}
 
+		// Client bootstrap: per-module data the dashboard app mounts and routes from.
 		foreach ( $groups as &$group ) {
 			foreach ( $group['subgroups'] as &$subgroup ) {
 				foreach ( $subgroup['modules'] as &$module ) {
 					$resolved = $modules[ $module['name'] ] ?? null;
-					$enabled = $module['enabled'] = $resolved?->supports( $mode );
+					$module['enabled'] = $resolved?->supports( $platform );
 
-					if ( !$resolved || !$enabled ) {
+					if ( !$resolved || !$module['enabled'] ) {
 						continue;
 					}
 
-					// Initial per-module state flows in via getJsData; a module
-					// that returns 'body' opts itself in to server-rendering.
-					foreach ( $this->getModuleJsDataSafe( $resolved, $mode ) as $key => $value ) {
+					foreach ( $this->getModuleJsDataSafe( $resolved, $platform ) as $key => $value ) {
 						$module[ $key ] = $value;
 					}
 
@@ -115,13 +114,13 @@ class SpecialPersonalDashboard extends SpecialPage {
 				}
 			}
 		}
+		unset( $group, $subgroup, $module );
 
 		$out->addJsConfigVars( [
 			'wgPersonalDashboardGroups' => $groups,
 			'wgPersonalDashboardPageviewToken' => $this->pageviewToken
 		] );
 
-		$platform = ( $this->isMobile ? 'mobile' : 'desktop' );
 		$overallSsrTimeInSeconds = microtime( true ) - $startTime;
 		$this->statsFactory->withComponent( 'PersonalDashboard' )
 			->getTiming( 'special_dashboard_server_side_render_seconds' )
@@ -230,11 +229,20 @@ class SpecialPersonalDashboard extends SpecialPage {
 		);
 	}
 
-	private function renderDesktop() {
+	/**
+	 * Emit the server-owned card frames, grouped into the layout the Vue app
+	 * adopts. Each island frame carries an empty slot the client teleports into;
+	 * server-rendered modules carry their full body.
+	 *
+	 * @param string $platform One of the IModule::PLATFORM_* constants
+	 * @param array $groups Module group tree
+	 * @param IModule[] $modules Resolved modules keyed by name
+	 */
+	private function renderGroupedFrames( string $platform, array $groups, array $modules ): void {
 		$out = $this->getContext()->getOutput();
-		$out->addBodyClasses( 'personal-dashboard-desktop' );
-		$context = $this->getContext();
-		foreach ( $this->getModuleGroups()[ 'groups' ] as $group ) {
+		$out->addBodyClasses( 'personal-dashboard-' . $platform );
+		$out->addHTML( Html::openElement( 'div', [ 'class' => 'personal-dashboard-container' ] ) );
+		foreach ( $groups as $group ) {
 			$out->addHTML( Html::openElement( 'div', [
 				'class' => "personal-dashboard-group-{$group[ 'name' ]}"
 			] ) );
@@ -243,27 +251,61 @@ class SpecialPersonalDashboard extends SpecialPage {
 					'class' => "personal-dashboard-group-{$group[ 'name' ]}-subgroup-{$subGroup[ 'name' ]}"
 				] ) );
 				foreach ( $subGroup[ 'modules' ] as $moduleConfig ) {
-					/** @var ?IModule $module */
-					$module = $this->getRequestedModule( $moduleConfig, $context );
-					if ( !$module ) {
-						continue;
+					$module = $modules[ $moduleConfig[ 'name' ] ] ?? null;
+					if ( $module && $module->supports( $platform ) ) {
+						$this->emitModuleFrame( $platform, $moduleConfig[ 'name' ], $module );
 					}
-					$startTime = microtime( true );
-
-					$module->setPageURL( $this->getPageTitle()->getLinkURL() );
-					$html = $this->getModuleRenderHtmlSafe( $module, IModule::RENDER_DESKTOP );
-					$out->addHTML( $html );
-
-					$this->recordModuleRenderingTime(
-						$moduleConfig[ 'name' ],
-						IModule::RENDER_DESKTOP,
-						microtime( true ) - $startTime
-					);
 				}
 				$out->addHTML( Html::closeElement( 'div' ) );
 			}
 			$out->addHTML( Html::closeElement( 'div' ) );
 		}
+		$out->addHTML( Html::closeElement( 'div' ) );
+		$this->emitNoJsNotice();
+	}
+
+	/**
+	 * Render a single module as the whole page: the real page an expandable
+	 * card's anchor falls through to when JS is off.
+	 *
+	 * @param string $platform One of the IModule::PLATFORM_* constants
+	 * @param string $name Module name
+	 * @param IModule $module Resolved module
+	 */
+	private function renderFocusedFrame( string $platform, string $name, IModule $module ): void {
+		$out = $this->getContext()->getOutput();
+		$out->addBodyClasses( [ 'personal-dashboard-' . $platform, 'personal-dashboard-focused' ] );
+		$out->addHTML( Html::openElement( 'div', [ 'class' => 'personal-dashboard-container' ] ) );
+		$this->emitModuleFrame( $platform, $name, $module );
+		$out->addHTML( Html::closeElement( 'div' ) );
+		$this->emitNoJsNotice();
+	}
+
+	/**
+	 * A page-level noscript notice explaining the empty card bodies. Island
+	 * bodies only fill in once the client mounts, so a no-JS visitor otherwise
+	 * sees bordered cards with nothing in them and no reason why.
+	 */
+	private function emitNoJsNotice(): void {
+		$this->getOutput()->addHTML( Html::rawElement( 'noscript', [],
+			Html::element( 'p', [ 'class' => 'personal-dashboard-no-js-notice' ],
+				$this->msg( 'personal-dashboard-module-no-js-fallback' )->text()
+			)
+		) );
+	}
+
+	/**
+	 * Render one module's frame into the page and record its timing.
+	 *
+	 * @param string $platform One of the IModule::PLATFORM_* constants
+	 * @param string $name Module name
+	 * @param IModule $module Resolved module
+	 */
+	private function emitModuleFrame( string $platform, string $name, IModule $module ): void {
+		$startTime = microtime( true );
+		$module->setPageURL( $this->getPageTitle()->getLinkURL() );
+		$this->getOutput()->addHTML( $this->getModuleRenderHtmlSafe( $module, $platform ) );
+		$this->recordModuleRenderingTime( $name, $platform, microtime( true ) - $startTime );
 	}
 
 	private function recordModuleRenderingTime( string $moduleName, string $mode, float $timeToRecordInSeconds ): void {
@@ -276,47 +318,19 @@ class SpecialPersonalDashboard extends SpecialPage {
 			->observeSeconds( $timeToRecordInSeconds );
 	}
 
-	private function renderMobileDetails( IModule $module ) {
-		$out = $this->getContext()->getOutput();
-		$out->addBodyClasses( 'personal-dashboard-mobile-details' );
-		$html = $this->getModuleRenderHtmlSafe( $module, IModule::RENDER_MOBILE_DETAILS );
-		$this->getOutput()->addHTML( $html );
-	}
-
-	private function renderMobileSummary() {
-		$out = $this->getContext()->getOutput();
-		$modules = $this->getModules();
-		$out->addBodyClasses( [
-			'personal-dashboard-mobile-summary',
-		] );
-		foreach ( $modules as $moduleName => $module ) {
-			$startTime = microtime( true );
-
-			$module->setPageURL( $this->getPageTitle()->getLinkURL() );
-			$html = $this->getModuleRenderHtmlSafe( $module, IModule::RENDER_MOBILE_SUMMARY );
-			$this->getOutput()->addHTML( $html );
-
-			$this->recordModuleRenderingTime(
-				$moduleName,
-				IModule::RENDER_MOBILE_SUMMARY,
-				microtime( true ) - $startTime
-			);
-		}
-	}
-
 	/**
-	 * Get the module render HTML for a particular mode, catching exceptions by default.
+	 * Get the module render HTML for a platform, catching exceptions by default.
 	 *
 	 * If PersonalDashboardDeveloperSetup is on, then throw the exceptions.
 	 * @param IModule $module
-	 * @param string $mode
+	 * @param string $platform One of the IModule::PLATFORM_* constants
 	 * @throws Throwable
 	 * @return string
 	 */
-	private function getModuleRenderHtmlSafe( IModule $module, string $mode ): string {
+	private function getModuleRenderHtmlSafe( IModule $module, string $platform ): string {
 		$html = '';
 		try {
-			$html = $module->render( $mode );
+			$html = $module->render( $platform );
 		} catch ( Throwable $throwable ) {
 			if ( $this->getConfig()->get( 'PersonalDashboardDeveloperSetup' ) ) {
 				throw $throwable;
@@ -331,13 +345,13 @@ class SpecialPersonalDashboard extends SpecialPage {
 	 *
 	 * If PersonalDashboardDeveloperSetup is on, then throw the exceptions.
 	 * @param IModule $module
-	 * @param string $mode
+	 * @param string $platform One of the IModule::PLATFORM_* constants
 	 * @throws Throwable
 	 * @return array
 	 */
-	private function getModuleJsDataSafe( IModule $module, string $mode ): array {
+	private function getModuleJsDataSafe( IModule $module, string $platform ): array {
 		try {
-			return $module->getJsData( $mode );
+			return $module->getJsData( $platform );
 		} catch ( Throwable $throwable ) {
 			if ( $this->getConfig()->get( 'PersonalDashboardDeveloperSetup' ) ) {
 				throw $throwable;

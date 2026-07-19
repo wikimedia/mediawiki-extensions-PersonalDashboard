@@ -24,31 +24,35 @@ class Placeholder implements IModule {
 	}
 
 	/** @inheritDoc */
-	public function render( $mode ): string {
+	public function render( string $platform ): string {
 		return Html::rawElement(
 			'div',
 			[
 				'class' => [
 					'personal-dashboard-module',
 					'personal-dashboard-module-' . $this->name,
-					'personal-dashboard-module-' . $mode,
+					'personal-dashboard-module-' . $platform,
 				],
 				'data-module-name' => $this->name,
-				'data-mode' => $mode,
+				'data-platform' => $platform,
 			],
 			Html::rawElement( 'div',
 				[ 'class' => 'personal-dashboard-module-body' ],
-				Html::rawElement( 'div', [
-					'id' => $this->name . '-vue-root',
-					'class' => 'ext-personal-dashboard-app-root',
+				Html::element( 'div', [
+					'id' => 'pd-slot-' . $this->name,
+					'class' => 'personal-dashboard-module-slot',
 				] )
 			)
 		);
 	}
 
 	/** @inheritDoc */
-	public function getJsData( $mode ): array {
-		return [ 'html' => $mode ];
+	public function getJsData( string $platform ): array {
+		return [
+			'enabled' => true,
+			'expandable' => false,
+			'serverRendered' => false,
+		];
 	}
 
 	/** @inheritDoc */
@@ -57,7 +61,7 @@ class Placeholder implements IModule {
 	}
 
 	/** @inheritDoc */
-	public function supports( $mode ): bool {
+	public function supports( string $platform ): bool {
 		return true;
 	}
 

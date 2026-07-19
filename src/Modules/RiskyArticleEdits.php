@@ -22,7 +22,7 @@ class RiskyArticleEdits extends BaseModule {
 
 	/** @inheritDoc */
 	protected function getSubheaderText() {
-		return $this->getMode() !== self::RENDER_DESKTOP ? '' : $this->msg(
+		return $this->getPlatform() !== self::PLATFORM_DESKTOP ? '' : $this->msg(
 			'personal-dashboard-risky-article-edits-subheader-info'
 		)->text();
 	}
@@ -42,49 +42,12 @@ class RiskyArticleEdits extends BaseModule {
 	}
 
 	/** @inheritDoc */
-	protected function getMobileDetailsHeader() {
-		$icon = $this->getBackIcon();
-		$text = $this->getHeaderTextElement();
-		return $icon . $text;
-	}
-
-	/** @inheritDoc */
 	protected function getFooter() {
-		return $this->getMode() !== self::RENDER_DESKTOP ? '' : Html::rawElement(
+		return $this->getPlatform() !== self::PLATFORM_DESKTOP ? '' : Html::rawElement(
 			'div',
 			[ 'id' => 'personal-dashboard-go-to-recentchanges' ],
 			$this->msg( 'personal-dashboard-risky-article-edits-footer-preamble' )->parse()
 		);
-	}
-
-	/** @inheritDoc */
-	protected function getBody() {
-		return implode( "\n", [
-			Html::rawElement( 'div',
-				[
-					'id' => 'risky-article-edits-vue-root',
-					'class' => [ 'ext-personal-dashboard-app-root' ],
-				],
-			),
-			Html::element( 'p',
-				[ 'class' => 'personal-dashboard-module-no-js-fallback' ],
-				$this->msg( 'personal-dashboard-module-no-js-fallback' )->text()
-			)
-		] );
-	}
-
-	/** @inheritDoc */
-	protected function getMobileSummaryBody() {
-		return Html::element( 'div',
-				[
-					'id' => 'risky-article-edits-vue-root',
-					'class' => [ 'ext-personal-dashboard-app-root' ],
-				],
-			) .
-			Html::element( 'p',
-				[ 'class' => 'personal-dashboard-module-no-js-fallback' ],
-				$this->msg( 'personal-dashboard-module-no-js-fallback' )->text()
-			);
 	}
 
 	/** @inheritDoc */

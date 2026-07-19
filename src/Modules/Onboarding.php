@@ -30,12 +30,12 @@ class Onboarding implements IModule {
 	}
 
 	/** @inheritDoc */
-	public function render( $mode ) {
+	public function render( string $platform ): string {
 		return '';
 	}
 
 	/** @inheritDoc */
-	public function getJsData( $mode ) {
+	public function getJsData( string $platform ): array {
 		return [];
 	}
 
@@ -45,7 +45,7 @@ class Onboarding implements IModule {
 	}
 
 	/** @inheritDoc */
-	public function supports( $mode ) {
+	public function supports( string $platform ): bool {
 		return !$this->userOptionsManager->getBoolOption(
 			$this->context->getUser(),
 			'personaldashboard-visited' );

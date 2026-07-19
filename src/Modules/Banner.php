@@ -17,13 +17,6 @@ class Banner extends BaseModule {
 
 	public const MESSAGE_KEY = 'PersonalDashboard-banner';
 
-	/** @inheritDoc */
-	protected static $supportedModes = [
-		self::RENDER_DESKTOP,
-		self::RENDER_MOBILE_SUMMARY
-		// RENDER_MOBILE_DETAILS is not supported
-	];
-
 	/**
 	 * Check whether the module is enabled (ie. if there's a banner message set by the wiki admin).
 	 * @param IContextSource $context
@@ -41,6 +34,14 @@ class Banner extends BaseModule {
 	/** @inheritDoc */
 	protected function canRender() {
 		return self::isEnabled( $this->getContext() );
+	}
+
+	/**
+	 * The banner is static server HTML; the client leaves it in place.
+	 * @return bool
+	 */
+	protected function serverRendered(): bool {
+		return true;
 	}
 
 	/** @inheritDoc */
@@ -66,15 +67,6 @@ class Banner extends BaseModule {
 				'class' => 'mw-parser-output',
 				'data-link-group-id' => 'banner',
 			],
-			$this->getContext()->msg( self::MESSAGE_KEY )->parse()
-		);
-	}
-
-	/** @inheritDoc */
-	protected function getMobileSummaryBody() {
-		return Html::rawElement(
-			'div',
-			[ 'class' => 'mw-parser-output' ],
 			$this->getContext()->msg( self::MESSAGE_KEY )->parse()
 		);
 	}

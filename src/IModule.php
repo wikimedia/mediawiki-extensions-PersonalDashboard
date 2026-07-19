@@ -3,27 +3,42 @@
 namespace MediaWiki\Extension\PersonalDashboard;
 
 interface IModule {
-	public const RENDER_DESKTOP = 'desktop';
-	public const RENDER_MOBILE_SUMMARY = 'mobile-summary';
-	public const RENDER_MOBILE_DETAILS = 'mobile-details';
-
 	/**
-	 * Render the module in the given mode.
-	 *
-	 * @param string $mode One of RENDER_* constants
-	 * @return string Html rendering of the module
+	 * Server-side platform the module frame is rendered for. This is the only
+	 * rendering distinction the server and the client care about.
+	 * The detail level within a platform (a compact summary versus the full
+	 * view) is derived client-side and never reaches PHP.
 	 */
-	public function render( $mode );
+	public const PLATFORM_DESKTOP = 'desktop';
+	public const PLATFORM_MOBILE = 'mobile';
 
 	/**
-	 * Get an array of data needed by the Javascript code related to this module.
+	 * Render the server-side card frame for the given platform.
 	 *
-	 * The default implementation doesn't return anything.
+	 * For an island module (the BaseModule default) this is the Codex-styled
+	 * header, subheader, an empty mount slot, and footer; the body is filled in
+	 * client-side once the module's Vue island loads. For a server-rendered
+	 * module (a static banner, a plain link) this is the module's full body,
+	 * with no slot.
 	 *
-	 * @param string $mode One of RENDER_* constants
+	 * @param string $platform One of the PLATFORM_* constants
+	 * @return string HTML for the card frame
+	 */
+	public function render( string $platform ): string;
+
+	/**
+	 * Client bootstrap data for this module, packed into wgPersonalDashboardGroups
+	 * and keyed by module name.
+	 *
+	 * Carries only what the client needs to mount and coordinate: whether the
+	 * module is enabled, whether it has an expandable full view, its header text,
+	 * whether it is server-rendered, plus any module-specific keys. It does NOT
+	 * carry body or footer HTML; those belong to render() now.
+	 *
+	 * @param string $platform One of the PLATFORM_* constants
 	 * @return array
 	 */
-	public function getJsData( $mode );
+	public function getJsData( string $platform ): array;
 
 	/**
 	 * Override this function to provide JS config vars needed by this module.
@@ -33,12 +48,13 @@ interface IModule {
 	public function getJsConfigVars();
 
 	/**
-	 * Whether this module supports the given mode. If this returns false, render() and
-	 * getJsData() should not be called with this mode.
-	 * @param string $mode One of RENDER_* constants
+	 * Whether this module supports the given platform. If this returns false,
+	 * render() and getJsData() should not be called for that platform.
+	 *
+	 * @param string $platform One of the PLATFORM_* constants
 	 * @return bool
 	 */
-	public function supports( $mode );
+	public function supports( string $platform ): bool;
 
 	/**
 	 * Sets the page base URL where the module is being rendered.

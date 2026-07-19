@@ -2,14 +2,12 @@
 
 namespace MediaWiki\Extension\PersonalDashboard\Modules;
 
-use InvalidArgumentException;
 use MediaWiki\Config\Config;
 use MediaWiki\Context\IContextSource;
 use MediaWiki\Context\RequestContext;
 use MediaWiki\Extension\PersonalDashboard\IModule;
 use MediaWiki\Html\Html;
 use MediaWiki\Message\Message;
-use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\User\User;
 use Wikimedia\Message\MessageSpecifier;
 
@@ -79,15 +77,14 @@ abstract class BaseModule implements IModule {
 	}
 
 	/**
-	 * Modes that are supported by this module.Subclasses that don't support certain modes should
-	 * override this to list only the modes they support. For more granular control, override
-	 * supports() instead.
+	 * Platforms that are supported by this module. Subclasses that don't support a
+	 * platform should override this to list only the platforms they support. For more
+	 * granular control, override supports() instead.
 	 * @var string[]
 	 */
-	protected static $supportedModes = [
-		self::RENDER_DESKTOP,
-		self::RENDER_MOBILE_SUMMARY,
-		self::RENDER_MOBILE_DETAILS
+	protected static $supportedPlatforms = [
+		self::PLATFORM_DESKTOP,
+		self::PLATFORM_MOBILE
 	];
 
 	/** @var string Name of the module */
@@ -95,8 +92,8 @@ abstract class BaseModule implements IModule {
 
 	protected IContextSource $context;
 
-	/** @var string Rendering mode (one of RENDER_* constants) */
-	private string $mode;
+	/** @var string Rendering platform (one of PLATFORM_* constants) */
+	private string $platform;
 
 	final protected function getContext(): IContextSource {
 		$this->context ??= RequestContext::getMain();
@@ -129,10 +126,10 @@ abstract class BaseModule implements IModule {
 	}
 
 	/**
-	 * @return string Rendering mode (one of RENDER_* constants)
+	 * @return string Rendering platform (one of PLATFORM_* constants)
 	 */
-	final protected function getMode(): string {
-		return $this->mode;
+	final protected function getPlatform(): string {
+		return $this->platform;
 	}
 
 	/** @inheritDoc */
@@ -141,10 +138,10 @@ abstract class BaseModule implements IModule {
 	}
 
 	/**
-	 * @param string $mode Rendering mode (one of RENDER_* constants)
+	 * @param string $platform Rendering platform (one of PLATFORM_* constants)
 	 */
-	protected function setMode( string $mode ) {
-		$this->mode = $mode;
+	protected function setPlatform( string $platform ) {
+		$this->platform = $platform;
 	}
 
 	/**
@@ -180,39 +177,34 @@ abstract class BaseModule implements IModule {
 	/**
 	 * @inheritDoc
 	 */
-	public function supports( $mode ) {
-		return in_array( $mode, static::$supportedModes );
+	public function supports( string $platform ): bool {
+		return in_array( $platform, static::$supportedPlatforms );
 	}
 
 	/**
-	 * Get an array of data needed by the Javascript code related to this module.
-	 * The data will be available in the 'personaldashboardmodules' JS configuration field, keyed by module name.
-	 * Keys currently in use:
-	 * - html: module HTML
-	 * - rlModules: ResourceLoader modules this module depends on
-	 * - heading: module header text
-	 * 'html' is only present when the module supports dynamic loading, 'heading'
-	 * in mobile summary mode, and 'rlModules' in both cases.
+	 * Client bootstrap data for this module, packed into wgPersonalDashboardGroups
+	 * keyed by module name.
 	 *
-	 * @param string $mode One of RENDER_DESKTOP, RENDER_MOBILE_SUMMARY, RENDER_MOBILE_DETAILS
+	 * Carries only what the client needs to mount and coordinate the module; the
+	 * body and footer HTML belong to render() now. A module that reports
+	 * serverRendered() true is left alone by the client: its render() output stays
+	 * in the server DOM rather than being mounted as an island.
+	 *
+	 * @param string $platform One of the PLATFORM_* constants
 	 * @return array
 	 */
-	public function getJsData( $mode ) {
-		if ( !$this->supports( $mode ) ) {
+	public function getJsData( string $platform ): array {
+		if ( !$this->supports( $platform ) ) {
 			return [];
 		}
 
-		$this->setMode( $mode );
+		$this->setPlatform( $platform );
 
 		return [
 			'enabled' => $this->shouldRender(),
 			'header' => $this->getHeaderText(),
-			'subheader' => $this->getSubheaderText(),
-			'body' => $mode === self::RENDER_MOBILE_SUMMARY ?
-				$this->getMobileSummaryBody() :
-				$this->getBody(),
-			'footer' => $this->getFooter(),
 			'expandable' => $this->shouldWrapModuleWithLink(),
+			'serverRendered' => $this->serverRendered(),
 		];
 	}
 
@@ -281,13 +273,27 @@ abstract class BaseModule implements IModule {
 	}
 
 	/**
+	 * Whether this module renders its whole body server-side.
+	 *
+	 * An island module (the default) emits a frame with an empty slot that its Vue
+	 * component fills in client-side. A server-rendered module emits its full body
+	 * from render() and is left untouched by the client. Override to return true for
+	 * static, JS-free modules.
+	 *
+	 * @return bool
+	 */
+	protected function serverRendered(): bool {
+		return false;
+	}
+
+	/**
 	 * @inheritDoc
 	 */
-	public function render( $mode ) {
-		if ( !$this->supports( $mode ) ) {
+	public function render( string $platform ): string {
+		if ( !$this->supports( $platform ) ) {
 			return '';
 		}
-		$this->setMode( $mode );
+		$this->setPlatform( $platform );
 		if ( !$this->shouldRender() ) {
 			return '';
 		}
@@ -297,21 +303,36 @@ abstract class BaseModule implements IModule {
 	}
 
 	/**
-	 * Get the module HTML for current mode
+	 * Get the module frame HTML for the current platform.
 	 *
 	 * @return string
 	 */
 	protected function getHtml() {
-		if ( $this->mode === self::RENDER_DESKTOP ) {
-			$html = $this->renderDesktop();
-		} elseif ( $this->mode === self::RENDER_MOBILE_SUMMARY ) {
-			$html = $this->renderMobileSummary();
-		} elseif ( $this->mode === self::RENDER_MOBILE_DETAILS ) {
-			$html = $this->renderMobileDetails();
-		} else {
-			throw new InvalidArgumentException( 'Invalid rendering mode: ' . $this->mode );
-		}
-		return $html;
+		return $this->getPlatform() === self::PLATFORM_MOBILE ?
+			$this->renderMobileFrame() :
+			$this->renderDesktopFrame();
+	}
+
+	/**
+	 * The body content for the frame: an empty mount slot for island modules, or
+	 * the full server-rendered body for modules that report serverRendered() true.
+	 *
+	 * @return string
+	 */
+	protected function getBodyContent(): string {
+		return $this->serverRendered() ? $this->getBody() : $this->getSlot();
+	}
+
+	/**
+	 * The empty mount slot an island module's Vue component teleports into.
+	 *
+	 * @return string
+	 */
+	protected function getSlot(): string {
+		return Html::element( 'div', [
+			'id' => 'pd-slot-' . $this->getName(),
+			'class' => 'personal-dashboard-module-slot',
+		] );
 	}
 
 	/**
@@ -326,17 +347,16 @@ abstract class BaseModule implements IModule {
 				'class' => array_merge( [
 					self::BASE_CSS_CLASS,
 					self::BASE_CSS_CLASS . '-' . $this->name,
-					self::BASE_CSS_CLASS . '-' . $this->getMode(),
+					self::BASE_CSS_CLASS . '-' . $this->getPlatform(),
 				], $this->getCssClasses() ),
 				'data-module-name' => $this->name,
-				'data-mode' => $this->getMode(),
+				'data-platform' => $this->getPlatform(),
 			],
 			implode( "\n", $sections )
 		);
 
 		if (
-			$this->getMode() === self::RENDER_MOBILE_SUMMARY &&
-			$this->supports( self::RENDER_MOBILE_DETAILS ) &&
+			$this->getPlatform() === self::PLATFORM_MOBILE &&
 			$this->shouldWrapModuleWithLink()
 		) {
 			return Html::rawElement( 'a', [
@@ -372,38 +392,24 @@ abstract class BaseModule implements IModule {
 	}
 
 	/**
-	 * @return string HTML rendering for desktop.
+	 * @return string The desktop card frame: header, subheader, body slot, footer.
 	 */
-	protected function renderDesktop() {
+	protected function renderDesktopFrame() {
 		return $this->buildModuleWrapper(
 			$this->buildSection( 'header', $this->getHeader(), $this->getHeaderTag() ),
 			$this->buildSection( 'subheader', $this->getSubheader(), $this->getSubheaderTag() ),
-			$this->buildSection( 'body', $this->getBody() ),
+			$this->buildSection( 'body', $this->getBodyContent() ),
 			$this->buildSection( 'footer', $this->getFooter() )
 		);
 	}
 
 	/**
-	 * @return string HTML rendering for mobile summary.
+	 * @return string The compact mobile card frame: header and body slot.
 	 */
-	protected function renderMobileSummary() {
+	protected function renderMobileFrame() {
 		return $this->buildModuleWrapper(
 			$this->buildSection( 'header', $this->getMobileSummaryHeader(), $this->getHeaderTag() ),
-			$this->buildSection( 'body', $this->getMobileSummaryBody() )
-		);
-	}
-
-	/**
-	 * @return string HTML rendering for mobile details.
-	 */
-	protected function renderMobileDetails() {
-		return $this->buildModuleWrapper(
-			$this->buildSection( 'header', $this->getMobileDetailsHeader(), $this->getHeaderTag() ),
-			$this->buildSection( 'header-separator',
-				Html::element( 'div', [ 'class' => static::BASE_CSS_CLASS . '-header-separator' ] ) ),
-			$this->buildSection( 'subheader', $this->getSubheader(), $this->getSubheaderTag() ),
-			$this->buildSection( 'body', $this->getBody() ),
-			$this->buildSection( 'footer', $this->getFooter() )
+			$this->buildSection( 'body', $this->getBodyContent() )
 		);
 	}
 
@@ -449,39 +455,23 @@ abstract class BaseModule implements IModule {
 	}
 
 	/**
-	 * Implement this function to provide the module body.
+	 * The module body. Island modules leave this empty (their body is the
+	 * client-filled slot); server-rendered modules override it with their full
+	 * content, and must also override serverRendered() to return true. Override
+	 * one without the other and getBodyContent() hands back an empty slot, so the
+	 * body silently never renders.
 	 *
 	 * @return string HTML content of the body
 	 */
-	abstract protected function getBody();
+	protected function getBody() {
+		return '';
+	}
 
 	/**
 	 * @return string HTML string to be used as header of the mobile summary.
 	 */
 	protected function getMobileSummaryHeader() {
 		return $this->getHeaderTextElement() . $this->getNavIcon();
-	}
-
-	/**
-	 * @return string HTML string to be used as header of the mobile details.
-	 */
-	protected function getMobileDetailsHeader() {
-		$icon = $this->getBackIcon();
-		$text = $this->getHeaderTextElement();
-		return $icon . $text;
-	}
-
-	/**
-	 * @return string HTML string wrapper for the back icon.
-	 */
-	protected function getBackIcon(): string {
-		return Html::rawElement(
-			'a',
-			[
-				'href' => SpecialPage::getTitleFor( 'PersonalDashboard' )->getLinkURL(),
-				'class' => [ static::BASE_CSS_CLASS . '-header-back-icon' ],
-			],
-		);
 	}
 
 	/**
@@ -494,16 +484,6 @@ abstract class BaseModule implements IModule {
 				'class' => [ static::BASE_CSS_CLASS . '-header-nav-icon' ],
 			],
 		);
-	}
-
-	/**
-	 * Implement this function to provide the module body
-	 * when rendered as a mobile summary.
-	 *
-	 * @return string HTML content of the body
-	 */
-	protected function getMobileSummaryBody() {
-		return $this->getBody();
 	}
 
 	/**

@@ -9,12 +9,12 @@ const islands = [
 	{ name: 'ext.example.two', header: 'Two', component: {} }
 ];
 
-function mountDashboard( activeModule ) {
+function mountDashboard( activeModule, hash = '' ) {
 	return mount( Dashboard, {
 		props: { islands, platform: 'desktop' },
 		global: {
 			mocks: {
-				$route: { params: activeModule ? { module: activeModule } : {} },
+				$route: { params: activeModule ? { module: activeModule } : {}, hash },
 				$router: { push() {} }
 			},
 			stubs: {
@@ -41,4 +41,9 @@ test( 'no active module leaves the dialog closed and untitled', () => {
 	const dialog = mountDashboard().findComponent( ModuleDialog );
 	expect( dialog.props( 'open' ) ).toBe( false );
 	expect( dialog.props( 'title' ) ).toBe( '' );
+} );
+
+test( 'a step hash leaves the module dialog shut for the module to own', () => {
+	const dialog = mountDashboard( 'ext.example.two', '#a-step' ).findComponent( ModuleDialog );
+	expect( dialog.props( 'open' ) ).toBe( false );
 } );

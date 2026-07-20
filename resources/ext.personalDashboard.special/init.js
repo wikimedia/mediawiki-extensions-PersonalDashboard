@@ -1,6 +1,7 @@
 const { createMwApp, defineAsyncComponent } = require( 'vue' );
-const { createRouter, createWebHashHistory } = require( 'vue-router' );
+const { createRouter } = require( 'vue-router' );
 const { createPinia } = require( 'pinia' );
+const { createMediaWikiHistory } = require( './mediaWikiHistory.js' );
 const App = require( './App.vue' );
 const Dashboard = require( './Dashboard.vue' );
 
@@ -54,14 +55,18 @@ const islandNames = new Set( islands.map( ( island ) => island.name ) );
 const platform = mw.config.get( 'wgPersonalDashboardPlatform', 'desktop' );
 
 const router = createRouter( {
-	history: createWebHashHistory(),
+	history: createMediaWikiHistory(),
 	routes: [
 		{
-			// A module owns everything under its own top segment: :module is
-			// the island dialog the dashboard app opens, :submodule* is a tail
-			// the module itself interprets (the policies examples walkthrough
-			// uses it as the policy name). The dashboard app never reads the tail.
-			path: '/:module?/:submodule*',
+			// The module name is the whole route: it is the page subpage ($par on
+			// the server), the focused page a card falls through to with no JS, and
+			// the island the dashboard app opens in a dialog. A step within a module
+			// (the policies walkthrough's policy) rides in the URL hash, which the
+			// module reads for itself; the dashboard app never reads the hash. The
+			// greedy (.*) matches any subpage, even an unknown or multi-segment one,
+			// so the app always mounts and falls through to the grouped dashboard
+			// just as the server does for an unrecognized $par.
+			path: '/:module(.*)',
 			component: Dashboard,
 			props: { islands, platform, focusedModule }
 		}
@@ -76,10 +81,10 @@ createMwApp( App )
 /*
  * Hand the router to any behavior module that wants to drive its own dialog
  * through browser history (the policies examples walkthrough does). We wait for
- * isReady() so the initial hash navigation has resolved: a module reads
- * currentRoute the instant it receives the router, and a deep-linked subroute
- * has to already be the current route or it won't open on first paint. mw.hook
- * replays, so a module that loads later still receives it.
+ * isReady() so the initial navigation has resolved: a module reads currentRoute
+ * the instant it receives the router, and a deep-linked step has to already be
+ * the current route or it won't open on first paint. mw.hook replays, so a
+ * module that loads later still receives it.
  */
 router.isReady().then( () => {
 	mw.hook( 'personalDashboard.router' ).fire( router );

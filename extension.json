@@ -109,6 +109,7 @@
 				"Dashboard.vue",
 				"IslandMount.vue",
 				"ModuleDialog.vue",
+				"mediaWikiHistory.js",
 				"instrumentation/onPersonalDashboardBaseline.js",
 				{
 					"name": "icons.json",

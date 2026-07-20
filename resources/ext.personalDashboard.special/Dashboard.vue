@@ -53,14 +53,15 @@ module.exports = defineComponent( {
 			if ( this.focusedModule ) {
 				return '';
 			}
-			// A subroute tail belongs to a module's own routing, not the dashboard
-			// app's dialog; a stale hash like #/reviewChanges/<tail> must not open the
-			// island's dialog on the module segment alone.
-			if ( ( this.$route.params.submodule || [] ).length ) {
+			// A step within a module lives in the URL hash and belongs to that
+			// module's own routing, not the dashboard app's dialog: a policy hash
+			// like #neutral-point-of-view opens the policies walkthrough, so the
+			// module dialog must stay shut over its card.
+			if ( this.$route.hash ) {
 				return '';
 			}
 			// Only a known island opens the dialog; an unknown or server-rendered
-			// name in the hash would otherwise open an empty, untitled dialog.
+			// name in the path would otherwise open an empty, untitled dialog.
 			const name = this.$route.params.module || '';
 			return this.islands.some( ( island ) => island.name === name ) ? name : '';
 		},

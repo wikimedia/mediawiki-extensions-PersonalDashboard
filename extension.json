@@ -133,8 +133,7 @@
 			"codexComponents": [
 				"CdxButton",
 				"CdxDialog",
-				"CdxIcon",
-				"CdxInfoChip"
+				"CdxIcon"
 			],
 			"dependencies": [
 				"vue"
@@ -385,6 +384,11 @@
 		"ext.personalDashboard.styles": {
 			"localBasePath": "resources/ext.personalDashboard.styles",
 			"remoteExtPath": "PersonalDashboard/resources/personalDashboard.styles",
+			"class": "MediaWiki\\ResourceLoader\\CodexModule",
+			"codexStyleOnly": true,
+			"codexComponents": [
+				"CdxInfoChip"
+			],
 			"styles": [
 				"index.less"
 			]

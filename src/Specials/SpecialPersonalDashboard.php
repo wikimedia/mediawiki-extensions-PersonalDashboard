@@ -61,7 +61,7 @@ class SpecialPersonalDashboard extends SpecialPage {
 		parent::execute( $par );
 
 		$out = $this->getContext()->getOutput();
-		$this->isMobile = Util::isMobile( $out->getSkin() );
+		$this->isMobile = Util::isMobile();
 		$platform = $this->isMobile ? IModule::PLATFORM_MOBILE : IModule::PLATFORM_DESKTOP;
 
 		$out->addModules( 'ext.personalDashboard.special' );
@@ -261,6 +261,10 @@ class SpecialPersonalDashboard extends SpecialPage {
 	private function renderGroupedFrames( string $platform, array $groups, array $modules ): void {
 		$out = $this->getContext()->getOutput();
 		$out->addBodyClasses( 'personal-dashboard-' . $platform );
+		// The viewport wraps the container as its container-query context so modern
+		// browsers stack the two columns to one from CSS at first paint, no flash.
+		// The observer in init.js is the fallback where @container is unsupported.
+		$out->addHTML( Html::openElement( 'div', [ 'class' => 'personal-dashboard-viewport' ] ) );
 		$out->addHTML( Html::openElement( 'div', [ 'class' => 'personal-dashboard-container' ] ) );
 		foreach ( $groups as $group ) {
 			$out->addHTML( Html::openElement( 'div', [
@@ -280,7 +284,7 @@ class SpecialPersonalDashboard extends SpecialPage {
 			}
 			$out->addHTML( Html::closeElement( 'div' ) );
 		}
-		$out->addHTML( Html::closeElement( 'div' ) );
+		$out->addHTML( Html::closeElement( 'div' ) . Html::closeElement( 'div' ) );
 		$this->emitNoJsNotice();
 	}
 
@@ -295,6 +299,9 @@ class SpecialPersonalDashboard extends SpecialPage {
 	private function renderFocusedFrame( string $platform, string $name, IModule $module ): void {
 		$out = $this->getContext()->getOutput();
 		$out->addBodyClasses( [ 'personal-dashboard-' . $platform, 'personal-dashboard-focused' ] );
+		// Same viewport wrapper as the grouped frames so the container query applies
+		// here too, though a lone focused module never has a second column to drop.
+		$out->addHTML( Html::openElement( 'div', [ 'class' => 'personal-dashboard-viewport' ] ) );
 		$out->addHTML( Html::openElement( 'div', [ 'class' => 'personal-dashboard-container' ] ) );
 		// A progressively enhanced module renders its deep no-JS content only when
 		// it is the whole focused page, not in its dashboard card. The back link
@@ -305,7 +312,7 @@ class SpecialPersonalDashboard extends SpecialPage {
 			$module->setBackLink( $this->buildBackLink() );
 		}
 		$this->emitModuleFrame( $platform, $name, $module );
-		$out->addHTML( Html::closeElement( 'div' ) );
+		$out->addHTML( Html::closeElement( 'div' ) . Html::closeElement( 'div' ) );
 		$this->emitNoJsNotice();
 	}
 

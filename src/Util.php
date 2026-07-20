@@ -14,7 +14,7 @@ use MediaWiki\Linker\LinkTarget;
 use MediaWiki\Logger\LoggerFactory;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Parser\Sanitizer;
-use MediaWiki\Skin\Skin;
+use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Status\Status;
 use MediaWiki\Title\TitleFactory;
 use MediaWiki\User\User;
@@ -97,11 +97,19 @@ class Util {
 	}
 
 	/**
-	 * @param Skin $skin
-	 * @return bool Whether the given skin is considered "mobile".
+	 * Whether the request is being served the mobile view. Resolved from
+	 * MobileFrontend, the canonical signal; without that extension there is no
+	 * mobile view, so the responsive CSS carries the layout on its own.
+	 *
+	 * @return bool
 	 */
-	public static function isMobile( Skin $skin ) {
-		return $skin->getSkinName() === 'minerva';
+	public static function isMobile(): bool {
+		if ( !ExtensionRegistry::getInstance()->isLoaded( 'MobileFrontend' ) ) {
+			return false;
+		}
+		return MediaWikiServices::getInstance()
+			->getService( 'MobileFrontend.Context' )
+			->shouldDisplayMobileView();
 	}
 
 	/**

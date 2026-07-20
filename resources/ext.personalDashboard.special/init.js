@@ -117,14 +117,21 @@ if ( container ) {
 		router.push( '/' + card.dataset.moduleName );
 	} );
 
-	// Desktop responsive breakpoint. The server owns this container now, so we
-	// observe it from here rather than a Vue component that no longer renders it.
-	if ( platform !== 'mobile' ) {
+	// Desktop responsive breakpoint. Modern browsers collapse the columns from a
+	// CSS container query at first paint; only browsers without @container support
+	// need this JS fallback. It reads the breakpoint from a CSS variable so the
+	// query and this fallback stay on one source, defaulting to 800 if that read
+	// fails. We measure with contentRect rather than contentBoxSize
+	// because this path is exactly the older browsers that predate contentBoxSize.
+	if ( platform !== 'mobile' && !CSS.supports( 'container-type', 'inline-size' ) ) {
+		const breakpoint = parseInt(
+			getComputedStyle( container ).getPropertyValue( '--personal-dashboard-column-breakpoint' ), 10
+		) || 800;
 		new ResizeObserver( ( entries ) => {
 			const entry = entries[ 0 ];
 			entry.target.classList.toggle(
 				'personal-dashboard-container__compact',
-				entry.contentBoxSize[ 0 ].inlineSize < 800
+				entry.contentRect.width < breakpoint
 			);
 		} ).observe( container );
 	}

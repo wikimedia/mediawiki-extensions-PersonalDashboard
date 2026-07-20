@@ -20,11 +20,20 @@ class SpecialPersonalDashboardTest extends SpecialPageTestBase {
 		);
 	}
 
-	public function testSpecialPageDoesNotFatal() {
+	public function testGroupedRenderEmitsViewportWrapper() {
 		$user = new TestUser( 'ATestUser' );
 		$req = new FauxRequest();
-		$this->executeSpecialPage( '', $req, null, $user->getUser() );
-		$this->assertTrue( true );
+		[ $html ] = $this->executeSpecialPage( '', $req, null, $user->getUser() );
+
+		$this->assertStringContainsString( 'personal-dashboard-viewport', $html );
+		$this->assertStringContainsString( 'personal-dashboard-container', $html );
+		// The viewport wraps the container as its container-query context (see
+		// SpecialPersonalDashboard::renderGroupedFrames), so it must open first.
+		$this->assertLessThan(
+			strpos( $html, 'personal-dashboard-container' ),
+			strpos( $html, 'personal-dashboard-viewport' ),
+			'viewport wrapper should open before the container it wraps'
+		);
 	}
 
 	public function testRenderSurveyLink() {

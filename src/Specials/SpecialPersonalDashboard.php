@@ -83,17 +83,27 @@ class SpecialPersonalDashboard extends SpecialPage {
 		// The Vue app mounts here and teleports each island into its server slot.
 		$out->addHTML( Html::element( 'div', [ 'id' => 'personal-dashboard-root' ] ) );
 
-		// A module name in $par focuses that single module as the whole page: the
-		// real page a card's in-body link falls through to with no JS, whether a
-		// mobile expandable card's anchor or a "see examples" link. With JS the
-		// click is intercepted and the module opens in a dialog instead. An unknown
-		// or unsupported module has no frame to show, so it falls through to the
-		// full grouped dashboard.
-		$focused = ( $par !== '' && isset( $modules[$par] )
-			&& $modules[$par]->supports( $platform ) ) ? $modules[$par] : null;
-		if ( $focused ) {
-			$this->renderFocusedFrame( $platform, $par, $focused );
+		// The first subpage segment names a module. A bare module name is the
+		// isolated focused page: the real page a card's in-body link falls through
+		// to with no JS, whether a mobile expandable card's anchor or a "see
+		// examples" link. A deeper subpath instead opens that module in place
+		// within the full dashboard, so the URL composes the whole page around the
+		// deep-linked state (the right policy, the right example) rather than
+		// showing the module alone; the module renders what it owns server-side and
+		// the client router owns anything deeper. An unknown module, or a subpath
+		// behind one that reads none, falls through to the plain grouped dashboard.
+		[ $moduleName, $subPath ] = array_pad( explode( '/', $par ?? '', 2 ), 2, '' );
+		$matched = ( $moduleName !== '' && isset( $modules[$moduleName] )
+			&& $modules[$moduleName]->supports( $platform ) ) ? $modules[$moduleName] : null;
+		$isolated = $matched !== null && $subPath === '';
+		if ( $isolated ) {
+			$this->renderFocusedFrame( $platform, $moduleName, $matched );
 		} else {
+			if ( $matched instanceof BaseModule && $subPath !== ''
+				&& $matched->acceptsFocusedSubPath()
+			) {
+				$matched->setFocusedSubPath( $subPath );
+			}
 			$this->renderGroupedFrames( $platform, $groups, $modules );
 		}
 
@@ -125,10 +135,11 @@ class SpecialPersonalDashboard extends SpecialPage {
 			// consumes this rather than re-sniffing the skin, so server and client
 			// render for the same platform.
 			'wgPersonalDashboardPlatform' => $platform,
-			// The module the server rendered as the whole page, or null for the
-			// grouped dashboard. Only this module has a mount slot on a focused
-			// render, so the dashboard app drops the other card islands.
-			'wgPersonalDashboardFocusedModule' => $focused ? $par : null
+			// The module rendered as the isolated whole page, or null for a grouped
+			// render (a deep subpath composes the full dashboard, so it is grouped
+			// too). Only an isolated render has a single module's slot, so the app
+			// drops the other card islands; a grouped render keeps them all.
+			'wgPersonalDashboardFocusedModule' => $isolated ? $moduleName : null
 		] );
 
 		$overallSsrTimeInSeconds = microtime( true ) - $startTime;

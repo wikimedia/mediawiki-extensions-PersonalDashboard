@@ -57,7 +57,11 @@ const router = createRouter( {
 	history: createWebHashHistory(),
 	routes: [
 		{
-			path: '/:module?',
+			// A module owns everything under its own top segment: :module is
+			// the island dialog the dashboard app opens, :submodule* is a tail
+			// the module itself interprets (the policies examples walkthrough
+			// uses it as the policy name). The dashboard app never reads the tail.
+			path: '/:module?/:submodule*',
 			component: Dashboard,
 			props: { islands, platform, focusedModule }
 		}
@@ -68,6 +72,18 @@ createMwApp( App )
 	.use( router )
 	.use( createPinia() )
 	.mount( '#personal-dashboard-root' );
+
+/*
+ * Hand the router to any behavior module that wants to drive its own dialog
+ * through browser history (the policies examples walkthrough does). We wait for
+ * isReady() so the initial hash navigation has resolved: a module reads
+ * currentRoute the instant it receives the router, and a deep-linked subroute
+ * has to already be the current route or it won't open on first paint. mw.hook
+ * replays, so a module that loads later still receives it.
+ */
+router.isReady().then( () => {
+	mw.hook( 'personalDashboard.router' ).fire( router );
+} );
 
 const container = document.querySelector( '.personal-dashboard-container' );
 if ( container ) {

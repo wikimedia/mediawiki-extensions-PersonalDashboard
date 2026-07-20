@@ -53,6 +53,12 @@ module.exports = defineComponent( {
 			if ( this.focusedModule ) {
 				return '';
 			}
+			// A subroute tail belongs to a module's own routing, not the dashboard
+			// app's dialog; a stale hash like #/reviewChanges/<tail> must not open the
+			// island's dialog on the module segment alone.
+			if ( ( this.$route.params.submodule || [] ).length ) {
+				return '';
+			}
 			// Only a known island opens the dialog; an unknown or server-rendered
 			// name in the hash would otherwise open an empty, untitled dialog.
 			const name = this.$route.params.module || '';

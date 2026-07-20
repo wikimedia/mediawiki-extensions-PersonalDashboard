@@ -99,11 +99,6 @@ class Impact extends BaseModule {
 	}
 
 	/** @inheritDoc */
-	protected function getNavIcon() {
-		return '';
-	}
-
-	/** @inheritDoc */
 	public function getJsConfigVars() {
 		$actorId = $this->getUser()->getActorId();
 		$thanksCount = $this->getThanksCount( $actorId );

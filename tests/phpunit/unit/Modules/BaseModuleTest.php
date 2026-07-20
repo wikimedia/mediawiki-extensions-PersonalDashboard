@@ -2,6 +2,7 @@
 namespace MediaWiki\Extension\PersonalDashboard\Tests\Unit\Modules;
 
 use MediaWiki\Context\IContextSource;
+use MediaWiki\Extension\PersonalDashboard\IModule;
 use MediaWiki\Extension\PersonalDashboard\Modules\BaseModule;
 use MediaWikiUnitTestCase;
 
@@ -84,4 +85,43 @@ class BaseModuleTest extends MediaWikiUnitTestCase {
 		);
 	}
 
+	public function testBuildModuleWrapperWrapsMobileCardInAnchor() {
+		$module = $this->newModule( true );
+		$module->callSetPlatform( IModule::PLATFORM_MOBILE );
+		$module->setName( 'impact' );
+		$module->setPageURL( '/wiki/Special:PersonalDashboard' );
+
+		$html = $module->callBuildModuleWrapper( '<span>x</span>' );
+
+		$this->assertStringContainsString(
+			'<a class="personal-dashboard-module-anchor" '
+				. 'href="/wiki/Special:PersonalDashboard/impact">',
+			$html
+		);
+	}
+
+	public function testBuildModuleWrapperSuppressesAnchorWhenFocused() {
+		$module = $this->newModule( true );
+		$module->callSetPlatform( IModule::PLATFORM_MOBILE );
+		$module->setName( 'impact' );
+		$module->setPageURL( '/wiki/Special:PersonalDashboard' );
+		// A focused render IS the page the anchor would link to; wrapping its body in
+		// a top-level anchor nests anchors (T426183), so the anchor must drop out.
+		$module->setFocused( true );
+
+		$html = $module->callBuildModuleWrapper( '<span>x</span>' );
+
+		$this->assertStringNotContainsString( 'personal-dashboard-module-anchor', $html );
+	}
+
+	public function testBuildModuleWrapperNeverWrapsDesktopCardInAnchor() {
+		$module = $this->newModule( true );
+		$module->callSetPlatform( IModule::PLATFORM_DESKTOP );
+		$module->setName( 'impact' );
+		$module->setPageURL( '/wiki/Special:PersonalDashboard' );
+
+		$html = $module->callBuildModuleWrapper( '<span>x</span>' );
+
+		$this->assertStringNotContainsString( 'personal-dashboard-module-anchor', $html );
+	}
 }

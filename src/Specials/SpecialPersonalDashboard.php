@@ -287,13 +287,29 @@ class SpecialPersonalDashboard extends SpecialPage {
 		$out->addBodyClasses( [ 'personal-dashboard-' . $platform, 'personal-dashboard-focused' ] );
 		$out->addHTML( Html::openElement( 'div', [ 'class' => 'personal-dashboard-container' ] ) );
 		// A progressively enhanced module renders its deep no-JS content only when
-		// it is the whole focused page, not in its dashboard card.
+		// it is the whole focused page, not in its dashboard card. The back link
+		// is page navigation, so the page owns it and hands it to the module's
+		// header rather than each module minting its own.
 		if ( $module instanceof BaseModule ) {
 			$module->setFocused( true );
+			$module->setBackLink( $this->buildBackLink() );
 		}
 		$this->emitModuleFrame( $platform, $name, $module );
 		$out->addHTML( Html::closeElement( 'div' ) );
 		$this->emitNoJsNotice();
+	}
+
+	/**
+	 * A link back to the grouped dashboard, rendered in the header of a focused
+	 * whole-page render so the page is not a dead end. Owned by the page rather
+	 * than minted per module, so a headerless module gets a way back too.
+	 */
+	private function buildBackLink(): string {
+		return Html::element( 'a', [
+			'href' => $this->getPageTitle()->getLinkURL(),
+			'class' => 'personal-dashboard-module-header-back-icon',
+			'aria-label' => $this->msg( 'personal-dashboard-back-to-dashboard' )->text(),
+		] );
 	}
 
 	/**

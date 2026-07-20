@@ -41,6 +41,12 @@ module.exports = defineComponent( {
 		active: {
 			type: Boolean,
 			default: false
+		},
+		// True when this island is the whole focused page rather than a card in
+		// the grouped dashboard.
+		focused: {
+			type: Boolean,
+			default: false
 		}
 	},
 	setup( props ) {
@@ -64,10 +70,10 @@ module.exports = defineComponent( {
 		},
 		detail() {
 			// Mobile shows a compact summary in the card and the full body in
-			// the dialog; desktop is always full.
-			return ( this.platform === 'mobile' && !this.activeInternal ) ?
-				'compact' :
-				'full';
+			// the dialog; desktop is always full. A focused render is the module's
+			// whole page, so it shows the full body there too.
+			const full = this.activeInternal || this.focused;
+			return ( this.platform === 'mobile' && !full ) ? 'compact' : 'full';
 		}
 	},
 	watch: {

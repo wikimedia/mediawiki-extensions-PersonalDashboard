@@ -5,6 +5,7 @@
 			"Jsn.sherman"
 		]
 	},
+	"personal-dashboard-back-to-dashboard": "Accessible label for the link in a focused module page's header that returns to the main dashboard (Special:PersonalDashboard).",
 	"personal-dashboard-beta-info-chip-text": "Text within an info chip that indicates that this extension is in its Beta version",
 	"personal-dashboard-desc": "{{desc|name=PersonalDashboard|url=https://www.mediawiki.org/wiki/Extension:PersonalDashboard}}",
 	"personal-dashboard-link-title": "Title for the Special:PersonalDashboard link in the user menu.",

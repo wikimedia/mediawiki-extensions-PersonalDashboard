@@ -10,6 +10,7 @@
 		:name="island.name"
 		:component="island.component"
 		:platform="platform"
+		:focused="island.name === focusedModule"
 		:active="island.name === activeName">
 	</island-mount>
 </template>
@@ -36,10 +37,22 @@ module.exports = defineComponent( {
 		platform: {
 			type: String,
 			default: 'desktop'
+		},
+		// The focused module's name on a whole-page render, or null on the grouped
+		// dashboard. An island matching it is the whole page, so it shows its full
+		// body rather than the compact mobile card summary.
+		focusedModule: {
+			type: String,
+			default: null
 		}
 	},
 	computed: {
 		activeName() {
+			// No dialog on a focused render: the module is the whole page, so a
+			// stale hash naming it must not spring a modal over the page.
+			if ( this.focusedModule ) {
+				return '';
+			}
 			// Only a known island opens the dialog; an unknown or server-rendered
 			// name in the hash would otherwise open an empty, untitled dialog.
 			const name = this.$route.params.module || '';

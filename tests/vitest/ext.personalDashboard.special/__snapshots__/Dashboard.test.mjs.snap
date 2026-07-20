@@ -13,12 +13,14 @@ exports[`renders one mount per island 1`] = `
   <island-mount-stub
     active="false"
     component="[object Object]"
+    focused="false"
     name="ext.example.one"
     platform="desktop"
   />
   <island-mount-stub
     active="false"
     component="[object Object]"
+    focused="false"
     name="ext.example.two"
     platform="desktop"
   />

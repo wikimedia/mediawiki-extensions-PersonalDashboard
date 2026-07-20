@@ -66,6 +66,18 @@
 				.cdx-mixin-css-icon( @cdx-icon-arrow-next );
 			}
 
+			&-back-icon {
+				flex: none;
+				.cdx-mixin-css-icon( @cdx-icon-arrow-previous );
+			}
+
+			// A focused page (either platform) leads with the back arrow and title
+			// together at the start, not pushed apart like the card's title and nav
+			// chevron.
+			.personal-dashboard-focused & {
+				justify-content: flex-start;
+			}
+
 			&-info-icon {
 				width: @min-size-icon-medium;
 				height: @min-size-icon-medium;

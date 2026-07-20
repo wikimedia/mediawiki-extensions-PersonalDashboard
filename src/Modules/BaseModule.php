@@ -48,6 +48,12 @@ abstract class BaseModule implements IModule {
 	private string $focusedSubPath = '';
 
 	/**
+	 * @var string Page-provided link back to the dashboard, rendered in the header
+	 * of a focused whole-page render. Empty on a grouped card.
+	 */
+	private string $backLink = '';
+
+	/**
 	 * @param IContextSource $context
 	 * @param bool $shouldWrapModuleWithLink
 	 */
@@ -115,6 +121,26 @@ abstract class BaseModule implements IModule {
 	 */
 	public function acceptsFocusedSubPath(): bool {
 		return false;
+	}
+
+	/**
+	 * Set the link back to the dashboard for a focused render. The special page
+	 * owns this control (it is page navigation, not module content) and hands it
+	 * in here so it renders inside the module's header, even for a headerless
+	 * module that would otherwise leave the visitor with no way back.
+	 */
+	public function setBackLink( string $html ): void {
+		$this->backLink = $html;
+	}
+
+	/**
+	 * @return string The header for a focused whole-page render: the page-provided
+	 * back link, then the module's own header so the focused view matches its card
+	 * (including any icon or enrichment getHeader() adds). A headerless module (its
+	 * title is empty) still gets the back link with no stray empty header.
+	 */
+	protected function getFocusedHeader(): string {
+		return $this->backLink . ( $this->getHeaderText() ? $this->getHeader() : '' );
 	}
 
 	/**
@@ -416,9 +442,14 @@ abstract class BaseModule implements IModule {
 			implode( "\n", $sections )
 		);
 
+		// The self-link is the no-JS fallthrough from a grouped card to its focused
+		// page. A focused render is already that page, and wrapping its interactive
+		// body in a top-level anchor nests anchors and turns a tap on any child link
+		// into a card-wide navigation (see T426183), so drop the wrapper there.
 		if (
 			$this->getPlatform() === self::PLATFORM_MOBILE &&
-			$this->shouldWrapModuleWithLink()
+			$this->shouldWrapModuleWithLink() &&
+			!$this->isFocused()
 		) {
 			return Html::rawElement( 'a', [
 				'class' => self::BASE_CSS_CLASS . '-anchor',
@@ -457,8 +488,9 @@ abstract class BaseModule implements IModule {
 	 * @return string The desktop card frame: header, subheader, body slot, footer.
 	 */
 	protected function renderDesktopFrame() {
+		$header = $this->isFocused() ? $this->getFocusedHeader() : $this->getHeader();
 		return $this->buildModuleWrapper(
-			$this->buildSection( 'header', $this->getHeader(), $this->getHeaderTag() ),
+			$this->buildSection( 'header', $header, $this->getHeaderTag() ),
 			$this->buildSection( 'subheader', $this->getSubheader(), $this->getSubheaderTag() ),
 			$this->buildSection( 'body', $this->getBodyContent() ),
 			$this->buildSection( 'footer', $this->getFooter() )
@@ -469,8 +501,11 @@ abstract class BaseModule implements IModule {
 	 * @return string The compact mobile card frame: header and body slot.
 	 */
 	protected function renderMobileFrame() {
+		// A focused page is a whole-page view, so it leads with a link back to the
+		// dashboard rather than the summary card's nav chevron.
+		$header = $this->isFocused() ? $this->getFocusedHeader() : $this->getMobileSummaryHeader();
 		return $this->buildModuleWrapper(
-			$this->buildSection( 'header', $this->getMobileSummaryHeader(), $this->getHeaderTag() ),
+			$this->buildSection( 'header', $header, $this->getHeaderTag() ),
 			$this->buildSection( 'body', $this->getBodyContent() )
 		);
 	}
@@ -533,7 +568,12 @@ abstract class BaseModule implements IModule {
 	 * @return string HTML string to be used as header of the mobile summary.
 	 */
 	protected function getMobileSummaryHeader() {
-		return $this->getHeaderTextElement() . $this->getNavIcon();
+		// The nav chevron promises a tap opens something: the dialog for an island,
+		// or the focused page via the card's anchor. Both go with the wrap-with-link
+		// flag, so a card without it (a server-rendered module like Policies) shows
+		// no chevron rather than inviting a tap that goes nowhere.
+		$navIcon = $this->shouldWrapModuleWithLink() ? $this->getNavIcon() : '';
+		return $this->getHeaderTextElement() . $navIcon;
 	}
 
 	/**

@@ -28,14 +28,14 @@ function lazyLoader( name ) {
 // card anywhere and always mounts.
 const islands = [];
 const groups = mw.config.get( 'wgPersonalDashboardGroups', [] );
-const focused = mw.config.get( 'wgPersonalDashboardFocusedModule', null );
+const focusedModule = mw.config.get( 'wgPersonalDashboardFocusedModule', null );
 for ( const group of groups ) {
 	for ( const subgroup of group.subgroups ) {
 		for ( const module of subgroup.modules ) {
 			if ( !module.enabled || module.serverRendered ) {
 				continue;
 			}
-			if ( focused && module.name !== focused && !module.behaviourOnly ) {
+			if ( focusedModule && module.name !== focusedModule && !module.behaviorOnly ) {
 				continue;
 			}
 			islands.push( {
@@ -59,7 +59,7 @@ const router = createRouter( {
 		{
 			path: '/:module?',
 			component: Dashboard,
-			props: { islands, platform }
+			props: { islands, platform, focusedModule }
 		}
 	]
 } );
@@ -77,6 +77,12 @@ if ( container ) {
 	// tap target, same as the anchor it wraps; a desktop card has no anchor, so
 	// its in-body links are never caught here.
 	container.addEventListener( 'click', ( e ) => {
+		// No dialog on a focused render: the module is already the whole page, so
+		// routing a tap into a dialog would teleport the page's own body into a
+		// modal duplicate of itself.
+		if ( focusedModule ) {
+			return;
+		}
 		// Leave modified and non-primary clicks to the browser so the anchor's
 		// real href still opens the focused page in a new tab.
 		if ( e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey ) {

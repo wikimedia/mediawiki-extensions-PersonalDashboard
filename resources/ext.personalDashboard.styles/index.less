@@ -6,6 +6,14 @@
 // both derive from it, the fallback via the CSS variable it feeds below.
 @personal-dashboard-column-breakpoint: 800px;
 
+// Always reserve the viewport scrollbar so a dynamic height change (expanding an
+// accordion, an island mounting) doesn't make it appear and shift the whole page
+// sideways. scrollbar-gutter doesn't reserve the root viewport's gutter here, so
+// force the track instead.
+html {
+	overflow-y: scroll;
+}
+
 .personal-dashboard {
 	&-viewport {
 		container-type: inline-size;

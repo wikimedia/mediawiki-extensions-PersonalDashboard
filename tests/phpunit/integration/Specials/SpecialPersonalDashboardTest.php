@@ -11,7 +11,7 @@ use MediaWiki\Tests\Specials\SpecialPageTestBase;
  * @group Database
  */
 class SpecialPersonalDashboardTest extends SpecialPageTestBase {
-	protected function newSpecialPage() {
+	protected function newSpecialPage(): SpecialPersonalDashboard {
 		$services = $this->getServiceContainer();
 		$dashboardServices = PersonalDashboardServices::wrap( $services );
 		return new SpecialPersonalDashboard(

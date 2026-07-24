@@ -1,5 +1,7 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace MediaWiki\Extension\PersonalDashboard\Modules;
 
 use MediaWiki\Extension\PersonalDashboard\IModule;
@@ -55,7 +57,7 @@ class Placeholder implements IModule {
 	}
 
 	/** @inheritDoc */
-	public function getJsConfigVars() {
+	public function getJsConfigVars(): array {
 		return [];
 	}
 

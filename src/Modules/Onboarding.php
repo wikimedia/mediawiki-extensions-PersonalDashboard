@@ -1,5 +1,7 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace MediaWiki\Extension\PersonalDashboard\Modules;
 
 use MediaWiki\Context\IContextSource;
@@ -26,7 +28,7 @@ class Onboarding implements IModule {
 	}
 
 	/** @inheritDoc */
-	public function setName( $name ) {
+	public function setName( $name ): void {
 	}
 
 	/** @inheritDoc */
@@ -42,7 +44,7 @@ class Onboarding implements IModule {
 	}
 
 	/** @inheritDoc */
-	public function getJsConfigVars() {
+	public function getJsConfigVars(): array {
 		return [];
 	}
 
@@ -54,6 +56,6 @@ class Onboarding implements IModule {
 	}
 
 	/** @inheritDoc */
-	public function setPageURL( string $url ) {
+	public function setPageURL( string $url ): void {
 	}
 }

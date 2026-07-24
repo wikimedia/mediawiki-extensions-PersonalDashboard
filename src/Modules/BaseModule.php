@@ -1,12 +1,16 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace MediaWiki\Extension\PersonalDashboard\Modules;
 
 use MediaWiki\Config\Config;
 use MediaWiki\Context\IContextSource;
 use MediaWiki\Context\RequestContext;
+use MediaWiki\Extension\PersonalDashboard\Config\ModuleStateEnum;
 use MediaWiki\Extension\PersonalDashboard\IModule;
 use MediaWiki\Html\Html;
+use MediaWiki\Language\MessageLocalizer;
 use MediaWiki\Message\Message;
 use MediaWiki\User\User;
 use Wikimedia\Message\MessageSpecifier;
@@ -15,25 +19,12 @@ use Wikimedia\Message\MessageSpecifier;
  * BaseModule is a base class for personaldashboard modules.
  * It provides utilities and a default structure (header, subheader, body, footer).
  */
-abstract class BaseModule implements IModule {
+abstract class BaseModule implements IModule, MessageLocalizer {
 
-	protected const BASE_CSS_CLASS = 'personal-dashboard-module';
-	protected const MODULE_STATE_COMPLETE = 'complete';
-	protected const MODULE_STATE_INCOMPLETE = 'incomplete';
-	protected const MODULE_STATE_ACTIVATED = 'activated';
-	protected const MODULE_STATE_UNACTIVATED = 'unactivated';
-	protected const MODULE_STATE_UNCONFIRMED = 'unconfirmed';
-	protected const MODULE_STATE_NOTRENDERED = 'notrendered';
+	protected const string BASE_CSS_CLASS = 'personal-dashboard-module';
 
-	/**
-	 * @var bool
-	 */
-	private $shouldWrapModuleWithLink;
-
-	/**
-	 * @var string
-	 */
-	private $pageURL = null;
+	private bool $shouldWrapModuleWithLink;
+	private ?string $pageURL = null;
 
 	/**
 	 * @var bool Whether the module is rendering as the whole focused page.
@@ -281,18 +272,16 @@ abstract class BaseModule implements IModule {
 	 *
 	 * @return array
 	 */
-	public function getJsConfigVars() {
+	public function getJsConfigVars(): array {
 		return [];
 	}
 
 	/**
 	 * Override this function to provide the state of this module. It will
 	 * be included in 'state' for all PersonalDashboardModule events.
-	 *
-	 * @return string
 	 */
-	public function getState() {
-		return '';
+	public function getState(): ModuleStateEnum {
+		return ModuleStateEnum::UNKNOWN;
 	}
 
 	/**
@@ -301,11 +290,11 @@ abstract class BaseModule implements IModule {
 	 *
 	 * @return array
 	 */
-	protected function getActionData() {
+	protected function getActionData(): array {
 		return [];
 	}
 
-	protected function outputDependencies() {
+	protected function outputDependencies(): void {
 		$out = $this->getContext()->getOutput();
 		$out->addModuleStyles( [
 			'ext.personalDashboard.styles',
@@ -314,7 +303,7 @@ abstract class BaseModule implements IModule {
 		$out->addModuleStyles( $this->getModuleStyles() );
 		$out->addModules( $this->getModules() );
 		$out->addJsConfigVars( [
-			'wgPersonalDashboardModuleState-' . $this->getName() => $this->getState(),
+			'wgPersonalDashboardModuleState-' . $this->getName() => $this->getState()->value,
 			'wgPersonalDashboardModuleActionData-' . $this->getName() => $this->getActionData(),
 		] );
 		$out->addJsConfigVars( $this->getJsConfigVars() );
@@ -355,7 +344,7 @@ abstract class BaseModule implements IModule {
 	 *
 	 * @return string
 	 */
-	protected function getHtml() {
+	protected function getHtml(): string {
 		$header = $this->isFocused() ? $this->getFocusedHeader() : $this->getHeader();
 		return $this->buildModuleWrapper(
 			$this->buildSection( 'header', $header, $this->getHeaderTag() ),
@@ -391,7 +380,7 @@ abstract class BaseModule implements IModule {
 	 * @param string ...$sections
 	 * @return string
 	 */
-	protected function buildModuleWrapper( ...$sections ) {
+	protected function buildModuleWrapper( ...$sections ): string {
 		$className = $this->name;
 		$lastDot = strrpos( $className, '.' );
 
@@ -423,7 +412,7 @@ abstract class BaseModule implements IModule {
 	 * @param string $tag HTML tag to use for the section
 	 * @return string
 	 */
-	protected function buildSection( $name, $content, $tag = 'div' ) {
+	protected function buildSection( $name, $content, $tag = 'div' ): string {
 		return $content ? Html::rawElement(
 			$tag,
 			[
@@ -439,7 +428,7 @@ abstract class BaseModule implements IModule {
 	/**
 	 * @return string HTML element containing the header text.
 	 */
-	protected function getHeaderTextElement() {
+	protected function getHeaderTextElement(): string {
 		return Html::element(
 			'div',
 			[ 'class' => static::BASE_CSS_CLASS . '-header-text' ],
@@ -452,14 +441,14 @@ abstract class BaseModule implements IModule {
 	 *
 	 * @return string
 	 */
-	abstract protected function getHeaderText();
+	abstract protected function getHeaderText(): string;
 
 	/**
 	 * Override this function to change the default header tag.
 	 *
 	 * @return string Tag to use with the header, eg. h2, h3, h4, ...
 	 */
-	protected function getHeaderTag() {
+	protected function getHeaderTag(): string {
 		return 'div';
 	}
 
@@ -468,7 +457,7 @@ abstract class BaseModule implements IModule {
 	 *
 	 * @return string HTML content of the header. Will be wrapped in a section.
 	 */
-	protected function getHeader() {
+	protected function getHeader(): string {
 		$html = '';
 		if ( $this->shouldHeaderIncludeIcon() ) {
 			$html .= $this->getHeaderIcon();
@@ -486,7 +475,7 @@ abstract class BaseModule implements IModule {
 	 *
 	 * @return string HTML content of the body
 	 */
-	protected function getBody() {
+	protected function getBody(): string {
 		return '';
 	}
 
@@ -495,7 +484,7 @@ abstract class BaseModule implements IModule {
 	 *
 	 * @return string HTML content of the subheader
 	 */
-	protected function getSubheader() {
+	protected function getSubheader(): string {
 		return $this->getSubheaderTextElement();
 	}
 
@@ -504,14 +493,14 @@ abstract class BaseModule implements IModule {
 	 *
 	 * @return string Text content of the subheader
 	 */
-	protected function getSubheaderText() {
+	protected function getSubheaderText(): string {
 		return '';
 	}
 
 	/**
 	 * @return string HTML element containing the header text.
 	 */
-	protected function getSubheaderTextElement() {
+	protected function getSubheaderTextElement(): string {
 		$text = $this->getSubheaderText();
 		return $text ? Html::element(
 			'div',
@@ -525,7 +514,7 @@ abstract class BaseModule implements IModule {
 	 *
 	 * @return string Tag to use with the subheader, e.g. h2, h3, h4
 	 */
-	protected function getSubheaderTag() {
+	protected function getSubheaderTag(): string {
 		return 'div';
 	}
 
@@ -534,14 +523,14 @@ abstract class BaseModule implements IModule {
 	 *
 	 * @return string HTML content of the footer
 	 */
-	protected function getFooter() {
+	protected function getFooter(): string {
 		return '';
 	}
 
 	/**
 	 * @return string HTML string wrapper for the header icon.
 	 */
-	protected function getHeaderIcon() {
+	protected function getHeaderIcon(): string {
 		return Html::element(
 			'span',
 			[
@@ -567,7 +556,7 @@ abstract class BaseModule implements IModule {
 	 * @return Message
 	 * @see MessageLocalizer::msg()
 	 */
-	protected function msg( $key, ...$params ) {
+	public function msg( $key, ...$params ): Message {
 		return $this->getContext()->msg( $key, ...$params );
 	}
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace MediaWiki\Extension\PersonalDashboard\Modules;
 
 use MediaWiki\Context\IContextSource;
@@ -16,12 +18,12 @@ class RiskyArticleEdits extends BaseModule {
 	}
 
 	/** @inheritDoc */
-	protected function getHeaderText() {
+	protected function getHeaderText(): string {
 		return $this->msg( 'personal-dashboard-risky-article-edits-header' )->text();
 	}
 
 	/** @inheritDoc */
-	protected function getSubheaderText() {
+	protected function getSubheaderText(): string {
 		return $this->msg( 'personal-dashboard-risky-article-edits-subheader-info' )->text();
 	}
 
@@ -31,7 +33,7 @@ class RiskyArticleEdits extends BaseModule {
 	}
 
 	/** @inheritDoc */
-	protected function getHeader() {
+	protected function getHeader(): string {
 		$html = $this->getHeaderTextElement();
 		if ( $this->shouldHeaderIncludeIcon() ) {
 			$html .= $this->getHeaderIcon();
@@ -46,7 +48,7 @@ class RiskyArticleEdits extends BaseModule {
 	 * .client-js no-js-fallback rule.
 	 * @inheritDoc
 	 */
-	protected function getFooter() {
+	protected function getFooter(): string {
 		return Html::rawElement(
 			'div',
 			[ 'class' => 'personal-dashboard-module-no-js-fallback' ],
@@ -55,7 +57,7 @@ class RiskyArticleEdits extends BaseModule {
 	}
 
 	/** @inheritDoc */
-	public function getJsConfigVars() {
+	public function getJsConfigVars(): array {
 		// fallback to ml disabled if ores isn't loaded and configured as expected
 		$config = $this->getConfig();
 		$mlDisabledConf = [
@@ -116,7 +118,7 @@ class RiskyArticleEdits extends BaseModule {
 	}
 
 	/** @inheritDoc */
-	protected function getModules() {
+	protected function getModules(): array {
 		return [ 'ext.personalDashboard.riskyArticleEdits' ];
 	}
 }

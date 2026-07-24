@@ -1,5 +1,7 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace MediaWiki\Extension\PersonalDashboard\Modules;
 
 use MediaWiki\Context\IContextSource;
@@ -24,7 +26,7 @@ class PoliciesGuidelines extends BaseModule {
 	 * Policies in display order, each mapped to the status icon per example step.
 	 * The single source the card body and its accordion steps read from.
 	 */
-	private const POLICIES = [
+	private const array POLICIES = [
 		'neutral-point-of-view' => [ 'error', 'success' ],
 		'no-original-research' => [ 'error', 'error' ],
 		'verifiability' => [ 'warning', 'error', 'success' ],
@@ -53,12 +55,12 @@ class PoliciesGuidelines extends BaseModule {
 	}
 
 	/** @inheritDoc */
-	protected function getHeaderText() {
+	protected function getHeaderText(): string {
 		return $this->msg( self::MSG_PREFIX . 'title' )->text();
 	}
 
 	/** @inheritDoc */
-	protected function getSubheaderText() {
+	protected function getSubheaderText(): string {
 		return $this->msg( self::MSG_PREFIX . 'body' )->text();
 	}
 
@@ -70,12 +72,12 @@ class PoliciesGuidelines extends BaseModule {
 	}
 
 	/** @inheritDoc */
-	protected function getModuleStyles() {
+	protected function getModuleStyles(): array {
 		return [ 'ext.personalDashboard.policiesGuidelines.styles' ];
 	}
 
 	/** @inheritDoc */
-	protected function getBody() {
+	protected function getBody(): string {
 		$cards = '';
 		foreach ( self::POLICIES as $name => $steps ) {
 			$cards .= $this->renderCard( $name, $steps );

@@ -3,6 +3,7 @@
 namespace MediaWiki\Extension\PersonalDashboard\Modules;
 
 use MediaWiki\Context\IContextSource;
+use MediaWiki\Extension\PersonalDashboard\Config\ModuleStateEnum;
 use MediaWiki\Html\Html;
 
 /**
@@ -15,14 +16,14 @@ use MediaWiki\Html\Html;
  */
 class Banner extends BaseModule {
 
-	public const MESSAGE_KEY = 'PersonalDashboard-banner';
+	public const string MESSAGE_KEY = 'PersonalDashboard-banner';
 
 	/**
 	 * Check whether the module is enabled (ie. if there's a banner message set by the wiki admin).
 	 * @param IContextSource $context
 	 * @return bool
 	 */
-	public static function isEnabled( IContextSource $context ) {
+	public static function isEnabled( IContextSource $context ): bool {
 		return !$context->msg( self::MESSAGE_KEY )->isDisabled();
 	}
 
@@ -32,7 +33,7 @@ class Banner extends BaseModule {
 	}
 
 	/** @inheritDoc */
-	protected function canRender() {
+	protected function canRender(): bool {
 		return self::isEnabled( $this->getContext() );
 	}
 
@@ -45,17 +46,17 @@ class Banner extends BaseModule {
 	}
 
 	/** @inheritDoc */
-	protected function getHeaderText() {
+	protected function getHeaderText(): string {
 		return '';
 	}
 
 	/** @inheritDoc */
-	protected function getHeader() {
+	protected function getHeader(): string {
 		return '';
 	}
 
 	/** @inheritDoc */
-	protected function getBody() {
+	protected function getBody(): string {
 		return Html::rawElement(
 			'div',
 			[
@@ -67,8 +68,8 @@ class Banner extends BaseModule {
 	}
 
 	/** @inheritDoc */
-	public function getState() {
-		return $this->canRender() ? self::MODULE_STATE_ACTIVATED : self::MODULE_STATE_UNACTIVATED;
+	public function getState(): ModuleStateEnum {
+		return $this->canRender() ? ModuleStateEnum::ACTIVATED : ModuleStateEnum::UNACTIVATED;
 	}
 
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace MediaWiki\Extension\PersonalDashboard;
 
 interface IModule {
@@ -37,7 +39,7 @@ interface IModule {
 	 *
 	 * @return array
 	 */
-	public function getJsConfigVars();
+	public function getJsConfigVars(): array;
 
 	/**
 	 * Whether this module can be rendered. If this returns false, render() and
@@ -53,12 +55,12 @@ interface IModule {
 	 * @param string $url base url
 	 * @return void
 	 */
-	public function setPageURL( string $url );
+	public function setPageURL( string $url ): void;
 
 	/**
 	 * Sets the module name.
 	 * @param string $name module name
 	 * @return void
 	 */
-	public function setName( string $name );
+	public function setName( string $name ): void;
 }

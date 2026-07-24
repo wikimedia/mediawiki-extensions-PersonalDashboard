@@ -1,5 +1,7 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace MediaWiki\Extension\PersonalDashboard\Modules;
 
 use MediaWiki\Context\IContextSource;
@@ -94,12 +96,12 @@ class Impact extends BaseModule {
 	}
 
 	/** @inheritDoc */
-	protected function getHeaderText() {
+	protected function getHeaderText(): string {
 		return $this->msg( 'personal-dashboard-impact-title' )->text();
 	}
 
 	/** @inheritDoc */
-	public function getJsConfigVars() {
+	public function getJsConfigVars(): array {
 		$actorId = $this->getUser()->getActorId();
 		$thanksCount = $this->getThanksCount( $actorId );
 		$reviewCount = $this->getReviewCount( $actorId );
@@ -111,7 +113,7 @@ class Impact extends BaseModule {
 	}
 
 	/** @inheritDoc */
-	protected function getModules() {
+	protected function getModules(): array {
 		return [ 'ext.personalDashboard.impact' ];
 	}
 }

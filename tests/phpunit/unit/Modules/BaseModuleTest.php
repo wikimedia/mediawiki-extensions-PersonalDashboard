@@ -1,4 +1,7 @@
 <?php
+
+declare( strict_types = 1 );
+
 namespace MediaWiki\Extension\PersonalDashboard\Tests\Unit\Modules;
 
 use MediaWiki\Context\IContextSource;
@@ -28,7 +31,7 @@ class BaseModuleTest extends MediaWikiUnitTestCase {
 
 			public bool $serverRenderedFlag = false;
 
-			protected function getHeaderText() {
+			protected function getHeaderText(): string {
 				return '';
 			}
 
@@ -36,7 +39,7 @@ class BaseModuleTest extends MediaWikiUnitTestCase {
 				return $this->serverRenderedFlag;
 			}
 
-			protected function getBody() {
+			protected function getBody(): string {
 				return '<p>SERVER_BODY_SENTINEL</p>';
 			}
 

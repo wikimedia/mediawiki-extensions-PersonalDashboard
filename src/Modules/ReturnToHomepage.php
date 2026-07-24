@@ -1,5 +1,7 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace MediaWiki\Extension\PersonalDashboard\Modules;
 
 use MediaWiki\Extension\PersonalDashboard\IModule;
@@ -36,7 +38,7 @@ class ReturnToHomepage implements IModule {
 	}
 
 	/** @inheritDoc */
-	public function setName( string $name ) {
+	public function setName( string $name ): void {
 	}
 
 	/** @inheritDoc */
@@ -50,7 +52,7 @@ class ReturnToHomepage implements IModule {
 	}
 
 	/** @inheritDoc */
-	public function getJsConfigVars() {
+	public function getJsConfigVars(): array {
 		return [];
 	}
 
@@ -60,6 +62,6 @@ class ReturnToHomepage implements IModule {
 	}
 
 	/** @inheritDoc */
-	public function setPageURL( string $url ) {
+	public function setPageURL( string $url ): void {
 	}
 }

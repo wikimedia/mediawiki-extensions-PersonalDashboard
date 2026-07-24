@@ -26,18 +26,14 @@ html {
 		// needs it at runtime and can't read a LESS variable. The query and the
 		// fallback stay on this one LESS source.
 		--personal-dashboard-column-breakpoint: @personal-dashboard-column-breakpoint;
+		// We hand the mobile breakpoint to the viewport composable the same way:
+		// it drives compact/full detail off width and can't read a LESS variable.
+		--personal-dashboard-mobile-breakpoint: @max-width-breakpoint-mobile;
 
 		// The observer fallback toggles this on browsers without @container; the
 		// container query above is the primary, width-driven collapse for everyone.
 		&__compact {
 			flex-direction: column;
-		}
-
-		// Mobile view leads with a top gap the desktop page chrome already provides.
-		// Keyed on the server's platform class, not the skin: responsive width is the
-		// container query's job, this is the one genuinely platform-specific bit.
-		.personal-dashboard-mobile & {
-			margin-top: @spacing-100;
 		}
 	}
 
@@ -64,19 +60,38 @@ html {
 	}
 
 	&-module {
-		&-desktop,
-		&-mobile {
-			border: @border-subtle;
-			border-radius: @border-radius-base;
+		border: @border-subtle;
+		border-radius: @border-radius-base;
+
+		&-section {
+			&-header {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				gap: @spacing-100;
+				margin: @spacing-100 @spacing-100 @spacing-50 @spacing-100;
+
+				// A focused page leads with the back arrow and title together at the
+				// start, rather than the header's default space-between.
+				.personal-dashboard-focused & {
+					justify-content: flex-start;
+				}
+			}
+
+			&-subheader {
+				margin: @spacing-50 @spacing-100 @spacing-50 @spacing-100;
+			}
+
+			&-body {
+				margin: @spacing-100;
+			}
+
+			&-footer {
+				margin: @spacing-50 @spacing-100 @spacing-100 @spacing-100;
+			}
 		}
 
 		&-header {
-			display: flex;
-			align-items: center;
-			justify-content: space-between;
-			gap: @spacing-100;
-			margin: @spacing-100 @spacing-100 @spacing-50 @spacing-100;
-
 			&-text {
 				// Hard-coded instead of @font-size-medium due to T393629
 				font-size: 1rem;
@@ -86,39 +101,15 @@ html {
 				overflow: hidden;
 			}
 
-			&-nav-icon {
-				flex: none;
-				.cdx-mixin-css-icon( @cdx-icon-arrow-next );
-			}
-
 			&-back-icon {
 				flex: none;
 				.cdx-mixin-css-icon( @cdx-icon-arrow-previous );
-			}
-
-			// A focused page (either platform) leads with the back arrow and title
-			// together at the start, not pushed apart like the card's title and nav
-			// chevron.
-			.personal-dashboard-focused & {
-				justify-content: flex-start;
 			}
 
 			&-info-icon {
 				width: @min-size-icon-medium;
 				height: @min-size-icon-medium;
 			}
-		}
-
-		&-subheader {
-			margin: @spacing-50 @spacing-100 @spacing-50 @spacing-100;
-		}
-
-		&-body {
-			margin: @spacing-100;
-		}
-
-		&-footer {
-			margin: @spacing-50 @spacing-100 @spacing-100 @spacing-100;
 		}
 
 		&-none {
@@ -130,32 +121,15 @@ html {
 			margin: @spacing-0;
 		}
 
-		&-thin&-desktop &-body {
-			margin-left: @spacing-0;
-			margin-right: @spacing-0;
-
-			&:first-child {
-				margin-top: @spacing-0;
-			}
-
-			&:last-child {
-				margin-bottom: @spacing-0;
-			}
-		}
-
-		&-anchor {
-			&:active,
-			&:hover,
-			&:link,
-			&:visited,
-			&:visited:active,
-			&:visited:hover {
-				color: inherit;
-				text-decoration: @text-decoration-none;
-			}
-		}
-
 		.client-js &-no-js-fallback {
+			display: none;
+		}
+
+		// riskyArticleEdits' footer is entirely a no-JS fallback, so hiding its inner
+		// content leaves an empty section. Collapse the whole section under JS from
+		// this upfront stylesheet (not the lazy island CSS) so no gap flashes before
+		// the client footer mounts.
+		.client-js &-riskyArticleEdits &-section-footer {
 			display: none;
 		}
 	}
@@ -165,6 +139,12 @@ html {
 		align-items: center;
 		gap: @spacing-50;
 
+		// We render this inline above the card block, so it needs a gap below or it
+		// butts against the first card.
+		.skin-minerva & {
+			margin-bottom: @spacing-100;
+		}
+
 		.external {
 			background: none;
 			padding-right: @spacing-0;
@@ -172,6 +152,14 @@ html {
 
 		&-icon {
 			.cdx-mixin-css-icon( @cdx-icon-lab-flask, @color-icon-notice, @size-icon-small );
+		}
+	}
+
+	&-js-warning {
+		margin-bottom: @spacing-100;
+
+		.client-js & {
+			display: none;
 		}
 	}
 }

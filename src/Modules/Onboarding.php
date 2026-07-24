@@ -30,12 +30,12 @@ class Onboarding implements IModule {
 	}
 
 	/** @inheritDoc */
-	public function render( string $platform ): string {
+	public function render(): string {
 		return '';
 	}
 
 	/** @inheritDoc */
-	public function getJsData( string $platform ): array {
+	public function getJsData(): array {
 		// A behavior-only island: it owns no card, so the dashboard app keeps
 		// mounting it even where the slot-bearing card islands are dropped.
 		return [ 'behaviorOnly' => true ];
@@ -47,7 +47,7 @@ class Onboarding implements IModule {
 	}
 
 	/** @inheritDoc */
-	public function supports( string $platform ): bool {
+	public function supports(): bool {
 		return !$this->userOptionsManager->getBoolOption(
 			$this->context->getUser(),
 			'personaldashboard-visited' );

@@ -22,19 +22,24 @@ use Wikimedia\Codex\Utility\Codex;
 use Wikimedia\Stats\StatsFactory;
 
 class SpecialPersonalDashboard extends SpecialPage {
+	/** @var Codex Shared Codex-PHP instance used by beta chip and no-js message */
+	private Codex $codex;
+
 	/**
 	 * @var string Unique identifier for this specific rendering of Special:PersonalDashboard.
 	 * Used by various EventLogging schemas to correlate events.
 	 */
 	private string $pageviewToken;
 
-	private bool $isMobile;
+	/** @var string Device label ('mobile'/'desktop') for the SSR timing metrics; analytics only. */
+	private string $device;
 
 	public function __construct(
 		private readonly PersonalDashboardModuleFactory $moduleFactory,
 		private readonly StatsFactory $statsFactory,
 	) {
 		parent::__construct( 'PersonalDashboard' );
+		$this->codex = new Codex();
 		$this->pageviewToken = $this->generatePageviewToken();
 	}
 
@@ -61,8 +66,9 @@ class SpecialPersonalDashboard extends SpecialPage {
 		parent::execute( $par );
 
 		$out = $this->getContext()->getOutput();
-		$this->isMobile = Util::isMobile();
-		$platform = $this->isMobile ? IModule::PLATFORM_MOBILE : IModule::PLATFORM_DESKTOP;
+		// Retained for analytics labels only: the rendered frame no longer varies by
+		// device, but both SSR timing metrics keep their device dimension.
+		$this->device = Util::isMobile() ? 'mobile' : 'desktop';
 
 		$out->addModules( 'ext.personalDashboard.special' );
 		$out->addModuleStyles( 'ext.personalDashboard.styles' );
@@ -70,7 +76,7 @@ class SpecialPersonalDashboard extends SpecialPage {
 		$surveyLink = $this->createSurveyLinkBetaChip();
 
 		if ( $surveyLink ) {
-			if ( $this->isMobile ) {
+			if ( $out->getSkin()->getSkinName() === 'minerva' ) {
 				$out->addHTML( $surveyLink );
 			} else {
 				$out->setIndicators( [ 'mw-ext-personal-dashboard-survey' => $surveyLink ] );
@@ -83,42 +89,24 @@ class SpecialPersonalDashboard extends SpecialPage {
 		// The Vue app mounts here and teleports each island into its server slot.
 		$out->addHTML( Html::element( 'div', [ 'id' => 'personal-dashboard-root' ] ) );
 
-		// The first subpage segment names a module. A bare module name is the
-		// isolated focused page: the real page a card's in-body link falls through
-		// to with no JS, whether a mobile expandable card's anchor or a "see
-		// examples" link. A deeper subpath instead opens that module in place
-		// within the full dashboard, so the URL composes the whole page around the
-		// deep-linked state (the right policy, the right example) rather than
-		// showing the module alone; the module renders what it owns server-side and
-		// the client router owns anything deeper. An unknown module, or a subpath
-		// behind one that reads none, falls through to the plain grouped dashboard.
-		[ $moduleName, $subPath ] = array_pad( explode( '/', $par ?? '', 2 ), 2, '' );
-		$matched = ( $moduleName !== '' && isset( $modules[$moduleName] )
-			&& $modules[$moduleName]->supports( $platform ) ) ? $modules[$moduleName] : null;
-		$isolated = $matched !== null && $subPath === '';
-		if ( $isolated ) {
-			$this->renderFocusedFrame( $platform, $moduleName, $matched );
-		} else {
-			if ( $matched instanceof BaseModule && $subPath !== ''
-				&& $matched->acceptsFocusedSubPath()
-			) {
-				$matched->setFocusedSubPath( $subPath );
-			}
-			$this->renderGroupedFrames( $platform, $groups, $modules );
-		}
-
 		// Client bootstrap: per-module data the dashboard app mounts and routes from.
 		foreach ( $groups as &$group ) {
 			foreach ( $group['subgroups'] as &$subgroup ) {
 				foreach ( $subgroup['modules'] as &$module ) {
 					$resolved = $modules[ $module['name'] ] ?? null;
-					$module['enabled'] = $resolved?->supports( $platform );
 
-					if ( !$resolved || !$module['enabled'] ) {
+					if ( !$resolved ) {
+						$module['enabled'] = false;
 						continue;
 					}
 
-					foreach ( $this->getModuleJsDataSafe( $resolved, $platform ) as $key => $value ) {
+					$module['enabled'] = $enabled = $resolved->supports();
+
+					if ( !$enabled ) {
+						continue;
+					}
+
+					foreach ( $this->getModuleJsDataSafe( $resolved ) as $key => $value ) {
 						$module[ $key ] = $value;
 					}
 
@@ -126,15 +114,40 @@ class SpecialPersonalDashboard extends SpecialPage {
 				}
 			}
 		}
+
+		$this->emitNoJsNotice();
+
+		// The first subpage segment names a module. A bare module name is the
+		// isolated focused page: the real page a card's in-body link falls through
+		// to with no JS (a "see examples" link). A deeper subpath instead opens that
+		// module in place within the full dashboard, so the URL composes the whole
+		// page around the deep-linked state (the right policy, the right example)
+		// rather than showing the module alone; the module renders what it owns
+		// server-side and the client router owns anything deeper. An unknown module,
+		// or a subpath behind one that reads none, falls through to the plain grouped
+		// dashboard.
+		[ $moduleName, $subPath ] = array_pad( explode( '/', $par ?? '', 2 ), 2, '' );
+		$matched = ( $moduleName !== '' && isset( $modules[$moduleName] )
+			&& $modules[$moduleName]->supports() ) ? $modules[$moduleName] : null;
+		$isolated = $matched !== null && $subPath === '';
+
+		if ( $isolated ) {
+			$this->renderFocusedFrame( $moduleName, $matched );
+		} else {
+			if ( $matched instanceof BaseModule && $subPath !== ''
+				&& $matched->acceptsFocusedSubPath()
+			) {
+				$matched->setFocusedSubPath( $subPath );
+			}
+
+			$this->renderGroupedFrames( $groups );
+		}
+
 		unset( $group, $subgroup, $module );
 
 		$out->addJsConfigVars( [
 			'wgPersonalDashboardGroups' => $groups,
 			'wgPersonalDashboardPageviewToken' => $this->pageviewToken,
-			// The rendering platform the server resolved from the skin. The client
-			// consumes this rather than re-sniffing the skin, so server and client
-			// render for the same platform.
-			'wgPersonalDashboardPlatform' => $platform,
 			// The module rendered as the isolated whole page, or null for a grouped
 			// render (a deep subpath composes the full dashboard, so it is grouped
 			// too). Only an isolated render has a single module's slot, so the app
@@ -145,7 +158,7 @@ class SpecialPersonalDashboard extends SpecialPage {
 		$overallSsrTimeInSeconds = microtime( true ) - $startTime;
 		$this->statsFactory->withComponent( 'PersonalDashboard' )
 			->getTiming( 'special_dashboard_server_side_render_seconds' )
-			->setLabel( 'platform', $platform )
+			->setLabel( 'platform', $this->device )
 			->observeSeconds( $overallSsrTimeInSeconds );
 	}
 
@@ -233,8 +246,8 @@ class SpecialPersonalDashboard extends SpecialPage {
 		$url = $surveyLink ? $surveyLink . $this->getLanguage()->getCode() :
 			'https://www.mediawiki.org/wiki/Talk:Moderator_Tools/Dashboard';
 
-		$cdx = new Codex();
-		$betaChip = $cdx->infoChip()
+		$betaChip = $this->codex
+			->infoChip()
 			->setStatus( 'notice' )
 			->setIcon( 'personal-dashboard-survey-icon' )
 			->setText( $this->msg( 'personal-dashboard-beta-info-chip-text' )->parse() )
@@ -254,51 +267,58 @@ class SpecialPersonalDashboard extends SpecialPage {
 	 * adopts. Each island frame carries an empty slot the client teleports into;
 	 * server-rendered modules carry their full body.
 	 *
-	 * @param string $platform One of the IModule::PLATFORM_* constants
 	 * @param array $groups Module group tree
-	 * @param IModule[] $modules Resolved modules keyed by name
 	 */
-	private function renderGroupedFrames( string $platform, array $groups, array $modules ): void {
-		$out = $this->getContext()->getOutput();
-		$out->addBodyClasses( 'personal-dashboard-' . $platform );
+	private function renderGroupedFrames( array $groups ): void {
+		$ctx = $this->getContext();
+		$out = $ctx->getOutput();
+
 		// The viewport wraps the container as its container-query context so modern
 		// browsers stack the two columns to one from CSS at first paint, no flash.
 		// The observer in init.js is the fallback where @container is unsupported.
 		$out->addHTML( Html::openElement( 'div', [ 'class' => 'personal-dashboard-viewport' ] ) );
 		$out->addHTML( Html::openElement( 'div', [ 'class' => 'personal-dashboard-container' ] ) );
+
 		foreach ( $groups as $group ) {
 			$out->addHTML( Html::openElement( 'div', [
 				'class' => "personal-dashboard-group-{$group[ 'name' ]}"
 			] ) );
+
 			foreach ( (array)$group[ 'subgroups' ] as $subGroup ) {
+				$modules = array_filter( $subGroup['modules'], static fn ( $module ) => $module['enabled'] );
+
 				$out->addHTML( Html::openElement( 'div', [
-					'class' => "personal-dashboard-group-{$group[ 'name' ]}-subgroup-{$subGroup[ 'name' ]}"
+					'class' => "personal-dashboard-group-{$group[ 'name' ]}-subgroup-{$subGroup[ 'name' ]}",
+					'style' => $modules ? null : 'display: none;'
 				] ) );
-				foreach ( $subGroup[ 'modules' ] as $moduleConfig ) {
-					$module = $modules[ $moduleConfig[ 'name' ] ] ?? null;
-					if ( $module && $module->supports( $platform ) ) {
-						$this->emitModuleFrame( $platform, $moduleConfig[ 'name' ], $module );
+
+				foreach ( $modules as $module ) {
+					$resolved = $this->getRequestedModule( $module, $ctx );
+
+					if ( $resolved ) {
+						$this->emitModuleFrame( $module[ 'name' ], $resolved );
 					}
 				}
+
 				$out->addHTML( Html::closeElement( 'div' ) );
 			}
+
 			$out->addHTML( Html::closeElement( 'div' ) );
 		}
+
 		$out->addHTML( Html::closeElement( 'div' ) . Html::closeElement( 'div' ) );
-		$this->emitNoJsNotice();
 	}
 
 	/**
-	 * Render a single module as the whole page: the real page an expandable
-	 * card's anchor falls through to when JS is off.
+	 * Render a single module as the whole page: the isolated focused-page view a
+	 * module gets on its own subpath.
 	 *
-	 * @param string $platform One of the IModule::PLATFORM_* constants
 	 * @param string $name Module name
 	 * @param IModule $module Resolved module
 	 */
-	private function renderFocusedFrame( string $platform, string $name, IModule $module ): void {
+	private function renderFocusedFrame( string $name, IModule $module ): void {
 		$out = $this->getContext()->getOutput();
-		$out->addBodyClasses( [ 'personal-dashboard-' . $platform, 'personal-dashboard-focused' ] );
+		$out->addBodyClasses( 'personal-dashboard-focused' );
 		// Same viewport wrapper as the grouped frames so the container query applies
 		// here too, though a lone focused module never has a second column to drop.
 		$out->addHTML( Html::openElement( 'div', [ 'class' => 'personal-dashboard-viewport' ] ) );
@@ -311,9 +331,8 @@ class SpecialPersonalDashboard extends SpecialPage {
 			$module->setFocused( true );
 			$module->setBackLink( $this->buildBackLink() );
 		}
-		$this->emitModuleFrame( $platform, $name, $module );
+		$this->emitModuleFrame( $name, $module );
 		$out->addHTML( Html::closeElement( 'div' ) . Html::closeElement( 'div' ) );
-		$this->emitNoJsNotice();
 	}
 
 	/**
@@ -335,57 +354,58 @@ class SpecialPersonalDashboard extends SpecialPage {
 	 * sees bordered cards with nothing in them and no reason why.
 	 */
 	private function emitNoJsNotice(): void {
-		$this->getOutput()->addHTML( Html::rawElement( 'noscript', [],
-			Html::element( 'p', [ 'class' => 'personal-dashboard-no-js-notice' ],
-				$this->msg( 'personal-dashboard-module-no-js-fallback' )->text()
-			)
-		) );
+		$this->getOutput()->addHTML( $this->codex
+			->message()
+			->setType( 'warning' )
+			->setContentText( $this->msg( 'personal-dashboard-module-no-js-fallback' )->text() )
+			->setAttributes( [ 'class' => 'personal-dashboard-js-warning' ] )
+			->build()
+			->getHtml() );
 	}
 
 	/**
 	 * Render one module's frame into the page and record its timing.
 	 *
-	 * @param string $platform One of the IModule::PLATFORM_* constants
 	 * @param string $name Module name
 	 * @param IModule $module Resolved module
 	 */
-	private function emitModuleFrame( string $platform, string $name, IModule $module ): void {
+	private function emitModuleFrame( string $name, IModule $module ): void {
 		$startTime = microtime( true );
 		$module->setPageURL( $this->getPageTitle()->getLinkURL() );
-		$this->getOutput()->addHTML( $this->getModuleRenderHtmlSafe( $module, $platform ) );
-		$this->recordModuleRenderingTime( $name, $platform, microtime( true ) - $startTime );
+		$this->getOutput()->addHTML( $this->getModuleRenderHtmlSafe( $module ) );
+		$this->recordModuleRenderingTime( $name, microtime( true ) - $startTime );
 	}
 
-	private function recordModuleRenderingTime( string $moduleName, string $mode, float $timeToRecordInSeconds ): void {
+	private function recordModuleRenderingTime( string $moduleName, float $timeToRecordInSeconds ): void {
 		$wiki = WikiMap::getCurrentWikiId();
 		$this->statsFactory->withComponent( 'PersonalDashboard' )
 			->getTiming( 'special_dashboard_ssr_per_module_seconds' )
 			->setLabel( 'wiki', $wiki )
 			->setLabel( 'module', $moduleName )
-			->setLabel( 'mode', $mode )
+			->setLabel( 'mode', $this->device )
 			->observeSeconds( $timeToRecordInSeconds );
 	}
 
 	/**
-	 * Get the module render HTML for a platform, catching exceptions by default.
+	 * Get the module render HTML, catching exceptions by default.
 	 *
 	 * If PersonalDashboardDeveloperSetup is on, then throw the exceptions.
 	 * @param IModule $module
-	 * @param string $platform One of the IModule::PLATFORM_* constants
 	 * @throws Throwable
 	 * @return string
 	 */
-	private function getModuleRenderHtmlSafe( IModule $module, string $platform ): string {
-		$html = '';
+	private function getModuleRenderHtmlSafe( IModule $module ): string {
 		try {
-			$html = $module->render( $platform );
+			return $module->render();
 		} catch ( Throwable $throwable ) {
 			if ( $this->getConfig()->get( 'PersonalDashboardDeveloperSetup' ) ) {
 				throw $throwable;
 			}
+
 			Util::logException( $throwable, [ 'origin' => __METHOD__ ] );
 		}
-		return $html;
+
+		return '';
 	}
 
 	/**
@@ -393,13 +413,12 @@ class SpecialPersonalDashboard extends SpecialPage {
 	 *
 	 * If PersonalDashboardDeveloperSetup is on, then throw the exceptions.
 	 * @param IModule $module
-	 * @param string $platform One of the IModule::PLATFORM_* constants
 	 * @throws Throwable
 	 * @return array
 	 */
-	private function getModuleJsDataSafe( IModule $module, string $platform ): array {
+	private function getModuleJsDataSafe( IModule $module ): array {
 		try {
-			return $module->getJsData( $platform );
+			return $module->getJsData();
 		} catch ( Throwable $throwable ) {
 			if ( $this->getConfig()->get( 'PersonalDashboardDeveloperSetup' ) ) {
 				throw $throwable;

@@ -1,5 +1,5 @@
 <template>
-	<div ref="moduleRef">
+	<div ref="moduleRef" :class="{ 'personal-dashboard-review-changes--mobile': isSummary }">
 		<div v-if="reviewChangesStore.isLoading">
 			<cdx-progress-bar inline :aria-label="progressBarAriaLabel"></cdx-progress-bar>
 		</div>
@@ -8,22 +8,18 @@
 			<p>Error: {{ reviewChangesStore.error.message }}</p>
 		</div>
 
-		<template
+		<div
 			v-else-if="reviewChangesStore &&
 				reviewChangesStore.feed &&
-				reviewChangesStore.pages">
-			<div
+				reviewChangesStore.pages"
+			class="personal-dashboard-review-changes__container">
+			<list-card-mobile
 				v-if="isSummary"
-				class="personal-dashboard-review-changes__container--mobile">
-				<list-card-mobile
-					v-bind="reviewChangesStore.feed[ 0 ]"
-					:pages="reviewChangesStore.pages">
-				</list-card-mobile>
-			</div>
+				v-bind="reviewChangesStore.feed[ 0 ]"
+				:pages="reviewChangesStore.pages">
+			</list-card-mobile>
 
-			<div
-				v-else
-				class="personal-dashboard-review-changes__container">
+			<template v-else>
 				<list-card
 					v-for="rc in reviewChangesStore.feed"
 					v-bind="rc"
@@ -31,30 +27,26 @@
 					:pages="reviewChangesStore.pages"
 					:is-mobile="isMobile">
 				</list-card>
-			</div>
-		</template>
+			</template>
+		</div>
 
-		<!-- eslint-disable max-len -->
-		<div
-			v-if="isSummary"
-			class="personal-dashboard-review-changes__footer">
+		<div class="personal-dashboard-review-changes__footer">
+			<!-- eslint-disable max-len -->
 			<cdx-button
+				v-if="isSummary"
 				:aria-label="buttonAriaLabel"
 				action="progressive"
 				weight="primary">
 				<span v-i18n-html:personal-dashboard-risky-article-edits-mobile-summary-footer-link-text></span>
 			</cdx-button>
-		</div>
 
-		<div
-			v-else-if="isMobileDetails"
-			class="personal-dashboard-module-footer">
 			<span
+				v-else-if="isFullDetail"
 				id="personal-dashboard-go-to-recentchanges"
 				v-i18n-html:personal-dashboard-risky-article-edits-footer-preamble>
 			</span>
+			<!-- eslint-enable max-len -->
 		</div>
-		<!-- eslint-enable max-len -->
 	</div>
 </template>
 
@@ -73,10 +65,6 @@ module.exports = defineComponent( {
 		ListCardMobile
 	},
 	props: {
-		platform: {
-			type: String,
-			default: 'desktop'
-		},
 		detail: {
 			type: String,
 			default: 'full'
@@ -109,8 +97,8 @@ module.exports = defineComponent( {
 		isSummary() {
 			return this.detail === 'compact';
 		},
-		isMobileDetails() {
-			return this.platform === 'mobile' && this.detail === 'full';
+		isFullDetail() {
+			return this.detail === 'full';
 		}
 	},
 	mounted() {
@@ -125,16 +113,8 @@ module.exports = defineComponent( {
 
 .personal-dashboard {
 	&-module {
-		&-riskyArticleEdits&-desktop & {
-			&-footer {
-				border-top: @border-subtle;
-				padding: @spacing-100;
-				margin: 0;
-			}
-
-			&-body {
-				margin: @spacing-100 0 0 0;
-			}
+		&-riskyArticleEdits &-section-body {
+			margin: @spacing-0;
 		}
 	}
 
@@ -147,19 +127,25 @@ module.exports = defineComponent( {
 			padding: @spacing-25;
 		}
 
-		&__footer .cdx-button {
-			width: 100%;
-			max-width: none;
-		}
-	}
+		&__footer {
+			margin: @spacing-50 @spacing-100 @spacing-100 @spacing-100;
 
-	@media screen and ( max-width: @max-width-breakpoint-mobile ) {
-		&-module-route-riskyArticleEdits &-review-changes {
-			&__message,
-			&__container {
-				margin-left: -@spacing-100;
-				margin-right: -@spacing-100;
+			.cdx-button {
+				width: 100%;
+				max-width: none;
 			}
+		}
+
+		&--mobile {
+			margin: @spacing-100;
+		}
+
+		&--mobile &__container {
+			padding: @spacing-0;
+		}
+
+		&--mobile &__footer {
+			margin: @spacing-0;
 		}
 	}
 }

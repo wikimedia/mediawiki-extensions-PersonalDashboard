@@ -59,9 +59,7 @@ class PoliciesGuidelines extends BaseModule {
 
 	/** @inheritDoc */
 	protected function getSubheaderText() {
-		return $this->msg( $this->getPlatform() === self::PLATFORM_DESKTOP ?
-			self::MSG_PREFIX . 'body' :
-			self::MSG_PREFIX . 'mobile-summary' )->text();
+		return $this->msg( self::MSG_PREFIX . 'body' )->text();
 	}
 
 	/** @inheritDoc */

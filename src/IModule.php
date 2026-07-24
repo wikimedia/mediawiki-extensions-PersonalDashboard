@@ -4,28 +4,20 @@ namespace MediaWiki\Extension\PersonalDashboard;
 
 interface IModule {
 	/**
-	 * Server-side platform the module frame is rendered for. This is the only
-	 * rendering distinction the server and the client care about.
-	 * The detail level within a platform (a compact summary versus the full
-	 * view) is derived client-side and never reaches PHP.
-	 */
-	public const PLATFORM_DESKTOP = 'desktop';
-	public const PLATFORM_MOBILE = 'mobile';
-
-	/**
-	 * Render the server-side card frame for the given platform.
+	 * Render the server-side card frame.
 	 *
 	 * For an island module (the BaseModule default) this is the Codex-styled
 	 * header, subheader, an empty mount slot, and footer; the body is filled in
 	 * client-side once the module's Vue island loads. A server-rendered module
 	 * emits its full body with no slot instead, either static and left untouched
 	 * (a banner, a plain link) or progressively enhanced by a behavior module
-	 * that adds interactivity to the server DOM.
+	 * that adds interactivity to the server DOM. The detail level within the
+	 * frame (a compact summary versus the full view) is derived client-side from
+	 * viewport width and never reaches PHP.
 	 *
-	 * @param string $platform One of the PLATFORM_* constants
 	 * @return string HTML for the card frame
 	 */
-	public function render( string $platform ): string;
+	public function render(): string;
 
 	/**
 	 * Client bootstrap data for this module, packed into wgPersonalDashboardGroups
@@ -36,10 +28,9 @@ interface IModule {
 	 * whether it is server-rendered, plus any module-specific keys. It does NOT
 	 * carry body or footer HTML; those belong to render() now.
 	 *
-	 * @param string $platform One of the PLATFORM_* constants
 	 * @return array
 	 */
-	public function getJsData( string $platform ): array;
+	public function getJsData(): array;
 
 	/**
 	 * Override this function to provide JS config vars needed by this module.
@@ -49,13 +40,12 @@ interface IModule {
 	public function getJsConfigVars();
 
 	/**
-	 * Whether this module supports the given platform. If this returns false,
-	 * render() and getJsData() should not be called for that platform.
+	 * Whether this module can be rendered. If this returns false, render() and
+	 * getJsData() should not be called.
 	 *
-	 * @param string $platform One of the PLATFORM_* constants
 	 * @return bool
 	 */
-	public function supports( string $platform ): bool;
+	public function supports(): bool;
 
 	/**
 	 * Sets the page base URL where the module is being rendered.

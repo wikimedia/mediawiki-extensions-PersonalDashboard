@@ -10,11 +10,7 @@
 	<teleport :to="target" :disabled="!target">
 		<suspense>
 			<template #default>
-				<component
-					:is="component"
-					:platform="platform"
-					:detail="detail">
-				</component>
+				<slot :detail="detail"></slot>
 			</template>
 		</suspense>
 	</teleport>
@@ -22,19 +18,12 @@
 
 <script>
 const { defineComponent, ref } = require( 'vue' );
+const { useViewport } = require( './useViewport.js' );
 
 module.exports = defineComponent( {
 	name: 'IslandMount',
 	props: {
 		name: {
-			type: String,
-			required: true
-		},
-		component: {
-			type: [ Object, Function ],
-			required: true
-		},
-		platform: {
 			type: String,
 			required: true
 		},
@@ -50,7 +39,9 @@ module.exports = defineComponent( {
 		}
 	},
 	setup( props ) {
+		const { isNarrow } = useViewport();
 		return {
+			isNarrow,
 			activeInternal: ref( props.active ),
 			// The server emits a mount slot for every card-bearing island. A
 			// behavior-only island (onboarding) has none, so it renders in
@@ -69,11 +60,11 @@ module.exports = defineComponent( {
 			return this.hasSlot ? '#pd-slot-' + CSS.escape( this.name ) : null;
 		},
 		detail() {
-			// Mobile shows a compact summary in the card and the full body in
-			// the dialog; desktop is always full. A focused render is the module's
-			// whole page, so it shows the full body there too.
+			// A narrow viewport shows a compact summary in the card and the full
+			// body in the dialog; a wide viewport is always full. An opened dialog
+			// or a focused whole-page render is always full regardless of width.
 			const full = this.activeInternal || this.focused;
-			return ( this.platform === 'mobile' && !full ) ? 'compact' : 'full';
+			return ( this.isNarrow && !full ) ? 'compact' : 'full';
 		}
 	},
 	watch: {

@@ -1,41 +1,45 @@
 <template>
-	<div v-if="loading">
-		<cdx-progress-bar inline :aria-label="progressBarAriaLabel"></cdx-progress-bar>
-	</div>
-
-	<div v-else-if="error">
-		<p>Error: {{ error.message }}</p>
-	</div>
-
-	<template v-if="activeDiscussionsResult">
-		<div v-if="isSummary">
-			<list-card-mobile
-				v-for="ac in activeDiscussionsResult.slice( 0, 1 )"
-				v-bind="ac"
-				:key="ac.discussionTitle">
-			</list-card-mobile>
+	<div :class="{ 'personal-dashboard-active-discussions--mobile': isSummary }">
+		<div v-if="loading">
+			<cdx-progress-bar inline :aria-label="progressBarAriaLabel"></cdx-progress-bar>
 		</div>
 
-		<div v-else class="personal-dashboard-active-discussions__container">
-			<list-card
-				v-for="ac in activeDiscussionsResult"
-				v-bind="ac"
-				:key="ac.discussionTitle"
-				:is-mobile="isMobile">
-			</list-card>
+		<div v-else-if="error">
+			<p>Error: {{ error.message }}</p>
 		</div>
-	</template>
 
-	<div
-		v-if="isSummary"
-		class="personal-dashboard-active-discussions__footer">
-		<cdx-button
-			id="personal-dashboard-go-to-active-discussions"
-			:aria-label="buttonAriaLabel"
-			action="progressive"
-			weight="primary">
-			{{ footerLinkText }}
-		</cdx-button>
+		<div
+			v-if="activeDiscussionsResult"
+			class="personal-dashboard-active-discussions__container">
+			<template v-if="isSummary">
+				<list-card-mobile
+					v-for="ac in activeDiscussionsResult.slice( 0, 1 )"
+					v-bind="ac"
+					:key="ac.discussionTitle">
+				</list-card-mobile>
+			</template>
+
+			<template v-else>
+				<list-card
+					v-for="ac in activeDiscussionsResult"
+					v-bind="ac"
+					:key="ac.discussionTitle"
+					:is-mobile="isMobile">
+				</list-card>
+			</template>
+		</div>
+
+		<div
+			v-if="isSummary"
+			class="personal-dashboard-active-discussions__footer">
+			<cdx-button
+				id="personal-dashboard-go-to-active-discussions"
+				:aria-label="buttonAriaLabel"
+				action="progressive"
+				weight="primary">
+				{{ footerLinkText }}
+			</cdx-button>
+		</div>
 	</div>
 </template>
 
@@ -48,8 +52,8 @@ const useFetchActiveDiscussionsResult = require( './composables/useFetchActiveDi
 
 module.exports = defineComponent( {
 	components: { ListCard, ListCardMobile, CdxButton, CdxProgressBar },
-	// Branches on detail only (compact summary vs full); the dashboard app's
-	// platform prop stays off the markup.
+	// Branches on detail only (compact summary vs full); no other dashboard app
+	// props reach its markup.
 	inheritAttrs: false,
 	props: {
 		detail: {
@@ -96,16 +100,8 @@ module.exports = defineComponent( {
 
 .personal-dashboard {
 	&-module {
-		&-activeDiscussions&-desktop & {
-			&-header {
-				border-bottom: @border-subtle;
-				margin: 0;
-				padding: @spacing-100;
-			}
-
-			&-body {
-				margin: 0;
-			}
+		&-activeDiscussions &-section-body {
+			margin: @spacing-0;
 		}
 	}
 
@@ -116,20 +112,27 @@ module.exports = defineComponent( {
 			gap: @spacing-25;
 			background: @background-color-neutral;
 			padding: @spacing-25;
+		}
 
-			.personal-dashboard-module-route-activeDiscussions & {
-				margin: @spacing-0;
+		&__footer {
+			margin: @spacing-50 @spacing-100 @spacing-100 @spacing-100;
 
-				@media screen and ( max-width: @max-width-breakpoint-mobile ) {
-					margin-left: -@spacing-100;
-					margin-right: -@spacing-100;
-				}
+			.cdx-button {
+				width: 100%;
+				max-width: none;
 			}
 		}
 
-		&__footer .cdx-button {
-			width: 100%;
-			max-width: none;
+		&--mobile {
+			margin: @spacing-100;
+		}
+
+		&--mobile &__container {
+			padding: @spacing-0;
+		}
+
+		&--mobile &__footer {
+			margin: @spacing-0;
 		}
 	}
 }

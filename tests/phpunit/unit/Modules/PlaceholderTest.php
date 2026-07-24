@@ -9,17 +9,16 @@ use MediaWikiUnitTestCase;
  */
 class PlaceholderTest extends MediaWikiUnitTestCase {
 
-	public function testRenderDesktopEmitsWrapperAndEmptySlot() {
+	public function testRenderEmitsWrapperAndEmptySlot() {
 		$module = new Placeholder();
 		$module->setName( 'foo' );
 
-		$html = $module->render( 'desktop' );
+		$html = $module->render();
 
 		$this->assertStringContainsString( 'personal-dashboard-module', $html );
 		$this->assertStringContainsString( 'personal-dashboard-module-foo', $html );
-		$this->assertStringContainsString( 'personal-dashboard-module-desktop', $html );
 		$this->assertStringContainsString( 'data-module-name="foo"', $html );
-		$this->assertStringContainsString( 'data-platform="desktop"', $html );
+		$this->assertStringNotContainsString( 'data-platform', $html );
 		$this->assertStringContainsString( 'personal-dashboard-module-body', $html );
 		// The empty mount slot the client teleports into: id and class present, no
 		// inner content, so nothing competes with the island the client mounts here.
@@ -27,16 +26,6 @@ class PlaceholderTest extends MediaWikiUnitTestCase {
 			'<div id="pd-slot-foo" class="personal-dashboard-module-slot"></div>',
 			$html
 		);
-	}
-
-	public function testRenderMobileEmitsMobilePlatformMarkers() {
-		$module = new Placeholder();
-		$module->setName( 'foo' );
-
-		$html = $module->render( 'mobile' );
-
-		$this->assertStringContainsString( 'personal-dashboard-module-mobile', $html );
-		$this->assertStringContainsString( 'data-platform="mobile"', $html );
 	}
 
 	public function testGetJsDataReportsServerRendered() {
@@ -50,14 +39,13 @@ class PlaceholderTest extends MediaWikiUnitTestCase {
 				'expandable' => false,
 				'serverRendered' => true,
 			],
-			$module->getJsData( 'desktop' )
+			$module->getJsData()
 		);
 	}
 
-	public function testSupportsBothPlatforms() {
+	public function testSupportsIsTrue() {
 		$module = new Placeholder();
 
-		$this->assertTrue( $module->supports( 'desktop' ) );
-		$this->assertTrue( $module->supports( 'mobile' ) );
+		$this->assertTrue( $module->supports() );
 	}
 }

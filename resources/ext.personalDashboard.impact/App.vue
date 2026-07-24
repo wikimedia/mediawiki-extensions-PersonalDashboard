@@ -61,8 +61,8 @@ const {
 
 module.exports = defineComponent( {
 	components: { CdxButton, CdxIcon, CdxPopover },
-	// Content-only island: it doesn't vary by platform or detail level, so the
-	// dashboard app's platform/detail props stay off its markup.
+	// Content-only island: it doesn't vary by detail level, so the dashboard app's
+	// detail prop stays off its markup.
 	inheritAttrs: false,
 	setup() {
 		const thanksCount = mw.config.get( 'wgPersonalDashboardImpactThanksCount', 0 );

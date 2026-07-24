@@ -6,12 +6,12 @@
 
 	<island-mount
 		v-for="island in islands"
+		v-slot="{ detail }"
 		:key="island.name"
 		:name="island.name"
-		:component="island.component"
-		:platform="platform"
 		:focused="island.name === focusedModule"
 		:active="island.name === activeName">
+		<component :is="island.component" :detail="detail"></component>
 	</island-mount>
 </template>
 
@@ -33,10 +33,6 @@ module.exports = defineComponent( {
 		islands: {
 			type: Array,
 			default: () => []
-		},
-		platform: {
-			type: String,
-			default: 'desktop'
 		},
 		// The focused module's name on a whole-page render, or null on the grouped
 		// dashboard. An island matching it is the whole page, so it shows its full

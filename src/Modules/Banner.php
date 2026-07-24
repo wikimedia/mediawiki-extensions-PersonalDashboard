@@ -55,11 +55,6 @@ class Banner extends BaseModule {
 	}
 
 	/** @inheritDoc */
-	protected function getMobileSummaryHeader() {
-		return '';
-	}
-
-	/** @inheritDoc */
 	protected function getBody() {
 		return Html::rawElement(
 			'div',

@@ -9,7 +9,7 @@
 	"personal-dashboard-beta-info-chip-text": "Beta",
 	"personal-dashboard-desc": "An experimental dashboard for moderators",
 	"personal-dashboard-link-title": "Dashboard",
-	"personal-dashboard-module-no-js-fallback": "Please enable JavaScript to view this component.",
+	"personal-dashboard-module-no-js-fallback": "Some parts of this dashboard do not appear unless JavaScript is enabled in your browser.",
 	"personal-dashboard-specialpage-title": "{{GENDER:$1|Hello}}, {{bidi:$1}}!",
 	"personal-dashboard-survey-text": "[$1 Share feedback]",
 	"tooltip-pt-personaldashboard": "{{GENDER:|Your}} personal dashboard"

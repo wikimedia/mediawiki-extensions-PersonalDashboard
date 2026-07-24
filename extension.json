@@ -109,6 +109,7 @@
 				"IslandMount.vue",
 				"ModuleDialog.vue",
 				"mediaWikiHistory.js",
+				"useViewport.js",
 				"instrumentation/onPersonalDashboardBaseline.js",
 				{
 					"name": "icons.json",
@@ -223,7 +224,6 @@
 				"CdxIcon",
 				"CdxPopover",
 				"CdxToggleButton",
-				"CdxMessage",
 				"CdxProgressBar"
 			],
 			"packageFiles": [
@@ -317,7 +317,8 @@
 			"class": "MediaWiki\\ResourceLoader\\CodexModule",
 			"codexStyleOnly": true,
 			"codexComponents": [
-				"CdxInfoChip"
+				"CdxInfoChip",
+				"CdxMessage"
 			],
 			"styles": [
 				"index.less"
@@ -448,13 +449,11 @@
 										},
 										{
 											"name": "ext.personalDashboard.riskyArticleEdits",
-											"enabled": true,
-											"style": "thin"
+											"enabled": true
 										},
 										{
 											"name": "ext.personalDashboard.activeDiscussions",
-											"enabled": true,
-											"style": "thin"
+											"enabled": true
 										}
 									]
 								}
@@ -480,8 +479,7 @@
 									"modules": [
 										{
 											"name": "ext.personalDashboard.policiesGuidelines",
-											"enabled": true,
-											"styleMobile": "minimized"
+											"enabled": true
 										}
 									]
 								}

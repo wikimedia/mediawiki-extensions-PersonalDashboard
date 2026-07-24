@@ -35,6 +35,8 @@
 
 	// The walkthrough draws its status icons as CSS-only Codex icons.
 	&__step-icon {
+		flex-shrink: 0;
+
 		&--success {
 			.cdx-mixin-css-icon( @cdx-icon-success, @color-icon-success );
 		}

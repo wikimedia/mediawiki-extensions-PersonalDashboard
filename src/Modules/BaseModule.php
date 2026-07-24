@@ -159,24 +159,10 @@ abstract class BaseModule implements IModule {
 		return $this->shouldWrapModuleWithLink;
 	}
 
-	/**
-	 * Platforms that are supported by this module. Subclasses that don't support a
-	 * platform should override this to list only the platforms they support. For more
-	 * granular control, override supports() instead.
-	 * @var string[]
-	 */
-	protected static $supportedPlatforms = [
-		self::PLATFORM_DESKTOP,
-		self::PLATFORM_MOBILE
-	];
-
 	/** @var string Name of the module */
 	protected string $name;
 
 	protected IContextSource $context;
-
-	/** @var string Rendering platform (one of PLATFORM_* constants) */
-	private string $platform;
 
 	final protected function getContext(): IContextSource {
 		$this->context ??= RequestContext::getMain();
@@ -208,23 +194,9 @@ abstract class BaseModule implements IModule {
 		return $this->getContext()->getConfig();
 	}
 
-	/**
-	 * @return string Rendering platform (one of PLATFORM_* constants)
-	 */
-	final protected function getPlatform(): string {
-		return $this->platform;
-	}
-
 	/** @inheritDoc */
 	final protected function getName(): string {
 		return $this->name;
-	}
-
-	/**
-	 * @param string $platform Rendering platform (one of PLATFORM_* constants)
-	 */
-	protected function setPlatform( string $platform ) {
-		$this->platform = $platform;
 	}
 
 	/**
@@ -260,8 +232,8 @@ abstract class BaseModule implements IModule {
 	/**
 	 * @inheritDoc
 	 */
-	public function supports( string $platform ): bool {
-		return in_array( $platform, static::$supportedPlatforms );
+	public function supports(): bool {
+		return true;
 	}
 
 	/**
@@ -273,16 +245,9 @@ abstract class BaseModule implements IModule {
 	 * serverRendered() true is left alone by the client: its render() output stays
 	 * in the server DOM rather than being mounted as an island.
 	 *
-	 * @param string $platform One of the PLATFORM_* constants
 	 * @return array
 	 */
-	public function getJsData( string $platform ): array {
-		if ( !$this->supports( $platform ) ) {
-			return [];
-		}
-
-		$this->setPlatform( $platform );
-
+	public function getJsData(): array {
 		return [
 			'enabled' => $this->shouldRender(),
 			'header' => $this->getHeaderText(),
@@ -376,11 +341,7 @@ abstract class BaseModule implements IModule {
 	/**
 	 * @inheritDoc
 	 */
-	public function render( string $platform ): string {
-		if ( !$this->supports( $platform ) ) {
-			return '';
-		}
-		$this->setPlatform( $platform );
+	public function render(): string {
 		if ( !$this->shouldRender() ) {
 			return '';
 		}
@@ -390,14 +351,18 @@ abstract class BaseModule implements IModule {
 	}
 
 	/**
-	 * Get the module frame HTML for the current platform.
+	 * The module card frame: header, subheader, body, footer.
 	 *
 	 * @return string
 	 */
 	protected function getHtml() {
-		return $this->getPlatform() === self::PLATFORM_MOBILE ?
-			$this->renderMobileFrame() :
-			$this->renderDesktopFrame();
+		$header = $this->isFocused() ? $this->getFocusedHeader() : $this->getHeader();
+		return $this->buildModuleWrapper(
+			$this->buildSection( 'header', $header, $this->getHeaderTag() ),
+			$this->buildSection( 'subheader', $this->getSubheader(), $this->getSubheaderTag() ),
+			$this->buildSection( 'body', $this->getBodyContent() ),
+			$this->buildSection( 'footer', $this->getFooter() )
+		);
 	}
 
 	/**
@@ -427,37 +392,25 @@ abstract class BaseModule implements IModule {
 	 * @return string
 	 */
 	protected function buildModuleWrapper( ...$sections ) {
-		$moduleContent = Html::rawElement(
+		$className = $this->name;
+		$lastDot = strrpos( $className, '.' );
+
+		if ( $lastDot !== false ) {
+			$className = substr( $className, $lastDot + 1 );
+		}
+
+		return Html::rawElement(
 			'div',
 			[
 				'id' => $this->getName(),
 				'class' => array_merge( [
 					self::BASE_CSS_CLASS,
-					self::BASE_CSS_CLASS . '-' . $this->name,
-					self::BASE_CSS_CLASS . '-' . $this->getPlatform(),
+					self::BASE_CSS_CLASS . '-' . $className,
 				], $this->getCssClasses() ),
 				'data-module-name' => $this->name,
-				'data-platform' => $this->getPlatform(),
 			],
 			implode( "\n", $sections )
 		);
-
-		// The self-link is the no-JS fallthrough from a grouped card to its focused
-		// page. A focused render is already that page, and wrapping its interactive
-		// body in a top-level anchor nests anchors and turns a tap on any child link
-		// into a card-wide navigation (see T426183), so drop the wrapper there.
-		if (
-			$this->getPlatform() === self::PLATFORM_MOBILE &&
-			$this->shouldWrapModuleWithLink() &&
-			!$this->isFocused()
-		) {
-			return Html::rawElement( 'a', [
-				'class' => self::BASE_CSS_CLASS . '-anchor',
-				'href' => $this->getPageURL() . '/' . $this->getName(),
-			], $moduleContent );
-		}
-
-		return $moduleContent;
 	}
 
 	/**
@@ -476,38 +429,11 @@ abstract class BaseModule implements IModule {
 			[
 				'class' => [
 					static::BASE_CSS_CLASS . '-section',
-					static::BASE_CSS_CLASS . '-section-' . $name,
-					static::BASE_CSS_CLASS . '-' . $name
+					static::BASE_CSS_CLASS . '-section-' . $name
 				]
 			],
 			$content
 		) : '';
-	}
-
-	/**
-	 * @return string The desktop card frame: header, subheader, body slot, footer.
-	 */
-	protected function renderDesktopFrame() {
-		$header = $this->isFocused() ? $this->getFocusedHeader() : $this->getHeader();
-		return $this->buildModuleWrapper(
-			$this->buildSection( 'header', $header, $this->getHeaderTag() ),
-			$this->buildSection( 'subheader', $this->getSubheader(), $this->getSubheaderTag() ),
-			$this->buildSection( 'body', $this->getBodyContent() ),
-			$this->buildSection( 'footer', $this->getFooter() )
-		);
-	}
-
-	/**
-	 * @return string The compact mobile card frame: header and body slot.
-	 */
-	protected function renderMobileFrame() {
-		// A focused page is a whole-page view, so it leads with a link back to the
-		// dashboard rather than the summary card's nav chevron.
-		$header = $this->isFocused() ? $this->getFocusedHeader() : $this->getMobileSummaryHeader();
-		return $this->buildModuleWrapper(
-			$this->buildSection( 'header', $header, $this->getHeaderTag() ),
-			$this->buildSection( 'body', $this->getBodyContent() )
-		);
 	}
 
 	/**
@@ -562,30 +488,6 @@ abstract class BaseModule implements IModule {
 	 */
 	protected function getBody() {
 		return '';
-	}
-
-	/**
-	 * @return string HTML string to be used as header of the mobile summary.
-	 */
-	protected function getMobileSummaryHeader() {
-		// The nav chevron promises a tap opens something: the dialog for an island,
-		// or the focused page via the card's anchor. Both go with the wrap-with-link
-		// flag, so a card without it (a server-rendered module like Policies) shows
-		// no chevron rather than inviting a tap that goes nowhere.
-		$navIcon = $this->shouldWrapModuleWithLink() ? $this->getNavIcon() : '';
-		return $this->getHeaderTextElement() . $navIcon;
-	}
-
-	/**
-	 * @return string HTML string wrapper for the navigation icon.
-	 */
-	protected function getNavIcon() {
-		return Html::element(
-			'span',
-			[
-				'class' => [ static::BASE_CSS_CLASS . '-header-nav-icon' ],
-			],
-		);
 	}
 
 	/**

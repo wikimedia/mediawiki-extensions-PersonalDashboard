@@ -11,7 +11,7 @@ const islands = [
 
 function mountDashboard( activeModule, hash = '' ) {
 	return mount( Dashboard, {
-		props: { islands, platform: 'desktop' },
+		props: { islands },
 		global: {
 			mocks: {
 				$route: { params: activeModule ? { module: activeModule } : {}, hash },

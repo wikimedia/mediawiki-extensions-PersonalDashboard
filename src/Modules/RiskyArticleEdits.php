@@ -22,9 +22,7 @@ class RiskyArticleEdits extends BaseModule {
 
 	/** @inheritDoc */
 	protected function getSubheaderText() {
-		return $this->getPlatform() !== self::PLATFORM_DESKTOP ? '' : $this->msg(
-			'personal-dashboard-risky-article-edits-subheader-info'
-		)->text();
+		return $this->msg( 'personal-dashboard-risky-article-edits-subheader-info' )->text();
 	}
 
 	/** @inheritDoc */
@@ -41,11 +39,17 @@ class RiskyArticleEdits extends BaseModule {
 		return $html;
 	}
 
-	/** @inheritDoc */
+	/**
+	 * The no-JS fallback footer: a plain link into recent changes, shown on every
+	 * viewport when JS is off. With JS the client renders its own detail-branched
+	 * footer inside the body slot, so this whole footer section is hidden under the
+	 * .client-js no-js-fallback rule.
+	 * @inheritDoc
+	 */
 	protected function getFooter() {
-		return $this->getPlatform() !== self::PLATFORM_DESKTOP ? '' : Html::rawElement(
+		return Html::rawElement(
 			'div',
-			[ 'id' => 'personal-dashboard-go-to-recentchanges' ],
+			[ 'class' => 'personal-dashboard-module-no-js-fallback' ],
 			$this->msg( 'personal-dashboard-risky-article-edits-footer-preamble' )->parse()
 		);
 	}

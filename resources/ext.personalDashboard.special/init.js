@@ -48,12 +48,6 @@ for ( const group of groups ) {
 	}
 }
 
-const islandNames = new Set( islands.map( ( island ) => island.name ) );
-
-// The rendering platform the server resolved from the skin; the client trusts
-// it rather than re-sniffing, so both sides render for the same platform.
-const platform = mw.config.get( 'wgPersonalDashboardPlatform', 'desktop' );
-
 const router = createRouter( {
 	history: createMediaWikiHistory(),
 	routes: [
@@ -68,7 +62,7 @@ const router = createRouter( {
 			// just as the server does for an unrecognized $par.
 			path: '/:module(.*)',
 			component: Dashboard,
-			props: { islands, platform, focusedModule }
+			props: { islands, focusedModule }
 		}
 	]
 } );
@@ -92,38 +86,13 @@ router.isReady().then( () => {
 
 const container = document.querySelector( '.personal-dashboard-container' );
 if ( container ) {
-	// A mobile expandable card is a server <a> to a focused page: the real page
-	// it falls through to with no JS. With JS, a plain click anywhere in that
-	// card opens the module in the dialog instead. The whole summary card is one
-	// tap target, same as the anchor it wraps; a desktop card has no anchor, so
-	// its in-body links are never caught here.
-	container.addEventListener( 'click', ( e ) => {
-		// No dialog on a focused render: the module is already the whole page, so
-		// routing a tap into a dialog would teleport the page's own body into a
-		// modal duplicate of itself.
-		if ( focusedModule ) {
-			return;
-		}
-		// Leave modified and non-primary clicks to the browser so the anchor's
-		// real href still opens the focused page in a new tab.
-		if ( e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey ) {
-			return;
-		}
-		const card = e.target.closest( '[data-module-name]' );
-		if ( !card || !card.closest( 'a' ) || !islandNames.has( card.dataset.moduleName ) ) {
-			return;
-		}
-		e.preventDefault();
-		router.push( '/' + card.dataset.moduleName );
-	} );
-
-	// Desktop responsive breakpoint. Modern browsers collapse the columns from a
+	// Responsive column breakpoint. Modern browsers collapse the columns from a
 	// CSS container query at first paint; only browsers without @container support
 	// need this JS fallback. It reads the breakpoint from a CSS variable so the
 	// query and this fallback stay on one source, defaulting to 800 if that read
 	// fails. We measure with contentRect rather than contentBoxSize
 	// because this path is exactly the older browsers that predate contentBoxSize.
-	if ( platform !== 'mobile' && !CSS.supports( 'container-type', 'inline-size' ) ) {
+	if ( !CSS.supports( 'container-type', 'inline-size' ) ) {
 		const breakpoint = parseInt(
 			getComputedStyle( container ).getPropertyValue( '--personal-dashboard-column-breakpoint' ), 10
 		) || 800;

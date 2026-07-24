@@ -9,7 +9,7 @@
 	"personal-dashboard-beta-info-chip-text": "Text within an info chip that indicates that this extension is in its Beta version",
 	"personal-dashboard-desc": "{{desc|name=PersonalDashboard|url=https://www.mediawiki.org/wiki/Extension:PersonalDashboard}}",
 	"personal-dashboard-link-title": "Title for the Special:PersonalDashboard link in the user menu.",
-	"personal-dashboard-module-no-js-fallback": "Message to display to user if JavaScript is not enabled.\n\n{{doc-personal-dashboard}}",
+	"personal-dashboard-module-no-js-fallback": "Warning message shown when JavaScript is disabled. Some cards on the dashboard are rendered on the server and display without JavaScript; others only fill in after JavaScript loads, and this message explains why those appear empty.",
 	"personal-dashboard-specialpage-title": "Title for Special:PersonalDashboard, which is a place for users to access useful tools about contributing. Parameters:\n* $1 - Name of the current user. Can be used with GENDER.\n\n{{doc-personal-dashboard}}",
 	"personal-dashboard-survey-text": "Text with link to the Personal Dashboard feedback survey.",
 	"tooltip-pt-personaldashboard": "Tooltip shown when hovering the mouse over the link to your own PersonalDashboard in the upper-side personal toolbox.\n\n{{doc-personal-dashboard}}"

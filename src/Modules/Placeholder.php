@@ -25,17 +25,15 @@ class Placeholder implements IModule {
 	}
 
 	/** @inheritDoc */
-	public function render( string $platform ): string {
+	public function render(): string {
 		return Html::rawElement(
 			'div',
 			[
 				'class' => [
 					'personal-dashboard-module',
 					'personal-dashboard-module-' . $this->name,
-					'personal-dashboard-module-' . $platform,
 				],
 				'data-module-name' => $this->name,
-				'data-platform' => $platform,
 			],
 			Html::rawElement( 'div',
 				[ 'class' => 'personal-dashboard-module-body' ],
@@ -48,7 +46,7 @@ class Placeholder implements IModule {
 	}
 
 	/** @inheritDoc */
-	public function getJsData( string $platform ): array {
+	public function getJsData(): array {
 		return [
 			'enabled' => true,
 			'expandable' => false,
@@ -62,7 +60,7 @@ class Placeholder implements IModule {
 	}
 
 	/** @inheritDoc */
-	public function supports( string $platform ): bool {
+	public function supports(): bool {
 		return true;
 	}
 

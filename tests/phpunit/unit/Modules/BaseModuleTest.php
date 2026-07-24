@@ -2,8 +2,8 @@
 namespace MediaWiki\Extension\PersonalDashboard\Tests\Unit\Modules;
 
 use MediaWiki\Context\IContextSource;
-use MediaWiki\Extension\PersonalDashboard\IModule;
 use MediaWiki\Extension\PersonalDashboard\Modules\BaseModule;
+use MediaWiki\Message\Message;
 use MediaWikiUnitTestCase;
 
 /**
@@ -15,8 +15,14 @@ class BaseModuleTest extends MediaWikiUnitTestCase {
 	// distinctive body sentinel, and public pass-throughs for the protected render
 	// helpers under test. Anonymous so the file keeps to one named class.
 	private function newModule( bool $shouldWrapModuleWithLink = false ) {
+		$message = $this->createMock( Message::class );
+		$message->method( 'text' )->willReturn( '' );
+
+		$context = $this->createMock( IContextSource::class );
+		$context->method( 'msg' )->willReturn( $message );
+
 		return new class(
-			$this->createMock( IContextSource::class ),
+			$context,
 			$shouldWrapModuleWithLink
 		) extends BaseModule {
 
@@ -44,10 +50,6 @@ class BaseModuleTest extends MediaWikiUnitTestCase {
 
 			public function callBuildModuleWrapper( string ...$sections ): string {
 				return $this->buildModuleWrapper( ...$sections );
-			}
-
-			public function callSetPlatform( string $platform ): void {
-				$this->setPlatform( $platform );
 			}
 		};
 	}
@@ -79,49 +81,26 @@ class BaseModuleTest extends MediaWikiUnitTestCase {
 		$module = $this->newModule();
 		$module->setName( 'impact' );
 
-		$this->assertSame(
+		$this->assertStringStartsWith(
 			'<div id="pd-slot-impact" class="personal-dashboard-module-slot"></div>',
 			$module->callGetSlot()
 		);
 	}
 
-	public function testBuildModuleWrapperWrapsMobileCardInAnchor() {
+	public function testBuildModuleWrapperEmitsPlainDivWithoutAnchor() {
 		$module = $this->newModule( true );
-		$module->callSetPlatform( IModule::PLATFORM_MOBILE );
 		$module->setName( 'impact' );
 		$module->setPageURL( '/wiki/Special:PersonalDashboard' );
 
 		$html = $module->callBuildModuleWrapper( '<span>x</span>' );
 
-		$this->assertStringContainsString(
-			'<a class="personal-dashboard-module-anchor" '
-				. 'href="/wiki/Special:PersonalDashboard/impact">',
-			$html
-		);
-	}
-
-	public function testBuildModuleWrapperSuppressesAnchorWhenFocused() {
-		$module = $this->newModule( true );
-		$module->callSetPlatform( IModule::PLATFORM_MOBILE );
-		$module->setName( 'impact' );
-		$module->setPageURL( '/wiki/Special:PersonalDashboard' );
-		// A focused render IS the page the anchor would link to; wrapping its body in
-		// a top-level anchor nests anchors (T426183), so the anchor must drop out.
-		$module->setFocused( true );
-
-		$html = $module->callBuildModuleWrapper( '<span>x</span>' );
-
+		// The whole-card anchor is gone: the wrapper is a plain div carrying the base
+		// and per-module classes, no anchor and no per-platform class.
+		$this->assertStringContainsString( 'id="impact"', $html );
+		$this->assertStringContainsString( 'personal-dashboard-module', $html );
+		$this->assertStringContainsString( 'personal-dashboard-module-impact', $html );
+		$this->assertStringContainsString( 'data-module-name="impact"', $html );
 		$this->assertStringNotContainsString( 'personal-dashboard-module-anchor', $html );
-	}
-
-	public function testBuildModuleWrapperNeverWrapsDesktopCardInAnchor() {
-		$module = $this->newModule( true );
-		$module->callSetPlatform( IModule::PLATFORM_DESKTOP );
-		$module->setName( 'impact' );
-		$module->setPageURL( '/wiki/Special:PersonalDashboard' );
-
-		$html = $module->callBuildModuleWrapper( '<span>x</span>' );
-
-		$this->assertStringNotContainsString( 'personal-dashboard-module-anchor', $html );
+		$this->assertStringNotContainsString( 'data-platform', $html );
 	}
 }

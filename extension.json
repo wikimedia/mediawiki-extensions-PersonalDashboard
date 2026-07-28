@@ -367,10 +367,6 @@
 			"description": "ML model used to filter edits",
 			"value": "revertrisklanguageagnostic"
 		},
-		"PersonalDashboardRiskyArticleEditsEnabled": {
-			"description": "Whether the risky article edits module is enabled",
-			"value": true
-		},
 		"PersonalDashboardRiskyArticleEditsMinimumEditCount": {
 			"description": "Minimum edit count required to view the risky article edits module",
 			"value": 0

@@ -19,8 +19,6 @@ const store = useReviewChangesStore();
 
 import RecentActivity from '/resources/ext.personalDashboard.riskyArticleEdits/App.vue';
 
-mw.user.options.set( 'personaldashboard-risky-articles-info', 0 );
-
 // Safely ignore error: Cannot find package 'ext.checkUser.userInfoCard'
 mw.loader.using = () => {};
 

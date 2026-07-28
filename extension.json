@@ -34,8 +34,7 @@
 	},
 	"DefaultUserOptions": {
 		"personaldashboard-eligible": false,
-		"personaldashboard-visited": false,
-		"personaldashboard-risky-articles-info": true
+		"personaldashboard-visited": false
 	},
 	"HookHandlers": {
 		"skintemplatenav-universal": {

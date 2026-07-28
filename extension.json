@@ -25,7 +25,6 @@
 			"class": "MediaWiki\\Extension\\PersonalDashboard\\Specials\\SpecialPersonalDashboard",
 			"services": [
 				"PersonalDashboardModuleFactory",
-				"UserOptionsManager",
 				"StatsFactory"
 			]
 		}

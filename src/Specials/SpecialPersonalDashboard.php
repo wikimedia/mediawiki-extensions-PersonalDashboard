@@ -1,5 +1,7 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace MediaWiki\Extension\PersonalDashboard\Specials;
 
 use MediaWiki\Config\ConfigException;
@@ -13,7 +15,6 @@ use MediaWiki\Extension\PersonalDashboard\Util;
 use MediaWiki\Html\Html;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\SpecialPage\SpecialPage;
-use MediaWiki\User\Options\UserOptionsManager;
 use MediaWiki\Utils\MWCryptRand;
 use MediaWiki\WikiMap\WikiMap;
 use Throwable;
@@ -31,7 +32,6 @@ class SpecialPersonalDashboard extends SpecialPage {
 
 	public function __construct(
 		private readonly PersonalDashboardModuleFactory $moduleFactory,
-		private readonly UserOptionsManager $userOptionsManager,
 		private readonly StatsFactory $statsFactory,
 	) {
 		parent::__construct( 'PersonalDashboard' );
@@ -153,7 +153,7 @@ class SpecialPersonalDashboard extends SpecialPage {
 	 * @param IContextSource $context
 	 * @return ?IModule
 	 */
-	private function getRequestedModule( array $moduleConfig, IContextSource $context ) {
+	private function getRequestedModule( array $moduleConfig, IContextSource $context ): ?IModule {
 		// $moduleConfig['enabled'] may be overriden by URL query param
 		$moduleUrlParam = $this->getContext()->getRequest()->getText( $moduleConfig[ 'name' ] );
 		if ( $moduleUrlParam !== '' ) {
@@ -163,7 +163,7 @@ class SpecialPersonalDashboard extends SpecialPage {
 			}
 		}
 		if ( !$moduleConfig || !array_key_exists( 'enabled', $moduleConfig ) || $moduleConfig['enabled'] !== true ) {
-			return;
+			return null;
 		}
 		return $this->moduleFactory->getModule( $moduleConfig[ 'name' ], [ $context ] );
 	}
@@ -171,13 +171,12 @@ class SpecialPersonalDashboard extends SpecialPage {
 	/**
 	 * @return IModule[]
 	 */
-	private function getModules() {
+	private function getModules(): array {
 		$modules = [];
 		$context = $this->getContext();
 		foreach ( $this->getModuleGroups()[ 'groups' ] as $groupConfig ) {
 			foreach ( (array)$groupConfig[ 'subgroups' ] as $subGroup ) {
 				foreach ( $subGroup[ 'modules' ] as $moduleConfig ) {
-					/** @var ?IModule $module */
 					$module = $this->getRequestedModule( $moduleConfig, $context );
 					if ( !$module ) {
 						continue;
@@ -192,7 +191,7 @@ class SpecialPersonalDashboard extends SpecialPage {
 	/**
 	 * @param string $name key of registered module group in extension.json
 	 */
-	private function getModuleGroups( $name = 'default' ): array {
+	private function getModuleGroups( string $name = 'default' ): array {
 		$registry = ExtensionRegistry::getInstance()->getAttribute( 'PersonalDashboardModuleGroups' );
 		// $moduleGroup may be overriden by URL query param
 		$nameOverride = $this->getContext()->getRequest()->getText( 'moduleGroup' );
@@ -210,7 +209,7 @@ class SpecialPersonalDashboard extends SpecialPage {
 	 * wgPersonalDashboardPageviewToken JS variable.
 	 * @return string
 	 */
-	private function generatePageviewToken() {
+	private function generatePageviewToken(): string {
 		return \Wikimedia\base_convert( MWCryptRand::generateHex( 40 ), 16, 32, 32 );
 	}
 

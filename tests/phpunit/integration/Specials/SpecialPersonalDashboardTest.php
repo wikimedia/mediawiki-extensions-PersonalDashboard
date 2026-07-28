@@ -16,7 +16,6 @@ class SpecialPersonalDashboardTest extends SpecialPageTestBase {
 		$dashboardServices = PersonalDashboardServices::wrap( $services );
 		return new SpecialPersonalDashboard(
 			$dashboardServices->getPersonalDashboardModuleFactory(),
-			$services->getUserOptionsManager(),
 			$services->getStatsFactory(),
 		);
 	}

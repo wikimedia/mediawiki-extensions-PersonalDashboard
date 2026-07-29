@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Hedda"
+			"Hedda",
+			"Rapsar"
 		]
 	},
 	"personal-dashboard-policies-guidelines-title": "Politikalar ve yönergeler",
@@ -15,7 +16,7 @@
 	"personal-dashboard-policies-guidelines-neutral-point-of-view-example-2": "William Shakespeare, genellikle İngiliz dilinin en büyük yazarlarından biri olarak kabul edilir.",
 	"personal-dashboard-policies-guidelines-neutral-point-of-view-answer-2-label": "Tarafsız:",
 	"personal-dashboard-policies-guidelines-neutral-point-of-view-answer-2-text": "Bu ifade, bir itibarın yerinde ve doğru bir tanımıdır. Geçerliliğini, Shakespeare’in bu itibara sahip olduğunu ortaya koyan çok sayıda güvenilir kaynağa borçludur.",
-	"personal-dashboard-policies-guidelines-no-original-research-title": "Özgün araştırma yok.",
+	"personal-dashboard-policies-guidelines-no-original-research-title": "Özgün araştırmaya yer vermeme",
 	"personal-dashboard-policies-guidelines-no-original-research-definition": "Maddeler, yayımlanmış kaynakların özetini sunmalı; yazarın kişisel yorumlarını ya da kendi bilgisini içermemelidir.",
 	"personal-dashboard-policies-guidelines-no-original-research-example-1": "Bu yıl kasım ayındaki sıcaklıklar, geçen yılın kasım ayına kıyasla daha yüksek.",
 	"personal-dashboard-policies-guidelines-no-original-research-answer-1-label": "Özgün araştırma içerir:",

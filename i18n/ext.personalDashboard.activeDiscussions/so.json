@@ -1,0 +1,16 @@
+{
+	"@metadata": {
+		"authors": [
+			"AhmedG612"
+		]
+	},
+	"personal-dashboard-active-discussions-title": "Doodaha firfircoon",
+	"personal-dashboard-active-discussions-description": "La soco doodihii ugu dambeeyay, kana qayb qaado wada sheekaysiga aad la yeelanayso tafatirayaasha kale ee Wikipedia.",
+	"personal-dashboard-active-discussions-latest-comment": "Faalladii ugu dambeysay:",
+	"personal-dashboard-active-discussions-today": "$1, Maanta",
+	"personal-dashboard-active-discussions-mobile-latest-comment": "Faalladii ugu dambeysay:",
+	"personal-dashboard-active-discussions-mobile-today": "$1, Maanta",
+	"personal-dashboard-active-discussions-mobile-summary-footer-link-text": "Eeg wax badan",
+	"personal-dashboard-active-discussions-mobile-summary-footer-button-aria-label": "U gudub doodo firfircoon oo dheeraad ah",
+	"personal-dashboard-active-discussions-progress-bar-aria-label": "Xariijinta horumarka ee gudaha ku jirta oo muujinaysa in doodaha firfircoon la soo rarayo"
+}

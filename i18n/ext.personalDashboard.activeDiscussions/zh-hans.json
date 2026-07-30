@@ -1,0 +1,16 @@
+{
+	"@metadata": {
+		"authors": [
+			"GuoPC"
+		]
+	},
+	"personal-dashboard-active-discussions-title": "活跃的讨论",
+	"personal-dashboard-active-discussions-description": "随时了解最新讨论动态，并与其他维基百科编辑者参与对话。",
+	"personal-dashboard-active-discussions-latest-comment": "最新留言：",
+	"personal-dashboard-active-discussions-today": "$1，今天",
+	"personal-dashboard-active-discussions-mobile-latest-comment": "最新留言：",
+	"personal-dashboard-active-discussions-mobile-today": "$1，今天",
+	"personal-dashboard-active-discussions-mobile-summary-footer-link-text": "查看更多",
+	"personal-dashboard-active-discussions-mobile-summary-footer-button-aria-label": "转到更活跃的讨论",
+	"personal-dashboard-active-discussions-progress-bar-aria-label": "内联进度条，提示正在加载活跃的讨论"
+}

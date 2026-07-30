@@ -1,0 +1,14 @@
+{
+	"@metadata": {
+		"authors": []
+	},
+	"personal-dashboard-active-discussions-title": "Aktive Diskussionen",
+	"personal-dashboard-active-discussions-description": "Bleiben über die neuesten Diskussionen auf dem Laufenden und beteilige dich an den Gesprächen mit anderen Wikipedia-Benutzern.",
+	"personal-dashboard-active-discussions-latest-comment": "Letzter Kommentar:",
+	"personal-dashboard-active-discussions-today": "$1, heute",
+	"personal-dashboard-active-discussions-mobile-latest-comment": "Letzter Kommentar:",
+	"personal-dashboard-active-discussions-mobile-today": "$1, heute",
+	"personal-dashboard-active-discussions-mobile-summary-footer-link-text": "Mehr anzeigen",
+	"personal-dashboard-active-discussions-mobile-summary-footer-button-aria-label": "Navigiere zu aktiveren Diskussionen.",
+	"personal-dashboard-active-discussions-progress-bar-aria-label": "Ein eingeblendeter Fortschrittsbalken, der anzeigt, dass aktive Diskussionen geladen werden."
+}

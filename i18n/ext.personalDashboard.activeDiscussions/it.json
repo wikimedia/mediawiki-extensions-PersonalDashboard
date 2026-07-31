@@ -1,0 +1,12 @@
+{
+	"@metadata": {
+		"authors": [
+			"Beta16"
+		]
+	},
+	"personal-dashboard-active-discussions-title": "Discussioni attive",
+	"personal-dashboard-active-discussions-latest-comment": "Ultimo commento:",
+	"personal-dashboard-active-discussions-today": "$1, oggi",
+	"personal-dashboard-active-discussions-mobile-latest-comment": "Ultimo commento:",
+	"personal-dashboard-active-discussions-mobile-today": "$1, oggi"
+}

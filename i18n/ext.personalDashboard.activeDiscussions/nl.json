@@ -1,0 +1,16 @@
+{
+	"@metadata": {
+		"authors": [
+			"Siebrand"
+		]
+	},
+	"personal-dashboard-active-discussions-title": "Openstaande onderwerpen",
+	"personal-dashboard-active-discussions-description": "Blijf op de hoogte van de laatste onderwerpen en neem deel aan het gesprek met andere Wikipedia-bewerkers.",
+	"personal-dashboard-active-discussions-latest-comment": "Nieuwste reactie:",
+	"personal-dashboard-active-discussions-today": "$1, vandaag",
+	"personal-dashboard-active-discussions-mobile-latest-comment": "Nieuwste reactie:",
+	"personal-dashboard-active-discussions-mobile-today": "$1, vandaag",
+	"personal-dashboard-active-discussions-mobile-summary-footer-link-text": "Meer weergeven",
+	"personal-dashboard-active-discussions-mobile-summary-footer-button-aria-label": "Naar actievere onderwerpen",
+	"personal-dashboard-active-discussions-progress-bar-aria-label": "Een voortgangsbalk die aangeeft dat actieve onderwerpen worden geladen"
+}

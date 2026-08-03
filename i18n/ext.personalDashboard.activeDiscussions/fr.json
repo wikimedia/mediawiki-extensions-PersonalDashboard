@@ -1,0 +1,16 @@
+{
+	"@metadata": {
+		"authors": [
+			"NClara"
+		]
+	},
+	"personal-dashboard-active-discussions-title": "Discussions actives",
+	"personal-dashboard-active-discussions-description": "Restez informé des dernières discussions et participez à la conversation avec les autres contributeurs de Wikipédia.",
+	"personal-dashboard-active-discussions-latest-comment": "Dernier commentaire :",
+	"personal-dashboard-active-discussions-today": "$1, aujourd'hui",
+	"personal-dashboard-active-discussions-mobile-latest-comment": "Dernier commentaire :",
+	"personal-dashboard-active-discussions-mobile-today": "$1, aujourd'hui",
+	"personal-dashboard-active-discussions-mobile-summary-footer-link-text": "Voir plus",
+	"personal-dashboard-active-discussions-mobile-summary-footer-button-aria-label": "Accédez à des discussions plus actives",
+	"personal-dashboard-active-discussions-progress-bar-aria-label": "Barre de progression intégrée indiquant le chargement des discussions en cours"
+}

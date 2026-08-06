@@ -65,7 +65,7 @@ class PoliciesGuidelines extends BaseModule {
 	}
 
 	/** @inheritDoc */
-	protected function getModules() {
+	protected function getModules(): array {
 		// The accordions are CSS-only, so the no-JS baseline needs no behavior
 		// module; the one-example-at-a-time enhancement is a follow-up.
 		return [];

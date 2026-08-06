@@ -195,7 +195,7 @@ abstract class BaseModule implements IModule, MessageLocalizer {
 	 * When this returns false, callers should never attempt to render the module.
 	 * @return bool
 	 */
-	protected function canRender() {
+	protected function canRender(): bool {
 		return true;
 	}
 
@@ -206,7 +206,7 @@ abstract class BaseModule implements IModule, MessageLocalizer {
 	 * when it becames enabled.
 	 * @return bool
 	 */
-	protected function shouldRender() {
+	protected function shouldRender(): bool {
 		return $this->canRender();
 	}
 
@@ -216,7 +216,7 @@ abstract class BaseModule implements IModule, MessageLocalizer {
 	 *
 	 * @return string[] Additional CSS classes
 	 */
-	protected function getCssClasses() {
+	protected function getCssClasses(): array {
 		return [];
 	}
 
@@ -253,7 +253,7 @@ abstract class BaseModule implements IModule, MessageLocalizer {
 	 *
 	 * @return string[] Name of the module(s) to load
 	 */
-	protected function getModules() {
+	protected function getModules(): array {
 		return [];
 	}
 
@@ -263,7 +263,7 @@ abstract class BaseModule implements IModule, MessageLocalizer {
 	 *
 	 * @return string[] Name of the module(s) to load
 	 */
-	protected function getModuleStyles() {
+	protected function getModuleStyles(): array {
 		return [];
 	}
 
@@ -412,7 +412,7 @@ abstract class BaseModule implements IModule, MessageLocalizer {
 	 * @param string $tag HTML tag to use for the section
 	 * @return string
 	 */
-	protected function buildSection( $name, $content, $tag = 'div' ): string {
+	protected function buildSection( string $name, string $content, string $tag = 'div' ): string {
 		return $content ? Html::rawElement(
 			$tag,
 			[

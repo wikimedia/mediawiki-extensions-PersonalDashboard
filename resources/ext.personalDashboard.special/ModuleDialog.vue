@@ -5,37 +5,28 @@
 		:use-close-button="true"
 		class="personal-dashboard-dialog">
 		<template #header>
-			<cdx-button
-				weight="quiet"
-				:aria-label="msgCloseButtonLabel"
-				@click="openInternal = false">
-				<cdx-icon :icon="cdxIconArrowPrevious"></cdx-icon>
-			</cdx-button>
-
-			<div class="cdx-dialog__header__title-group">
-				<h2 class="cdx-dialog__header__title">
-					{{ title }}
-				</h2>
-			</div>
-
-			<div class="cdx-dialog__header__placeholder"></div>
+			<focused-header
+				:title="title"
+				:back-href="backHref"
+				@back="openInternal = false">
+			</focused-header>
 		</template>
 
-		<div id="personal-dashboard-teleport"></div>
+		<div :id="DIALOG_TARGET_ID"></div>
 	</cdx-dialog>
 </template>
 
 <script>
 const { defineComponent } = require( 'vue' );
-const { CdxButton, CdxDialog, CdxIcon } = require( './codex.js' );
-const { cdxIconArrowPrevious } = require( './icons.json' );
+const { CdxDialog } = require( './codex.js' );
+const FocusedHeader = require( './FocusedHeader.vue' );
+const { DIALOG_TARGET_ID } = require( './teleportTargets.js' );
 
 module.exports = defineComponent( {
 	name: 'ModuleDialog',
 	components: {
-		CdxButton,
 		CdxDialog,
-		CdxIcon
+		FocusedHeader
 	},
 	props: {
 		open: {
@@ -45,14 +36,17 @@ module.exports = defineComponent( {
 		title: {
 			type: String,
 			default: ''
+		},
+		// The dashboard's own URL on a focused whole-page render, or '' when the
+		// dashboard is already behind the dialog and closing it is enough.
+		backHref: {
+			type: String,
+			default: ''
 		}
 	},
 	emits: [ 'update:open' ],
 	setup() {
-		return {
-			msgCloseButtonLabel: mw.msg( 'cdx-dialog-close-button-label' ),
-			cdxIconArrowPrevious
-		};
+		return { DIALOG_TARGET_ID };
 	},
 	computed: {
 		openInternal: {
@@ -77,29 +71,10 @@ module.exports = defineComponent( {
 	max-height: none;
 	border: 0;
 
+	// FocusedHeader.vue carries the real header spec now; zero the padding
+	// Codex applies here so its spec is not applied twice.
 	.cdx-dialog__header {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: @spacing-50;
-		box-sizing: border-box;
-		width: 100%;
-
-		&__title {
-			text-overflow: ellipsis;
-			overflow: hidden;
-			white-space: nowrap;
-
-			&-group {
-				flex-grow: 0;
-				overflow: hidden;
-			}
-		}
-
-		&__placeholder {
-			width: 32px;
-			height: 32px;
-		}
+		padding: 0;
 	}
 }
 </style>

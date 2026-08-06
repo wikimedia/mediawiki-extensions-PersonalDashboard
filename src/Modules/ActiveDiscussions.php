@@ -11,7 +11,7 @@ use MediaWiki\Context\IContextSource;
  */
 class ActiveDiscussions extends BaseModule {
 	public function __construct( IContextSource $context ) {
-		parent::__construct( $context, true );
+		parent::__construct( $context, shouldWrapModuleWithLink: true );
 	}
 
 	/** @inheritDoc */

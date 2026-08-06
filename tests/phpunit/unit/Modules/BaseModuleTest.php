@@ -180,8 +180,6 @@ class BaseModuleTest extends MediaWikiUnitTestCase {
 		$html = $module->callGetHtml();
 
 		$this->assertStringContainsString( 'BACK_SENTINEL', $html );
-		$this->assertStringContainsString(
-			'personal-dashboard-module-header-info-icon', $html );
 		$this->assertStringContainsString( 'personal-dashboard-module--focused', $html );
 		$this->assertStringNotContainsString( 'SUBHEADER_SENTINEL', $html );
 		$this->assertStringNotContainsString(

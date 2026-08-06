@@ -1,0 +1,13 @@
+@import 'mediawiki.skin.variables.less';
+
+// .vector-body forms a stacking context (position: relative; z-index: 0) that
+// caps our fixed overlay below #mw-head, an unpositioned sibling that would
+// otherwise win only by DOM order. Raising the wrapper's rank here settles it
+// unambiguously either way.
+body.personal-dashboard-focused {
+	@media screen and ( max-width: @max-width-breakpoint-mobile ) {
+		.vector-body {
+			z-index: @z-index-off-canvas-backdrop;
+		}
+	}
+}

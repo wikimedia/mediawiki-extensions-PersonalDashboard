@@ -1,22 +1,51 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`renders one mount per island 1`] = `
+exports[`renders one mount per island at a narrow viewport 1`] = `
 <div
   data-v-app=""
 >
   
   <module-dialog-stub
+    backhref=""
     open="false"
     title=""
   />
+  <!--v-if-->
   
   <island-mount-stub
-    active="false"
+    activetarget=""
     focused="false"
     name="ext.example.one"
   />
   <island-mount-stub
-    active="false"
+    activetarget=""
+    focused="false"
+    name="ext.example.two"
+  />
+  
+  
+</div>
+`;
+
+exports[`renders one mount per island at a wide viewport 1`] = `
+<div
+  data-v-app=""
+>
+  
+  <module-dialog-stub
+    backhref=""
+    open="false"
+    title=""
+  />
+  <!--v-if-->
+  
+  <island-mount-stub
+    activetarget=""
+    focused="false"
+    name="ext.example.one"
+  />
+  <island-mount-stub
+    activetarget=""
     focused="false"
     name="ext.example.two"
   />

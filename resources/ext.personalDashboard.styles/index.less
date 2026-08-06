@@ -15,17 +15,26 @@
 		display: flex;
 		gap: @spacing-100;
 		// A CSS variable hands the breakpoint to init.js: the observer fallback
-		// needs it at runtime and can't read a LESS variable. The query and the
+		// needs it at runtime and cannot read a LESS variable. The query and the
 		// fallback stay on this one LESS source.
 		--personal-dashboard-column-breakpoint: @personal-dashboard-column-breakpoint;
 		// We hand the mobile breakpoint to the viewport composable the same way:
-		// it drives compact/full detail off width and can't read a LESS variable.
+		// it drives compact/full detail off width and cannot read a LESS variable.
 		--personal-dashboard-mobile-breakpoint: @max-width-breakpoint-mobile;
 
 		// The observer fallback toggles this on browsers without @container; the
 		// container query above is the primary, width-driven collapse for everyone.
 		&__compact {
 			flex-direction: column;
+		}
+
+		// The app owns a focused frame that stands in for the whole card tree while a
+		// wide viewport shows one module in place. Distinct from the
+		// personal-dashboard-focused body class, which marks a server-side
+		// focused render: there this container already holds the one right
+		// module, and hiding it would hide the page.
+		&__replaced {
+			display: none;
 		}
 	}
 
@@ -111,18 +120,22 @@
 				flex: none;
 				.cdx-mixin-css-icon( @cdx-icon-arrow-previous );
 			}
-
-			&-info-icon {
-				width: @min-size-icon-medium;
-				height: @min-size-icon-medium;
-			}
 		}
 
 		&--focused & {
 			&-section {
 				&-header {
+					display: flex;
+					align-items: center;
 					border-bottom: @border-subtle;
-					padding: @spacing-50;
+					// The header spec from T433896 follow-up (design feedback), the
+					// same height and padding FocusedHeader.vue carries: no Codex
+					// spacing token lands on 46px, so rem instead of raw px keeps it
+					// scaling with the user's font-size preference. Matched top and
+					// bottom comes for free from align-items: center inside that
+					// fixed height rather than equal padding.
+					height: 2.875rem;
+					padding: @spacing-0 @spacing-12;
 				}
 
 				&-body {
@@ -132,22 +145,15 @@
 
 			&-header {
 				&-container {
-					justify-content: space-between;
-					align-items: center;
+					// flex-start, not the space-between the card uses: the arrow hugs the
+					// left-aligned title, as it does in FocusedHeader.vue.
+					justify-content: flex-start;
+					gap: @spacing-50;
 					padding: @spacing-0;
-				}
-
-				&-text {
-					font-size: @font-size-large;
-					line-height: @line-height-large;
 				}
 
 				&-back-icon {
 					padding: @spacing-35;
-				}
-
-				&-info-icon {
-					padding: @spacing-35 + 1;
 				}
 			}
 		}
@@ -160,7 +166,7 @@
 			display: none;
 		}
 
-		// reviewChanges' footer is entirely a no-JS fallback, so hiding its inner
+		// The reviewChanges footer is entirely a no-JS fallback, so hiding its inner
 		// content leaves an empty section. Collapse the whole section under JS from
 		// this upfront stylesheet (not the lazy island CSS) so no gap flashes before
 		// the client footer mounts.
@@ -199,9 +205,39 @@
 	}
 }
 
+body.personal-dashboard-focused {
+	@media screen and ( max-width: @max-width-breakpoint-mobile ) {
+		// The layer covers the page; without this the page still scrolls behind it.
+		overflow: hidden;
+
+		/*
+		 * Cover the skin's chrome instead of hiding it selector by selector, the
+		 * way MobileFrontend's editor takeover does: an opaque layer that knows
+		 * nothing about any skin's markup. It goes on the wrapper and not the
+		 * container inside it, because container-type: inline-size computes to
+		 * contain: layout, which would make the wrapper the containing block for
+		 * a fixed child and trap it back inside the content box. Some skins also
+		 * need their own wrapper's z-index raised (skinStyles/*.less) to clear a
+		 * positioned header the wrapper's own stacking context otherwise caps.
+		 */
+		.personal-dashboard-viewport {
+			position: fixed;
+			inset: 0;
+			z-index: @z-index-off-canvas-backdrop;
+			background-color: @background-color-base;
+			overflow-y: auto;
+		}
+
+		// Edge-to-edge now that nothing frames it.
+		.personal-dashboard-module--focused {
+			border: 0;
+		}
+	}
+}
+
 // Collapse to one column at the breakpoint, from first paint with no JS; the
 // &__compact fallback does the same via the observer. Top-level, not nested in
-// &-container: less.php doesn't carry the parent selector into @container (unlike
+// &-container: less.php does not carry the parent selector into @container (unlike
 // @media), so a nested rule compiles selectorless. After the base rule to win.
 @container ( max-width: @personal-dashboard-column-breakpoint ) {
 	.personal-dashboard-container {

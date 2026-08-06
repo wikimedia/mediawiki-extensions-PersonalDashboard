@@ -10,7 +10,11 @@
 	<teleport :to="target" :disabled="!target">
 		<suspense>
 			<template #default>
-				<slot :detail="detail" :focused="focused" :is-narrow="isNarrow" :active="activeInternal"></slot>
+				<slot
+					:detail="detail"
+					:focused="focused"
+					:is-narrow="isNarrow"
+					:active="active"></slot>
 			</template>
 		</suspense>
 	</teleport>
@@ -27,9 +31,14 @@ module.exports = defineComponent( {
 			type: String,
 			required: true
 		},
-		active: {
-			type: Boolean,
-			default: false
+		// The selector to teleport into when this island is the whole focused
+		// view (the dialog or the in-page frame), or '' to stay in its own card
+		// slot. A string, not a boolean: crossing the viewport breakpoint swaps
+		// which selector is "active" (dialog vs. frame), and a boolean staying
+		// true through that swap would never tell <teleport> the target moved.
+		activeTarget: {
+			type: String,
+			default: ''
 		},
 		// True when this island is the whole focused page rather than a card in
 		// the grouped dashboard.
@@ -42,7 +51,7 @@ module.exports = defineComponent( {
 		const { isNarrow } = useViewport();
 		return {
 			isNarrow,
-			activeInternal: ref( props.active ),
+			activeTargetInternal: ref( props.activeTarget ),
 			// The server emits a mount slot for every card-bearing island. A
 			// behavior-only island (onboarding) has none, so it renders in
 			// place and manages its own portal.
@@ -51,28 +60,31 @@ module.exports = defineComponent( {
 	},
 	computed: {
 		target() {
-			if ( this.activeInternal ) {
-				return '#personal-dashboard-teleport';
+			if ( this.activeTargetInternal ) {
+				return this.activeTargetInternal;
 			}
 			// Module names carry dots, so escape them for the selector; an
 			// unescaped '#pd-slot-ext.foo.bar' reads the dots as class selectors
 			// and the teleport target is never found.
 			return this.hasSlot ? '#pd-slot-' + CSS.escape( this.name ) : null;
 		},
+		active() {
+			return !!this.activeTargetInternal;
+		},
 		detail() {
 			// A narrow viewport shows a compact summary in the card and the full
 			// body in the dialog; a wide viewport is always full. An opened dialog
 			// or a focused whole-page render is always full regardless of width.
-			const full = this.activeInternal || this.focused;
+			const full = this.active || this.focused;
 			return ( this.isNarrow && !full ) ? 'compact' : 'full';
 		}
 	},
 	watch: {
-		active( value ) {
-			// The dialog only mounts its teleport target when it opens, so defer
-			// the move a tick until that target exists.
+		activeTarget( value ) {
+			// The dialog or frame only mounts its teleport target when it opens,
+			// so defer the move a tick until that target exists.
 			this.$nextTick( () => {
-				this.activeInternal = value;
+				this.activeTargetInternal = value;
 			} );
 		}
 	}

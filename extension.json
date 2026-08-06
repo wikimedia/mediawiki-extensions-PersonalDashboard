@@ -109,9 +109,12 @@
 				"init.js",
 				"App.vue",
 				"Dashboard.vue",
+				"FocusedFrame.vue",
+				"FocusedHeader.vue",
 				"IslandMount.vue",
 				"ModuleDialog.vue",
 				"mediaWikiHistory.js",
+				"teleportTargets.js",
 				"useViewport.js",
 				"instrumentation/onPersonalDashboardBaseline.js",
 				"instrumentation/experiments.js",
@@ -127,6 +130,9 @@
 				"vue",
 				"vue-router",
 				"pinia"
+			],
+			"messages": [
+				"personal-dashboard-back-to-dashboard"
 			]
 		},
 		"ext.personalDashboard.common": {
@@ -323,7 +329,12 @@
 			],
 			"styles": [
 				"index.less"
-			]
+			],
+			"skinStyles": {
+				"vector-2022": "skinStyles/vector-2022.less",
+				"vector": "skinStyles/vector.less",
+				"monobook": "skinStyles/monobook.less"
+			}
 		},
 		"ext.personalDashboard.policiesGuidelines.styles": {
 			"localBasePath": "resources/ext.personalDashboard.policiesGuidelines.styles",

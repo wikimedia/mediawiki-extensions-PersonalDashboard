@@ -80,7 +80,7 @@ test( 'a focused island is full even when narrow', async () => {
 
 test( 'an active island is full even when narrow', async () => {
 	isNarrow.value = true;
-	const wrapper = await mountIsland( { active: true } );
+	const wrapper = await mountIsland( { activeTarget: '#personal-dashboard-teleport' } );
 	expect( childDetail( wrapper ) ).toBe( 'full' );
 } );
 
@@ -92,13 +92,18 @@ test( 'passes focused through to the island body', async () => {
 
 test( 'passes the raw isNarrow value through to the island body', async () => {
 	isNarrow.value = true;
-	expect( childIsNarrow( await mountIsland( { active: true } ) ) ).toBe( true );
+	expect( childIsNarrow( await mountIsland( { activeTarget: '#personal-dashboard-teleport' } ) ) ).toBe( true );
 
 	isNarrow.value = false;
 	expect( childIsNarrow( await mountIsland() ) ).toBe( false );
 } );
 
 test( 'passes active through to the island body', async () => {
-	expect( childActive( await mountIsland( { active: true } ) ) ).toBe( true );
+	expect( childActive( await mountIsland( { activeTarget: '#personal-dashboard-teleport' } ) ) ).toBe( true );
 	expect( childActive( await mountIsland() ) ).toBe( false );
+} );
+
+test( 'a different active target still reports active, not just a truthy one', async () => {
+	expect( childActive( await mountIsland( { activeTarget: '#personal-dashboard-focused-frame-teleport' } ) ) )
+		.toBe( true );
 } );

@@ -1,0 +1,13 @@
+@import 'mediawiki.skin.variables.less';
+
+// .mw-body shares #globalWrapper's stacking context with .menu-toggle
+// (z-index: 4); raising .mw-body's rank here is what lets our fixed overlay,
+// nested inside it, actually paint above the hamburger toggle instead of
+// under it.
+body.personal-dashboard-focused {
+	@media screen and ( max-width: @max-width-breakpoint-mobile ) {
+		.mw-body {
+			z-index: @z-index-off-canvas-backdrop;
+		}
+	}
+}

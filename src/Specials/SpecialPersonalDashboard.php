@@ -134,8 +134,6 @@ class SpecialPersonalDashboard extends SpecialPage {
 			}
 		}
 
-		$this->emitNoJsNotice();
-
 		// The first subpage segment names a module. A bare module name is the
 		// isolated focused page: the real page a card's in-body link falls through
 		// to with no JS (a "see examples" link). A deeper subpath instead opens that
@@ -153,6 +151,8 @@ class SpecialPersonalDashboard extends SpecialPage {
 		if ( $isolated ) {
 			$this->renderFocusedFrame( $moduleName, $matched );
 		} else {
+			$this->emitNoJsNotice();
+
 			if ( $matched instanceof BaseModule && $subPath !== ''
 				&& $matched->acceptsFocusedSubPath()
 			) {
@@ -381,6 +381,9 @@ class SpecialPersonalDashboard extends SpecialPage {
 		// Same viewport wrapper as the grouped frames so the container query applies
 		// here too, though a lone focused module never has a second column to drop.
 		$out->addHTML( Html::openElement( 'div', [ 'class' => 'personal-dashboard-viewport' ] ) );
+		// The narrow-viewport overlay covers everything outside this wrapper, so the
+		// notice has to render inside it here or a no-JS visitor never sees it.
+		$this->emitNoJsNotice();
 		$out->addHTML( Html::openElement( 'div', [ 'class' => 'personal-dashboard-container' ] ) );
 		// A progressively enhanced module renders its deep no-JS content only when
 		// it is the whole focused page, not in its dashboard card. The back link

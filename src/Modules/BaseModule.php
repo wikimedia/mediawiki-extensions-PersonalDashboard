@@ -177,9 +177,7 @@ abstract class BaseModule implements IModule, MessageLocalizer {
 		return Html::rawElement(
 			'div',
 			[ 'class' => 'personal-dashboard-module-header-container' ],
-			$this->backLink . $this->getHeader() . Html::element( 'div', [
-				'class' => 'personal-dashboard-module-header-info-icon'
-			] )
+			$this->backLink . $this->getHeader()
 		);
 	}
 

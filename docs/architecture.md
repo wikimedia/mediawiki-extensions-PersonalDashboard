@@ -23,7 +23,7 @@ Here is one request to `Special:PersonalDashboard`, end to end.
 
 Two more paths through the same code:
 
-- A module name in the subpath (`Special:PersonalDashboard/ext.personalDashboard.reviewChanges`) renders that one module as a whole server page (`renderFocusedFrame()`). An expandable card's header is a plain server-rendered link to that URL, so clicking it navigates rather than opening anything client-side. `ModuleDialog.vue` renders the same module over the dashboard instead when a client-side route push names it; reconciling the two presentations is [T433896](https://phabricator.wikimedia.org/T433896). See [`./routing.md`](./routing.md).
+- A module name in the subpath (`Special:PersonalDashboard/ext.personalDashboard.reviewChanges`) renders that one module as a whole server page (`renderFocusedFrame()`). At a narrow viewport `ModuleDialog.vue` opens over that page, full-screen and free of the skin's chrome; at a wide viewport the server's own render already is the intended design, chrome and all, so nothing opens over it. An expandable card's header links to a module's own URL, but with JavaScript `Dashboard.vue` catches the click and pushes the route instead of loading it: at a narrow viewport that opens the dialog with no page load, at a wide viewport it opens `FocusedFrame.vue` in place instead, keeping the skin's chrome visible. Without JavaScript the link navigates to the server's inline render ([T433896](https://phabricator.wikimedia.org/T433896)). See [`./routing.md`](./routing.md).
 - With no JavaScript, server-rendered bodies show as-is; island cards show empty framed cards under a page-level notice explaining why. See [`./render-contract.md`](./render-contract.md).
 
 ## The pieces
@@ -32,7 +32,7 @@ Two more paths through the same code:
 
 **The server render contract (islands architecture).** How a module's server HTML and its client Vue behavior fit together: which modules are islands, which are server-static, which are progressively enhanced, and why MediaWiki's lack of Vue SSR makes that split load-bearing rather than cosmetic. Also covers the platform-axis removal (detail is now viewport-driven, client-side, not a server render mode). See [`./render-contract.md`](./render-contract.md).
 
-**Routing and the focused module.** The Vue Router migration, the module-name-as-subpage convention, and the two presentations one module URL can produce: the whole-page server render, or the dialog over the dashboard. See [`./routing.md`](./routing.md).
+**Routing and the focused module.** The Vue Router migration, the module-name-as-subpage convention, and how a focused module URL is presented: a full-screen dialog at a narrow viewport, an in-page frame keeping the skin's chrome at a wide one, and the server's own inline render standing as-is wherever it's already the right presentation (including no-JS). See [`./routing.md`](./routing.md).
 
 **Design decisions.** Deliberate divergences from MediaWiki convention, with the reasoning and a receipt for each: the dropped platform axis, and why registration stays declarative attributes rather than a runtime registry. See [`./decisions.md`](./decisions.md).
 

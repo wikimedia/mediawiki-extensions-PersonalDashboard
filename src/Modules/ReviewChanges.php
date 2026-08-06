@@ -40,7 +40,7 @@ class ReviewChanges extends BaseModule {
 		private readonly CommentFormatter $commentFormatter,
 	) {
 		$this->dbr = $connectionProvider->getReplicaDatabase();
-		parent::__construct( $context, true );
+		parent::__construct( $context, shouldWrapModuleWithLink: true );
 	}
 
 	/**

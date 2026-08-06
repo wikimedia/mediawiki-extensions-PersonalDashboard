@@ -101,12 +101,4 @@ module.exports = defineComponent( {
 		}
 	}
 }
-
-.open-true {
-	.personal-dashboard-module-route-activeDiscussions {
-		.ext-personal-dashboard-active-discussions-footer {
-			display: none;
-		}
-	}
-}
 </style>

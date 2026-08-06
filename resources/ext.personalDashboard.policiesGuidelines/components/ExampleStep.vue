@@ -35,7 +35,6 @@ module.exports = defineComponent( {
 		}
 	},
 	data() {
-		const msgPrefix = 'personal-dashboard-policies-guidelines-';
 		let iconData = cdxIconSuccess;
 
 		if ( this.icon === 'warning' ) {
@@ -45,12 +44,45 @@ module.exports = defineComponent( {
 		}
 
 		return {
+			msgHeader: mw.msg( 'personal-dashboard-policies-guidelines-examples-header', this.step ),
+			// Messages used here include:
+			// * personal-dashboard-policies-guidelines-neutral-point-of-view-example-1
+			// * personal-dashboard-policies-guidelines-neutral-point-of-view-example-2
+			// * personal-dashboard-policies-guidelines-no-original-research-example-1
+			// * personal-dashboard-policies-guidelines-no-original-research-example-2
+			// * personal-dashboard-policies-guidelines-verifiability-example-1
+			// * personal-dashboard-policies-guidelines-verifiability-example-2
+			// * personal-dashboard-policies-guidelines-verifiability-example-3
+			// * personal-dashboard-policies-guidelines-assume-good-faith-example-1
+			// * personal-dashboard-policies-guidelines-assume-good-faith-example-2
+			msgExample: mw.msg( `personal-dashboard-policies-guidelines-${ this.name }-example-${ this.step }` ),
+			// Messages used here include:
+			// * personal-dashboard-policies-guidelines-neutral-point-of-view-answer-1-label
+			// * personal-dashboard-policies-guidelines-neutral-point-of-view-answer-2-label
+			// * personal-dashboard-policies-guidelines-no-original-research-answer-1-label
+			// * personal-dashboard-policies-guidelines-no-original-research-answer-2-label
+			// * personal-dashboard-policies-guidelines-verifiability-answer-1-label
+			// * personal-dashboard-policies-guidelines-verifiability-answer-2-label
+			// * personal-dashboard-policies-guidelines-verifiability-answer-3-label
+			// * personal-dashboard-policies-guidelines-assume-good-faith-answer-1-label
+			// * personal-dashboard-policies-guidelines-assume-good-faith-answer-2-label
+			msgAnswerLabel: mw.msg( `personal-dashboard-policies-guidelines-${ this.name }-answer-${ this.step }-label` ),
+			// Messages used here include:
+			// * personal-dashboard-policies-guidelines-neutral-point-of-view-answer-1-text
+			// * personal-dashboard-policies-guidelines-neutral-point-of-view-answer-2-text
+			// * personal-dashboard-policies-guidelines-no-original-research-answer-1-text
+			// * personal-dashboard-policies-guidelines-no-original-research-answer-2-text
+			// * personal-dashboard-policies-guidelines-verifiability-answer-1-text
+			// * personal-dashboard-policies-guidelines-verifiability-answer-2-text
+			// * personal-dashboard-policies-guidelines-verifiability-answer-3-text
+			// * personal-dashboard-policies-guidelines-assume-good-faith-answer-1-text
+			// * personal-dashboard-policies-guidelines-assume-good-faith-answer-2-text
+			msgAnswerText: mw.msg( `personal-dashboard-policies-guidelines-${ this.name }-answer-${ this.step }-text` ),
 
-			msgHeader: mw.msg( `${ msgPrefix }examples-header`, this.step ),
-			msgExample: mw.msg( `${ msgPrefix }${ this.name }-example-${ this.step }` ),
-			msgAnswerLabel: mw.msg( `${ msgPrefix }${ this.name }-answer-${ this.step }-label` ),
-			msgAnswerText: mw.msg( `${ msgPrefix }${ this.name }-answer-${ this.step }-text` ),
-
+			// The following CSS classes are used here:
+			// * personal-dashboard-policies-guidelines__icon--success
+			// * personal-dashboard-policies-guidelines__icon--warning
+			// * personal-dashboard-policies-guidelines__icon--error
 			iconClass: `personal-dashboard-policies-guidelines__icon--${ this.icon }`,
 			iconData
 		};

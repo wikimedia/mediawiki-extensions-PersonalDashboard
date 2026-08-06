@@ -281,6 +281,10 @@ class SpecialPersonalDashboard extends SpecialPage {
 
 		foreach ( $groups as $group ) {
 			$out->addHTML( Html::openElement( 'div', [
+				// The following CSS classes are used here:
+				// * personal-dashboard-group-utils
+				// * personal-dashboard-group-main
+				// * personal-dashboard-group-sidebar
 				'class' => "personal-dashboard-group-{$group[ 'name' ]}"
 			] ) );
 
@@ -288,6 +292,11 @@ class SpecialPersonalDashboard extends SpecialPage {
 				$modules = array_filter( $subGroup['modules'], static fn ( $module ) => $module['enabled'] );
 
 				$out->addHTML( Html::openElement( 'div', [
+					// The following CSS classes are used here:
+					// * personal-dashboard-group-utils-subgroup-startup
+					// * personal-dashboard-group-main-subgroup-primary
+					// * personal-dashboard-group-sidebar-subgroup-primary
+					// * personal-dashboard-group-sidebar-subgroup-secondary
 					'class' => "personal-dashboard-group-{$group[ 'name' ]}-subgroup-{$subGroup[ 'name' ]}",
 					'style' => $modules ? null : 'display: none;'
 				] ) );

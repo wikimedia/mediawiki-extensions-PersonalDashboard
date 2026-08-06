@@ -33,6 +33,9 @@ class Placeholder implements IModule {
 			[
 				'class' => [
 					'personal-dashboard-module',
+					// Mirrors the per-module class from BaseModule::buildModuleWrapper(),
+					// built from whatever unregistered module name config requested, so
+					// the possible classes cannot be enumerated here.
 					'personal-dashboard-module-' . $this->name,
 				],
 				'data-module-name' => $this->name,

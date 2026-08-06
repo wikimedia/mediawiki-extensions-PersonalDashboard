@@ -32,7 +32,6 @@ module.exports = defineComponent( {
 		const isMenuLinkVisible = mw.config.get( 'wgPersonalDashboardMenuVisible' );
 		const bannerPath = mw.config.get( 'wgExtensionAssetsPath' ) +
 			'/PersonalDashboard/resources/ext.personalDashboard.onboarding/images/';
-		const msgPrefix = 'personal-dashboard-onboarding-step-';
 
 		return {
 			isMenuLinkVisible,
@@ -42,22 +41,16 @@ module.exports = defineComponent( {
 				{
 					slot: 'step-1',
 					banner: `${ bannerPath }1.svg`,
-					// * personal-dashboard-onboarding-step-1-alt
-					alt: mw.msg( `${ msgPrefix }1-alt` ),
-					// * personal-dashboard-onboarding-step-2-title
-					title: mw.msg( `${ msgPrefix }2-title` ),
-					// * personal-dashboard-onboarding-step-1-body
-					body: mw.msg( `${ msgPrefix }1-body` )
+					alt: mw.msg( 'personal-dashboard-onboarding-step-1-alt' ),
+					title: mw.msg( 'personal-dashboard-onboarding-step-2-title' ),
+					body: mw.msg( 'personal-dashboard-onboarding-step-1-body' )
 				},
 				{
 					slot: 'step-2',
 					banner: `${ bannerPath }3.svg`,
-					// * personal-dashboard-onboarding-step-3-alt
-					alt: mw.msg( `${ msgPrefix }3-alt` ),
-					// * personal-dashboard-onboarding-step-3-title
-					title: mw.msg( `${ msgPrefix }3-title` ),
-					// * personal-dashboard-onboarding-step-3-body
-					body: mw.msg( `${ msgPrefix }3-body` )
+					alt: mw.msg( 'personal-dashboard-onboarding-step-3-alt' ),
+					title: mw.msg( 'personal-dashboard-onboarding-step-3-title' ),
+					body: mw.msg( 'personal-dashboard-onboarding-step-3-body' )
 				}
 			],
 			msgTitle: mw.msg( 'personal-dashboard-onboarding-title' ),

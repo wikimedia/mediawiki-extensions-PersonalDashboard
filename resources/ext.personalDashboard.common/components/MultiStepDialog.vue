@@ -133,7 +133,7 @@ module.exports = defineComponent( {
 			let result = 'cdx-dialog__header__stepper__dot';
 
 			if ( step === this.step ) {
-				result += ` ${ result }--active`;
+				result += ' cdx-dialog__header__stepper__dot--active';
 			}
 
 			return result;

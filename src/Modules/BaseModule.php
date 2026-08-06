@@ -21,8 +21,6 @@ use Wikimedia\Message\MessageSpecifier;
  */
 abstract class BaseModule implements IModule, MessageLocalizer {
 
-	protected const string BASE_CSS_CLASS = 'personal-dashboard-module';
-
 	private bool $shouldWrapModuleWithLink;
 	private ?string $pageURL = null;
 
@@ -393,8 +391,14 @@ abstract class BaseModule implements IModule, MessageLocalizer {
 			[
 				'id' => $this->getName(),
 				'class' => array_merge( [
-					self::BASE_CSS_CLASS,
-					self::BASE_CSS_CLASS . '-' . $className,
+					'personal-dashboard-module',
+					// The following CSS classes are used here:
+					// * personal-dashboard-module-activeDiscussions
+					// * personal-dashboard-module-banner
+					// * personal-dashboard-module-impact
+					// * personal-dashboard-module-policiesGuidelines
+					// * personal-dashboard-module-riskyArticleEdits
+					"personal-dashboard-module-$className",
 				], $this->getCssClasses() ),
 				'data-module-name' => $this->name,
 			],
@@ -417,8 +421,13 @@ abstract class BaseModule implements IModule, MessageLocalizer {
 			$tag,
 			[
 				'class' => [
-					static::BASE_CSS_CLASS . '-section',
-					static::BASE_CSS_CLASS . '-section-' . $name
+					'personal-dashboard-module-section',
+					// The following CSS classes are used here:
+					// * personal-dashboard-module-section-header
+					// * personal-dashboard-module-section-subheader
+					// * personal-dashboard-module-section-body
+					// * personal-dashboard-module-section-footer
+					"personal-dashboard-module-section-$name"
 				]
 			],
 			$content
@@ -431,7 +440,7 @@ abstract class BaseModule implements IModule, MessageLocalizer {
 	protected function getHeaderTextElement(): string {
 		return Html::element(
 			'div',
-			[ 'class' => static::BASE_CSS_CLASS . '-header-text' ],
+			[ 'class' => 'personal-dashboard-module-header-text' ],
 			$this->getHeaderText()
 		);
 	}
@@ -504,7 +513,7 @@ abstract class BaseModule implements IModule, MessageLocalizer {
 		$text = $this->getSubheaderText();
 		return $text ? Html::element(
 			'div',
-			[ 'class' => static::BASE_CSS_CLASS . '-subheader-text' ],
+			[ 'class' => 'personal-dashboard-module-subheader-text' ],
 			$text
 		) : '';
 	}
@@ -534,7 +543,7 @@ abstract class BaseModule implements IModule, MessageLocalizer {
 		return Html::element(
 			'span',
 			[
-				'class' => [ static::BASE_CSS_CLASS . '-header-icon' ],
+				'class' => [ 'personal-dashboard-module-header-icon' ],
 			],
 		);
 	}

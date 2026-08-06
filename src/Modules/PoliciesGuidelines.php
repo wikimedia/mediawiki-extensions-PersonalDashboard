@@ -170,6 +170,10 @@ class PoliciesGuidelines extends BaseModule {
 				Html::rawElement( 'div', [ 'class' => 'personal-dashboard-policies-guidelines__answer' ],
 					Html::element( 'span', [ 'class' => [
 						'personal-dashboard-policies-guidelines__step-icon',
+						// The following CSS classes are used here:
+						// * personal-dashboard-policies-guidelines__step-icon--success
+						// * personal-dashboard-policies-guidelines__step-icon--warning
+						// * personal-dashboard-policies-guidelines__step-icon--error
 						'personal-dashboard-policies-guidelines__step-icon--' . $icon,
 					] ] ) .
 					Html::rawElement( 'div', [ 'class' => 'personal-dashboard-policies-guidelines__answer__text' ],

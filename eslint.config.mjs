@@ -10,6 +10,8 @@ const compat = new FlatCompat( {
 export default defineConfig( [
 	globalIgnores( [ 'coverage/', 'resources/lib/', 'vendor/' ] ),
 	{
+		// Node CLI scripts get the server config below instead.
+		ignores: [ 'tests/check-unused-messages.js' ],
 		extends: compat.extends(
 			'wikimedia/client/common',
 			'wikimedia/language/es2018',
@@ -33,6 +35,15 @@ export default defineConfig( [
 			'vue/no-undef-components': [ 'error', {
 				ignorePatterns: [ '^router-.+$' ]
 			} ]
+		}
+	},
+	{
+		// Node.js scripts run from the command line, not shipped to browsers.
+		files: [ 'tests/check-unused-messages.js' ],
+		extends: compat.extends( 'wikimedia/server' ),
+		rules: {
+			// Walking the repo with computed paths is this script's job.
+			'security/detect-non-literal-fs-filename': 'off'
 		}
 	},
 	{

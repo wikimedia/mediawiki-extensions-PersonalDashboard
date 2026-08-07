@@ -6,6 +6,9 @@ namespace MediaWiki\Extension\PersonalDashboard\Modules;
 
 use MediaWiki\Context\IContextSource;
 use MediaWiki\Html\Html;
+use Wikimedia\Codex\Component\Accordion;
+use Wikimedia\Codex\Component\HtmlSnippet;
+use Wikimedia\Codex\Utility\Codex;
 
 /**
  * Core content policies, each a Codex card that is also a <details> accordion:
@@ -31,8 +34,11 @@ class PoliciesGuidelines extends BaseModule {
 		'assume-good-faith' => [ 'error', 'success' ],
 	];
 
+	private Codex $codex;
+
 	public function __construct( IContextSource $context ) {
 		parent::__construct( $context );
+		$this->codex = new Codex();
 	}
 
 	/**
@@ -76,14 +82,14 @@ class PoliciesGuidelines extends BaseModule {
 
 	/** @inheritDoc */
 	protected function getBody(): string {
-		$cards = '';
+		$html = '';
 		foreach ( self::POLICIES as $name => $steps ) {
-			$cards .= $this->renderCard( $name, $steps );
+			$html .= $this->getAccordion( $name, $steps )->getHtml();
 		}
 		return Html::rawElement(
 			'div',
 			[ 'class' => 'personal-dashboard-policies-guidelines__list' ],
-			$cards
+			$html
 		);
 	}
 
@@ -95,47 +101,33 @@ class PoliciesGuidelines extends BaseModule {
 	 *
 	 * @param string $name Policy key
 	 * @param string[] $steps Status icon per example step
-	 * @return string
+	 * @return Accordion
 	 */
-	private function renderCard( string $name, array $steps ): string {
-		$attribs = [
-			'id' => $name,
-			'class' => 'cdx-accordion',
-		];
+	private function getAccordion( string $name, array $steps ): Accordion {
 		// Only the policy the subpath names opens; everything else stays collapsed,
 		// on the focused page too. The point is not to overwhelm a new user, so we
 		// leave the walkthroughs closed until they choose one. The first subpath
 		// segment is the policy; anything below it (an example) is the client
 		// router's, so match on that segment alone.
-		if ( explode( '/', $this->getFocusedSubPath(), 2 )[0] === $name ) {
-			$attribs['open'] = '';
-		}
+		$open = explode( '/', $this->getFocusedSubPath(), 2 )[0] === $name;
 
-		$header = Html::rawElement( 'summary', [],
-			Html::rawElement( 'h3', [ 'class' => 'cdx-accordion__header' ],
-				Html::element( 'span', [ 'class' => 'cdx-accordion__header__title' ],
-					// Messages used here include:
-					// * personal-dashboard-policies-guidelines-neutral-point-of-view-title
-					// * personal-dashboard-policies-guidelines-no-original-research-title
-					// * personal-dashboard-policies-guidelines-verifiability-title
-					// * personal-dashboard-policies-guidelines-assume-good-faith-title
-					$this->msg( "personal-dashboard-policies-guidelines-$name-title" )->text()
-				) .
-				Html::element( 'span', [ 'class' => 'cdx-accordion__header__description' ],
-					// Messages used here include:
-					// * personal-dashboard-policies-guidelines-neutral-point-of-view-definition
-					// * personal-dashboard-policies-guidelines-no-original-research-definition
-					// * personal-dashboard-policies-guidelines-verifiability-definition
-					// * personal-dashboard-policies-guidelines-assume-good-faith-definition
-					$this->msg( "personal-dashboard-policies-guidelines-$name-definition" )->text()
-				)
-			)
-		);
-		$content = Html::rawElement( 'div', [ 'class' => 'cdx-accordion__content' ],
-			$this->renderSteps( $name, $steps )
-		);
-
-		return Html::rawElement( 'details', $attribs, $header . $content );
+		return $this->codex->accordion()
+			->setId( $name )
+			->setOpen( $open )
+			// Messages used here include:
+			// * personal-dashboard-policies-guidelines-neutral-point-of-view-title
+			// * personal-dashboard-policies-guidelines-no-original-research-title
+			// * personal-dashboard-policies-guidelines-verifiability-title
+			// * personal-dashboard-policies-guidelines-assume-good-faith-title
+			->setTitle( $this->msg( "personal-dashboard-policies-guidelines-$name-title" )->text() )
+			// Messages used here include:
+			// * personal-dashboard-policies-guidelines-neutral-point-of-view-definition
+			// * personal-dashboard-policies-guidelines-no-original-research-definition
+			// * personal-dashboard-policies-guidelines-verifiability-definition
+			// * personal-dashboard-policies-guidelines-assume-good-faith-definition
+			->setDescription( $this->msg( "personal-dashboard-policies-guidelines-$name-definition" )->text() )
+			->setContentHtml( $this->getStepsHtml( $name, $steps ) )
+			->build();
 	}
 
 	/**
@@ -144,9 +136,9 @@ class PoliciesGuidelines extends BaseModule {
 	 *
 	 * @param string $name Policy key
 	 * @param string[] $steps Status icon per example step
-	 * @return string
+	 * @return HtmlSnippet
 	 */
-	private function renderSteps( string $name, array $steps ): string {
+	private function getStepsHtml( string $name, array $steps ): HtmlSnippet {
 		$html = '';
 		foreach ( $steps as $index => $icon ) {
 			$step = $index + 1;
@@ -205,6 +197,8 @@ class PoliciesGuidelines extends BaseModule {
 				)
 			);
 		}
-		return $html;
+		return $this->codex->htmlSnippet()
+			->setContent( $html )
+			->build();
 	}
 }

@@ -1,0 +1,16 @@
+{
+	"@metadata": {
+		"authors": [
+			"شاه زمان پټان"
+		]
+	},
+	"personal-dashboard-active-discussions-title": "کارنده شننې",
+	"personal-dashboard-active-discussions-description": "د وروستيو شننو سره تازه اوسئ او د ويکي‌پېډيا نورو سمونگرانو سره خبرو اترو کې گډون وکړئ.",
+	"personal-dashboard-active-discussions-latest-comment": "وروستۍ څرگندونه:",
+	"personal-dashboard-active-discussions-today": "$1، نن",
+	"personal-dashboard-active-discussions-mobile-latest-comment": "وروستۍ څرگندونه:",
+	"personal-dashboard-active-discussions-mobile-today": "$1، نن",
+	"personal-dashboard-active-discussions-mobile-summary-footer-link-text": "نور کتل",
+	"personal-dashboard-active-discussions-mobile-summary-footer-button-aria-label": "نورو کارنده شننو ته ورشئ",
+	"personal-dashboard-active-discussions-progress-bar-aria-label": "پرکرښه بهير بټه چې د کارنده شننو بارېدو بهير ښيي."
+}

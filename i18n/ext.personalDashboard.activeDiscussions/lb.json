@@ -1,0 +1,11 @@
+{
+	"@metadata": {
+		"authors": [
+			"Volvox"
+		]
+	},
+	"personal-dashboard-active-discussions-title": "Aktiv Diskussiounen",
+	"personal-dashboard-active-discussions-today": "$1, haut",
+	"personal-dashboard-active-discussions-mobile-today": "$1, haut",
+	"personal-dashboard-active-discussions-mobile-summary-footer-link-text": "Méi weisen"
+}

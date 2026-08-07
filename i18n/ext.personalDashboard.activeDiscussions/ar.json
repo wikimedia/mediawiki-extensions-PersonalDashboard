@@ -1,0 +1,16 @@
+{
+	"@metadata": {
+		"authors": [
+			"Meno25"
+		]
+	},
+	"personal-dashboard-active-discussions-title": "مناقشات فعّالة",
+	"personal-dashboard-active-discussions-description": "ابقَ على اطلاع دائم بأحدث المناقشات وانضم إلى الحوار مع محرري ويكيبيديا الآخرين.",
+	"personal-dashboard-active-discussions-latest-comment": "آخر تعليق:",
+	"personal-dashboard-active-discussions-today": "$1 ، اليوم",
+	"personal-dashboard-active-discussions-mobile-latest-comment": "آخر تعليق:",
+	"personal-dashboard-active-discussions-mobile-today": "$1 ، اليوم",
+	"personal-dashboard-active-discussions-mobile-summary-footer-link-text": "عرض المزيد",
+	"personal-dashboard-active-discussions-mobile-summary-footer-button-aria-label": "انتقل إلى مناقشات أكثر نشاطًا",
+	"personal-dashboard-active-discussions-progress-bar-aria-label": "شريط تقدم مضمن يشير إلى أنه يتم تحميل المناقشات النشطة"
+}

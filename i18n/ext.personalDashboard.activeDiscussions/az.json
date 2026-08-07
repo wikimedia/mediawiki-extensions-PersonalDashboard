@@ -1,0 +1,16 @@
+{
+	"@metadata": {
+		"authors": [
+			"Nemoralis"
+		]
+	},
+	"personal-dashboard-active-discussions-title": "Aktiv müzakirələr",
+	"personal-dashboard-active-discussions-description": "Ən son müzakirələrdən xəbərdar olun və digər Vikipediya redaktorları ilə söhbətə qoşulun.",
+	"personal-dashboard-active-discussions-latest-comment": "Son şərh:",
+	"personal-dashboard-active-discussions-today": "$1, Bu gün",
+	"personal-dashboard-active-discussions-mobile-latest-comment": "Son şərh:",
+	"personal-dashboard-active-discussions-mobile-today": "$1, Bu gün",
+	"personal-dashboard-active-discussions-mobile-summary-footer-link-text": "Daha ətraflı",
+	"personal-dashboard-active-discussions-mobile-summary-footer-button-aria-label": "Daha aktiv müzakirələrə keçin",
+	"personal-dashboard-active-discussions-progress-bar-aria-label": "aktiv müzakirələrin yükləndiyini göstərən sətir içi irəliləyiş paneli"
+}

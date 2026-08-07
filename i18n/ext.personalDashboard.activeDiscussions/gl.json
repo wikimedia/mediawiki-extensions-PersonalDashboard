@@ -1,0 +1,16 @@
+{
+	"@metadata": {
+		"authors": [
+			"Toliño"
+		]
+	},
+	"personal-dashboard-active-discussions-title": "Conversas activas",
+	"personal-dashboard-active-discussions-description": "Mantente ao día das últimas conversas e únete á conversa con outros editores da Wikipedia.",
+	"personal-dashboard-active-discussions-latest-comment": "Último comentario:",
+	"personal-dashboard-active-discussions-today": "$1, hoxe",
+	"personal-dashboard-active-discussions-mobile-latest-comment": "Último comentario:",
+	"personal-dashboard-active-discussions-mobile-today": "$1, hoxe",
+	"personal-dashboard-active-discussions-mobile-summary-footer-link-text": "Ver máis",
+	"personal-dashboard-active-discussions-mobile-summary-footer-button-aria-label": "Navegar ata outras conversas activas",
+	"personal-dashboard-active-discussions-progress-bar-aria-label": "barra de progreso en liña que indica que se están a cargar as conversas activas"
+}

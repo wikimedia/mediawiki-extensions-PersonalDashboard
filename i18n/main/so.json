@@ -8,7 +8,7 @@
 	"personal-dashboard-beta-info-chip-text": "Beta",
 	"personal-dashboard-desc": "Dashboard tijaabo ah oo loogu talagalay kormeerayaasha",
 	"personal-dashboard-link-title": "Dashboard-ka",
-	"personal-dashboard-module-no-js-fallback": "Fadlan daar JavaScript si aad u aragto qaybtan.",
+	"personal-dashboard-module-no-js-fallback": "Qaybo ka mid ah dashboard-kan ma muuqanayaan ilaa JavaScript laga hawlgeliyo biraawsarkaaga.",
 	"personal-dashboard-specialpage-title": "{{GENDER:$1|Salaan}}, {{bidi:$1}}!",
 	"personal-dashboard-survey-text": "[$1 La wadaag jawaab celin]",
 	"tooltip-pt-personaldashboard": "{{GENDER:|Dashboard-kaaga gaarka ah}}"

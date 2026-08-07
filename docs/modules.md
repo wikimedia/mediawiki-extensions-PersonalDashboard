@@ -4,7 +4,7 @@ Personal Dashboard is experimental; the details below will change.
 
 A module is a discrete unit of content on `Special:PersonalDashboard` (Impact, Active Discussions, Review Changes, and so on). Modules render their own content; the module-group registry places them into the page.
 
-Any extension can contribute a module via the `PersonalDashboard.Modules` attribute. This doc uses [BoilerPlate](https://www.mediawiki.org/wiki/Extension:BoilerPlate) as a stand-in; it isn't actually shipping a module, but [Gerrit change 1295084](https://gerrit.wikimedia.org/r/c/mediawiki/extensions/BoilerPlate/+/1295084) is a PoC that implements the integration (extends `BaseModule` rather than implementing `IModule` directly; may be stale).
+Any extension can contribute a module via the `PersonalDashboard.Modules` attribute. This doc uses [BoilerPlate](https://www.mediawiki.org/wiki/Extension:BoilerPlate) as a stand-in; it isn't actually shipping a module. For a real one, GrowthExperiments registers its Mentorship module this way ([T432039](https://phabricator.wikimedia.org/T432039)), extending `BaseModule` rather than implementing `IModule` directly.
 
 Registering a module means one entry in the extension's `./extension.json` and a PHP class. Placing it on the dashboard is either a change to Personal Dashboard (for the default layout) or a new group in your own `./extension.json` (for experiments).
 
@@ -41,10 +41,10 @@ If a group references a name that isn't registered, `PersonalDashboardModuleFact
 
 Modules implement `MediaWiki\Extension\PersonalDashboard\IModule`. Six methods:
 
-- `render($platform)`: returns the module's server-side card frame for one of `PLATFORM_DESKTOP` or `PLATFORM_MOBILE` (constants on `IModule`). Platform is the only rendering distinction the server cares about; the detail level within a platform (a compact summary versus the full view) is derived client-side and never reaches PHP.
-- `getJsData($platform)`: return value is packed into `wgPersonalDashboardGroups` on the page for the client to read. It carries what the client needs to mount and coordinate the module (enabled, header, expandable, serverRendered), not the body or footer HTML.
+- `render()`: returns the module's server-side card frame, one frame regardless of device. The detail level within it (a compact summary versus the full view) is derived client-side from viewport width and never reaches PHP.
+- `getJsData()`: return value is packed into `wgPersonalDashboardGroups` on the page for the client to read. It carries what the client needs to mount and coordinate the module (enabled, header, expandable, serverRendered), not the body or footer HTML.
 - `getJsConfigVars()`: additional `mw.config` keys the module's client-side code needs.
-- `supports($platform)`: return false to skip a platform.
+- `supports()`: return false to skip the module entirely; `render()` and `getJsData()` are then never called.
 - `setName($name)`, `setPageURL($url)`: called by the factory and the special page before render; typically empty stubs.
 
 For BoilerPlate, the class lives at `src/ModuleExample.php` under `MediaWiki\Extension\BoilerPlate\`. `./src/Modules/ReturnToHomepage.php` is the smallest working example in Personal Dashboard: no context, no services, `render()` returns a static link.
@@ -62,9 +62,9 @@ By default BaseModule emits a card frame whose body is an empty mount slot; the 
 - `serverRendered()`: return true for a module whose whole body is server HTML with no client mount. The client leaves it in place.
 - `getBody()`: the server-rendered body HTML. Consulted only when `serverRendered()` is true; override one without the other and the body silently never renders.
 
-The [PoC](https://gerrit.wikimedia.org/r/c/mediawiki/extensions/BoilerPlate/+/1295084)'s `src/ModuleExample.php` extends BaseModule; `./src/Modules/Impact.php` does the same with a database-backed body.
+GrowthExperiments' `includes/PersonalDashboard/Mentorship.php` extends BaseModule from outside this extension and overrides both, so its body is server HTML. `./src/Modules/Impact.php` extends BaseModule but overrides neither, staying an island that queries the database and hands its counts to Vue as config vars.
 
-Client-side (Vue) modules are the island default: BaseModule emits the mount slot, and a matching ResourceLoader module registered under `ResourceModules` in the same extension's `./extension.json` supplies the Vue app the dashboard teleports in. The app receives a `platform` prop and derives its own detail level; it needs no PHP beyond the frame. `./src/Modules/ReviewChanges.php` paired with `./resources/ext.personalDashboard.reviewChanges/` is the fullest in-tree example.
+Client-side (Vue) modules are the island default: BaseModule emits the mount slot, and a matching ResourceLoader module registered under `ResourceModules` in the same extension's `./extension.json` supplies the Vue app the dashboard teleports in. The dashboard app hands it `detail`, `focused`, `active` and `isNarrow`, and the module decides its own presentation from those; it needs no PHP beyond the frame. `./src/Modules/ReviewChanges.php` paired with `./resources/ext.personalDashboard.reviewChanges/` is the fullest in-tree example.
 
 ## Show it on the dashboard
 
@@ -83,20 +83,20 @@ Two paths for a BoilerPlate module to appear:
 
 Modules can carry optional per-placement keys such as `"style": "thin"` and `"styleMobile": "minimized"`; see existing entries in Personal Dashboard's `./extension.json` for examples.
 
-**Register a named group.** For an experiment or opt-in preview, register a new group in BoilerPlate's own `./extension.json` under `PersonalDashboard.ModuleGroups`. See the [PoC](https://gerrit.wikimedia.org/r/c/mediawiki/extensions/BoilerPlate/+/1295084)'s `boilerPlate` group for a concrete example.
+**Register a named group.** For an experiment or opt-in preview, register a new group in BoilerPlate's own `./extension.json` under `PersonalDashboard.ModuleGroups`. GrowthExperiments' `home` group is a working example ([T432039](https://phabricator.wikimedia.org/T432039)).
 
-Registering the group is the platform mechanism today, but there is no stable user-facing way to switch to a non-default group. User-facing `?moduleGroup=` routing is going away as part of T430805; a dev/override affordance to select alternative groups is planned but TBD. Register the group now if it's the right structural home for an experiment; the switching affordance can come later.
+Registering the group is the platform mechanism today, but there is no stable user-facing way to switch to a non-default group. User-facing `?moduleGroup=` routing is going away as part of [T430805](https://phabricator.wikimedia.org/T430805); a dev/override affordance to select alternative groups is planned but TBD. Register the group now if it's the right structural home for an experiment; the switching affordance can come later.
 
 ## Existing modules as reference
 
-All shipped modules live in Personal Dashboard itself and use the same registration mechanism a third-party extension would.
+Personal Dashboard ships most modules itself, and GrowthExperiments ships the Mentorship module from its own tree ([T432039](https://phabricator.wikimedia.org/T432039)). All of them use the same registration mechanism a third-party extension would.
 
 - `./src/Modules/ReturnToHomepage.php`: smallest server-side module; implements `IModule` directly.
 - `./src/Modules/Banner.php`: static content from a wiki message; server-rendered (no client mount), extends `BaseModule`.
-- `./src/Modules/Impact.php`: DB-backed, passes data to Vue via `getJsData()`; extends `BaseModule`.
+- `./src/Modules/Impact.php`: DB-backed island, passes its counts to Vue via `getJsConfigVars()`; extends `BaseModule`.
 - `./src/Modules/ReviewChanges.php`: full client-side Vue module, the Review Changes experience; extends `BaseModule`.
 - `./src/Modules/Placeholder.php`: fallback used when a registered module fails to load; implements `IModule` directly.
 
 ## See also
 
-The [Extension:PersonalDashboard](https://www.mediawiki.org/wiki/Extension:PersonalDashboard) page on mediawiki.org covers the product side: what the dashboard is, which wikis it runs on, deployment history. This doc covers the code-facing side of writing a module for it.
+[`./architecture.md`](./architecture.md) covers how registration and module groups fit with the rest of the extension: the server render contract an `IModule` implements, and how a module gets routed to and opened. The [Extension:PersonalDashboard](https://www.mediawiki.org/wiki/Extension:PersonalDashboard) page on mediawiki.org covers the product side: what the dashboard is, which wikis it runs on, deployment history.

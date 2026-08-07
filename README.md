@@ -7,7 +7,7 @@ cd extensions
 git clone https://gerrit.wikimedia.org/r/mediawiki/extensions/PersonalDashboard.git
 ```
 
-For product-side background (what the dashboard is, deployment history), see [Extension:PersonalDashboard](https://www.mediawiki.org/wiki/Extension:PersonalDashboard). For writing a new module, see [./docs/modules.md](./docs/modules.md).
+For product-side background (what the dashboard is, deployment history), see [Extension:PersonalDashboard](https://www.mediawiki.org/wiki/Extension:PersonalDashboard). For the code architecture, see [./docs/architecture.md](./docs/architecture.md). For writing a new module, see [./docs/modules.md](./docs/modules.md).
 
 ## Instrumentation
 

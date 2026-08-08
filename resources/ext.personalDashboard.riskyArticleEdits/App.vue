@@ -72,7 +72,6 @@ module.exports = defineComponent( {
 	},
 	setup() {
 		const moduleRef = ref();
-		// eslint-disable-next-line compat/compat
 		const observer = new IntersectionObserver( ( entries ) => {
 			if ( entries[ 0 ].isIntersecting ) {
 				mw.hook( 'personaldashboard.recentactivity.loaded' ).fire();

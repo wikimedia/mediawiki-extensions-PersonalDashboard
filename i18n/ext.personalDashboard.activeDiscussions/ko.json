@@ -1,8 +1,17 @@
 {
 	"@metadata": {
 		"authors": [
-			"Suleiman the Magnificent Television"
+			"Suleiman the Magnificent Television",
+			"Tensama0415"
 		]
 	},
-	"personal-dashboard-active-discussions-title": "활발한 토론"
+	"personal-dashboard-active-discussions-title": "활발한 토론",
+	"personal-dashboard-active-discussions-description": "최신 토론 내용을 확인하고 다른 위키백과 편집자들과 대화에 참여하세요.",
+	"personal-dashboard-active-discussions-latest-comment": "최신 댓글:",
+	"personal-dashboard-active-discussions-today": "$1, 오늘",
+	"personal-dashboard-active-discussions-mobile-latest-comment": "최신 댓글:",
+	"personal-dashboard-active-discussions-mobile-today": "$1, 오늘",
+	"personal-dashboard-active-discussions-mobile-summary-footer-link-text": "더 보기",
+	"personal-dashboard-active-discussions-mobile-summary-footer-button-aria-label": "더 많은 활성화된 토론 둘러보기",
+	"personal-dashboard-active-discussions-progress-bar-aria-label": "활성화된 토론이 로드되고 있음을 나타내는 인라인 진행 표시줄"
 }

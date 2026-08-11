@@ -1,0 +1,16 @@
+{
+	"@metadata": {
+		"authors": [
+			"Bjankuloski06"
+		]
+	},
+	"personal-dashboard-active-discussions-title": "Тековни разговори",
+	"personal-dashboard-active-discussions-description": "Бидете во тек со најновите разговори и придружете се на разговорот со други уредници на Википедија.",
+	"personal-dashboard-active-discussions-latest-comment": "Последен коментар:",
+	"personal-dashboard-active-discussions-today": "$1, денес",
+	"personal-dashboard-active-discussions-mobile-latest-comment": "Последен коментар:",
+	"personal-dashboard-active-discussions-mobile-today": "$1, денес",
+	"personal-dashboard-active-discussions-mobile-summary-footer-link-text": "Погл. уште",
+	"personal-dashboard-active-discussions-mobile-summary-footer-button-aria-label": "Оди на поактивни дискусии",
+	"personal-dashboard-active-discussions-progress-bar-aria-label": "вградена лента за напредок што покажува дека се вчитуваат тековните разговори"
+}

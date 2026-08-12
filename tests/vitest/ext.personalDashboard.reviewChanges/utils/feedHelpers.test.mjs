@@ -4,7 +4,7 @@ import {
 	initializeEmptyFeed,
 	handleApiData,
 	normalizeFeedItem
-} from '/resources/ext.personalDashboard.riskyArticleEdits/utils/feedHelpers.js';
+} from '/resources/ext.personalDashboard.reviewChanges/utils/feedHelpers.js';
 
 function makeRawItem( overrides ) {
 	return Object.assign( {

@@ -64,8 +64,8 @@
 			"i18n/ext.personalDashboard.impact",
 			"i18n/ext.personalDashboard.onboarding",
 			"i18n/ext.personalDashboard.policiesGuidelines",
-			"i18n/ext.personalDashboard.riskyArticleEdits",
-			"i18n/ext.personalDashboard.riskyArticleEdits.mobile",
+			"i18n/ext.personalDashboard.reviewChanges",
+			"i18n/ext.personalDashboard.reviewChanges.mobile",
 			"i18n/main"
 		]
 	},
@@ -214,9 +214,9 @@
 				}
 			]
 		},
-		"ext.personalDashboard.riskyArticleEdits": {
-			"localBasePath": "resources/ext.personalDashboard.riskyArticleEdits",
-			"remoteExtPath": "PersonalDashboard/resources/personalDashboard.riskyArticleEdits",
+		"ext.personalDashboard.reviewChanges": {
+			"localBasePath": "resources/ext.personalDashboard.reviewChanges",
+			"remoteExtPath": "PersonalDashboard/resources/personalDashboard.reviewChanges",
 			"class": "MediaWiki\\ResourceLoader\\CodexModule",
 			"codexComponents": [
 				"CdxButton",
@@ -363,12 +363,12 @@
 			"description": "Show a blue dot inviting users to try out the dashboard. This has no effect if `$wgPersonalDashboardUserMenu = false` or a user does not meet the `$wgPersonalDashboardMinimum/MaximumEdits` threshold.",
 			"value": true
 		},
-		"PersonalDashboardRiskyArticleEditsMlModel": {
+		"PersonalDashboardReviewChangesMlModel": {
 			"description": "ML model used to filter edits",
 			"value": "revertrisklanguageagnostic"
 		},
-		"PersonalDashboardRiskyArticleEditsMinimumEditCount": {
-			"description": "Minimum edit count required to view the risky article edits module",
+		"PersonalDashboardReviewChangesMinimumEditCount": {
+			"description": "Minimum edit count required to view the review changes module",
 			"value": 0
 		},
 		"PersonalDashboardActiveDiscussionsPages": {
@@ -409,8 +409,8 @@
 				"ext.personalDashboard.returnToHomepage": {
 					"class": "MediaWiki\\Extension\\PersonalDashboard\\Modules\\ReturnToHomepage"
 				},
-				"ext.personalDashboard.riskyArticleEdits": {
-					"class": "MediaWiki\\Extension\\PersonalDashboard\\Modules\\RiskyArticleEdits"
+				"ext.personalDashboard.reviewChanges": {
+					"class": "MediaWiki\\Extension\\PersonalDashboard\\Modules\\ReviewChanges"
 				}
 			},
 			"ModuleGroups": {
@@ -448,7 +448,7 @@
 											"enabled": true
 										},
 										{
-											"name": "ext.personalDashboard.riskyArticleEdits",
+											"name": "ext.personalDashboard.reviewChanges",
 											"enabled": true,
 											"style": "thin"
 										},
@@ -525,7 +525,7 @@
 									"enabled": true,
 									"modules": [
 										{
-											"name": "ext.personalDashboard.riskyArticleEdits",
+											"name": "ext.personalDashboard.reviewChanges",
 											"enabled": true
 										},
 										{

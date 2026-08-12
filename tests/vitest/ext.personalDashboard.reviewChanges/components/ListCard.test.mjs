@@ -1,6 +1,6 @@
 import { test, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
-import ListCard from '/resources/ext.personalDashboard.riskyArticleEdits/components/ListCard.vue';
+import ListCard from '/resources/ext.personalDashboard.reviewChanges/components/ListCard.vue';
 
 function hasVisited( wrapper ) {
 	return wrapper.classes( 'personal-dashboard-review-changes__card--visited' );

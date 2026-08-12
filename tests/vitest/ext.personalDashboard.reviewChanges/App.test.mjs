@@ -2,7 +2,7 @@ import { vi, beforeEach, test, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
 
-vi.mock( '/resources/ext.personalDashboard.riskyArticleEdits/store/reviewChangesStore.js', () => {
+vi.mock( '/resources/ext.personalDashboard.reviewChanges/store/reviewChangesStore.js', () => {
 	const mockStore = {
 		feed: [],
 		pages: [],
@@ -14,10 +14,10 @@ vi.mock( '/resources/ext.personalDashboard.riskyArticleEdits/store/reviewChanges
 	return { useReviewChangesStore: () => mockStore };
 } );
 
-import { useReviewChangesStore } from '/resources/ext.personalDashboard.riskyArticleEdits/store/reviewChangesStore.js';
+import { useReviewChangesStore } from '/resources/ext.personalDashboard.reviewChanges/store/reviewChangesStore.js';
 const store = useReviewChangesStore();
 
-import RecentActivity from '/resources/ext.personalDashboard.riskyArticleEdits/App.vue';
+import RecentActivity from '/resources/ext.personalDashboard.reviewChanges/App.vue';
 
 // Safely ignore error: Cannot find package 'ext.checkUser.userInfoCard'
 mw.loader.using = () => {};

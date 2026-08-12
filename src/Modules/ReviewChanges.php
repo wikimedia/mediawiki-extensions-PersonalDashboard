@@ -9,9 +9,9 @@ use MediaWiki\Html\Html;
 use MediaWiki\Registration\ExtensionRegistry;
 
 /**
- * Class for the RiskyArticleEdits module.
+ * Class for the ReviewChanges module.
  */
-class RiskyArticleEdits extends BaseModule {
+class ReviewChanges extends BaseModule {
 
 	public function __construct( IContextSource $context ) {
 		parent::__construct( $context, true );
@@ -47,7 +47,7 @@ class RiskyArticleEdits extends BaseModule {
 		// fallback to ml disabled if ores isn't loaded and configured as expected
 		$config = $this->getConfig();
 		$mlDisabledConf = [
-				'wgPersonalDashboardRiskyArticleEditsMlEnabled' => false,
+				'wgPersonalDashboardReviewChangesMlEnabled' => false,
 		];
 		if (
 			!ExtensionRegistry::getInstance()->isLoaded( 'ORES' ) ||
@@ -69,11 +69,11 @@ class RiskyArticleEdits extends BaseModule {
 		];
 		// get model from url param or config
 		$models = [];
-		$requestedModel = $this->getContext()->getRequest()->getText( 'personaldashboard_riskyarticleedits_mlmodel' );
+		$requestedModel = $this->getContext()->getRequest()->getText( 'reviewchanges_mlmodel' );
 		if ( $requestedModel !== '' ) {
 			$models[] = $requestedModel;
 		}
-		$models[] = $config->get( 'PersonalDashboardRiskyArticleEditsMlModel' );
+		$models[] = $config->get( 'PersonalDashboardReviewChangesMlModel' );
 
 		// try models in decending order
 		// make the model avaiable if it is enabled and the expected filter is configured
@@ -95,8 +95,8 @@ class RiskyArticleEdits extends BaseModule {
 				continue;
 			}
 			return [
-				'wgPersonalDashboardRiskyArticleEditsMlModel' => $model,
-				'wgPersonalDashboardRiskyArticleEditsMlEnabled' => true,
+				'wgPersonalDashboardReviewChangesMlModel' => $model,
+				'wgPersonalDashboardReviewChangesMlEnabled' => true,
 			];
 		}
 		// fallback to ml disabled if no model is available
@@ -105,6 +105,6 @@ class RiskyArticleEdits extends BaseModule {
 
 	/** @inheritDoc */
 	protected function getModules(): array {
-		return [ 'ext.personalDashboard.riskyArticleEdits' ];
+		return [ 'ext.personalDashboard.reviewChanges' ];
 	}
 }

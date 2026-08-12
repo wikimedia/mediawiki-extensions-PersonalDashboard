@@ -64,7 +64,7 @@ By default BaseModule emits a card frame whose body is an empty mount slot; the 
 
 The [PoC](https://gerrit.wikimedia.org/r/c/mediawiki/extensions/BoilerPlate/+/1295084)'s `src/ModuleExample.php` extends BaseModule; `./src/Modules/Impact.php` does the same with a database-backed body.
 
-Client-side (Vue) modules are the island default: BaseModule emits the mount slot, and a matching ResourceLoader module registered under `ResourceModules` in the same extension's `./extension.json` supplies the Vue app the dashboard teleports in. The app receives a `platform` prop and derives its own detail level; it needs no PHP beyond the frame. `./src/Modules/RiskyArticleEdits.php` paired with `./resources/ext.personalDashboard.riskyArticleEdits/` is the fullest in-tree example.
+Client-side (Vue) modules are the island default: BaseModule emits the mount slot, and a matching ResourceLoader module registered under `ResourceModules` in the same extension's `./extension.json` supplies the Vue app the dashboard teleports in. The app receives a `platform` prop and derives its own detail level; it needs no PHP beyond the frame. `./src/Modules/ReviewChanges.php` paired with `./resources/ext.personalDashboard.reviewChanges/` is the fullest in-tree example.
 
 ## Show it on the dashboard
 
@@ -94,7 +94,7 @@ All shipped modules live in Personal Dashboard itself and use the same registrat
 - `./src/Modules/ReturnToHomepage.php`: smallest server-side module; implements `IModule` directly.
 - `./src/Modules/Banner.php`: static content from a wiki message; server-rendered (no client mount), extends `BaseModule`.
 - `./src/Modules/Impact.php`: DB-backed, passes data to Vue via `getJsData()`; extends `BaseModule`.
-- `./src/Modules/RiskyArticleEdits.php`: full client-side Vue module, the Review Changes experience; extends `BaseModule`.
+- `./src/Modules/ReviewChanges.php`: full client-side Vue module, the Review Changes experience; extends `BaseModule`.
 - `./src/Modules/Placeholder.php`: fallback used when a registered module fails to load; implements `IModule` directly.
 
 ## See also

@@ -454,7 +454,7 @@ abstract class BaseModule implements IModule, MessageLocalizer {
 					// * personal-dashboard-module-banner
 					// * personal-dashboard-module-impact
 					// * personal-dashboard-module-policiesGuidelines
-					// * personal-dashboard-module-riskyArticleEdits
+					// * personal-dashboard-module-reviewChanges
 					"personal-dashboard-module-$className",
 					// The following CSS classes are used here:
 					// * personal-dashboard-module--style-default

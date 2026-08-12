@@ -58,8 +58,8 @@ async function getRCParams( offset ) {
 		params.rcshow += '|unpatrolled';
 		params.grcshow += '|unpatrolled';
 	}
-	if ( mw.config.get( 'wgPersonalDashboardRiskyArticleEditsMlEnabled' ) === true ) {
-		const model = mw.config.get( 'wgPersonalDashboardRiskyArticleEditsMlModel' );
+	if ( mw.config.get( 'wgPersonalDashboardReviewChangesMlEnabled' ) === true ) {
+		const model = mw.config.get( 'wgPersonalDashboardReviewChangesMlModel' );
 		// The filter values are only accepted by the API when ORES has registered
 		// the underlying model, surfaced via wgOresModels.
 		const oresModels = mw.config.get( 'wgOresModels' ) || {};

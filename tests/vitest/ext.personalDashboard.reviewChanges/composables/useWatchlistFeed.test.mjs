@@ -12,7 +12,7 @@ vi.mock( 'ext.personalDashboard.common', () => ( {
 	}
 } ) );
 
-import { useWatchlistFeed } from '/resources/ext.personalDashboard.riskyArticleEdits/composables/useWatchlistFeed.js';
+import { useWatchlistFeed } from '/resources/ext.personalDashboard.reviewChanges/composables/useWatchlistFeed.js';
 
 function makeRawWatchlistItem( overrides ) {
 	return Object.assign( {

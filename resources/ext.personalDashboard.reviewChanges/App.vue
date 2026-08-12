@@ -103,7 +103,7 @@ module.exports = defineComponent( {
 
 .personal-dashboard {
 	&-module {
-		&-riskyArticleEdits &-section-body {
+		&-reviewChanges &-section-body {
 			margin: @spacing-0;
 		}
 	}

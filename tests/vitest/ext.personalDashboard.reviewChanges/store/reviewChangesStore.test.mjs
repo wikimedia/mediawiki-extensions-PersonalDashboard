@@ -7,18 +7,18 @@ const { mockFetchWatchlistItems, mockFetchRecentChangesItems } = vi.hoisted( () 
 } ) );
 
 vi.mock(
-	'/resources/ext.personalDashboard.riskyArticleEdits/composables/useWatchlistFeed.js',
+	'/resources/ext.personalDashboard.reviewChanges/composables/useWatchlistFeed.js',
 	() => ( { useWatchlistFeed: () => ( { fetchWatchlistItems: mockFetchWatchlistItems } ) } )
 );
 
 vi.mock(
-	'/resources/ext.personalDashboard.riskyArticleEdits/composables/useRecentChangesFeed.js',
+	'/resources/ext.personalDashboard.reviewChanges/composables/useRecentChangesFeed.js',
 	() => ( {
 		useRecentChangesFeed: () => ( { fetchRecentChangesItems: mockFetchRecentChangesItems } )
 	} )
 );
 
-import { useReviewChangesStore } from '/resources/ext.personalDashboard.riskyArticleEdits/store/reviewChangesStore.js';
+import { useReviewChangesStore } from '/resources/ext.personalDashboard.reviewChanges/store/reviewChangesStore.js';
 
 function makeFeedItem( overrides ) {
 	return Object.assign( {

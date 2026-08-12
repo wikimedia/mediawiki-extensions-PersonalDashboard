@@ -12,7 +12,7 @@ vi.mock( 'ext.personalDashboard.common', () => ( {
 	}
 } ) );
 
-import { useRecentChangesFeed } from '/resources/ext.personalDashboard.riskyArticleEdits/composables/useRecentChangesFeed.js';
+import { useRecentChangesFeed } from '/resources/ext.personalDashboard.reviewChanges/composables/useRecentChangesFeed.js';
 
 function makeRawRCItem( overrides ) {
 	return Object.assign( {
@@ -42,8 +42,8 @@ function makeApiResponse( items, pages, continueToken ) {
 
 beforeEach( () => {
 	mw.user.getRights = () => [];
-	mw.config.set( 'wgPersonalDashboardRiskyArticleEditsMlEnabled', false );
-	mw.config.set( 'wgPersonalDashboardRiskyArticleEditsMlModel', null );
+	mw.config.set( 'wgPersonalDashboardReviewChangesMlEnabled', false );
+	mw.config.set( 'wgPersonalDashboardReviewChangesMlModel', null );
 	mw.config.set( 'wgOresModels', null );
 } );
 
@@ -239,8 +239,8 @@ describe( 'API params', () => {
 	} );
 
 	test( 'adds revertrisklanguageagnostic filter when ML model is set and model is available', async () => {
-		mw.config.set( 'wgPersonalDashboardRiskyArticleEditsMlEnabled', true );
-		mw.config.set( 'wgPersonalDashboardRiskyArticleEditsMlModel', 'revertrisklanguageagnostic' );
+		mw.config.set( 'wgPersonalDashboardReviewChangesMlEnabled', true );
+		mw.config.set( 'wgPersonalDashboardReviewChangesMlModel', 'revertrisklanguageagnostic' );
 		mw.config.set( 'wgOresModels', { revertrisklanguageagnostic: {} } );
 		let capturedParams = null;
 		mw.Api.mock( ( params ) => {
@@ -256,8 +256,8 @@ describe( 'API params', () => {
 	} );
 
 	test( 'adds oresreview filter when ML model is damaging and model is available', async () => {
-		mw.config.set( 'wgPersonalDashboardRiskyArticleEditsMlEnabled', true );
-		mw.config.set( 'wgPersonalDashboardRiskyArticleEditsMlModel', 'damaging' );
+		mw.config.set( 'wgPersonalDashboardReviewChangesMlEnabled', true );
+		mw.config.set( 'wgPersonalDashboardReviewChangesMlModel', 'damaging' );
 		mw.config.set( 'wgOresModels', { damaging: {} } );
 		let capturedParams = null;
 		mw.Api.mock( ( params ) => {
@@ -273,8 +273,8 @@ describe( 'API params', () => {
 	} );
 
 	test( 'does not add ML filters when the requested model is not registered in wgOresModels', async () => {
-		mw.config.set( 'wgPersonalDashboardRiskyArticleEditsMlEnabled', true );
-		mw.config.set( 'wgPersonalDashboardRiskyArticleEditsMlModel', 'revertrisklanguageagnostic' );
+		mw.config.set( 'wgPersonalDashboardReviewChangesMlEnabled', true );
+		mw.config.set( 'wgPersonalDashboardReviewChangesMlModel', 'revertrisklanguageagnostic' );
 		mw.config.set( 'wgOresModels', {} );
 		let capturedParams = null;
 		mw.Api.mock( ( params ) => {
@@ -290,7 +290,7 @@ describe( 'API params', () => {
 	} );
 
 	test( 'does not add ML filters when ML is disabled', async () => {
-		mw.config.set( 'wgPersonalDashboardRiskyArticleEditsMlEnabled', false );
+		mw.config.set( 'wgPersonalDashboardReviewChangesMlEnabled', false );
 		let capturedParams = null;
 		mw.Api.mock( ( params ) => {
 			capturedParams = params;

@@ -106,6 +106,11 @@ class SpecialPersonalDashboard extends SpecialPage {
 						continue;
 					}
 
+					if ( $resolved instanceof BaseModule ) {
+						$resolved->setStyles( $module['style'] ?? 'default',
+							$module['styleMobile'] ?? 'default' );
+					}
+
 					foreach ( $this->getModuleJsDataSafe( $resolved ) as $key => $value ) {
 						$module[ $key ] = $value;
 					}

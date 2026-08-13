@@ -27,20 +27,6 @@ class RiskyArticleEdits extends BaseModule {
 		return $this->msg( 'personal-dashboard-risky-article-edits-subheader-info' )->text();
 	}
 
-	/** @inheritDoc */
-	protected function shouldHeaderIncludeIcon(): bool {
-		return false;
-	}
-
-	/** @inheritDoc */
-	protected function getHeader(): string {
-		$html = $this->getHeaderTextElement();
-		if ( $this->shouldHeaderIncludeIcon() ) {
-			$html .= $this->getHeaderIcon();
-		}
-		return $html;
-	}
-
 	/**
 	 * The no-JS fallback footer: a plain link into recent changes, shown on every
 	 * viewport when JS is off. With JS the client renders its own detail-branched

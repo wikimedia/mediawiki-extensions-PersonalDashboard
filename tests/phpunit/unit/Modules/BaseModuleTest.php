@@ -7,6 +7,7 @@ namespace MediaWiki\Extension\PersonalDashboard\Tests\Unit\Modules;
 use MediaWiki\Context\IContextSource;
 use MediaWiki\Extension\PersonalDashboard\Modules\BaseModule;
 use MediaWiki\Message\Message;
+use MediaWiki\Title\Title;
 use MediaWikiUnitTestCase;
 
 /**
@@ -18,11 +19,16 @@ class BaseModuleTest extends MediaWikiUnitTestCase {
 	// distinctive body sentinel, and public pass-throughs for the protected render
 	// helpers under test. Anonymous so the file keeps to one named class.
 	private function newModule( bool $shouldWrapModuleWithLink = false ) {
-		$message = $this->createMock( Message::class );
-		$message->method( 'text' )->willReturn( '' );
-
 		$context = $this->createMock( IContextSource::class );
-		$context->method( 'msg' )->willReturn( $message );
+		$context->method( 'msg' )->willReturnCallback( function ( $key ) {
+			$message = $this->createMock( Message::class );
+			$message->method( 'text' )->willReturn( 'msg-' . $key );
+			return $message;
+		} );
+
+		$title = $this->createMock( Title::class );
+		$title->method( 'getLinkURL' )->willReturn( '/wiki/Special:PersonalDashboard' );
+		$context->method( 'getTitle' )->willReturn( $title );
 
 		return new class(
 			$context,
@@ -30,9 +36,15 @@ class BaseModuleTest extends MediaWikiUnitTestCase {
 		) extends BaseModule {
 
 			public bool $serverRenderedFlag = false;
+			public string $headerTextValue = '';
+			public string $subheaderTextValue = '';
 
 			protected function getHeaderText(): string {
-				return '';
+				return $this->headerTextValue;
+			}
+
+			protected function getSubheaderText(): string {
+				return $this->subheaderTextValue;
 			}
 
 			protected function serverRendered(): bool {
@@ -53,6 +65,10 @@ class BaseModuleTest extends MediaWikiUnitTestCase {
 
 			public function callBuildModuleWrapper( string ...$sections ): string {
 				return $this->buildModuleWrapper( ...$sections );
+			}
+
+			public function callGetHtml(): string {
+				return $this->getHtml();
 			}
 		};
 	}
@@ -105,5 +121,81 @@ class BaseModuleTest extends MediaWikiUnitTestCase {
 		$this->assertStringContainsString( 'data-module-name="impact"', $html );
 		$this->assertStringNotContainsString( 'personal-dashboard-module-anchor', $html );
 		$this->assertStringNotContainsString( 'data-platform', $html );
+	}
+
+	public function testCardHeaderLinksToFocusedPageAndIsNamedByItsText() {
+		$module = $this->newModule( true );
+		$module->setName( 'impact' );
+		$module->headerTextValue = 'Impact';
+
+		$html = $module->callGetHtml();
+
+		$this->assertStringContainsString(
+			'href="/wiki/Special:PersonalDashboard/impact"', $html );
+		$this->assertStringContainsString(
+			'class="personal-dashboard-module-header-container"', $html );
+		$this->assertStringContainsString(
+			'personal-dashboard-module-header-forward-icon', $html );
+		$this->assertStringContainsString( '>Impact<', $html );
+		// The visible text names the link, so an aria-label would only override it.
+		$this->assertStringNotContainsString( 'aria-label', $html );
+	}
+
+	public function testHeaderlessCardHeaderKeepsArrowAndCarriesAccessibleName() {
+		$module = $this->newModule( true );
+		$module->setName( 'banner' );
+		$module->headerTextValue = '';
+
+		$html = $module->callGetHtml();
+
+		$this->assertStringContainsString(
+			'personal-dashboard-module-header-forward-icon', $html );
+		$this->assertStringContainsString(
+			'aria-label="msg-personal-dashboard-open-module"', $html );
+		$this->assertStringNotContainsString(
+			'personal-dashboard-module-header-text', $html );
+	}
+
+	public function testCardHeaderIsPlainContainerWhenLinkWrappingIsOff() {
+		$module = $this->newModule();
+		$module->setName( 'impact' );
+		$module->headerTextValue = 'Impact';
+
+		$html = $module->callGetHtml();
+
+		$this->assertStringContainsString( '>Impact<', $html );
+		$this->assertStringNotContainsString( '<a', $html );
+		$this->assertStringNotContainsString(
+			'personal-dashboard-module-header-forward-icon', $html );
+	}
+
+	public function testFocusedRenderUsesBackLinkAndDropsSubheader() {
+		$module = $this->newModule();
+		$module->setName( 'impact' );
+		$module->headerTextValue = 'Impact';
+		$module->subheaderTextValue = 'SUBHEADER_SENTINEL';
+		$module->setBackLink( '<a id="BACK_SENTINEL"></a>' );
+		$module->setFocused( true );
+
+		$html = $module->callGetHtml();
+
+		$this->assertStringContainsString( 'BACK_SENTINEL', $html );
+		$this->assertStringContainsString(
+			'personal-dashboard-module-header-info-icon', $html );
+		$this->assertStringContainsString( 'personal-dashboard-module--focused', $html );
+		$this->assertStringNotContainsString( 'SUBHEADER_SENTINEL', $html );
+		$this->assertStringNotContainsString(
+			'personal-dashboard-module-header-forward-icon', $html );
+	}
+
+	public function testWrapperCarriesDesktopAndMobileStyleClasses() {
+		$module = $this->newModule();
+		$module->setName( 'impact' );
+		$module->setStyles( 'thin', 'none' );
+
+		$html = $module->callBuildModuleWrapper( '<span>x</span>' );
+
+		$this->assertStringContainsString( 'personal-dashboard-module--style-thin', $html );
+		$this->assertStringContainsString( 'personal-dashboard-module--style-mobile-none', $html );
 	}
 }

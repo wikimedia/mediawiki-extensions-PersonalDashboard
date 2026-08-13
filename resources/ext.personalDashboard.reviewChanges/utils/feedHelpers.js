@@ -7,9 +7,13 @@
  */
 
 /**
+ * @typedef {'recentchanges'|'watchlist'|'recentlyedited'} FeedSource
+ */
+
+/**
  * @typedef {Object} FeedItem
  * @property {string}   id          Unique identifier (e.g. "watchlist-1001")
- * @property {string}   feedorigin  Feed source key: 'watchlist' | 'recentchanges'
+ * @property {FeedSource} feedorigin Feed source key
  * @property {string}   title       Page title
  * @property {number}   revid       Revision ID
  * @property {number}   pageid      Page ID
@@ -26,18 +30,10 @@
  */
 
 /**
- * Tags that indicate an edit has already been reviewed and should be excluded
- * from the feed.
- *
- * @type {string[]}
- */
-const EXCLUDE_TAGS = [ 'mw-reverted', 'mw-rollback', 'mw-undo' ];
-
-/**
  * Build an empty feed response for a given source, used as a safe fallback
  * when the API returns nothing usable.
  *
- * @param {string} feed 'recentchanges' | 'watchlist'
+ * @param {FeedSource} feed
  * @return {Object}
  */
 function initializeEmptyFeed( feed ) {
@@ -55,11 +51,19 @@ function initializeEmptyFeed( feed ) {
  *
  * @param {Object|null} data  Raw API response
  * @param {number}      limit Maximum number of items (used only for fallback context)
- * @param {string}      feed  'recentchanges' | 'watchlist'
+ * @param {FeedSource}  feed
  * @param {Function}    parseApiStatus From ext.personalDashboard.common utils
  * @return {Object}
  */
 function handleApiData( data, limit, feed, parseApiStatus ) {
+	/**
+	 * Tags that indicate an edit has already been reviewed and should be excluded
+	 * from the feed.
+	 *
+	 * @type {string[]}
+	 */
+	const EXCLUDED_TAGS = mw.config.get( 'wgPersonalDashboardReviewChangesExcludedTags' );
+
 	if ( !data ) {
 		return initializeEmptyFeed( feed );
 	}
@@ -77,7 +81,7 @@ function handleApiData( data, limit, feed, parseApiStatus ) {
 
 	const filteredResultsWithFeedOrigin = data.query[ feed ]
 		.filter(
-			( change ) => !EXCLUDE_TAGS.some(
+			( change ) => !EXCLUDED_TAGS.some(
 				( tag ) => ( change.tags || [] ).includes( tag )
 			)
 		)
@@ -97,8 +101,8 @@ function handleApiData( data, limit, feed, parseApiStatus ) {
  * Handles both watchlist and recentchanges responses since both APIs
  * return the same field names when equivalent props are requested.
  *
- * @param {Object} raw    Raw API entry (already stamped with feedorigin)
- * @param {string} source Feed source key, e.g. 'watchlist' | 'recentchanges'
+ * @param {Object} raw Raw API entry (already stamped with feedorigin)
+ * @param {FeedSource} source
  * @return {FeedItem}
  */
 function normalizeFeedItem( raw, source ) {
@@ -106,14 +110,14 @@ function normalizeFeedItem( raw, source ) {
 		id: source + '-' + raw.revid,
 		feedorigin: source,
 		title: raw.title,
-		revid: raw.revid,
-		pageid: raw.pageid,
+		revid: Number( raw.revid ),
+		pageid: Number( raw.pageid ),
 		// eslint-disable-next-line camelcase
-		old_revid: raw.old_revid || null,
+		old_revid: Number( raw.old_revid ) || null,
 		user: raw.user || '',
 		timestamp: raw.timestamp,
-		newlen: raw.newlen || 0,
-		oldlen: raw.oldlen || 0,
+		newlen: Number( raw.newlen ) || 0,
+		oldlen: Number( raw.oldlen ) || 0,
 		parsedcomment: raw.parsedcomment || '',
 		minor: Boolean( raw.minor ),
 		bot: Boolean( raw.bot ),
@@ -122,8 +126,74 @@ function normalizeFeedItem( raw, source ) {
 	};
 }
 
+/**
+ * Order feed items newest first.
+ *
+ * @param {FeedItem} a
+ * @param {FeedItem} b
+ * @return {number}
+ */
+function byTimestampDesc( a, b ) {
+	return b.timestamp.localeCompare( a.timestamp );
+}
+
+/**
+ * Select up to `limit` items spread as evenly as possible across the feed sources.
+ *
+ * Sources are drawn from round-robin — newest first within each source — so every
+ * source gets an equal share of the feed rather than whichever source happens to
+ * be busiest crowding the others out. A source that runs dry drops out of the
+ * rotation and the others take up its share, so a quiet watchlist doesn't leave
+ * the feed short.
+ *
+ * Titles are deduplicated across sources: the same page can legitimately show up
+ * in more than one source (a page you edited that is also on your watchlist), and
+ * a source that loses an item this way draws its next one instead, so its share
+ * stays intact.
+ *
+ * When the limit doesn't divide evenly the earlier sources get the extra slots,
+ * so pass them in priority order.
+ *
+ * @param {FeedItem[][]} sources One array of items per feed source, in priority order.
+ * @param {number} limit Maximum number of items to return.
+ * @return {FeedItem[]} Selected items, newest first.
+ */
+function selectEvenlyAcrossFeeds( sources, limit ) {
+	const queues = sources.map( ( items ) => items.slice().sort( byTimestampDesc ) );
+	const cursors = queues.map( () => 0 );
+	const seenTitles = new Set();
+	const selected = [];
+
+	let drewAnItem = true;
+	while ( selected.length < limit && drewAnItem ) {
+		drewAnItem = false;
+
+		for ( let i = 0; i < queues.length && selected.length < limit; i++ ) {
+			// Skip past anything another source already contributed.
+			while (
+				cursors[ i ] < queues[ i ].length &&
+				seenTitles.has( queues[ i ][ cursors[ i ] ].title )
+			) {
+				cursors[ i ]++;
+			}
+
+			if ( cursors[ i ] >= queues[ i ].length ) {
+				continue;
+			}
+
+			const item = queues[ i ][ cursors[ i ]++ ];
+			seenTitles.add( item.title );
+			selected.push( item );
+			drewAnItem = true;
+		}
+	}
+
+	return selected.sort( byTimestampDesc );
+}
+
 module.exports = {
 	initializeEmptyFeed,
 	handleApiData,
-	normalizeFeedItem
+	normalizeFeedItem,
+	selectEvenlyAcrossFeeds
 };

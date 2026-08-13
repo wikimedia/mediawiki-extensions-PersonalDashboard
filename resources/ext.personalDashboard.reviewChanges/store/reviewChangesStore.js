@@ -5,15 +5,17 @@
  *
  * Intentionally thin: all API logic, param-building, pagination, and
  * normalization lives in the composables and feedHelpers. The store's
- * only job is to coordinate the two sources, merge their output, and
+ * only job is to coordinate the sources, merge their output, and
  * expose reactive state to the UI.
  */
 
 const { defineStore } = require( 'pinia' );
 const { useWatchlistFeed } = require( '../composables/useWatchlistFeed.js' );
 const { useRecentChangesFeed } = require( '../composables/useRecentChangesFeed.js' );
+const { useRecentlyEditedFeed } = require( '../composables/useRecentlyEditedFeed.js' );
+const { selectEvenlyAcrossFeeds } = require( '../utils/feedHelpers.js' );
 
-const NUM_FEEDS = 2;
+const NUM_FEEDS = 3;
 const MAX_API_REQUESTS = 10;
 
 const useReviewChangesStore = defineStore( 'reviewChanges', {
@@ -55,11 +57,16 @@ const useReviewChangesStore = defineStore( 'reviewChanges', {
 
 	actions: {
 		/**
-		 * Fetch and merge the RC and watchlist feeds, then
-		 * commit the result to state.
+		 * Fetch the watchlist, recent changes and recently-edited feeds, merge
+		 * them into a roughly even split of the available slots, then commit the
+		 * result to state.
 		 *
 		 * Watchlist titles are passed to the RC composable so it can exclude
 		 * duplicates before sampling.
+		 *
+		 * Each source is asked for more than its share where that is cheap, so
+		 * selectEvenlyAcrossFeeds has something to backfill with when another
+		 * source comes up short.
 		 *
 		 * @param {number} limit Total number of feed items to display
 		 * @return {Promise<void>}
@@ -72,6 +79,7 @@ const useReviewChangesStore = defineStore( 'reviewChanges', {
 
 			const { fetchWatchlistItems } = useWatchlistFeed();
 			const { fetchRecentChangesItems } = useRecentChangesFeed();
+			const { fetchRecentlyEditedItems } = useRecentlyEditedFeed();
 
 			try {
 				const wlItems = await fetchWatchlistItems( perFeedLimit, MAX_API_REQUESTS );
@@ -83,10 +91,11 @@ const useReviewChangesStore = defineStore( 'reviewChanges', {
 					amountToFill, MAX_API_REQUESTS, wlTitles
 				);
 
-				const merged = rcItems.concat( wlItems );
-				merged.sort( ( a, b ) => b.timestamp.localeCompare( a.timestamp ) );
+				// These are prefetched server-side, so sampling more than a third
+				// costs nothing and leaves room to backfill the other sources.
+				const reItems = fetchRecentlyEditedItems( limit );
 
-				this.feed = merged.slice( 0, limit );
+				this.feed = selectEvenlyAcrossFeeds( [ rcItems, wlItems, reItems ], limit );
 				this.pages = pages;
 			} catch ( err ) {
 				mw.log.error( err.message );

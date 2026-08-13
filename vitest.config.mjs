@@ -8,5 +8,9 @@ export default defineConfig( {
 			'mediawiki.DateFormatter': '/tests/vitest/mocks/mediawiki.DateFormatter.mjs',
 			'ext.personalDashboard.common': '/tests/vitest/mocks/ext.personalDashboard.common.mjs'
 		}
+	},
+	test: {
+		// Merged with (not replacing) the plugin's own setup file.
+		setupFiles: [ './tests/vitest/setup.mjs' ]
 	}
 } );

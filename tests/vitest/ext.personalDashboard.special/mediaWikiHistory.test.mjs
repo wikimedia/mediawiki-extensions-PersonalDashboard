@@ -31,8 +31,13 @@ test( 'titleFromLocation decodes a percent-encoded short path', () => {
 		.toBe( 'Special:PersonalDashboard/a b' );
 } );
 
+// The tests below stub `mw` with just the slice of the API under test. Put the
+// shared stub from tests/vitest/setup.mjs back afterwards rather than calling
+// vi.unstubAllGlobals(), which would leave `mw` undefined for everything after it.
+const sharedMw = mw;
+
 afterEach( () => {
-	vi.unstubAllGlobals();
+	vi.stubGlobal( 'mw', sharedMw );
 } );
 
 test( 'hrefFor preserves the long index.php form and appends the hash', () => {

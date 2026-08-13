@@ -4,17 +4,121 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Extension\PersonalDashboard\Modules;
 
+use MediaWiki\ChangeTags\ChangeTags;
+use MediaWiki\CommentFormatter\CommentFormatter;
 use MediaWiki\Context\IContextSource;
 use MediaWiki\Html\Html;
+use MediaWiki\RecentChanges\ChangesListQuery\ChangesListQuery;
+use MediaWiki\RecentChanges\ChangesListQuery\ChangesListQueryFactory;
+use MediaWiki\RecentChanges\RecentChange;
 use MediaWiki\Registration\ExtensionRegistry;
+use MediaWiki\Revision\RevisionRecord;
+use MediaWiki\Title\Title;
+use Wikimedia\Rdbms\IConnectionProvider;
+use Wikimedia\Rdbms\IReadableDatabase;
+use Wikimedia\Timestamp\TimestampFormat;
 
 /**
  * Class for the ReviewChanges module.
  */
 class ReviewChanges extends BaseModule {
 
-	public function __construct( IContextSource $context ) {
+	private const int RECENTLY_EDITED_PAGES_LIMIT = 50;
+	private const int REVIEW_CHANGES_LIMIT = 100;
+	private const array EXCLUDED_TAGS = [
+		ChangeTags::TAG_REVERTED,
+		ChangeTags::TAG_UNDO,
+		ChangeTags::TAG_ROLLBACK,
+	];
+
+	private IReadableDatabase $dbr;
+
+	public function __construct(
+		IContextSource $context,
+		IConnectionProvider $connectionProvider,
+		private readonly ChangesListQueryFactory $changesListQueryFactory,
+		private readonly CommentFormatter $commentFormatter,
+	) {
+		$this->dbr = $connectionProvider->getReplicaDatabase();
 		parent::__construct( $context, true );
+	}
+
+	/**
+	 * Fetch recent changes to pages that the user has recently edited,
+	 * excluding their own edits, bot edits, and reverted edits.
+	 *
+	 * @return array FeedItem-format to be consumed by the useRecentlyEditedFeed composable.
+	 */
+	private function getRecentlyEditedItems(): array {
+		$actorId = $this->getUser()->getActorId();
+		if ( !$actorId ) {
+			return [];
+		}
+
+		$pagesRecentlyEdited = $this->dbr->newSelectQueryBuilder()
+			->distinct()
+			->select( 'rev_page' )
+			->from( 'revision' )
+			->where( [ 'rev_actor' => $actorId ] )
+			->orderBy( 'rev_timestamp DESC' )
+			->limit( self::RECENTLY_EDITED_PAGES_LIMIT )
+			->caller( __METHOD__ )
+			->fetchFieldValues();
+
+		if ( !$pagesRecentlyEdited ) {
+			return [];
+		}
+
+		$result = $this->changesListQueryFactory->newQuery()
+			->audience( $this->getUser() )
+			->recentChangeFields()
+			->addChangeTagSummaryField()
+			->requireLatest()
+			->excludeUser( $this->getUser() )
+			->excludeChangeTags( self::EXCLUDED_TAGS )
+			->excludeDeletedUser()
+			->excludeDeletedLogAction()
+			->where( $this->dbr->andExpr( [
+				$this->dbr->expr( 'rc_cur_id', '=', $pagesRecentlyEdited ),
+				$this->dbr->expr( 'rc_source', '=', RecentChange::SRC_EDIT ),
+				$this->dbr->expr( 'rc_bot', '=', 0 ),
+			] ) )
+			->orderBy( ChangesListQuery::SORT_TIMESTAMP_DESC )
+			->limit( self::REVIEW_CHANGES_LIMIT )
+			->caller( __METHOD__ )
+			->fetchResult()
+			->getResultWrapper();
+
+		// Reconstruct the result into the FeedItem format consumable by <list-card> in Vue.
+		$revs = [];
+		foreach ( $result as $row ) {
+			// TODO: Clientside should be aware the summary is hidden
+			//   and show a muted 'revdelete-summary-hid' message
+			$parsedComment = '';
+			if ( RevisionRecord::userCanBitfield(
+				$row->rc_deleted, RevisionRecord::DELETED_COMMENT, $this->getUser() )
+			) {
+				$parsedComment = $this->commentFormatter->format( $row->rc_comment_text ?? '' );
+			}
+
+			$revs[] = [
+				'title' => Title::makeTitle( $row->rc_namespace, $row->rc_title )->getPrefixedText(),
+				'revid' => $row->rc_this_oldid,
+				'pageid' => $row->rc_cur_id,
+				'old_revid' => $row->rc_last_oldid,
+				'user' => $row->rc_user_text,
+				'timestamp' => wfTimestamp( TimestampFormat::ISO_8601, $row->rc_timestamp ),
+				'newlen' => $row->rc_new_len,
+				'oldlen' => $row->rc_old_len,
+				'parsedcomment' => $parsedComment,
+				'minor' => (bool)$row->rc_minor,
+				'bot' => (bool)$row->rc_bot,
+				'new' => $row->rc_source === RecentChange::SRC_NEW,
+				'tags' => $row->ts_tags ? explode( ',', $row->ts_tags ) : [],
+			];
+		}
+
+		return $revs;
 	}
 
 	/** @inheritDoc */
@@ -44,10 +148,14 @@ class ReviewChanges extends BaseModule {
 
 	/** @inheritDoc */
 	public function getJsConfigVars(): array {
+		$recentlyEditedItems = $this->getRecentlyEditedItems();
+
 		// fallback to ml disabled if ores isn't loaded and configured as expected
 		$config = $this->getConfig();
 		$mlDisabledConf = [
-				'wgPersonalDashboardReviewChangesMlEnabled' => false,
+			'wgPersonalDashboardReviewChangesMlEnabled' => false,
+			'wgPersonalDashboardReviewChangesExcludedTags' => self::EXCLUDED_TAGS,
+			'wgPersonalDashboardRecentlyEditedItems' => $recentlyEditedItems,
 		];
 		if (
 			!ExtensionRegistry::getInstance()->isLoaded( 'ORES' ) ||
@@ -97,6 +205,8 @@ class ReviewChanges extends BaseModule {
 			return [
 				'wgPersonalDashboardReviewChangesMlModel' => $model,
 				'wgPersonalDashboardReviewChangesMlEnabled' => true,
+				'wgPersonalDashboardReviewChangesExcludedTags' => self::EXCLUDED_TAGS,
+				'wgPersonalDashboardRecentlyEditedItems' => $recentlyEditedItems,
 			];
 		}
 		// fallback to ml disabled if no model is available

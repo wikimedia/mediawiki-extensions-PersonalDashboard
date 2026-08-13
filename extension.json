@@ -233,6 +233,7 @@
 				"store/reviewChangesStore.js",
 				"composables/useWatchlistFeed.js",
 				"composables/useRecentChangesFeed.js",
+				"composables/useRecentlyEditedFeed.js",
 				"utils/feedHelpers.js",
 				{
 					"name": "icons.json",
@@ -410,7 +411,12 @@
 					"class": "MediaWiki\\Extension\\PersonalDashboard\\Modules\\ReturnToHomepage"
 				},
 				"ext.personalDashboard.reviewChanges": {
-					"class": "MediaWiki\\Extension\\PersonalDashboard\\Modules\\ReviewChanges"
+					"class": "MediaWiki\\Extension\\PersonalDashboard\\Modules\\ReviewChanges",
+					"services": [
+						"ConnectionProvider",
+						"ChangesListQueryFactory",
+						"CommentFormatter"
+					]
 				}
 			},
 			"ModuleGroups": {

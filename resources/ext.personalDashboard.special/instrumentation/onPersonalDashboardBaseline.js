@@ -14,14 +14,22 @@ if (
 		);
 		instrument.submitInteraction( 'pageview' );
 
+		// One friendly name per feed source, so clicks are attributed to the
+		// source the item actually came from. Anything unrecognised falls back
+		// to the generic diff name rather than being lumped in with a specific
+		// source and skewing that source's click-through rate.
+		const friendlyNameDiff = 'Personal Dashboard diff link';
+		const friendlyNamesByOrigin = {
+			recentchanges: friendlyNameDiff,
+			watchlist: 'Personal Dashboard watched diff link',
+			recentlyedited: 'Personal Dashboard recently edited diff link'
+		};
+
 		function instrumentReviewChangesLinks( selector ) {
 			const links = document.querySelectorAll( selector );
-			const friendlyNameDiff = 'Personal Dashboard diff link';
-			const friendlyNameWatchlist = 'Personal Dashboard watched diff link';
 			for ( const [ i, link ] of links.entries() ) {
 				const origin = link.dataset.feedorigin;
-				const friendlyName = origin === 'recentchanges' ?
-					friendlyNameDiff : friendlyNameWatchlist;
+				const friendlyName = friendlyNamesByOrigin[ origin ] || friendlyNameDiff;
 				ClickThroughRateInstrument.start(
 					selector + ':nth-of-type(' + ( i + 1 ) + ')',
 					friendlyName,

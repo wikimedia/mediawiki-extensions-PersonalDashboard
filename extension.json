@@ -449,11 +449,13 @@
 										},
 										{
 											"name": "ext.personalDashboard.riskyArticleEdits",
-											"enabled": true
+											"enabled": true,
+											"style": "thin"
 										},
 										{
 											"name": "ext.personalDashboard.activeDiscussions",
-											"enabled": true
+											"enabled": true,
+											"style": "thin"
 										}
 									]
 								}

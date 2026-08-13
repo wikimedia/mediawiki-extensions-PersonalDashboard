@@ -42,6 +42,12 @@ abstract class BaseModule implements IModule, MessageLocalizer {
 	 */
 	private string $backLink = '';
 
+	/** @var string Style of the module card on desktop */
+	protected string $styleDesktop = 'default';
+
+	/** @var string Style of the module card on mobile */
+	protected string $styleMobile = 'default';
+
 	/**
 	 * @param IContextSource $context
 	 * @param bool $shouldWrapModuleWithLink
@@ -65,6 +71,15 @@ abstract class BaseModule implements IModule, MessageLocalizer {
 	/** @inheritDoc */
 	public function setName( string $name ): void {
 		$this->name = $name;
+	}
+
+	/**
+	 * Sets the module card style for desktop and mobile.
+	 * Possible values are: default, thin, none
+	 */
+	public function setStyles( string $desktop, string $mobile ): void {
+		$this->styleDesktop = $desktop;
+		$this->styleMobile = $mobile;
 	}
 
 	/**
@@ -123,13 +138,49 @@ abstract class BaseModule implements IModule, MessageLocalizer {
 	}
 
 	/**
+	 * @return string The header for a summary card render: the dashboard-provided
+	 * forward link, then the module's own header so the card matches its focused
+	 * view (including any icon or enrichment getHeader() adds). A headerless module
+	 * (its title is empty) still gets the forward link, labelled instead of named
+	 * by its text.
+	 */
+	protected function getCardHeader(): string {
+		$tag = 'div';
+		$attribs = [ 'class' => 'personal-dashboard-module-header-container' ];
+		$header = $this->getHeader();
+
+		if ( $this->shouldWrapModuleWithLink() ) {
+			$tag = 'a';
+			$attribs['href'] = $this->getContext()->getTitle()->getLinkURL() . '/' . $this->name;
+
+			// Without a header the arrow icon is the link's only content, leaving
+			// nothing for a screen reader to announce.
+			if ( !$header ) {
+				$attribs['aria-label'] = $this->msg( 'personal-dashboard-open-module' )->text();
+			}
+
+			$header .= Html::element( 'div', [
+				'class' => 'personal-dashboard-module-header-forward-icon'
+			] );
+		}
+
+		return Html::rawElement( $tag, $attribs, $header );
+	}
+
+	/**
 	 * @return string The header for a focused whole-page render: the page-provided
 	 * back link, then the module's own header so the focused view matches its card
 	 * (including any icon or enrichment getHeader() adds). A headerless module (its
 	 * title is empty) still gets the back link with no stray empty header.
 	 */
 	protected function getFocusedHeader(): string {
-		return $this->backLink . ( $this->getHeaderText() ? $this->getHeader() : '' );
+		return Html::rawElement(
+			'div',
+			[ 'class' => 'personal-dashboard-module-header-container' ],
+			$this->backLink . $this->getHeader() . Html::element( 'div', [
+				'class' => 'personal-dashboard-module-header-info-icon'
+			] )
+		);
 	}
 
 	/**
@@ -215,7 +266,9 @@ abstract class BaseModule implements IModule, MessageLocalizer {
 	 * @return string[] Additional CSS classes
 	 */
 	protected function getCssClasses(): array {
-		return [];
+		return $this->isFocused() ? [
+			'personal-dashboard-module--focused'
+		] : [];
 	}
 
 	/**
@@ -343,10 +396,14 @@ abstract class BaseModule implements IModule, MessageLocalizer {
 	 * @return string
 	 */
 	protected function getHtml(): string {
-		$header = $this->isFocused() ? $this->getFocusedHeader() : $this->getHeader();
+		$header = $this->isFocused() ?
+			$this->getFocusedHeader() :
+			$this->getCardHeader();
+		$subheader = !$this->isFocused() ? $this->getSubheader() : '';
+
 		return $this->buildModuleWrapper(
 			$this->buildSection( 'header', $header, $this->getHeaderTag() ),
-			$this->buildSection( 'subheader', $this->getSubheader(), $this->getSubheaderTag() ),
+			$this->buildSection( 'subheader', $subheader, $this->getSubheaderTag() ),
 			$this->buildSection( 'body', $this->getBodyContent() ),
 			$this->buildSection( 'footer', $this->getFooter() )
 		);
@@ -399,6 +456,16 @@ abstract class BaseModule implements IModule, MessageLocalizer {
 					// * personal-dashboard-module-policiesGuidelines
 					// * personal-dashboard-module-riskyArticleEdits
 					"personal-dashboard-module-$className",
+					// The following CSS classes are used here:
+					// * personal-dashboard-module--style-default
+					// * personal-dashboard-module--style-thin
+					// * personal-dashboard-module--style-none
+					"personal-dashboard-module--style-$this->styleDesktop",
+					// The following CSS classes are used here:
+					// * personal-dashboard-module--style-mobile-default
+					// * personal-dashboard-module--style-mobile-thin
+					// * personal-dashboard-module--style-mobile-none
+					"personal-dashboard-module--style-mobile-$this->styleMobile"
 				], $this->getCssClasses() ),
 				'data-module-name' => $this->name,
 			],
@@ -438,11 +505,11 @@ abstract class BaseModule implements IModule, MessageLocalizer {
 	 * @return string HTML element containing the header text.
 	 */
 	protected function getHeaderTextElement(): string {
-		return Html::element(
-			'div',
-			[ 'class' => 'personal-dashboard-module-header-text' ],
-			$this->getHeaderText()
-		);
+		$text = $this->getHeaderText();
+
+		return $text ? Html::element( 'div', [
+			'class' => 'personal-dashboard-module-header-text'
+		], $text ) : '';
 	}
 
 	/**

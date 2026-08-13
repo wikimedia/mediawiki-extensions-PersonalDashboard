@@ -30,22 +30,16 @@
 			</template>
 		</div>
 
-		<div class="personal-dashboard-review-changes__footer">
+		<div
+			v-if="isSummary"
+			class="personal-dashboard-review-changes__footer">
 			<!-- eslint-disable max-len -->
 			<cdx-button
-				v-if="isSummary"
 				:aria-label="buttonAriaLabel"
 				action="progressive"
 				weight="primary">
 				<span v-i18n-html:personal-dashboard-risky-article-edits-mobile-summary-footer-link-text></span>
 			</cdx-button>
-
-			<span
-				v-else-if="isFullDetail"
-				id="personal-dashboard-go-to-recentchanges"
-				v-i18n-html:personal-dashboard-risky-article-edits-footer-preamble>
-			</span>
-			<!-- eslint-enable max-len -->
 		</div>
 	</div>
 </template>
@@ -95,9 +89,6 @@ module.exports = defineComponent( {
 	computed: {
 		isSummary() {
 			return this.detail === 'compact';
-		},
-		isFullDetail() {
-			return this.detail === 'full';
 		}
 	},
 	mounted() {

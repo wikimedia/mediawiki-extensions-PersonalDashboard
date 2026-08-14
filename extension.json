@@ -26,6 +26,9 @@
 			"services": [
 				"PersonalDashboardModuleFactory",
 				"StatsFactory"
+			],
+			"optional_services": [
+				"TestKitchen.ExperimentManager"
 			]
 		}
 	},
@@ -111,6 +114,7 @@
 				"mediaWikiHistory.js",
 				"useViewport.js",
 				"instrumentation/onPersonalDashboardBaseline.js",
+				"instrumentation/experiments.js",
 				{
 					"name": "icons.json",
 					"callback": "MediaWiki\\ResourceLoader\\CodexModule::getIcons",

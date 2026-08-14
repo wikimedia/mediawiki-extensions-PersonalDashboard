@@ -8,10 +8,13 @@ use MediaWiki\Config\ConfigException;
 use MediaWiki\Context\IContextSource;
 use MediaWiki\Exception\ErrorPageError;
 use MediaWiki\Exception\UserNotLoggedIn;
+use MediaWiki\Extension\PersonalDashboard\ExperimentResolver;
+use MediaWiki\Extension\PersonalDashboard\Experiments;
 use MediaWiki\Extension\PersonalDashboard\IModule;
 use MediaWiki\Extension\PersonalDashboard\Modules\BaseModule;
 use MediaWiki\Extension\PersonalDashboard\PersonalDashboardModuleFactory;
 use MediaWiki\Extension\PersonalDashboard\Util;
+use MediaWiki\Extension\TestKitchen\Sdk\ExperimentManagerInterface;
 use MediaWiki\Html\Html;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\SpecialPage\SpecialPage;
@@ -35,9 +38,19 @@ class SpecialPersonalDashboard extends SpecialPage {
 	/** @var string Device label ('mobile'/'desktop') for the SSR timing metrics; analytics only. */
 	private string $device;
 
+	/** Per-request memo of getModuleGroups()'s result; both call sites use the same $name. */
+	private ?array $resolvedModuleGroup = null;
+
+	/** Per-request memo of getModuleGroups()'s resolved registry key (e.g. 'default', 'T426615'). */
+	private ?string $resolvedModuleGroupName = null;
+
+	/** Per-request memo of experiment name => assigned variant, for every assignment that took effect. */
+	private array $resolvedExperimentVariants = [];
+
 	public function __construct(
 		private readonly PersonalDashboardModuleFactory $moduleFactory,
 		private readonly StatsFactory $statsFactory,
+		private readonly ?ExperimentManagerInterface $experimentManager = null,
 	) {
 		parent::__construct( 'PersonalDashboard' );
 		$this->codex = new Codex( new MediaWikiLocalization( $this->getContext() ) );
@@ -158,7 +171,11 @@ class SpecialPersonalDashboard extends SpecialPage {
 			// render (a deep subpath composes the full dashboard, so it is grouped
 			// too). Only an isolated render has a single module's slot, so the app
 			// drops the other card islands; a grouped render keeps them all.
-			'wgPersonalDashboardFocusedModule' => $isolated ? $moduleName : null
+			'wgPersonalDashboardFocusedModule' => $isolated ? $moduleName : null,
+			'wgPersonalDashboardModuleGroup' => $this->resolvedModuleGroupName,
+			// Cast to object: an empty PHP array JSON-encodes as [], but the
+			// unenrolled case (most requests) needs {} on the wire.
+			'wgPersonalDashboardExperimentVariants' => (object)$this->resolvedExperimentVariants,
 		] );
 
 		$overallSsrTimeInSeconds = microtime( true ) - $startTime;
@@ -222,15 +239,43 @@ class SpecialPersonalDashboard extends SpecialPage {
 	 * @param string $name key of registered module group in extension.json
 	 */
 	private function getModuleGroups( string $name = 'default' ): array {
+		// Resolving once per request avoids redundant experiment resolution
+		// (and a duplicate sendExposure() call for the experiment that wins).
+		if ( $this->resolvedModuleGroup !== null ) {
+			return $this->resolvedModuleGroup;
+		}
+
 		$registry = ExtensionRegistry::getInstance()->getAttribute( 'PersonalDashboardModuleGroups' );
+
+		$resolver = new ExperimentResolver(
+			$this->experimentManager,
+			$this->statsFactory,
+			Experiments::all(),
+			$registry
+		);
+		$resolution = $resolver->resolve();
+		$resolution->sendExposures();
+		$this->resolvedExperimentVariants = $resolution->getVariants();
+
+		$experimentGroup = $resolution->getModuleGroup();
+		if ( $experimentGroup !== null ) {
+			$this->resolvedModuleGroupName = $experimentGroup;
+			$this->resolvedModuleGroup = $registry[ $experimentGroup ];
+			return $this->resolvedModuleGroup;
+		}
+
 		// $moduleGroup may be overriden by URL query param
 		$nameOverride = $this->getContext()->getRequest()->getText( 'moduleGroup' );
 		if ( $nameOverride !== '' ) {
 			if ( array_key_exists( $nameOverride, $registry ) ) {
-				return $registry[ $nameOverride ];
+				$this->resolvedModuleGroupName = $nameOverride;
+				$this->resolvedModuleGroup = $registry[ $nameOverride ];
+				return $this->resolvedModuleGroup;
 			}
 		}
-		return $registry[ $name ];
+		$this->resolvedModuleGroupName = $name;
+		$this->resolvedModuleGroup = $registry[ $name ];
+		return $this->resolvedModuleGroup;
 	}
 
 	/**

@@ -13,6 +13,7 @@
 	"personal-dashboard-desc": "一个面向版主的实验性面板",
 	"personal-dashboard-link-title": "面板",
 	"personal-dashboard-module-no-js-fallback": "如果您的浏览器未启用JavaScript，则此仪表板的某些部分将不会显示。",
+	"personal-dashboard-open-module": "打开此模块",
 	"personal-dashboard-specialpage-title": "{{GENDER:$1|您好}}，{{bidi:$1}}！",
 	"personal-dashboard-survey-text": "[$1 分享反馈]",
 	"tooltip-pt-personaldashboard": "{{GENDER:|您的}}个人面板"

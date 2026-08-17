@@ -9,6 +9,7 @@
 	"personal-dashboard-desc": "Un panel experimental para a moderación",
 	"personal-dashboard-link-title": "Panel de control",
 	"personal-dashboard-module-no-js-fallback": "Algunhas partes deste panel non funcionan agás que teñas activado o JavaScript no teu navegador.",
+	"personal-dashboard-open-module": "Abrir este módulo",
 	"personal-dashboard-specialpage-title": "{{GENDER:$1|Ola}}, {{bidi:$1}}!",
 	"personal-dashboard-survey-text": "[$1 Comparte os teus comentarios]",
 	"tooltip-pt-personaldashboard": "{{GENDER:|O teu}} panel persoal"

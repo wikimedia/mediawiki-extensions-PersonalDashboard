@@ -1,0 +1,10 @@
+{
+	"@metadata": {
+		"authors": [
+			"Saurmandal"
+		]
+	},
+	"personal-dashboard-risky-article-edits-footer-preamble": "[{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}} हाल में हुए बदलावों के पृष्ठ] पर अधिक सम्पादन देखें",
+	"personal-dashboard-risky-article-edits-info-time-text-today": "आज $1",
+	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "सम्पादन सारांश नहीं है"
+}

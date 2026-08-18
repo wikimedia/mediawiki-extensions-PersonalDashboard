@@ -1,0 +1,17 @@
+{
+	"@metadata": {
+		"authors": [
+			"Anerka",
+			"Hedda",
+			"Rapsar",
+			"Samwalton9 (WMF)"
+		]
+	},
+	"personal-dashboard-risky-article-edits-header": "Değişiklikleri gözden geçir",
+	"personal-dashboard-risky-article-edits-subheader": "Aşağıdaki düzenlemeleri gözden geçirerek gerekebilecek düzeltmelerle Vikipedi’nin güvenilirliğinin korunmasına yardımcı olun.",
+	"personal-dashboard-risky-article-edits-subheader-info": "Vikipedi’nin güvenilirliğine katkıda bulunun.",
+	"personal-dashboard-risky-article-edits-footer-preamble": "[{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}} Son değişiklikler sayfasında] daha fazla değişiklik görüntüle.",
+	"personal-dashboard-risky-article-edits-info-time-text-today": "$1, Bugün",
+	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Değişiklik özeti yok",
+	"personal-dashboard-risky-article-edits-progress-bar-aria-label": "İncelenebilecek değişikliklerin yüklendiğini gösteren satır içi ilerleme çubuğu."
+}

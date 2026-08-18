@@ -9,6 +9,7 @@
 	"personal-dashboard-desc": "Експериментална управувачница за модаратори",
 	"personal-dashboard-link-title": "Управувачница",
 	"personal-dashboard-module-no-js-fallback": "Некои делови од оваа управувачница не се покажуваат ако немате овозможено JavaScript во прелистувачот.",
+	"personal-dashboard-open-module": "Отвори го модулов",
 	"personal-dashboard-specialpage-title": "{{GENDER:$1|Здраво}}, {{bidi:$1}}!",
 	"personal-dashboard-survey-text": "[$1 Дајте мислење]",
 	"tooltip-pt-personaldashboard": "{{GENDER:|Ваша}} лична управувачница"

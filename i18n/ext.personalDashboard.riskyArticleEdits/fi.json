@@ -1,0 +1,14 @@
+{
+	"@metadata": {
+		"authors": [
+			"Samoasambia",
+			"Wikipeedikko"
+		]
+	},
+	"personal-dashboard-risky-article-edits-header": "Tarkasta muutoksia",
+	"personal-dashboard-risky-article-edits-subheader": "Auta pitämään Wikipedia luotettavana tarkastamalla seuraavat muokkaukset, jotka saattavat vaatia huomiota.",
+	"personal-dashboard-risky-article-edits-subheader-info": "Nämä muokkaukset ovat muiden käyttäjien tekemiä. Auta pitämään Wikipedia luotettavana tarkistamalla ne.",
+	"personal-dashboard-risky-article-edits-footer-preamble": "Katso lisää muokkauksia  [{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}} Tuoreet muutokset -sivulla]",
+	"personal-dashboard-risky-article-edits-info-time-text-today": "$1, tänään",
+	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Ei muokkausyhteenvetoa"
+}

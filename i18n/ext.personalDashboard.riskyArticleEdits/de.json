@@ -1,0 +1,15 @@
+{
+	"@metadata": {
+		"authors": [
+			"Brettchenweber"
+		]
+	},
+	"personal-dashboard-risky-article-edits-header": "Änderungen überprüfen",
+	"personal-dashboard-risky-article-edits-subheader": "Hilf mit, die Zuverlässigkeit von Wikipedia zu gewährleisten, indem du die folgenden Bearbeitungen überprüfst, die möglicherweise Aufmerksamkeit benötigen.",
+	"personal-dashboard-risky-article-edits-subheader-info": "Diese Bearbeitungen wurden von anderen Benutzern vorgenommen. Bleibe auf dem Laufenden und trage zur Qualität von Wikipedia bei, indem du sie überprüfst.",
+	"personal-dashboard-risky-article-edits-footer-preamble": "Weitere Bearbeitungen findest du in den [{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}} letzten Änderungen].",
+	"personal-dashboard-risky-article-edits-info-time-text-today": "$1, heute",
+	"personal-dashboard-risky-article-edits-list-card-aria-label": "Versionsunterschied für $1 öffnen",
+	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Keine Bearbeitungszusammenfassung",
+	"personal-dashboard-risky-article-edits-progress-bar-aria-label": "eingebetteter Fortschrittsbalken zur Anzeige des Ladevorgangs der zu überprüfenden Änderungen."
+}

@@ -1,0 +1,14 @@
+{
+	"@metadata": {
+		"authors": [
+			"McDutchie"
+		]
+	},
+	"personal-dashboard-risky-article-edits-header": "Revider cambiamentos",
+	"personal-dashboard-risky-article-edits-subheader": "Adjuta a mantener Wikipedia digne de fide: revide le sequente modificationes que pote requirer attention.",
+	"personal-dashboard-risky-article-edits-subheader-info": "Iste modificationes ha essite apportate per altere usatores. Resta al currente e adjuta a mantener le qualitate de Wikipedia per revider los.",
+	"personal-dashboard-risky-article-edits-footer-preamble": "Vide plus modificationes sur le [{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}} pagina de modificationes recente]",
+	"personal-dashboard-risky-article-edits-info-time-text-today": "$1, hodie",
+	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Nulle summario de modification",
+	"personal-dashboard-risky-article-edits-progress-bar-aria-label": "barra de progresso integrate que indica quando le modificationes a revider es cargate"
+}

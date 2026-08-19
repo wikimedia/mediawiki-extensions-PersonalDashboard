@@ -1,4 +1,4 @@
-# Authoring a Personal Dashboard module
+# Authoring a Personal Dashboard module {#modules}
 
 Personal Dashboard is experimental; the details below will change.
 

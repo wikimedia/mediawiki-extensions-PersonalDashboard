@@ -222,6 +222,7 @@
 				"CdxButton",
 				"CdxCard",
 				"CdxIcon",
+				"CdxInfoChip",
 				"CdxPopover",
 				"CdxToggleButton",
 				"CdxProgressBar"
@@ -241,6 +242,7 @@
 					"callbackParam": [
 						"cdxIconArticle",
 						"cdxIconEdit",
+						"cdxIconNotice",
 						"cdxIconUserAvatar",
 						"cdxIconUserTemporary",
 						"cdxIconTextSummary",
@@ -249,6 +251,7 @@
 				}
 			],
 			"messages": [
+				"personal-dashboard-review-changes-major-changes-label",
 				"personal-dashboard-risky-article-edits-header",
 				"personal-dashboard-risky-article-edits-subheader",
 				"personal-dashboard-risky-article-edits-footer-preamble",

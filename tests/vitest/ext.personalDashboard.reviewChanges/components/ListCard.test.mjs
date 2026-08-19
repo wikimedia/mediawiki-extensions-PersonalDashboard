@@ -13,6 +13,32 @@ function getOtherLinks( wrapper ) {
 	];
 }
 
+function mountWithLengths( oldlen, newlen ) {
+	return mount( ListCard, {
+		props: {
+			title: 'TestTitle',
+			newlen,
+			// eslint-disable-next-line camelcase
+			old_revid: 0,
+			oldlen,
+			pageid: 8675309,
+			revid: 0,
+			user: 'TestUser',
+			parsedcomment: 'TestComment',
+			timestamp: new Date( 2026, 1, 1, 3, 0 ).toISOString(),
+			tags: [],
+			pages: [],
+			feedorigin: 'recentchanges',
+			isMobile: false
+		},
+		global: {
+			stubs: {
+				UserInfoButton: true
+			}
+		}
+	} );
+}
+
 // Safely ignore error: Cannot find package 'ext.checkUser.userInfoCard'
 mw.loader.using = () => {};
 
@@ -261,6 +287,38 @@ test( 'user info card visible on desktop', () => {
 
 	const button = wrapper.findComponent( { name: 'UserInfoButton' } );
 	expect( button.exists() ).toStrictEqual( true );
+} );
+
+test( 'shows the major changes chip when the size delta exceeds 1000 bytes', () => {
+	const wrapper = mountWithLengths( 2000, 3001 );
+
+	expect( wrapper.vm.isMajorChange ).toStrictEqual( true );
+
+	const chip = wrapper.find( '.cdx-info-chip' );
+	expect( chip.exists() ).toStrictEqual( true );
+	expect( chip.text() ).toStrictEqual( '⧼personal-dashboard-review-changes-major-changes-label⧽' );
+	expect( chip.find( '.cdx-icon' ).exists() ).toStrictEqual( true );
+} );
+
+test( 'shows the major changes chip for large removals', () => {
+	const wrapper = mountWithLengths( 3001, 2000 );
+
+	expect( wrapper.vm.isMajorChange ).toStrictEqual( true );
+	expect( wrapper.find( '.cdx-info-chip' ).exists() ).toStrictEqual( true );
+} );
+
+test( 'hides the major changes chip for a small size delta', () => {
+	const wrapper = mountWithLengths( 2000, 2100 );
+
+	expect( wrapper.vm.isMajorChange ).toStrictEqual( false );
+	expect( wrapper.find( '.cdx-info-chip' ).exists() ).toStrictEqual( false );
+} );
+
+test( 'hides the major changes chip when the size delta is exactly 1000 bytes', () => {
+	const wrapper = mountWithLengths( 2000, 3000 );
+
+	expect( wrapper.vm.isMajorChange ).toStrictEqual( false );
+	expect( wrapper.find( '.cdx-info-chip' ).exists() ).toStrictEqual( false );
 } );
 
 test( 'user info card hidden on mobile', () => {

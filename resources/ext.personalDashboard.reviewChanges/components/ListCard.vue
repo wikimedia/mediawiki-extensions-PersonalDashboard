@@ -76,20 +76,27 @@
 				</div>
 			</div>
 		</template>
+		<template v-if="isMajorChange" #supporting-text>
+			<cdx-info-chip :icon="noticeIcon">
+				{{ $i18n( 'personal-dashboard-review-changes-major-changes-label' ) }}
+			</cdx-info-chip>
+		</template>
 	</cdx-card>
 </template>
 
 <script>
 const { defineComponent, defineAsyncComponent, ref, toRaw } = require( 'vue' );
-const { CdxCard, CdxIcon } = require( '../codex.js' );
-const { cdxIconUserAvatar, cdxIconUserTemporary } = require( '../icons.json' );
+const { CdxCard, CdxIcon, CdxInfoChip } = require( '../codex.js' );
+const { cdxIconNotice, cdxIconUserAvatar, cdxIconUserTemporary } = require( '../icons.json' );
 const { formatRelativeTimeOrDate } = require( 'mediawiki.DateFormatter' );
+const MAJOR_CHANGE_DELTA = 1000;
 
 module.exports = defineComponent( {
 	name: 'ListCard',
 	components: {
 		CdxCard,
 		CdxIcon,
+		CdxInfoChip,
 		UserInfoButton: defineAsyncComponent( {
 			loader: () => new Promise( ( resolve ) => {
 				mw.loader.using( 'ext.checkUser.userInfoCard', ( require ) => {
@@ -108,6 +115,8 @@ module.exports = defineComponent( {
 		user: { type: String, required: true },
 		parsedcomment: { type: String, required: true },
 		timestamp: { type: String, default: '' },
+		newlen: { type: Number, required: true },
+		oldlen: { type: Number, required: true },
 		pages: { type: Object, required: true },
 		feedorigin: { type: String, required: true },
 		isMobile: { type: Boolean, default: false }
@@ -116,7 +125,8 @@ module.exports = defineComponent( {
 		return {
 			hasVisited: ref( false ),
 			showUserInfoCard: mw.user.options.get( 'checkuser-userinfocard-enable' ),
-			missingCommentMessage: mw.msg( 'personal-dashboard-risky-article-edits-list-card-no-comment-message' )
+			missingCommentMessage: mw.msg( 'personal-dashboard-risky-article-edits-list-card-no-comment-message' ),
+			noticeIcon: cdxIconNotice
 		};
 	},
 	computed: {
@@ -163,6 +173,9 @@ module.exports = defineComponent( {
 			return mw.util.isTemporaryUser( this.user ) ?
 				cdxIconUserTemporary :
 				cdxIconUserAvatar;
+		},
+		isMajorChange() {
+			return Math.abs( this.newlen - this.oldlen ) > MAJOR_CHANGE_DELTA;
 		}
 	},
 	methods: {

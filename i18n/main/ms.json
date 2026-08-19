@@ -4,5 +4,13 @@
 			"Hakimi97"
 		]
 	},
-	"personal-dashboard-beta-info-chip-text": "Beta"
+	"personal-dashboard-back-to-dashboard": "Kembali ke papan pemuka",
+	"personal-dashboard-beta-info-chip-text": "Beta",
+	"personal-dashboard-desc": "Sebuah papan pemuka eksperimen untuk moderator",
+	"personal-dashboard-link-title": "Papan pemuka",
+	"personal-dashboard-module-no-js-fallback": "Sesetengah bahagian papan pemuka ini tidak akan dipaparkan melainkan JavaScript didayakan dalam pelayar anda.",
+	"personal-dashboard-open-module": "Buka modul ini",
+	"personal-dashboard-specialpage-title": "{{GENDER:$1|Apa khabar}}, {{bidi:$1}}!",
+	"personal-dashboard-survey-text": "[$1 Kongsi maklum balas]",
+	"tooltip-pt-personaldashboard": "Papan pemuka peribadi {{GENDER:|anda}}"
 }

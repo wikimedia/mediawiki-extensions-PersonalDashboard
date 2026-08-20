@@ -30,8 +30,8 @@ const useReviewChangesStore = defineStore( 'reviewChanges', {
 
 			/**
 			 * Pages metadata from the RC generator query (prop: 'description').
-			 * Passed as-is to <list-card> and <list-card-mobile> as a separate
-			 * prop — does not fit the FeedItem shape.
+			 * Passed as-is to <list-card> as a separate prop; it does not fit the
+			 * FeedItem shape.
 			 *
 			 * @type {Object[]}
 			 */

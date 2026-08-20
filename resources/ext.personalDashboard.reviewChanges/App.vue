@@ -1,5 +1,5 @@
 <template>
-	<div ref="moduleRef" :class="{ 'personal-dashboard-review-changes--mobile': isSummary }">
+	<div ref="moduleRef">
 		<div v-if="reviewChangesStore.isLoading">
 			<cdx-progress-bar inline :aria-label="progressBarAriaLabel"></cdx-progress-bar>
 		</div>
@@ -9,38 +9,31 @@
 		</div>
 
 		<div
-			v-else-if="reviewChangesStore &&
-				reviewChangesStore.feed &&
-				reviewChangesStore.pages"
+			v-show="reviewChangesStore.hasFeed"
 			class="personal-dashboard-review-changes__container">
-			<list-card-mobile
-				v-if="isSummary"
-				v-bind="reviewChangesStore.feed[ 0 ]"
-				:pages="reviewChangesStore.pages">
-			</list-card-mobile>
-
-			<template v-else>
+			<div
+				class="personal-dashboard-review-changes__list"
+				:class="{ 'personal-dashboard-review-changes__list--summary': isSummary }">
 				<list-card
-					v-for="rc in reviewChangesStore.feed"
+					v-for="rc in visibleFeed"
 					v-bind="rc"
-					:key="`${detail}-${rc.feedorigin}-${rc.revid}`"
+					:key="`${rc.feedorigin}-${rc.revid}`"
 					:pages="reviewChangesStore.pages"
-					:is-mobile="isMobile">
+					:is-narrow="isNarrow">
 				</list-card>
-			</template>
+			</div>
 		</div>
 
-		<div
+		<cdx-button
 			v-if="isSummary"
-			class="personal-dashboard-review-changes__footer">
+			:aria-label="buttonAriaLabel"
+			action="progressive"
+			weight="quiet"
+			class="personal-dashboard-review-changes__show-more"
+			@click="showMore">
 			<!-- eslint-disable max-len -->
-			<cdx-button
-				:aria-label="buttonAriaLabel"
-				action="progressive"
-				weight="primary">
-				<span v-i18n-html:personal-dashboard-risky-article-edits-mobile-summary-footer-link-text></span>
-			</cdx-button>
-		</div>
+			<span v-i18n-html:personal-dashboard-risky-article-edits-mobile-summary-footer-link-text></span>
+		</cdx-button>
 	</div>
 </template>
 
@@ -49,19 +42,36 @@ const { defineComponent, ref } = require( 'vue' );
 const { CdxButton, CdxProgressBar } = require( './codex.js' );
 const { useReviewChangesStore } = require( './store/reviewChangesStore.js' );
 const ListCard = require( './components/ListCard.vue' );
-const ListCardMobile = require( './components/ListCardMobile.vue' );
+
+// The dialog and the card share one component instance (teleported, not
+// remounted), so a fixed fetch covers both: the card slices it down to a
+// preview, the dialog shows it whole, with no re-fetch on the summary/full
+// transition.
+const FULL_LIMIT = 10;
+const SUMMARY_LIMIT = 3;
 
 module.exports = defineComponent( {
 	components: {
 		CdxButton,
 		CdxProgressBar,
-		ListCard,
-		ListCardMobile
+		ListCard
 	},
+	inheritAttrs: false,
 	props: {
-		detail: {
-			type: String,
-			default: 'full'
+		// True for a whole-page focused render or an open module dialog; the
+		// card in the dashboard grid is the only place the summary shows,
+		// on every viewport, per T426181's desktop+mobile convergence.
+		focused: {
+			type: Boolean,
+			default: false
+		},
+		active: {
+			type: Boolean,
+			default: false
+		},
+		isNarrow: {
+			type: Boolean,
+			default: false
 		}
 	},
 	setup() {
@@ -72,15 +82,11 @@ module.exports = defineComponent( {
 			}
 		} );
 
-		const isMobile = mw.config.get( 'wgMFMode' ) !== null;
-		const limit = isMobile ? 10 : 5;
 		const reviewChangesStore = useReviewChangesStore();
 
 		return {
 			moduleRef,
 			observer,
-			isMobile,
-			limit,
 			reviewChangesStore,
 			buttonAriaLabel: mw.msg( 'personal-dashboard-risky-article-edits-mobile-summary-footer-link-text' ),
 			progressBarAriaLabel: mw.msg( 'personal-dashboard-risky-article-edits-progress-bar-aria-label' )
@@ -88,12 +94,22 @@ module.exports = defineComponent( {
 	},
 	computed: {
 		isSummary() {
-			return this.detail === 'compact';
+			return !( this.focused || this.active );
+		},
+		visibleFeed() {
+			return this.isSummary ?
+				this.reviewChangesStore.feed.slice( 0, SUMMARY_LIMIT ) :
+				this.reviewChangesStore.feed;
+		}
+	},
+	methods: {
+		showMore() {
+			this.$router.push( '/ext.personalDashboard.reviewChanges' );
 		}
 	},
 	mounted() {
 		this.observer.observe( this.moduleRef );
-		this.reviewChangesStore.fetchRecentActivity( this.limit );
+		this.reviewChangesStore.fetchRecentActivity( FULL_LIMIT );
 	}
 } );
 </script>
@@ -102,40 +118,36 @@ module.exports = defineComponent( {
 @import 'mediawiki.skin.variables.less';
 
 .personal-dashboard {
-	&-module {
-		&-reviewChanges &-section-body {
-			margin: @spacing-0;
-		}
-	}
-
 	&-review-changes {
 		&__container {
-			display: flex;
-			flex-direction: column;
-			gap: @spacing-25;
 			background: @background-color-neutral;
 			padding: @spacing-25;
 		}
 
-		&__footer {
-			margin: @spacing-50 @spacing-100 @spacing-100 @spacing-100;
+		&__list {
+			display: flex;
+			flex-direction: column;
+			gap: @spacing-25;
 
-			.cdx-button {
-				width: 100%;
-				max-width: none;
+			// Hints at the "Show more" button below, scoped to the last card
+			// itself so it can never leak into a card beneath it.
+			&--summary .personal-dashboard-review-changes__card:last-child::after {
+				content: '';
+				position: absolute;
+				bottom: 0;
+				left: 0;
+				right: 0;
+				height: 64px;
+				z-index: 2;
+				pointer-events: none;
+				background: linear-gradient( @background-color-transparent, @background-color-base );
 			}
 		}
 
-		&--mobile {
-			margin: @spacing-100;
-		}
-
-		&--mobile &__container {
-			padding: @spacing-0;
-		}
-
-		&--mobile &__footer {
-			margin: @spacing-0;
+		&__show-more.cdx-button {
+			width: 100%;
+			max-width: none;
+			padding: @spacing-75 0;
 		}
 	}
 }

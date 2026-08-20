@@ -10,7 +10,7 @@
 	<teleport :to="target" :disabled="!target">
 		<suspense>
 			<template #default>
-				<slot :detail="detail"></slot>
+				<slot :detail="detail" :focused="focused" :is-narrow="isNarrow" :active="activeInternal"></slot>
 			</template>
 		</suspense>
 	</teleport>

@@ -171,7 +171,7 @@ test( 'sets visited on primary link click', async () => {
 			tags: [],
 			pages: [],
 			feedorigin: 'recentchanges',
-			isMobile: false
+			isNarrow: false
 		},
 		global: {
 			stubs: {
@@ -206,7 +206,7 @@ test( 'does not set visited on other link clicks', async () => {
 			tags: [],
 			pages: [],
 			feedorigin: 'recentchanges',
-			isMobile: false
+			isNarrow: false
 		},
 		global: {
 			stubs: {
@@ -242,7 +242,7 @@ test( 'title and username are not links on mobile', async () => {
 			tags: [],
 			pages: [],
 			feedorigin: 'recentchanges',
-			isMobile: true
+			isNarrow: true
 		},
 		global: {
 			stubs: {
@@ -276,7 +276,7 @@ test( 'user info card visible on desktop', () => {
 			tags: [],
 			pages: [],
 			feedorigin: 'recentchanges',
-			isMobile: false
+			isNarrow: false
 		},
 		global: {
 			stubs: {
@@ -337,7 +337,7 @@ test( 'user info card hidden on mobile', () => {
 			tags: [],
 			pages: [],
 			feedorigin: 'recentchanges',
-			isMobile: true
+			isNarrow: true
 		},
 		global: {
 			stubs: {

@@ -15,7 +15,7 @@
 
 				<div class="personal-dashboard-review-changes__card__header">
 					<div
-						v-if="isMobile"
+						v-if="isNarrow"
 						class="personal-dashboard-review-changes__card__title">
 						{{ title }}
 					</div>
@@ -36,7 +36,7 @@
 				<div class="personal-dashboard-review-changes__card__subheader">
 					<div class="personal-dashboard-review-changes__card__icon">
 						<cdx-icon
-							v-if="isMobile || !showUserInfoCard"
+							v-if="isNarrow || !showUserInfoCard"
 							:icon="userIcon"
 							size="small">
 						</cdx-icon>
@@ -45,7 +45,7 @@
 					</div>
 
 					<div
-						v-if="isMobile"
+						v-if="isNarrow"
 						class="personal-dashboard-review-changes__card__username">
 						{{ user }}
 					</div>
@@ -119,7 +119,7 @@ module.exports = defineComponent( {
 		oldlen: { type: Number, required: true },
 		pages: { type: Object, required: true },
 		feedorigin: { type: String, required: true },
-		isMobile: { type: Boolean, default: false }
+		isNarrow: { type: Boolean, default: false }
 	},
 	setup() {
 		return {

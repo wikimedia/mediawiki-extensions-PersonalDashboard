@@ -5,6 +5,6 @@
 			"McDutchie"
 		]
 	},
-	"personal-dashboard-risky-article-edits-mobile-summary-footer-link-text": "Footer link text for the recent activity module when mobile summary view is enabled which sends the user to Special:RecentChanges with the revertrisklanguageagnostic query parameter set.",
+	"personal-dashboard-risky-article-edits-mobile-summary-footer-link-text": "Button text for the Review Changes module's \"show more\" affordance, which opens the full edit list in a dialog.",
 	"personal-dashboard-risky-article-edits-mobile-user-text": "Text for displaying the user who made the change on the mobile summary view \n\nParameters:\n* $1 - the user's name\n* $2 - the title of the article they edited"
 }

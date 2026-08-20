@@ -6,12 +6,18 @@
 
 	<island-mount
 		v-for="island in islands"
-		v-slot="{ detail }"
+		v-slot="{ detail, focused, isNarrow, active }"
 		:key="island.name"
 		:name="island.name"
 		:focused="island.name === focusedModule"
 		:active="island.name === activeName">
-		<component :is="island.component" :detail="detail"></component>
+		<component
+			:is="island.component"
+			:detail="detail"
+			:focused="focused"
+			:is-narrow="isNarrow"
+			:active="active">
+		</component>
 	</island-mount>
 </template>
 
@@ -36,7 +42,7 @@ module.exports = defineComponent( {
 		},
 		// The focused module's name on a whole-page render, or null on the grouped
 		// dashboard. An island matching it is the whole page, so it shows its full
-		// body rather than the compact mobile card summary.
+		// body rather than the compact card summary.
 		focusedModule: {
 			type: String,
 			default: null

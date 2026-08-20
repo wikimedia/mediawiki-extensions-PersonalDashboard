@@ -230,7 +230,6 @@
 			"packageFiles": [
 				"App.vue",
 				"components/ListCard.vue",
-				"components/ListCardMobile.vue",
 				"store/reviewChangesStore.js",
 				"composables/useWatchlistFeed.js",
 				"composables/useRecentChangesFeed.js",

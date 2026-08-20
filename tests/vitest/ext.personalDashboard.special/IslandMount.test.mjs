@@ -11,7 +11,7 @@ import IslandMount from '/resources/ext.personalDashboard.special/IslandMount.vu
 
 const stub = {
 	name: 'IslandStub',
-	props: [ 'detail' ],
+	props: [ 'detail', 'focused', 'isNarrow', 'active' ],
 	template: '<div></div>'
 };
 
@@ -23,7 +23,12 @@ async function mountIsland( props ) {
 		slots: {
 			// A bare component in slots drops the scoped-slot params, so forward
 			// them by hand to assert what IslandMount passes to the island body.
-			default: ( params ) => h( stub, { detail: params.detail } )
+			default: ( params ) => h( stub, {
+				detail: params.detail,
+				focused: params.focused,
+				isNarrow: params.isNarrow,
+				active: params.active
+			} )
 		}
 	} );
 	// Let Suspense resolve the child.
@@ -35,6 +40,18 @@ function childDetail( wrapper ) {
 	return wrapper.findComponent( stub ).props( 'detail' );
 }
 
+function childFocused( wrapper ) {
+	return wrapper.findComponent( stub ).props( 'focused' );
+}
+
+function childIsNarrow( wrapper ) {
+	return wrapper.findComponent( stub ).props( 'isNarrow' );
+}
+
+function childActive( wrapper ) {
+	return wrapper.findComponent( stub ).props( 'active' );
+}
+
 beforeEach( () => {
 	isNarrow.value = false;
 } );
@@ -43,13 +60,13 @@ afterEach( () => {
 	vi.restoreAllMocks();
 } );
 
-test( 'narrow and not active or focused renders a compact card', async () => {
+test( 'a narrow card and not active or focused renders a compact card', async () => {
 	isNarrow.value = true;
 	const wrapper = await mountIsland();
 	expect( childDetail( wrapper ) ).toBe( 'compact' );
 } );
 
-test( 'wide and not active or focused renders a full card', async () => {
+test( 'a wide card and not active or focused renders a full card', async () => {
 	isNarrow.value = false;
 	const wrapper = await mountIsland();
 	expect( childDetail( wrapper ) ).toBe( 'full' );
@@ -65,4 +82,23 @@ test( 'an active island is full even when narrow', async () => {
 	isNarrow.value = true;
 	const wrapper = await mountIsland( { active: true } );
 	expect( childDetail( wrapper ) ).toBe( 'full' );
+} );
+
+test( 'passes focused through to the island body', async () => {
+	isNarrow.value = true;
+	expect( childFocused( await mountIsland( { focused: true } ) ) ).toBe( true );
+	expect( childFocused( await mountIsland() ) ).toBe( false );
+} );
+
+test( 'passes the raw isNarrow value through to the island body', async () => {
+	isNarrow.value = true;
+	expect( childIsNarrow( await mountIsland( { active: true } ) ) ).toBe( true );
+
+	isNarrow.value = false;
+	expect( childIsNarrow( await mountIsland() ) ).toBe( false );
+} );
+
+test( 'passes active through to the island body', async () => {
+	expect( childActive( await mountIsland( { active: true } ) ) ).toBe( true );
+	expect( childActive( await mountIsland() ) ).toBe( false );
 } );

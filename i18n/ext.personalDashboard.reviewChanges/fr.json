@@ -2,12 +2,13 @@
 	"@metadata": {
 		"authors": [
 			"Eihel",
-			"Escargot bleu"
+			"Escargot bleu",
+			"Wladek92"
 		]
 	},
 	"personal-dashboard-risky-article-edits-header": "Vérifier les modifications",
 	"personal-dashboard-risky-article-edits-subheader": "Aidez à maintenir Wikipédia fiable en relisant les modifications suivantes qui peuvent nécessiter votre attention.",
-	"personal-dashboard-risky-article-edits-subheader-info": "Aidez à préserver la fiabilité de Wikipédia.",
+	"personal-dashboard-risky-article-edits-subheader-info": "Ces modifications ont été faites par d'autres utilisateurs. Restez à jour et aidez à préserver la qualité de Wikipédia en effectuant des relectures.",
 	"personal-dashboard-risky-article-edits-footer-preamble": "Voir plus de modifications dans la [{{fullurl:Special:RecentChanges\n|revertrisklanguageagnostic=all}} page des modifications récentes]",
 	"personal-dashboard-risky-article-edits-info-time-text-today": "aujourd'hui à $1",
 	"personal-dashboard-risky-article-edits-list-card-aria-label": "Ouvrir la vue différentielle pour $1",

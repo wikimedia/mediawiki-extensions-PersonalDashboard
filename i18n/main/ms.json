@@ -4,5 +4,10 @@
 			"Hakimi97"
 		]
 	},
-	"personal-dashboard-beta-info-chip-text": "Beta"
+	"personal-dashboard-beta-info-chip-text": "Beta",
+	"personal-dashboard-desc": "Sebuah papan pemuka eksperimen untuk moderator",
+	"personal-dashboard-link-title": "Papan pemuka",
+	"personal-dashboard-specialpage-title": "{{GENDER:$1|Apa khabar}}, {{bidi:$1}}!",
+	"personal-dashboard-survey-text": "[$1 Kongsi maklum balas]",
+	"tooltip-pt-personaldashboard": "Papan pemuka peribadi {{GENDER:|anda}}"
 }

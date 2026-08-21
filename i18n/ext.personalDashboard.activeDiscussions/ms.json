@@ -1,0 +1,15 @@
+{
+	"@metadata": {
+		"authors": [
+			"Hakimi97"
+		]
+	},
+	"personal-dashboard-active-discussions-title": "Perbincangan aktif",
+	"personal-dashboard-active-discussions-description": "Ikuti perkembangan perbincangan terkini dan sertai perbualan dengan penyunting Wikipedia lain.",
+	"personal-dashboard-active-discussions-latest-comment": "Komen terkini:",
+	"personal-dashboard-active-discussions-today": "$1, Hari Ini",
+	"personal-dashboard-active-discussions-mobile-latest-comment": "Komen terkini:",
+	"personal-dashboard-active-discussions-mobile-today": "$1, Hari ini",
+	"personal-dashboard-active-discussions-mobile-summary-footer-link-text": "Lihat lagi",
+	"personal-dashboard-active-discussions-mobile-summary-footer-button-aria-label": "Navigasi ke perbincangan yang lebih aktif"
+}

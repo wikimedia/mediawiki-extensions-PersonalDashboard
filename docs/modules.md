@@ -103,22 +103,7 @@ Registering the group is the platform mechanism today. User-facing `?moduleGroup
 
 ## Serve a group through a TestKitchen experiment
 
-Registering a group puts it on the shelf; a TestKitchen experiment is what serves it to real users. Add one entry to `ROUTING` in `./src/Experiments.php`, keyed by the experiment name, mapping each variant to a registered module group ID:
-
-```php
-private const ROUTING = [
-    'my-experiment' => [
-        'control' => 'default',
-        'treatment' => 'boilerPlate',
-    ],
-];
-```
-
-Three things have to line up outside that file. The key must match the experiment name registered in TestKitchen's own config, or nobody ever resolves and the experiment reports no enrollment. Each variant's value must name a module group registered on the wikis being served, because a group whose extension isn't enabled there is skipped. And the experiment has to use the `mw-user` identifier type: `edge-unique` can't be read server-side, so module-group routing only works for logged-in users.
-
-Personal Dashboard handles the rest. It reads the user's assignment on each dashboard render, sends the TestKitchen exposure event for the experiment that resolves (control and treatment alike, and only for users who actually get the group), and tags every health-metrics event with the resolved module group in `action_context` and the variant in `action_subtype`. An unenrolled user's events carry `action_context` alone, which is how analysis tells them from an enrolled control user.
-
-Only one experiment routes at a time today: the first registered name that resolves wins, and the rest never take effect.
+Registering a group puts it on the shelf; a TestKitchen experiment is what serves it to real users, and more than one experiment can be enrolled and tagged in the same request. See [./experiments.md](./experiments.md) for registering an experiment, how resolution and exposure work, the health-metrics tagging shape, and how concurrent experiments are arbitrated.
 
 ## Existing modules as reference
 

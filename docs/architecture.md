@@ -34,6 +34,8 @@ Two more paths through the same code:
 
 **Routing and the focused module.** The Vue Router migration, the module-name-as-subpage convention, and the two presentations one module URL can produce: the whole-page server render, or the dialog over the dashboard. See [`./routing.md`](./routing.md).
 
+**Experiments.** Serving a module group to real users through a TestKitchen experiment: registering the routing, how exposure and variant tagging work, and how concurrent experiments are arbitrated. See [`./experiments.md`](./experiments.md).
+
 **The shared feed scaffold.** Review Changes and Active Discussions are both feeds, and the loading state, the error state, the compact-versus-full derivation, the footer control and the card chrome are one implementation in `ext.personalDashboard.common` rather than a copy per module ([T433900](https://phabricator.wikimedia.org/T433900)). A feed module supplies its queries, its labels and a card body; the scaffold consumes a normalized feed-data contract (`items`, `isLoading`, `error`) that a Pinia store, a fetch composable, or a server-fed `getJsData()` payload can all satisfy. See [`./modules.md`](./modules.md#feed-modules).
 
 **Design decisions.** Deliberate divergences from MediaWiki convention, with the reasoning and a receipt for each: the dropped platform axis, and why registration stays declarative attributes rather than a runtime registry. See [`./decisions.md`](./decisions.md).

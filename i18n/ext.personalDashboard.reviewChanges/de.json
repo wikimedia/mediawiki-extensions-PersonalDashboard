@@ -11,5 +11,6 @@
 	"personal-dashboard-risky-article-edits-info-time-text-today": "$1, heute",
 	"personal-dashboard-risky-article-edits-list-card-aria-label": "Versionsunterschied für $1 öffnen",
 	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Keine Bearbeitungszusammenfassung",
-	"personal-dashboard-risky-article-edits-progress-bar-aria-label": "eingebetteter Fortschrittsbalken zur Anzeige des Ladevorgangs der zu überprüfenden Änderungen."
+	"personal-dashboard-risky-article-edits-progress-bar-aria-label": "eingebetteter Fortschrittsbalken zur Anzeige des Ladevorgangs der zu überprüfenden Änderungen.",
+	"personal-dashboard-review-changes-major-changes-label": "Größere Änderungen"
 }

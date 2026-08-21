@@ -1,0 +1,16 @@
+{
+	"@metadata": {
+		"authors": [
+			"Wizzard"
+		]
+	},
+	"personal-dashboard-back-to-dashboard": "Návrat na nástenku",
+	"personal-dashboard-beta-info-chip-text": "Beta",
+	"personal-dashboard-desc": "Experimentálna nástenka pre moderátorov",
+	"personal-dashboard-link-title": "Nástenka",
+	"personal-dashboard-module-no-js-fallback": "Niektoré časti tejto nástenky sa nezobrazia, pokiaľ nemáte v prehliadači zapnutý JavaScript.",
+	"personal-dashboard-open-module": "Otvoriť tento modul",
+	"personal-dashboard-specialpage-title": "{{GENDER:$1|Dobrý deň}}, {{bidi:$1}}!",
+	"personal-dashboard-survey-text": "[$1 Podeliť sa o spätnú väzbu]",
+	"tooltip-pt-personaldashboard": "{{GENDER:|Vaša}} osobná nástenka"
+}

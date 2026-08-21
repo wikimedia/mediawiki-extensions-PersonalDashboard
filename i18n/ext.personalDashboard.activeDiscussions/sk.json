@@ -1,0 +1,16 @@
+{
+	"@metadata": {
+		"authors": [
+			"Wizzard"
+		]
+	},
+	"personal-dashboard-active-discussions-title": "Aktívne diskusie",
+	"personal-dashboard-active-discussions-description": "Majte prehľad o najnovších diskusiách a zapojte sa do rozhovoru s ostatnými redaktormi Wikipédie.",
+	"personal-dashboard-active-discussions-latest-comment": "Posledný komentár:",
+	"personal-dashboard-active-discussions-today": "$1, dnes",
+	"personal-dashboard-active-discussions-mobile-latest-comment": "Posledný komentár:",
+	"personal-dashboard-active-discussions-mobile-today": "$1, dnes",
+	"personal-dashboard-active-discussions-mobile-summary-footer-link-text": "Zobraziť viac",
+	"personal-dashboard-active-discussions-mobile-summary-footer-button-aria-label": "Prejsť na ďalšie aktívne diskusie",
+	"personal-dashboard-active-discussions-progress-bar-aria-label": "vložený ukazovateľ priebehu naznačujúci, že sa načítavajú aktívne diskusie"
+}

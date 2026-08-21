@@ -1,0 +1,12 @@
+{
+	"@metadata": {
+		"authors": [
+			"Wizzard"
+		]
+	},
+	"personal-dashboard-impact-title": "Váš prínos",
+	"personal-dashboard-impact-thanks-sent": "Odoslané poďakovania",
+	"personal-dashboard-impact-edits-reviewed": "Posúdené úpravy",
+	"personal-dashboard-impact-edits-reviewed-description": "Počíta úpravy, ktoré ste za posledných 30 dní vrátili, a všetky poďakovania, ktoré ste odoslali.",
+	"personal-dashboard-impact-info-button": "Informácie"
+}

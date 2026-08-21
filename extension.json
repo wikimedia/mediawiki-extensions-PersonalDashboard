@@ -386,6 +386,10 @@
 		"PersonalDashboardActiveDiscussionsPages": {
 			"description": "The pages were active discussions will be extracted from",
 			"value": []
+		},
+		"PersonalDashboardAllowOverride": {
+			"description": "Kill switch for the pdo ModuleGroup override. False by default (safe for any install); WMF's deployment config sets this true for WMF wikis.",
+			"value": false
 		}
 	},
 	"DatabaseVirtualDomains": [

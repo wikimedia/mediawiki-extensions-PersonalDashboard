@@ -38,7 +38,7 @@ class SpecialPersonalDashboard extends SpecialPage {
 	/** @var string Device label ('mobile'/'desktop') for the SSR timing metrics; analytics only. */
 	private string $device;
 
-	/** Per-request memo of getModuleGroups()'s result; both call sites use the same $name. */
+	/** Per-request memo of getModuleGroups()'s result. */
 	private ?array $resolvedModuleGroup = null;
 
 	/** Per-request memo of getModuleGroups()'s resolved registry key (e.g. 'default', 'T426615'). */
@@ -46,6 +46,9 @@ class SpecialPersonalDashboard extends SpecialPage {
 
 	/** Per-request memo of experiment name => assigned variant, for every assignment that took effect. */
 	private array $resolvedExperimentVariants = [];
+
+	/** Per-request memo of whether the pdo ModuleGroup override resolved this request's module group. */
+	private bool $pdoOverrideActive = false;
 
 	public function __construct(
 		private readonly PersonalDashboardModuleFactory $moduleFactory,
@@ -176,6 +179,7 @@ class SpecialPersonalDashboard extends SpecialPage {
 			// Cast to object: an empty PHP array JSON-encodes as [], but the
 			// unenrolled case (most requests) needs {} on the wire.
 			'wgPersonalDashboardExperimentVariants' => (object)$this->resolvedExperimentVariants,
+			'wgPersonalDashboardPdoActive' => $this->pdoOverrideActive,
 		] );
 
 		$overallSsrTimeInSeconds = microtime( true ) - $startTime;
@@ -236,9 +240,10 @@ class SpecialPersonalDashboard extends SpecialPage {
 	}
 
 	/**
-	 * @param string $name key of registered module group in extension.json
+	 * Resolve this request's module group: a TestKitchen enrollment first, then
+	 * the `pdo` dev override, then the default group registered in extension.json.
 	 */
-	private function getModuleGroups( string $name = 'default' ): array {
+	private function getModuleGroups(): array {
 		// Resolving once per request avoids redundant experiment resolution
 		// (and a duplicate sendExposure() call for the experiment that wins).
 		if ( $this->resolvedModuleGroup !== null ) {
@@ -254,28 +259,76 @@ class SpecialPersonalDashboard extends SpecialPage {
 			$registry
 		);
 		$resolution = $resolver->resolve();
-		$resolution->sendExposures();
-		$this->resolvedExperimentVariants = $resolution->getVariants();
 
 		$experimentGroup = $resolution->getModuleGroup();
 		if ( $experimentGroup !== null ) {
+			$resolution->sendExposures();
+			$this->resolvedExperimentVariants = $resolution->getVariants();
 			$this->resolvedModuleGroupName = $experimentGroup;
 			$this->resolvedModuleGroup = $registry[ $experimentGroup ];
 			return $this->resolvedModuleGroup;
 		}
 
-		// $moduleGroup may be overriden by URL query param
-		$nameOverride = $this->getContext()->getRequest()->getText( 'moduleGroup' );
-		if ( $nameOverride !== '' ) {
-			if ( array_key_exists( $nameOverride, $registry ) ) {
-				$this->resolvedModuleGroupName = $nameOverride;
-				$this->resolvedModuleGroup = $registry[ $nameOverride ];
+		if ( $this->getConfig()->get( 'PersonalDashboardAllowOverride' ) ) {
+			$pdoGroup = $this->resolvePdoOverride( $registry );
+			if ( $pdoGroup !== null ) {
+				/*
+				 * pdo takes precedence over a non-overriding assignment (control,
+				 * or a tag-only experiment): no exposure fires for those
+				 * assignments, since pdo, not the experiment, decided what this
+				 * user sees.
+				 */
+				$this->resolvedModuleGroupName = $pdoGroup;
+				$this->resolvedModuleGroup = $registry[ $pdoGroup ];
+				$this->pdoOverrideActive = true;
 				return $this->resolvedModuleGroup;
 			}
 		}
-		$this->resolvedModuleGroupName = $name;
-		$this->resolvedModuleGroup = $registry[ $name ];
+
+		$resolution->sendExposures();
+		$this->resolvedExperimentVariants = $resolution->getVariants();
+		$this->resolvedModuleGroupName = 'default';
+		$this->resolvedModuleGroup = $registry[ 'default' ];
 		return $this->resolvedModuleGroup;
+	}
+
+	/**
+	 * Resolve the `pdo` ModuleGroup override: a URL param (`?pdo=`)
+	 * or a fallback cookie, either naming a registered module group. The URL
+	 * param also (re)sets the cookie for the rest of the browser session, so a
+	 * single tagged link keeps routing a QA session on reload. Only called once
+	 * real experiment enrollment (which always wins) has already returned null.
+	 *
+	 * @param array $registry Registered module groups, keyed by ID
+	 * @return ?string Module group ID, or null if no valid override applies
+	 */
+	private function resolvePdoOverride( array $registry ): ?string {
+		$request = $this->getContext()->getRequest();
+
+		$pdo = $request->getText( 'pdo' );
+		$fromUrlParam = $pdo !== '';
+
+		if ( !$fromUrlParam ) {
+			$pdo = $request->getCookie( 'pdo' ) ?? '';
+		}
+
+		if ( $pdo === '' || !array_key_exists( $pdo, $registry ) ) {
+			return null;
+		}
+
+		if ( $fromUrlParam ) {
+			/*
+			 * A null expiry is what gets a session cookie; 0 would mean
+			 * $wgCookieExpiration, pinning anyone who follows a shared `?pdo=` link
+			 * to that module group (and out of the event stream) for a month.
+			 * httpOnly => false is cheap insurance rather than a functional need:
+			 * the cookie carries only a module-group ID, and nothing client-side
+			 * reads it today (see wgPersonalDashboardPdoActive below).
+			 */
+			$request->response()->setCookie( 'pdo', $pdo, null, [ 'httpOnly' => false ] );
+		}
+
+		return $pdo;
 	}
 
 	/**

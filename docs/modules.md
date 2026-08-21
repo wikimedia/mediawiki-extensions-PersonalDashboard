@@ -85,7 +85,28 @@ Modules can carry optional per-placement keys such as `"style": "thin"` and `"st
 
 **Register a named group.** For an experiment or opt-in preview, register a new group in BoilerPlate's own `./extension.json` under `PersonalDashboard.ModuleGroups`. GrowthExperiments' `home` group is a working example ([T432039](https://phabricator.wikimedia.org/T432039)).
 
-Registering the group is the platform mechanism today, but there is no stable user-facing way to switch to a non-default group. User-facing `?moduleGroup=` routing is going away as part of [T430805](https://phabricator.wikimedia.org/T430805); a dev/override affordance to select alternative groups is planned but TBD. Register the group now if it's the right structural home for an experiment; the switching affordance can come later.
+Registering the group is the platform mechanism today. User-facing `?moduleGroup=` routing, which let anyone silently re-target their own dashboard, is gone as part of [T430805](https://phabricator.wikimedia.org/T430805). `?pdo=<ModuleGroupId>` replaces it: a dev/QA-only override gated by the `PersonalDashboardAllowOverride` kill switch. The switch defaults to `false` in the extension's own config, so a third-party install or local dev checkout gets `pdo` disabled out of the box; WMF's deployment config sets it `true`. Setting `pdo` via URL param also sets a `pdo` session cookie, so a single tagged link keeps routing a QA session across reloads until the browser session ends. A real TestKitchen enrollment always wins over `pdo`, and PersonalDashboard suppresses its own instrumentation entirely while `pdo` is active, so dev/QA traffic never contaminates analysis data.
+
+`pdo` and TestKitchen's own `?mpo=` solve different problems: `pdo` previews a module group before any TestKitchen experiment exists to validate it, while `mpo` validates a specific variant once a real experiment is live.
+
+## Serve a group through a TestKitchen experiment
+
+Registering a group puts it on the shelf; a TestKitchen experiment is what serves it to real users. Add one entry to `ROUTING` in `./src/Experiments.php`, keyed by the experiment name, mapping each variant to a registered module group ID:
+
+```php
+private const ROUTING = [
+    'my-experiment' => [
+        'control' => 'default',
+        'treatment' => 'boilerPlate',
+    ],
+];
+```
+
+Three things have to line up outside that file. The key must match the experiment name registered in TestKitchen's own config, or nobody ever resolves and the experiment reports no enrollment. Each variant's value must name a module group registered on the wikis being served, because a group whose extension isn't enabled there is skipped. And the experiment has to use the `mw-user` identifier type: `edge-unique` can't be read server-side, so module-group routing only works for logged-in users.
+
+Personal Dashboard handles the rest. It reads the user's assignment on each dashboard render, sends the TestKitchen exposure event for the experiment that resolves (control and treatment alike, and only for users who actually get the group), and tags every health-metrics event with the resolved module group in `action_context` and the variant in `action_subtype`. An unenrolled user's events carry `action_context` alone, which is how analysis tells them from an enrolled control user.
+
+Only one experiment routes at a time today: the first registered name that resolves wins, and the rest never take effect.
 
 ## Existing modules as reference
 

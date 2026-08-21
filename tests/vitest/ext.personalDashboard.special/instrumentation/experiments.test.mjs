@@ -1,5 +1,5 @@
 import { afterEach, expect, test, vi } from 'vitest';
-import { withExperimentTagging } from '/resources/ext.personalDashboard.special/instrumentation/experiments.js';
+import { isPdoActive, withExperimentTagging } from '/resources/ext.personalDashboard.special/instrumentation/experiments.js';
 
 afterEach( () => {
 	mw.config.reset();
@@ -99,4 +99,32 @@ test( 'an array-shaped wgPersonalDashboardExperimentVariants still serializes as
 		{ action_context: JSON.stringify( { module_group: 'default', module_variants: {} } ) },
 		undefined
 	);
+} );
+
+test( 'send() proceeds normally when pdo is not active (regression check)', () => {
+	mw.config.set( 'wgPersonalDashboardPdoActive', false );
+	const send = vi.fn();
+	const instrument = withExperimentTagging( { send } );
+
+	instrument.send( 'pageview' );
+
+	expect( send ).toHaveBeenCalledTimes( 1 );
+} );
+
+test( 'send() is suppressed when wgPersonalDashboardPdoActive is true', () => {
+	mw.config.set( 'wgPersonalDashboardPdoActive', true );
+	const send = vi.fn();
+	const instrument = withExperimentTagging( { send } );
+
+	instrument.send( 'pageview' );
+
+	expect( send ).not.toHaveBeenCalled();
+} );
+
+test( 'isPdoActive() reflects wgPersonalDashboardPdoActive', () => {
+	mw.config.set( 'wgPersonalDashboardPdoActive', false );
+	expect( isPdoActive() ).toBe( false );
+
+	mw.config.set( 'wgPersonalDashboardPdoActive', true );
+	expect( isPdoActive() ).toBe( true );
 } );

@@ -8,7 +8,9 @@ const compat = new FlatCompat( {
 } );
 
 export default defineConfig( [
-	globalIgnores( [ 'coverage/', 'resources/lib/', 'vendor/' ] ),
+	// Hidden directories hold tooling state, not our source, and flat config
+	// no longer skips them. Directories only, so hidden config files still count.
+	globalIgnores( [ '**/.*/', 'coverage/', 'resources/lib/', 'vendor/' ] ),
 	{
 		// Node CLI scripts get the server config below instead.
 		ignores: [ 'tests/check-unused-messages.js' ],

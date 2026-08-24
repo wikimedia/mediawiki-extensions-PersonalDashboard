@@ -23,7 +23,7 @@ const path = require( 'path' );
 const ROOT = process.cwd();
 const IGNORE_FILE = path.join( ROOT, 'i18n-ignore.json' );
 const SOURCE_EXTENSIONS = new Set( [ '.php', '.js', '.json', '.vue' ] );
-const EXCLUDED_DIRS = new Set( [ 'node_modules', 'vendor', '.git', 'coverage', 'dist' ] );
+const EXCLUDED_DIRS = new Set( [ 'node_modules', 'vendor', 'coverage', 'dist' ] );
 
 function readJson( filePath ) {
 	return JSON.parse( fs.readFileSync( filePath, 'utf8' ) );
@@ -75,7 +75,10 @@ function getSourceBlob( messageDirs ) {
 		for ( const entry of fs.readdirSync( dir, { withFileTypes: true } ) ) {
 			const full = path.join( dir, entry.name );
 			if ( entry.isDirectory() ) {
+				// Hidden directories hold tooling state, not our source; reading
+				// them makes an unused key look referenced.
 				if (
+					entry.name.startsWith( '.' ) ||
 					EXCLUDED_DIRS.has( entry.name ) ||
 					messageDirSet.has( path.resolve( full ) )
 				) {

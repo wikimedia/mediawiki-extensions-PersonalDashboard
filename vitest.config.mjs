@@ -10,6 +10,9 @@ export default defineConfig( {
 		}
 	},
 	test: {
+		// Collect only our own tests. The default walk covers the whole tree,
+		// hidden directories included, and those hold anything but our source.
+		include: [ 'tests/vitest/**/*.test.mjs' ],
 		// Merged with (not replacing) the plugin's own setup file.
 		setupFiles: [ './tests/vitest/setup.mjs' ]
 	}

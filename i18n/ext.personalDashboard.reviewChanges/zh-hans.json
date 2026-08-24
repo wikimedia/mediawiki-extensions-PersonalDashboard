@@ -14,5 +14,6 @@
 	"personal-dashboard-risky-article-edits-info-time-text-today": "$1，今天",
 	"personal-dashboard-risky-article-edits-list-card-aria-label": "打开$1的差异视图",
 	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "无编辑摘要",
-	"personal-dashboard-risky-article-edits-progress-bar-aria-label": "指示待审核更改加载时机的内联进度条"
+	"personal-dashboard-risky-article-edits-progress-bar-aria-label": "指示待审核更改加载时机的内联进度条",
+	"personal-dashboard-review-changes-major-changes-label": "重大更改"
 }

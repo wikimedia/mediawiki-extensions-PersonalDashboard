@@ -11,5 +11,6 @@
 	"personal-dashboard-risky-article-edits-info-time-text-today": "$1, денес",
 	"personal-dashboard-risky-article-edits-list-card-aria-label": "Отворете го прегледот на разлики за $1",
 	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Нема опис на уредувањето",
-	"personal-dashboard-risky-article-edits-progress-bar-aria-label": "лента за напредок во редови која покажува вчитување на промените за преглед"
+	"personal-dashboard-risky-article-edits-progress-bar-aria-label": "лента за напредок во редови која покажува вчитување на промените за преглед",
+	"personal-dashboard-review-changes-major-changes-label": "Крупни промени"
 }

@@ -8,7 +8,8 @@
 	"personal-dashboard-beta-info-chip-text": "بيتا",
 	"personal-dashboard-desc": "لوحة تحكم تجريبية للمشرفين",
 	"personal-dashboard-link-title": "لوحة التحكم",
-	"personal-dashboard-module-no-js-fallback": "يرجى تفعيل جافا سكريبت لعرض هذا المكون.",
+	"personal-dashboard-module-no-js-fallback": "بعض أجزاء لوحة التحكم هذه لا تظهر إلا إذا تم تفعيل جافا سكريبت في متصفحك.",
+	"personal-dashboard-open-module": "افتح هذه الوحدة",
 	"personal-dashboard-specialpage-title": "{{GENDER:$1| مرحباً}}، {{bidi: $1}}!",
 	"personal-dashboard-survey-text": "[ $1 مشاركة التعليقات]",
 	"tooltip-pt-personaldashboard": "لوحة التحكم الشخصية {{GENDER:|بك}}"

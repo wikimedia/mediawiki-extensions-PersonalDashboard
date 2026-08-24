@@ -12,5 +12,6 @@
 	"personal-dashboard-risky-article-edits-info-time-text-today": "$1، اليوم",
 	"personal-dashboard-risky-article-edits-list-card-aria-label": "افتح عرض الفرق مقابل $1",
 	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "ملخص بدون تعديل",
-	"personal-dashboard-risky-article-edits-progress-bar-aria-label": "شريط تقدم مدمج للإشارة إلى وقت تحميل التغييرات للمراجعة"
+	"personal-dashboard-risky-article-edits-progress-bar-aria-label": "شريط تقدم مدمج للإشارة إلى وقت تحميل التغييرات للمراجعة",
+	"personal-dashboard-review-changes-major-changes-label": "تغييرات كبيرة"
 }

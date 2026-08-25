@@ -257,7 +257,6 @@ class SpecialPersonalDashboard extends SpecialPage {
 			->setStatus( 'notice' )
 			->setIcon( 'personal-dashboard-survey-icon' )
 			->setText( $this->msg( 'personal-dashboard-beta-info-chip-text' )->parse() )
-			->build()
 			->getHtml();
 
 		return Html::rawElement(
@@ -372,9 +371,8 @@ class SpecialPersonalDashboard extends SpecialPage {
 		$this->getOutput()->addHTML( $this->codex
 			->message()
 			->setType( 'warning' )
-			->setContentText( $this->msg( 'personal-dashboard-module-no-js-fallback' )->text() )
+			->setContent( $this->msg( 'personal-dashboard-module-no-js-fallback' )->text() )
 			->setAttributes( [ 'class' => 'personal-dashboard-js-warning' ] )
-			->build()
 			->getHtml() );
 	}
 

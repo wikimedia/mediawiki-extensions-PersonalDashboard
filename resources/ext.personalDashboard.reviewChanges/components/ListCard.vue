@@ -28,42 +28,48 @@
 						{{ title }}
 					</a>
 
-					<div class="personal-dashboard-review-changes__card__description">
+					<div
+						v-if="description"
+						class="personal-dashboard-review-changes__card__description">
 						{{ description }}
 					</div>
 				</div>
 
 				<div class="personal-dashboard-review-changes__card__subheader">
-					<div class="personal-dashboard-review-changes__card__icon">
-						<cdx-icon
-							v-if="isNarrow || !showUserInfoCard"
-							:icon="userIcon"
-							size="small">
-						</cdx-icon>
+					<div class="personal-dashboard-review-changes__card__user">
+						<div class="personal-dashboard-review-changes__card__icon">
+							<cdx-icon
+								v-if="isNarrow || !showUserInfoCard"
+								:icon="userIcon"
+								size="small">
+							</cdx-icon>
 
-						<user-info-button v-else :username="user"></user-info-button>
+							<user-info-button v-else :username="user"></user-info-button>
+						</div>
+
+						<div
+							v-if="isNarrow"
+							class="personal-dashboard-review-changes__card__username">
+							{{ user }}
+						</div>
+
+						<a
+							v-else
+							:href="userUrl"
+							target="_blank"
+							class="personal-dashboard-review-changes__card__username">
+							{{ user }}
+						</a>
 					</div>
 
-					<div
-						v-if="isNarrow"
-						class="personal-dashboard-review-changes__card__username">
-						{{ user }}
-					</div>
+					<div class="personal-dashboard-review-changes__card__meta">
+						<div class="personal-dashboard-review-changes__card__separator">
+							⋅
+						</div>
 
-					<a
-						v-else
-						:href="userUrl"
-						target="_blank"
-						class="personal-dashboard-review-changes__card__username">
-						{{ user }}
-					</a>
-
-					<div class="personal-dashboard-review-changes__card__separator">
-						⋅
-					</div>
-
-					<div class="personal-dashboard-review-changes__card__timestamp">
-						{{ timestampFormatted }}
+						<div class="personal-dashboard-review-changes__card__timestamp">
+							{{ timestampFormatted }}
+						</div>
 					</div>
 				</div>
 
@@ -253,8 +259,13 @@ module.exports = defineComponent( {
 
 	&__header {
 		display: flex;
-		align-items: center;
-		gap: @spacing-35;
+		// The description stays beside the title while both fit. If they do not
+		// fit, the description moves onto its own line and is cut short there.
+		flex-wrap: wrap;
+		align-items: baseline;
+		// `row-gap column-gap`: the row gap only applies once the description has
+		// moved down, so it never indents the description beside the title.
+		gap: @spacing-25 @spacing-35;
 	}
 
 	&__title,
@@ -262,21 +273,61 @@ module.exports = defineComponent( {
 		font-weight: @font-weight-bold;
 	}
 
-	&__title,
+	// The title is never cut short. A long title flows onto the next line, and a
+	// word that is longer than the line breaks instead of overflowing the card.
+	&__title {
+		overflow-wrap: anywhere;
+	}
+
 	&__description,
 	&__username,
-	&__timestamp,
-	&__summary {
+	&__timestamp {
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
 	}
 
+	// The summary keeps at most two lines, then ends with an ellipsis.
+	&__summary {
+		// Contrary to its name, the non-standard `-webkit-box` value works in all
+		// major browsers. `-webkit-box-orient` is necessary to make the line clamp
+		// below work.
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 2;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		overflow-wrap: break-word;
+	}
+
 	&__subheader {
+		display: flex;
+		// A long username pushes the timestamp onto its own line before the
+		// username itself is cut short.
+		flex-wrap: wrap;
+		align-items: center;
+		gap: @spacing-25;
+		min-height: 20px;
+	}
+
+	// `min-width: 0` lets the group shrink below the width of the username, so
+	// the username can show an ellipsis once the timestamp has moved down.
+	&__user {
 		display: flex;
 		align-items: center;
 		gap: @spacing-25;
-		height: 20px;
+		min-width: 0;
+	}
+
+	&__meta {
+		display: flex;
+		flex-shrink: 0;
+		align-items: center;
+		gap: @spacing-25;
+	}
+
+	&__icon {
+		flex-shrink: 0;
 	}
 
 	&__icon .cdx-button:enabled {

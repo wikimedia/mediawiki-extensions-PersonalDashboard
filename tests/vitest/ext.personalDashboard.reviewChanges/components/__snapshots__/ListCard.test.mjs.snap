@@ -52,48 +52,56 @@ exports[`mount component 1`] = `
           class="personal-dashboard-review-changes__card__subheader"
         >
           <div
-            class="personal-dashboard-review-changes__card__icon"
+            class="personal-dashboard-review-changes__card__user"
           >
-            <span
-              class="cdx-icon cdx-icon--small"
+            <div
+              class="personal-dashboard-review-changes__card__icon"
             >
-              <svg
-                aria-hidden="true"
-                height="20"
-                viewBox="0 0 20 20"
-                width="20"
-                xmlns="http://www.w3.org/2000/svg"
+              <span
+                class="cdx-icon cdx-icon--small"
               >
-                <!--v-if-->
-                <g>
-                  <path
-                    d="M12 11a6 6 0 016 6v2H2v-2a6 6 0 016-6z"
-                  />
-                  <circle
-                    cx="10"
-                    cy="5"
-                    r="4"
-                  />
-                </g>
-              </svg>
-            </span>
+                <svg
+                  aria-hidden="true"
+                  height="20"
+                  viewBox="0 0 20 20"
+                  width="20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <!--v-if-->
+                  <g>
+                    <path
+                      d="M12 11a6 6 0 016 6v2H2v-2a6 6 0 016-6z"
+                    />
+                    <circle
+                      cx="10"
+                      cy="5"
+                      r="4"
+                    />
+                  </g>
+                </svg>
+              </span>
+            </div>
+            <a
+              class="personal-dashboard-review-changes__card__username"
+              href="/wiki/User:TestUser"
+              target="_blank"
+            >
+              TestUser
+            </a>
           </div>
-          <a
-            class="personal-dashboard-review-changes__card__username"
-            href="/wiki/User:TestUser"
-            target="_blank"
-          >
-            TestUser
-          </a>
           <div
-            class="personal-dashboard-review-changes__card__separator"
+            class="personal-dashboard-review-changes__card__meta"
           >
-             ⋅ 
-          </div>
-          <div
-            class="personal-dashboard-review-changes__card__timestamp"
-          >
-            in 2 hours
+            <div
+              class="personal-dashboard-review-changes__card__separator"
+            >
+               ⋅ 
+            </div>
+            <div
+              class="personal-dashboard-review-changes__card__timestamp"
+            >
+              in 2 hours
+            </div>
           </div>
         </div>
         <div

@@ -18,6 +18,7 @@ use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\Utils\MWCryptRand;
 use MediaWiki\WikiMap\WikiMap;
 use Throwable;
+use Wikimedia\Codex\Localization\MediaWikiLocalization;
 use Wikimedia\Codex\Utility\Codex;
 use Wikimedia\Stats\StatsFactory;
 
@@ -39,7 +40,7 @@ class SpecialPersonalDashboard extends SpecialPage {
 		private readonly StatsFactory $statsFactory,
 	) {
 		parent::__construct( 'PersonalDashboard' );
-		$this->codex = new Codex();
+		$this->codex = new Codex( new MediaWikiLocalization( $this->getContext() ) );
 		$this->pageviewToken = $this->generatePageviewToken();
 	}
 

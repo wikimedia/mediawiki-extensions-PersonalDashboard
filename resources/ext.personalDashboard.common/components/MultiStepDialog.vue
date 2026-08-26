@@ -194,10 +194,6 @@ module.exports = defineComponent( {
 			align-items: center;
 			flex-wrap: nowrap;
 			overflow-wrap: anywhere;
-
-			.cdx-checkbox {
-				margin-bottom: 0;
-			}
 		}
 
 		&__actions {

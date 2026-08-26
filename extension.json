@@ -159,10 +159,6 @@
 		},
 		"ext.personalDashboard.onboarding": {
 			"localBasePath": "resources/ext.personalDashboard.onboarding",
-			"class": "MediaWiki\\ResourceLoader\\CodexModule",
-			"codexComponents": [
-				"CdxCheckbox"
-			],
 			"dependencies": [
 				"vue",
 				"ext.personalDashboard.common"
@@ -223,8 +219,6 @@
 				"CdxCard",
 				"CdxIcon",
 				"CdxInfoChip",
-				"CdxPopover",
-				"CdxToggleButton",
 				"CdxProgressBar"
 			],
 			"packageFiles": [

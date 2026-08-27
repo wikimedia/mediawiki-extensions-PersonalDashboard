@@ -1,11 +1,8 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`mount component 1`] = `
-<a
-  class="cdx-card cdx-card--is-link personal-dashboard-active-discussions__card"
-  href="/wiki/Wikipedia:Village_Pump#Test_Title"
-  role="button"
-  target="_blank"
+<span
+  class="cdx-card personal-dashboard-feed__card personal-dashboard-active-discussions__card"
 >
   <!--v-if-->
   <span
@@ -21,21 +18,28 @@ exports[`mount component 1`] = `
       class="cdx-card__text__description"
     >
       
-      <div
-        class="personal-dashboard-active-discussions__card__container"
+      <span
+        class="personal-dashboard-feed__card__container"
       >
-        <div
-          class="personal-dashboard-active-discussions__card__header"
+        <a
+          aria-label="Test Title"
+          class="personal-dashboard-feed__card__link"
+          href="/wiki/Wikipedia:Village_Pump#Test_Title"
+          target="_blank"
+        />
+        <span
+          class="personal-dashboard-feed__card__header"
         >
-          <div
+          
+          <span
             class="personal-dashboard-active-discussions__card__title"
           >
             Test Title
-          </div>
-          <div
+          </span>
+          <span
             class="personal-dashboard-active-discussions__card__icons"
           >
-            <div
+            <span
               class="personal-dashboard-active-discussions__card__comments"
             >
               <span
@@ -57,8 +61,8 @@ exports[`mount component 1`] = `
                 </svg>
               </span>
                12
-            </div>
-            <div
+            </span>
+            <span
               class="personal-dashboard-active-discussions__card__authors"
             >
               <span
@@ -85,17 +89,25 @@ exports[`mount component 1`] = `
                 </svg>
               </span>
                4
-            </div>
-          </div>
-        </div>
-        <div
-          class="personal-dashboard-active-discussions__card__subheader"
+            </span>
+          </span>
+          
+        </span>
+        <span
+          class="personal-dashboard-feed__card__meta"
         >
-          Wikipedia:Village Pump
-        </div>
-        <div
-          class="personal-dashboard-active-discussions__card__latest"
+          
+          <span
+            class="personal-dashboard-active-discussions__card__subheader"
+          >
+            Wikipedia:Village Pump
+          </span>
+          
+        </span>
+        <span
+          class="personal-dashboard-feed__card__description"
         >
+          
           ⧼personal-dashboard-active-discussions-latest-comment⧽ 
           <a
             href="/wiki/Wikipedia:Village_Pump#foo"
@@ -103,11 +115,12 @@ exports[`mount component 1`] = `
           >
             in 7 hours
           </a>
-        </div>
-      </div>
+          
+        </span>
+      </span>
       
     </span>
     <!--v-if-->
   </span>
-</a>
+</span>
 `;

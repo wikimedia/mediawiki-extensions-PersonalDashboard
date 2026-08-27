@@ -79,13 +79,17 @@ describe( 'initial state', () => {
 	} );
 } );
 
-describe( 'hasFeed getter', () => {
-	test( 'is false when feed is empty', () => {
+describe( 'feedState getter', () => {
+	test( 'exposes the empty feed as the shared contract', () => {
 		const store = useReviewChangesStore();
-		expect( store.hasFeed ).toBe( false );
+		expect( store.feedState ).toEqual( {
+			items: [],
+			isLoading: false,
+			error: null
+		} );
 	} );
 
-	test( 'is true when feed has items', async () => {
+	test( 'exposes the fetched feed as the shared contract', async () => {
 		const store = useReviewChangesStore();
 		mockFetchWatchlistItems.mockResolvedValue( [] );
 		mockFetchRecentChangesItems.mockResolvedValue(
@@ -94,7 +98,10 @@ describe( 'hasFeed getter', () => {
 
 		await store.fetchRecentActivity( 5 );
 
-		expect( store.hasFeed ).toBe( true );
+		expect( store.feedState.items ).toStrictEqual( store.feed );
+		expect( store.feedState.items ).toHaveLength( 1 );
+		expect( store.feedState.isLoading ).toBe( false );
+		expect( store.feedState.error ).toBeNull();
 	} );
 } );
 

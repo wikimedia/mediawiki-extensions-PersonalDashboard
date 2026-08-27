@@ -2,7 +2,7 @@
 
 exports[`mount component 1`] = `
 <span
-  class="cdx-card personal-dashboard-review-changes__card"
+  class="cdx-card personal-dashboard-feed__card personal-dashboard-review-changes__card"
   data-feedorigin="recentchanges"
   ns="0"
   rcid="0"
@@ -23,18 +23,19 @@ exports[`mount component 1`] = `
       class="cdx-card__text__description"
     >
       
-      <div
-        class="personal-dashboard-review-changes__card__container"
+      <span
+        class="personal-dashboard-feed__card__container"
       >
         <a
           aria-label="⧼personal-dashboard-risky-article-edits-list-card-aria-label⧽"
-          class="personal-dashboard-review-changes__card__link"
+          class="personal-dashboard-feed__card__link"
           href="/w/index.php?title=TestTitle&curid=8675309&diff=0&oldid=0"
           target="_blank"
         />
-        <div
-          class="personal-dashboard-review-changes__card__header"
+        <span
+          class="personal-dashboard-feed__card__header"
         >
+          
           <a
             class="personal-dashboard-review-changes__card__title"
             href="/wiki/TestTitle"
@@ -42,19 +43,21 @@ exports[`mount component 1`] = `
           >
             TestTitle
           </a>
-          <div
+          <span
             class="personal-dashboard-review-changes__card__description"
           >
             a description
-          </div>
-        </div>
-        <div
-          class="personal-dashboard-review-changes__card__subheader"
+          </span>
+          
+        </span>
+        <span
+          class="personal-dashboard-feed__card__meta"
         >
-          <div
+          
+          <span
             class="personal-dashboard-review-changes__card__user"
           >
-            <div
+            <span
               class="personal-dashboard-review-changes__card__icon"
             >
               <span
@@ -80,7 +83,7 @@ exports[`mount component 1`] = `
                   </g>
                 </svg>
               </span>
-            </div>
+            </span>
             <a
               class="personal-dashboard-review-changes__card__username"
               href="/wiki/User:TestUser"
@@ -88,28 +91,35 @@ exports[`mount component 1`] = `
             >
               TestUser
             </a>
-          </div>
-          <div
+          </span>
+          <span
             class="personal-dashboard-review-changes__card__meta"
           >
-            <div
+            <span
               class="personal-dashboard-review-changes__card__separator"
             >
-               ⋅ 
-            </div>
-            <div
+               · 
+            </span>
+            <span
               class="personal-dashboard-review-changes__card__timestamp"
             >
               in 2 hours
-            </div>
-          </div>
-        </div>
-        <div
-          class="personal-dashboard-review-changes__card__summary"
+            </span>
+          </span>
+          
+        </span>
+        <span
+          class="personal-dashboard-feed__card__description"
         >
-          TestComment
-        </div>
-      </div>
+          
+          <span
+            class="personal-dashboard-review-changes__card__summary"
+          >
+            TestComment
+          </span>
+          
+        </span>
+      </span>
       
     </span>
     <!--v-if-->

@@ -103,3 +103,39 @@ test( 'renders discussion URL without html markup', async () => {
 
 	expect( '/wiki/Wikipedia:Village_pump_(idea_lab)#DiscussionPage#Test_Title' ).toStrictEqual( wrapper.vm.discussionUrl );
 } );
+
+test( 'links the timestamp to the latest comment on a wide viewport', () => {
+	const wrapper = mount( ListCard, {
+		props: {
+			discussionTitle: 'Test Title',
+			discussionPage: 'Wikipedia:Village Pump',
+			commentCount: 12,
+			authorCount: 4,
+			latestReply: new Date( 2024, 11, 2 ).toISOString(),
+			latestReplyId: 'foo',
+			isNarrow: false
+		}
+	} );
+
+	const link = wrapper.find( '.personal-dashboard-feed__card__description a' );
+	expect( link.attributes( 'href' ) ).toStrictEqual( '/wiki/Wikipedia:Village_Pump#foo' );
+} );
+
+test( 'drops the timestamp link on a narrow viewport', () => {
+	const wrapper = mount( ListCard, {
+		props: {
+			discussionTitle: 'Test Title',
+			discussionPage: 'Wikipedia:Village Pump',
+			commentCount: 12,
+			authorCount: 4,
+			latestReply: new Date( 2024, 11, 2 ).toISOString(),
+			latestReplyId: 'foo',
+			isNarrow: true
+		}
+	} );
+
+	expect( wrapper.find( '.personal-dashboard-feed__card__description a' ).exists() )
+		.toStrictEqual( false );
+	expect( wrapper.find( '.personal-dashboard-feed__card__description' ).text() )
+		.toContain( '1 year ago' );
+} );

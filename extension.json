@@ -140,8 +140,10 @@
 			"class": "MediaWiki\\ResourceLoader\\CodexModule",
 			"codexComponents": [
 				"CdxButton",
+				"CdxCard",
 				"CdxDialog",
-				"CdxIcon"
+				"CdxIcon",
+				"CdxProgressBar"
 			],
 			"dependencies": [
 				"vue"
@@ -150,12 +152,16 @@
 				"personal-dashboard-multi-step-dialog-progress",
 				"personal-dashboard-multi-step-dialog-next-button",
 				"personal-dashboard-multi-step-dialog-previous-button",
-				"personal-dashboard-multi-step-dialog-got-it-button"
+				"personal-dashboard-multi-step-dialog-got-it-button",
+				"personal-dashboard-feed-error"
 			],
 			"packageFiles": [
 				"index.js",
 				"utils.js",
+				"components/FeedCard.vue",
+				"components/FeedPanel.vue",
 				"components/MultiStepDialog.vue",
+				"composables/useFeedState.js",
 				{
 					"name": "icons.json",
 					"callback": "MediaWiki\\ResourceLoader\\CodexModule::getIcons",
@@ -225,11 +231,8 @@
 			"remoteExtPath": "PersonalDashboard/resources/personalDashboard.reviewChanges",
 			"class": "MediaWiki\\ResourceLoader\\CodexModule",
 			"codexComponents": [
-				"CdxButton",
-				"CdxCard",
 				"CdxIcon",
-				"CdxInfoChip",
-				"CdxProgressBar"
+				"CdxInfoChip"
 			],
 			"packageFiles": [
 				"App.vue",
@@ -263,6 +266,7 @@
 				"personal-dashboard-risky-article-edits-list-card-no-comment-message",
 				"personal-dashboard-risky-article-edits-mobile-summary-footer-link-text",
 				"personal-dashboard-risky-article-edits-mobile-user-text",
+				"personal-dashboard-risky-article-edits-progress-bar-aria-label",
 				"personal-dashboard-risky-article-edits-subheader-info",
 				"tag-mw-reverted",
 				"tag-mw-rollback",
@@ -281,23 +285,18 @@
 			"remoteExtPath": "PersonalDashboard/resources/personalDashboard.activeDiscussions",
 			"class": "MediaWiki\\ResourceLoader\\CodexModule",
 			"codexComponents": [
-				"CdxCard",
-				"CdxIcon",
-				"CdxButton",
-				"CdxProgressBar"
+				"CdxIcon"
 			],
 			"packageFiles": [
 				"App.vue",
 				"components/ListCard.vue",
-				"components/ListCardMobile.vue",
-				"composables/useFetchActiveDiscussionsResult.js",
+				"composables/useActiveDiscussionsFeed.js",
 				{
 					"name": "icons.json",
 					"callback": "MediaWiki\\ResourceLoader\\CodexModule::getIcons",
 					"callbackParam": [
 						"cdxIconUserAvatar",
-						"cdxIconSpeechBubble",
-						"cdxIconSpeechBubbles"
+						"cdxIconSpeechBubble"
 					]
 				}
 			],

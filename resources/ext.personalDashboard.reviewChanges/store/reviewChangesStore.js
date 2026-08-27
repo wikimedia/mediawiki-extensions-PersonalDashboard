@@ -5,8 +5,10 @@
  *
  * Intentionally thin: all API logic, param-building, pagination, and
  * normalization lives in the composables and feedHelpers. The store's
- * only job is to coordinate the sources, merge their output, and
- * expose reactive state to the UI.
+ * only job is to coordinate the three sources, merge their output, and
+ * expose the result as the shared feed-data contract (see the feedState
+ * getter). It keeps its own state rather than using useFeedState because
+ * that helper wraps a single loader, and this feed is a merge of three.
  */
 
 const { defineStore } = require( 'pinia' );
@@ -47,12 +49,18 @@ const useReviewChangesStore = defineStore( 'reviewChanges', {
 
 	getters: {
 		/**
-		 * Whether the feed has loaded at least once and has items to show.
+		 * This store as the normalized feed-data contract the shared feed
+		 * scaffold consumes, so the module can hand it over in one binding.
 		 *
+		 * @see ext.personalDashboard.common/composables/useFeedState.js
 		 * @param {Object} state
-		 * @return {boolean}
+		 * @return {Object}
 		 */
-		hasFeed: ( state ) => state.feed.length > 0
+		feedState: ( state ) => ( {
+			items: state.feed,
+			isLoading: state.isLoading,
+			error: state.error
+		} )
 	},
 
 	actions: {

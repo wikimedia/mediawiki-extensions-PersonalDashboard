@@ -3,7 +3,9 @@ import { mount } from '@vue/test-utils';
 import ListCard from '/resources/ext.personalDashboard.reviewChanges/components/ListCard.vue';
 
 function hasVisited( wrapper ) {
-	return wrapper.classes( 'personal-dashboard-review-changes__card--visited' );
+	// The visited modifier belongs to the shared FeedCard chrome, and lands on
+	// this same element alongside the module's own class.
+	return wrapper.classes( 'personal-dashboard-feed__card--visited' );
 }
 
 function getOtherLinks( wrapper ) {
@@ -183,7 +185,7 @@ test( 'sets visited on primary link click', async () => {
 	expect( hasVisited( wrapper ) ).toStrictEqual( false );
 
 	// Remove href for testing only, otherwise happy-dom will fetch\
-	const link = wrapper.find( '.personal-dashboard-review-changes__card__link' );
+	const link = wrapper.find( '.personal-dashboard-feed__card__link' );
 	link.element.removeAttribute( 'href' );
 
 	await link.trigger( 'click' );
@@ -254,7 +256,7 @@ test( 'title and username are not links on mobile', async () => {
 	expect( hasVisited( wrapper ) ).toStrictEqual( false );
 
 	for ( const link of getOtherLinks( wrapper ) ) {
-		expect( link.element.tagName ).toStrictEqual( 'DIV' );
+		expect( link.element.tagName ).toStrictEqual( 'SPAN' );
 	}
 } );
 

@@ -1,11 +1,7 @@
 import { afterEach, test, expect, vi } from 'vitest';
-import { default as useFetchActiveDiscussionsResult } from '/resources/ext.personalDashboard.activeDiscussions/composables/useFetchActiveDiscussionsResult.js';
+import { useActiveDiscussionsFeed } from '/resources/ext.personalDashboard.activeDiscussions/composables/useActiveDiscussionsFeed.js';
 
-const {
-	activeDiscussionsResult,
-	error,
-	fetchActiveDiscussions
-} = useFetchActiveDiscussionsResult();
+const { feedState, load } = useActiveDiscussionsFeed();
 
 mw.config.set( 'wgPersonalDashboardActiveDiscussionsPages', [ 'Wikipedia:Village_pump' ] );
 
@@ -46,9 +42,10 @@ test( 'fetchActiveDiscussions with response', async () => {
 		}
 	} );
 
-	await fetchActiveDiscussions();
-	expect( activeDiscussionsResult.value ).toStrictEqual( [
+	await load();
+	expect( feedState.items ).toStrictEqual( [
 		{
+			id: 'Wikipedia:Village_pump#h-This_should_be_the_first_comment-20260219013200',
 			discussionPage: 'Wikipedia:Village_pump',
 			discussionTitle: 'This should be the first comment',
 			commentCount: 4,
@@ -66,16 +63,16 @@ test( 'fetchActiveDiscussions with no items', async () => {
 		}
 	} );
 
-	await fetchActiveDiscussions();
-	expect( activeDiscussionsResult.value ).toStrictEqual( [] );
+	await load();
+	expect( feedState.items ).toStrictEqual( [] );
 } );
 
 test( 'fetchActiveDiscussions with key missing', async () => {
 	mw.Api.mock( { discussiontoolspageinfo: {} } );
 	const logError = vi.spyOn( mw.log, 'error' ).mockImplementationOnce( () => {} );
 
-	await fetchActiveDiscussions();
-	expect( error.value.message ).toStrictEqual( 'No valid active discussions found' );
+	await load();
+	expect( feedState.error.message ).toStrictEqual( 'No valid active discussions found' );
 	expect( logError ).toHaveBeenCalledExactlyOnceWith( 'No valid active discussions found' );
 } );
 
@@ -83,8 +80,8 @@ test( 'fetchActiveDiscussions with all keys missing', async () => {
 	mw.Api.mock( {} );
 	const logError = vi.spyOn( mw.log, 'error' ).mockImplementationOnce( () => {} );
 
-	await fetchActiveDiscussions();
-	expect( error.value.message ).toStrictEqual( 'No valid active discussions found' );
+	await load();
+	expect( feedState.error.message ).toStrictEqual( 'No valid active discussions found' );
 	expect( logError ).toHaveBeenCalledExactlyOnceWith( 'No valid active discussions found' );
 } );
 
@@ -94,8 +91,8 @@ test( 'fetchActiveDiscussions with error', async () => {
 	} );
 	const logError = vi.spyOn( mw.log, 'error' ).mockImplementationOnce( () => {} );
 
-	await fetchActiveDiscussions();
-	expect( error.value.message ).toStrictEqual( 'An error' );
+	await load();
+	expect( feedState.error.message ).toStrictEqual( 'An error' );
 	expect( logError ).toHaveBeenCalledExactlyOnceWith( 'An error' );
 } );
 
@@ -132,6 +129,6 @@ test( 'fetchActiveDiscussions with low author count', async () => {
 		}
 	} );
 
-	await fetchActiveDiscussions();
-	expect( activeDiscussionsResult.value ).toStrictEqual( [] );
+	await load();
+	expect( feedState.items ).toStrictEqual( [] );
 } );

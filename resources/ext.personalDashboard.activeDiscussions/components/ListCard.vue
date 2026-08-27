@@ -1,61 +1,60 @@
 <template>
-	<cdx-card
+	<feed-card
 		class="personal-dashboard-active-discussions__card"
 		:url="discussionUrl"
-		target="_blank"
-		role="button">
-		<template #description>
-			<div class="personal-dashboard-active-discussions__card__container">
-				<div class="personal-dashboard-active-discussions__card__header">
-					<div class="personal-dashboard-active-discussions__card__title">
-						{{ discussionTitleFormatted }}
-					</div>
+		:aria-label="discussionTitleFormatted"
+	>
+		<template #header>
+			<span class="personal-dashboard-active-discussions__card__title">
+				{{ discussionTitleFormatted }}
+			</span>
 
-					<div class="personal-dashboard-active-discussions__card__icons">
-						<div class="personal-dashboard-active-discussions__card__comments">
-							<cdx-icon :icon="cdxIconSpeechBubble" size="small"></cdx-icon>
-							{{ commentCount }}
-						</div>
+			<span class="personal-dashboard-active-discussions__card__icons">
+				<span class="personal-dashboard-active-discussions__card__comments">
+					<cdx-icon :icon="cdxIconSpeechBubble" size="small"></cdx-icon>
+					{{ commentCount }}
+				</span>
 
-						<div class="personal-dashboard-active-discussions__card__authors">
-							<cdx-icon :icon="cdxIconUserAvatar" size="small"></cdx-icon>
-							{{ authorCount }}
-						</div>
-					</div>
-				</div>
-
-				<div class="personal-dashboard-active-discussions__card__subheader">
-					{{ discussionPageFormatted }}
-				</div>
-
-				<div class="personal-dashboard-active-discussions__card__latest">
-					{{ latestComment }}
-
-					<span v-if="isMobile">
-						{{ timestampFormatted }}
-					</span>
-
-					<a
-						v-else
-						:href="commentUrl"
-						target="_blank">
-						{{ timestampFormatted }}
-					</a>
-				</div>
-			</div>
+				<span class="personal-dashboard-active-discussions__card__authors">
+					<cdx-icon :icon="cdxIconUserAvatar" size="small"></cdx-icon>
+					{{ authorCount }}
+				</span>
+			</span>
 		</template>
-	</cdx-card>
+
+		<template #meta>
+			<span class="personal-dashboard-active-discussions__card__subheader">
+				{{ discussionPageFormatted }}
+			</span>
+		</template>
+
+		<template #description>
+			{{ latestComment }}
+
+			<span v-if="isNarrow">
+				{{ timestampFormatted }}
+			</span>
+			<a
+				v-else
+				:href="commentUrl"
+				target="_blank"
+			>
+				{{ timestampFormatted }}
+			</a>
+		</template>
+	</feed-card>
 </template>
 
 <script>
 const { defineComponent } = require( 'vue' );
-const { CdxCard, CdxIcon } = require( '../codex.js' );
+const { CdxIcon } = require( '../codex.js' );
+const { FeedCard } = require( 'ext.personalDashboard.common' );
 const { cdxIconUserAvatar, cdxIconSpeechBubble } = require( '../icons.json' );
 const { formatRelativeTimeOrDate } = require( 'mediawiki.DateFormatter' );
 
 module.exports = defineComponent( {
 	name: 'ListCard',
-	components: { CdxCard, CdxIcon },
+	components: { CdxIcon, FeedCard },
 	props: {
 		discussionTitle: { type: String, required: true },
 		discussionPage: { type: String, required: true },
@@ -63,7 +62,7 @@ module.exports = defineComponent( {
 		authorCount: { type: Number, required: true },
 		latestReply: { type: String, required: true },
 		latestReplyId: { type: String, required: true },
-		isMobile: { type: Boolean, default: false }
+		isNarrow: { type: Boolean, default: false }
 	},
 	setup() {
 		return {
@@ -74,24 +73,10 @@ module.exports = defineComponent( {
 	},
 	computed: {
 		discussionTitleFormatted() {
-			if ( !this.discussionTitle ) {
-				return '';
-			}
-
-			const temp = document.createElement( 'div' );
-			temp.innerHTML = this.discussionTitle;
-
-			return temp.innerText;
+			return this.stripMarkup( this.discussionTitle );
 		},
 		discussionPageFormatted() {
-			if ( !this.discussionPage ) {
-				return '';
-			}
-
-			const temp = document.createElement( 'div' );
-			temp.innerHTML = this.discussionPage;
-
-			return temp.innerText;
+			return this.stripMarkup( this.discussionPage );
 		},
 		discussionUrl() {
 			return mw.util.getUrl( this.discussionPageFormatted + '#' + this.discussionTitleFormatted );
@@ -103,6 +88,22 @@ module.exports = defineComponent( {
 			const latestReplyTimestamp = new Date( Date.parse( this.latestReply ) );
 			return `${ formatRelativeTimeOrDate( latestReplyTimestamp ) }`;
 		}
+	},
+	methods: {
+		/**
+		 * DiscussionTools hands back thread titles and page names as HTML; the
+		 * card shows them as plain text.
+		 *
+		 * @param {string} html
+		 * @return {string}
+		 */
+		stripMarkup( html ) {
+			if ( !html ) {
+				return '';
+			}
+
+			return new DOMParser().parseFromString( html, 'text/html' ).body.textContent;
+		}
 	}
 } );
 </script>
@@ -110,37 +111,13 @@ module.exports = defineComponent( {
 <style lang="less">
 @import 'mediawiki.skin.variables.less';
 
+// The card chrome (the whole-card link, the visited state and the row layout)
+// lives in FeedCard; only what is specific to an Active Discussions item is here.
 .personal-dashboard-active-discussions__card {
-	&.cdx-card {
-		padding: @spacing-100;
-		border-color: transparent;
-
-		&:hover {
-			border-color: @border-color-subtle;
-		}
-	}
-
-	.cdx-card__text {
-		width: 100%;
-	}
-
-	.cdx-card__text__description {
-		margin-top: 0;
-	}
-
-	&__container {
-		display: flex;
-		flex-direction: column;
-		gap: @spacing-25;
-		color: @color-subtle;
-		line-height: @line-height-x-small;
-	}
-
-	&__header {
-		display: flex;
-		align-items: center;
+	// FeedCard lays the header out as a row; this card puts its counts at the
+	// far end of that row, and stacks them under the title on Minerva.
+	.personal-dashboard-feed__card__header {
 		justify-content: space-between;
-		gap: @spacing-35;
 
 		.skin-minerva & {
 			flex-direction: column;
@@ -148,20 +125,10 @@ module.exports = defineComponent( {
 		}
 	}
 
-	&__title {
-		color: @color-base;
-		font-weight: @font-weight-bold;
-	}
-
-	&__subheader {
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
-	}
-
 	&__icons {
-		display: flex;
 		align-items: center;
+		display: flex;
+		font-weight: @font-weight-normal;
 		gap: @spacing-50;
 		white-space: nowrap;
 	}

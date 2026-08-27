@@ -2,43 +2,44 @@
 
 exports[`mount component 1`] = `
 <div>
-  <div>
-    
+  <div
+    class="personal-dashboard-feed"
+  >
+    <div>
+      
+      <div
+        aria-disabled="false"
+        aria-hidden="true"
+        aria-label="⧼personal-dashboard-risky-article-edits-progress-bar-aria-label⧽"
+        class="cdx-progress-bar cdx-progress-bar--inline cdx-progress-bar--enabled"
+        role="progressbar"
+      >
+        <div
+          class="cdx-progress-bar__bar"
+        />
+      </div>
+      <!--v-if-->
+      
+    </div>
     <div
-      aria-disabled="false"
-      aria-hidden="true"
-      aria-label="⧼personal-dashboard-risky-article-edits-progress-bar-aria-label⧽"
-      class="cdx-progress-bar cdx-progress-bar--inline cdx-progress-bar--enabled"
-      role="progressbar"
+      class="personal-dashboard-feed__container"
+      style="display: none;"
     >
       <div
-        class="cdx-progress-bar__bar"
-      />
+        class="personal-dashboard-feed__list personal-dashboard-feed__list--summary"
+      >
+        
+        
+      </div>
     </div>
-    <!--v-if-->
-    
-  </div>
-  <div
-    class="personal-dashboard-review-changes__container"
-    style="display: none;"
-  >
-    <div
-      class="personal-dashboard-review-changes__list personal-dashboard-review-changes__list--summary"
+    <button
+      aria-label="⧼personal-dashboard-risky-article-edits-mobile-summary-footer-link-text⧽"
+      class="cdx-button cdx-button--action-progressive cdx-button--weight-quiet cdx-button--size-medium personal-dashboard-feed__show-more"
     >
       
-      
-    </div>
-  </div>
-  <button
-    aria-label="⧼personal-dashboard-risky-article-edits-mobile-summary-footer-link-text⧽"
-    class="cdx-button cdx-button--action-progressive cdx-button--weight-quiet cdx-button--size-medium personal-dashboard-review-changes__show-more"
-  >
-    
-    <!-- eslint-disable max-len -->
-    <span>
       ⧼personal-dashboard-risky-article-edits-mobile-summary-footer-link-text⧽
-    </span>
-    
-  </button>
+      
+    </button>
+  </div>
 </div>
 `;

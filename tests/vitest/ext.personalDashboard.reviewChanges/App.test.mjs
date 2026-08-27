@@ -8,7 +8,11 @@ vi.mock( '/resources/ext.personalDashboard.reviewChanges/store/reviewChangesStor
 		pages: [],
 		isLoading: true,
 		error: null,
-		hasFeed: false,
+		// The shared feed-data contract the module hands to the scaffold; a
+		// getter so a test can keep mutating the state fields above.
+		get feedState() {
+			return { items: this.feed, isLoading: this.isLoading, error: this.error };
+		},
 		fetchRecentActivity: vi.fn()
 	};
 	return { useReviewChangesStore: () => mockStore };
@@ -28,7 +32,6 @@ beforeEach( () => {
 	store.pages = [];
 	store.isLoading = true;
 	store.error = null;
-	store.hasFeed = false;
 	store.fetchRecentActivity.mockReset();
 } );
 
@@ -46,13 +49,17 @@ test( 'shows error message when there is one', () => {
 	store.isLoading = false;
 	store.error = new Error( 'An Error' );
 
-	const wrapper = mount( RecentActivity );
-	expect( wrapper.text() ).toContain( 'An Error' );
+	// The message mock drops parameters, so the failure the reader is shown is
+	// only visible in the $i18n call.
+	const i18n = vi.fn( ( key ) => key );
+	const wrapper = mount( RecentActivity, { global: { mocks: { $i18n: i18n } } } );
+
+	expect( i18n ).toHaveBeenCalledWith( 'personal-dashboard-feed-error', 'An Error' );
+	expect( wrapper.text() ).toContain( 'personal-dashboard-feed-error' );
 } );
 
 test( 'shows recent changes with information', () => {
 	store.isLoading = false;
-	store.hasFeed = true;
 	store.feed = [
 		{
 			title: 'Article Title',
@@ -93,7 +100,6 @@ test( 'shows recent changes with information', () => {
 
 test( 'fetches the full 10-item limit regardless of summary/focused/active', () => {
 	store.isLoading = false;
-	store.hasFeed = true;
 
 	mount( RecentActivity );
 	expect( store.fetchRecentActivity ).toHaveBeenCalledWith( 10 );
@@ -123,7 +129,6 @@ function makeFeedItem( index ) {
 
 test( 'the summary card shows only the first 3 items of a larger fetched feed', () => {
 	store.isLoading = false;
-	store.hasFeed = true;
 	store.feed = Array.from( { length: 5 }, ( _, i ) => makeFeedItem( i ) );
 
 	const wrapper = mount( RecentActivity );
@@ -135,7 +140,6 @@ test( 'the summary card shows only the first 3 items of a larger fetched feed', 
 
 test( 'a dialog reusing the same teleported instance shows every fetched item, not the summary subset', () => {
 	store.isLoading = false;
-	store.hasFeed = true;
 	store.feed = Array.from( { length: 5 }, ( _, i ) => makeFeedItem( i ) );
 
 	// The dialog and the card teleport one component instance (see IslandMount.vue),
@@ -150,27 +154,24 @@ test( 'a dialog reusing the same teleported instance shows every fetched item, n
 
 test( 'the grid card shows the summary affordances on every viewport', () => {
 	store.isLoading = false;
-	store.hasFeed = true;
 
 	const wrapper = mount( RecentActivity );
-	expect( wrapper.find( '.personal-dashboard-review-changes__show-more' ).exists() ).toStrictEqual( true );
-	expect( wrapper.find( '.personal-dashboard-review-changes__list--summary' ).exists() ).toStrictEqual( true );
+	expect( wrapper.find( '.personal-dashboard-feed__show-more' ).exists() ).toStrictEqual( true );
+	expect( wrapper.find( '.personal-dashboard-feed__list--summary' ).exists() ).toStrictEqual( true );
 } );
 
 test( 'focused or active drops the summary affordances', () => {
 	store.isLoading = false;
-	store.hasFeed = true;
 
 	const focused = mount( RecentActivity, { props: { focused: true } } );
-	expect( focused.find( '.personal-dashboard-review-changes__show-more' ).exists() ).toStrictEqual( false );
+	expect( focused.find( '.personal-dashboard-feed__show-more' ).exists() ).toStrictEqual( false );
 
 	const active = mount( RecentActivity, { props: { active: true } } );
-	expect( active.find( '.personal-dashboard-review-changes__show-more' ).exists() ).toStrictEqual( false );
+	expect( active.find( '.personal-dashboard-feed__show-more' ).exists() ).toStrictEqual( false );
 } );
 
 test( 'show more opens the module dialog via the router', async () => {
 	store.isLoading = false;
-	store.hasFeed = true;
 
 	const push = vi.fn();
 	const wrapper = mount( RecentActivity, {
@@ -181,7 +182,7 @@ test( 'show more opens the module dialog via the router', async () => {
 		}
 	} );
 
-	await wrapper.find( '.personal-dashboard-review-changes__show-more' ).trigger( 'click' );
+	await wrapper.find( '.personal-dashboard-feed__show-more' ).trigger( 'click' );
 
 	expect( push ).toHaveBeenCalledWith( '/ext.personalDashboard.reviewChanges' );
 } );

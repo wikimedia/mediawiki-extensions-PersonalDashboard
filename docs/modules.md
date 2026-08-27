@@ -66,6 +66,18 @@ GrowthExperiments' `includes/PersonalDashboard/Mentorship.php` extends BaseModul
 
 Client-side (Vue) modules are the island default: BaseModule emits the mount slot, and a matching ResourceLoader module registered under `ResourceModules` in the same extension's `./extension.json` supplies the Vue app the dashboard teleports in. The dashboard app hands it `detail`, `focused`, `active` and `isNarrow`, and the module decides its own presentation from those; it needs no PHP beyond the frame. `./src/Modules/ReviewChanges.php` paired with `./resources/ext.personalDashboard.reviewChanges/` is the fullest in-tree example.
 
+## Feed modules
+
+A feed module renders a list of items with a loading state, an error state, a compact card summary versus a full list, and a footer control. None of that is yours to write: `ext.personalDashboard.common` ships the scaffold, and a feed module supplies its queries, its labels, and the body of one card ([T433900](https://phabricator.wikimedia.org/T433900)).
+
+Three pieces, all exported from `ext.personalDashboard.common`:
+
+- **`useFeedState( loader )`** produces the normalized feed-data contract: `{ items, isLoading, error }`, where each item carries a unique `id`. It owns the state transitions a client fetch repeats — flags up, flags down, log and surface the failure — so your loader is just the query. The contract is what matters, not this helper: a Pinia store satisfies it with a getter (`./resources/ext.personalDashboard.reviewChanges/store/reviewChangesStore.js`, which merges three sources and so keeps its own state), and a module handed server-normalized data through `getJsData()` satisfies it with a plain object and no fetch layer at all.
+- **`FeedPanel`** is the scaffold. Bind the contract to it, pass `moduleName` (its route, for the footer control) and the label props, and fill its one `#item` slot. It owns the compact/full derivation: pick the rule with `summaryMode`, either `"card"` or `"viewport"` (see [`./render-contract.md`](./render-contract.md)). Don't declare the island props in your module — let them ride in `$attrs` and forward them, so the derivation lives in one place.
+- **`FeedCard`** is the card chrome: the Codex card, the whole-card overlay link and its stacking context, the visited state, and the `#header` / `#meta` / `#description` rows. Your card component fills those slots from your item shape and keeps its own class on the element for anything specific to it.
+
+`./resources/ext.personalDashboard.activeDiscussions/` is the smaller of the two consumers and the better one to read first: one composable holding the API query, an `App.vue` that is little more than the labels and the fetch limit, and a `ListCard.vue` that is all slot content.
+
 ## Show it on the dashboard
 
 The default dashboard layout lives at `PersonalDashboard.ModuleGroups.default` in **Personal Dashboard's** own `./extension.json`. A group contains subgroups, and a subgroup contains modules. The `default` group has three top-level groups: `utils` (hidden, holds the onboarding module), `main`, and `sidebar`.

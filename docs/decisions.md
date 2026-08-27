@@ -12,7 +12,9 @@ Deliberate divergences from MediaWiki convention, each with the reasoning and a 
 
 **Consequence.** One cacheable server response, no platform `Vary`; detail never reaches PHP. A reviewer expecting server-side platform handling won't find it, by design. `useViewport()` and `IslandMount.vue` own the compact/full decision; see [`./render-contract.md`](./render-contract.md) for the mechanism.
 
-**Receipt.** `55aa0d3` ("Drop the platform axis; drive detail from viewport").
+**Amendment.** Viewport is the default rule, not the only one. A module whose card is a summary on every viewport — full detail belonging to the dialog or the focused page rather than to a wide screen — says so with `summaryMode="card"` on the shared feed scaffold, and the viewport stops deciding for it. Review Changes converged its desktop and mobile experiences that way (T426181, `7516d7e`). The divergence above still holds: the choice is client-side and per module, and nothing about it reaches PHP.
+
+**Receipt.** `55aa0d3` ("Drop the platform axis; drive detail from viewport"); `7516d7e` for the amendment.
 
 ## Registration is declarative, not a runtime API
 

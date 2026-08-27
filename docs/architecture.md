@@ -32,7 +32,9 @@ Two more paths through the same code:
 
 **The server render contract (islands architecture).** How a module's server HTML and its client Vue behavior fit together: which modules are islands, which are server-static, which are progressively enhanced, and why MediaWiki's lack of Vue SSR makes that split load-bearing rather than cosmetic. Also covers the platform-axis removal (detail is now viewport-driven, client-side, not a server render mode). See [`./render-contract.md`](./render-contract.md).
 
-**Routing and the focused module.** The Vue Router migration, the module-name-as-subpage convention, and how a focused module URL is presented: a full-screen dialog at a narrow viewport, an in-page frame keeping the skin's chrome at a wide one, and the server's own inline render standing as-is wherever it's already the right presentation (including no-JS). See [`./routing.md`](./routing.md).
+**Routing and the focused module.** The Vue Router migration, the module-name-as-subpage convention, and the two presentations one module URL can produce: the whole-page server render, or the dialog over the dashboard. See [`./routing.md`](./routing.md).
+
+**The shared feed scaffold.** Review Changes and Active Discussions are both feeds, and the loading state, the error state, the compact-versus-full derivation, the footer control and the card chrome are one implementation in `ext.personalDashboard.common` rather than a copy per module ([T433900](https://phabricator.wikimedia.org/T433900)). A feed module supplies its queries, its labels and a card body; the scaffold consumes a normalized feed-data contract (`items`, `isLoading`, `error`) that a Pinia store, a fetch composable, or a server-fed `getJsData()` payload can all satisfy. See [`./modules.md`](./modules.md#feed-modules).
 
 **Design decisions.** Deliberate divergences from MediaWiki convention, with the reasoning and a receipt for each: the dropped platform axis, and why registration stays declarative attributes rather than a runtime registry. See [`./decisions.md`](./decisions.md).
 

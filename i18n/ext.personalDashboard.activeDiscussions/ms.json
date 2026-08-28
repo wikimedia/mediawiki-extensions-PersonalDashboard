@@ -11,5 +11,6 @@
 	"personal-dashboard-active-discussions-mobile-latest-comment": "Komen terkini:",
 	"personal-dashboard-active-discussions-mobile-today": "$1, Hari ini",
 	"personal-dashboard-active-discussions-mobile-summary-footer-link-text": "Lihat lagi",
-	"personal-dashboard-active-discussions-mobile-summary-footer-button-aria-label": "Navigasi ke perbincangan yang lebih aktif"
+	"personal-dashboard-active-discussions-mobile-summary-footer-button-aria-label": "Navigasi ke perbincangan yang lebih aktif",
+	"personal-dashboard-active-discussions-progress-bar-aria-label": "palang kemajuan sebaris yang menunjukkan bahawa perbincangan aktif sedang dimuatkan"
 }

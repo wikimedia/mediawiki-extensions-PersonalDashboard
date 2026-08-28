@@ -1,0 +1,13 @@
+{
+	"@metadata": {
+		"authors": [
+			"Wizzard"
+		]
+	},
+	"personal-dashboard-beta-info-chip-text": "Beta",
+	"personal-dashboard-desc": "Experimentálna nástenka pre moderátorov",
+	"personal-dashboard-link-title": "Nástenka",
+	"personal-dashboard-specialpage-title": "{{GENDER:$1|Dobrý deň}}, {{bidi:$1}}!",
+	"personal-dashboard-survey-text": "[$1 Podeliť sa o spätnú väzbu]",
+	"tooltip-pt-personaldashboard": "{{GENDER:|Vaša}} osobná nástenka"
+}

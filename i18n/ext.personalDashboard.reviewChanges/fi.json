@@ -10,5 +10,6 @@
 	"personal-dashboard-risky-article-edits-subheader-info": "Nämä muokkaukset ovat muiden käyttäjien tekemiä. Auta pitämään Wikipedia luotettavana tarkistamalla ne.",
 	"personal-dashboard-risky-article-edits-footer-preamble": "Katso lisää muokkauksia  [{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}} Tuoreet muutokset -sivulla]",
 	"personal-dashboard-risky-article-edits-info-time-text-today": "$1, tänään",
-	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Ei muokkausyhteenvetoa"
+	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Ei muokkausyhteenvetoa",
+	"personal-dashboard-review-changes-major-changes-label": "Suuret muutokset"
 }

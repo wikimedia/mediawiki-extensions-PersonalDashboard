@@ -59,7 +59,11 @@ class ReviewChanges extends BaseModule {
 			->distinct()
 			->select( 'rev_page' )
 			->from( 'revision' )
-			->where( [ 'rev_actor' => $actorId ] )
+			->join( 'page', null, [ 'rev_page = page_id' ] )
+			->where( [
+				'rev_actor' => $actorId,
+				'page_namespace' => 0,
+			] )
 			->orderBy( 'rev_timestamp DESC' )
 			->limit( self::RECENTLY_EDITED_PAGES_LIMIT )
 			->caller( __METHOD__ )

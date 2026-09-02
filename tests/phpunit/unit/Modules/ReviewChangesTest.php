@@ -69,16 +69,12 @@ class ReviewChangesTest extends MediaWikiUnitTestCase {
 		);
 	}
 
-	public function testNamesItsHeaderAndSubheaderMessages() {
+	public function testNamesItsHeaderMessage() {
 		$module = TestingAccessWrapper::newFromObject( $this->newModule( null ) );
 
 		$this->assertSame(
 			'text-personal-dashboard-risky-article-edits-header',
 			$module->getHeaderText()
-		);
-		$this->assertSame(
-			'text-personal-dashboard-risky-article-edits-subheader-info',
-			$module->getSubheaderText()
 		);
 	}
 
@@ -98,5 +94,24 @@ class ReviewChangesTest extends MediaWikiUnitTestCase {
 		$module = TestingAccessWrapper::newFromObject( $this->newModule( null ) );
 
 		$this->assertSame( [ 'ext.personalDashboard.reviewChanges' ], $module->getModules() );
+	}
+
+	public function testDeclaresHeaderMenuSoTheFrameEmitsAHeaderMountSlot() {
+		$module = $this->newModule( null );
+
+		$this->assertTrue(
+			TestingAccessWrapper::newFromObject( $module )->hasHeaderMenu(),
+			'the module needs a header slot for its overflow menu (T433725)'
+		);
+	}
+
+	public function testCarriesNoSubheaderSinceItsCopyMovedIntoTheHeaderMenu() {
+		$module = $this->newModule( null );
+
+		$this->assertSame(
+			'',
+			TestingAccessWrapper::newFromObject( $module )->getSubheaderText(),
+			'the description belongs to the About panel now, not the card (T433725)'
+		);
 	}
 }

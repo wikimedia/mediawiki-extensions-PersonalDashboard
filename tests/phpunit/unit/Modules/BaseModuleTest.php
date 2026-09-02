@@ -36,6 +36,7 @@ class BaseModuleTest extends MediaWikiUnitTestCase {
 		) extends BaseModule {
 
 			public bool $serverRenderedFlag = false;
+			public bool $hasHeaderMenuFlag = false;
 			public string $headerTextValue = '';
 			public string $subheaderTextValue = '';
 
@@ -49,6 +50,10 @@ class BaseModuleTest extends MediaWikiUnitTestCase {
 
 			protected function serverRendered(): bool {
 				return $this->serverRenderedFlag;
+			}
+
+			protected function hasHeaderMenu(): bool {
+				return $this->hasHeaderMenuFlag;
 			}
 
 			protected function getBody(): string {
@@ -215,6 +220,58 @@ class BaseModuleTest extends MediaWikiUnitTestCase {
 		$this->assertStringNotContainsString( 'SUBHEADER_SENTINEL', $html );
 		$this->assertStringNotContainsString(
 			'personal-dashboard-module-header-forward-icon', $html );
+	}
+
+	public function testHeaderMenuCardHeaderDropsTheArrowAndKeepsTheButtonOutOfTheLink() {
+		$module = $this->newModule( true );
+		$module->setName( 'ext.personalDashboard.reviewChanges' );
+		$module->headerTextValue = 'Review changes';
+		$module->hasHeaderMenuFlag = true;
+		$module->setPageURL( '/wiki/Special:PersonalDashboard' );
+
+		$html = $module->callGetHtml();
+
+		// The container stays a plain div and the link moves inside it, so the
+		// menu button is never nested in an anchor.
+		$this->assertStringContainsString(
+			'<div class="personal-dashboard-module-header-container">', $html );
+		$this->assertStringContainsString(
+			'<a class="personal-dashboard-module-header-link" '
+				. 'href="/wiki/Special:PersonalDashboard/ext.personalDashboard.reviewChanges">',
+			$html
+		);
+		// The menu button takes the trailing corner, so the arrow is gone (T433725).
+		$this->assertStringNotContainsString(
+			'personal-dashboard-module-header-forward-icon', $html );
+		$this->assertStringContainsString(
+			'id="pd-header-slot-ext.personalDashboard.reviewChanges"', $html );
+		$this->assertStringContainsString(
+			'class="personal-dashboard-module-header-menu"', $html );
+		$this->assertGreaterThan(
+			strrpos( $html, 'personal-dashboard-module-header-link' ),
+			strrpos( $html, 'id="pd-header-slot-ext.personalDashboard.reviewChanges"' ),
+			'the menu slot must come after the link it sits beside'
+		);
+	}
+
+	public function testHeaderMenuFocusedHeaderCarriesTheMountSlotAfterTheBackLink() {
+		$module = $this->newModule();
+		$module->setName( 'ext.personalDashboard.reviewChanges' );
+		$module->headerTextValue = 'Review changes';
+		$module->hasHeaderMenuFlag = true;
+		$module->setBackLink( '<a id="BACK_SENTINEL"></a>' );
+		$module->setFocused( true );
+
+		$html = $module->callGetHtml();
+
+		$this->assertStringContainsString( 'BACK_SENTINEL', $html );
+		$this->assertStringContainsString(
+			'id="pd-header-slot-ext.personalDashboard.reviewChanges"', $html );
+		$this->assertGreaterThan(
+			strrpos( $html, 'BACK_SENTINEL' ),
+			strrpos( $html, 'id="pd-header-slot-ext.personalDashboard.reviewChanges"' ),
+			'the menu slot ends the row, opposite the back link'
+		);
 	}
 
 	public function testWrapperCarriesDesktopAndMobileStyleClasses() {

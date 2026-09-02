@@ -7,6 +7,7 @@
 			<focused-header
 				:title="title"
 				:back-href="backHref"
+				:actions-target-id="DIALOG_HEADER_TARGET_ID"
 				@back="openInternal = false">
 			</focused-header>
 		</template>
@@ -19,7 +20,7 @@
 const { defineComponent } = require( 'vue' );
 const { CdxDialog } = require( './codex.js' );
 const FocusedHeader = require( './FocusedHeader.vue' );
-const { DIALOG_TARGET_ID } = require( './teleportTargets.js' );
+const { DIALOG_TARGET_ID, DIALOG_HEADER_TARGET_ID } = require( './teleportTargets.js' );
 
 module.exports = defineComponent( {
 	name: 'ModuleDialog',
@@ -45,7 +46,7 @@ module.exports = defineComponent( {
 	},
 	emits: [ 'update:open' ],
 	setup() {
-		return { DIALOG_TARGET_ID };
+		return { DIALOG_TARGET_ID, DIALOG_HEADER_TARGET_ID };
 	},
 	computed: {
 		openInternal: {

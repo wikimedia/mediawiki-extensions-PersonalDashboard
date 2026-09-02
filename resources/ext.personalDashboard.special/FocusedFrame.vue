@@ -4,7 +4,11 @@
 		class="personal-dashboard-focused-frame"
 		tabindex="-1"
 	>
-		<focused-header :title="title" @back="$emit( 'back' )"></focused-header>
+		<focused-header
+			:title="title"
+			:actions-target-id="FRAME_HEADER_TARGET_ID"
+			@back="$emit( 'back' )">
+		</focused-header>
 		<div :id="FRAME_TARGET_ID"></div>
 	</div>
 </template>
@@ -12,7 +16,7 @@
 <script>
 const { defineComponent } = require( 'vue' );
 const FocusedHeader = require( './FocusedHeader.vue' );
-const { FRAME_TARGET_ID } = require( './teleportTargets.js' );
+const { FRAME_TARGET_ID, FRAME_HEADER_TARGET_ID } = require( './teleportTargets.js' );
 
 module.exports = defineComponent( {
 	name: 'FocusedFrame',
@@ -27,7 +31,7 @@ module.exports = defineComponent( {
 	},
 	emits: [ 'back' ],
 	setup() {
-		return { FRAME_TARGET_ID };
+		return { FRAME_TARGET_ID, FRAME_HEADER_TARGET_ID };
 	},
 	mounted() {
 		// A soft nav hides .personal-dashboard-container with display: none,

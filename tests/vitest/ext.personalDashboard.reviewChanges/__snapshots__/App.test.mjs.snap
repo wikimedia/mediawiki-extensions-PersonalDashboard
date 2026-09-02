@@ -1,39 +1,52 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`mount component 1`] = `
-<div>
-  <div
-    class="personal-dashboard-feed"
-  >
-    <div>
-      
+<div
+  data-v-app=""
+>
+  
+  <div>
+    <div
+      class="personal-dashboard-feed"
+    >
+      <div>
+        
+        <div
+          aria-disabled="false"
+          aria-hidden="true"
+          aria-label="⧼personal-dashboard-risky-article-edits-progress-bar-aria-label⧽"
+          class="cdx-progress-bar cdx-progress-bar--inline cdx-progress-bar--enabled"
+          role="progressbar"
+        >
+          <div
+            class="cdx-progress-bar__bar"
+          />
+        </div>
+        <!--v-if-->
+        
+      </div>
       <div
-        aria-disabled="false"
-        aria-hidden="true"
-        aria-label="⧼personal-dashboard-risky-article-edits-progress-bar-aria-label⧽"
-        class="cdx-progress-bar cdx-progress-bar--inline cdx-progress-bar--enabled"
-        role="progressbar"
+        class="personal-dashboard-feed__container"
+        style="display: none;"
       >
         <div
-          class="cdx-progress-bar__bar"
-        />
+          class="personal-dashboard-feed__list"
+        >
+          
+          
+        </div>
       </div>
       <!--v-if-->
-      
+      <!--v-if-->
     </div>
-    <div
-      class="personal-dashboard-feed__container"
-      style="display: none;"
-    >
-      <div
-        class="personal-dashboard-feed__list"
-      >
-        
-        
-      </div>
-    </div>
-    <!--v-if-->
-    <!--v-if-->
   </div>
+  <!--
+		The menu button belongs in the module header, which the server renders.
+		The header slot is the client's mount point there. This teleport nests
+		inside the island's own teleport, and follows the body into the dialog or
+		the in-page frame, since either stands in for the whole card.
+	-->
+  <!--v-if-->
+  
 </div>
 `;

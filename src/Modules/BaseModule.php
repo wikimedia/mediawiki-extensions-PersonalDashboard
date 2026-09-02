@@ -143,6 +143,12 @@ abstract class BaseModule implements IModule, MessageLocalizer {
 	 * view (including any icon or enrichment getHeader() adds). A headerless module
 	 * (its title is empty) still gets the forward link, labelled instead of named
 	 * by its text.
+	 *
+	 * A module with a header menu gets a mount slot at the end of the row instead
+	 * of the arrow: design dropped the arrow from such a header (T433725), and
+	 * the menu button takes that corner. The link stays, wrapping the title
+	 * alone, because a button must not sit inside a link. Such a module is
+	 * assumed to have header text; the link would otherwise wrap nothing.
 	 */
 	protected function getCardHeader(): string {
 		$tag = 'div';
@@ -150,18 +156,37 @@ abstract class BaseModule implements IModule, MessageLocalizer {
 		$header = $this->getHeader();
 
 		if ( $this->shouldWrapModuleWithLink() ) {
-			$tag = 'a';
-			$attribs['href'] = $this->getPageURL() . '/' . $this->name;
+			$linkAttribs = [
+				'href' => $this->getPageURL() . '/' . $this->name
+			];
 
 			// Without a header the arrow icon is the link's only content, leaving
 			// nothing for a screen reader to announce.
 			if ( !$header ) {
-				$attribs['aria-label'] = $this->msg( 'personal-dashboard-open-module' )->text();
+				$linkAttribs['aria-label'] = $this->msg( 'personal-dashboard-open-module' )->text();
 			}
 
-			$header .= Html::element( 'div', [
-				'class' => 'personal-dashboard-module-header-forward-icon'
-			] );
+			if ( $this->hasHeaderMenu() ) {
+				// No arrow here: the menu button takes the trailing corner. The
+				// button must not go inside a link, so the container stays a plain
+				// div and the link wraps the title alone. Dashboard.vue matches
+				// this class as well when it intercepts a header click.
+				$header = Html::rawElement(
+					'a',
+					[ 'class' => 'personal-dashboard-module-header-link' ] + $linkAttribs,
+					$header
+				);
+			} else {
+				$header .= Html::element( 'div', [
+					'class' => 'personal-dashboard-module-header-forward-icon'
+				] );
+				$tag = 'a';
+				$attribs += $linkAttribs;
+			}
+		}
+
+		if ( $this->hasHeaderMenu() ) {
+			$header .= $this->getHeaderMenuSlot();
 		}
 
 		return Html::rawElement( $tag, $attribs, $header );
@@ -171,13 +196,15 @@ abstract class BaseModule implements IModule, MessageLocalizer {
 	 * @return string The header for a focused whole-page render: the page-provided
 	 * back link, then the module's own header so the focused view matches its card
 	 * (including any icon or enrichment getHeader() adds). A headerless module (its
-	 * title is empty) still gets the back link with no stray empty header.
+	 * title is empty) still gets the back link with no stray empty header. A
+	 * module with a header menu also gets its mount slot at the end of the row.
 	 */
 	protected function getFocusedHeader(): string {
 		return Html::rawElement(
 			'div',
 			[ 'class' => 'personal-dashboard-module-header-container' ],
 			$this->backLink . $this->getHeader()
+				. ( $this->hasHeaderMenu() ? $this->getHeaderMenuSlot() : '' )
 		);
 	}
 
@@ -426,6 +453,37 @@ abstract class BaseModule implements IModule, MessageLocalizer {
 		return Html::element( 'div', [
 			'id' => 'pd-slot-' . $this->getName(),
 			'class' => 'personal-dashboard-module-slot',
+		] );
+	}
+
+	/**
+	 * Whether this module puts an overflow menu in its header: a button at the
+	 * end of the header row that opens a menu of actions about the module.
+	 *
+	 * Default false. A module that returns true gets a second mount slot in its
+	 * header, and its Vue component teleports the button and everything the menu
+	 * opens into it. A menu holds client state, so it can never be server HTML;
+	 * see ./docs/render-contract.md.
+	 *
+	 * @return bool
+	 */
+	protected function hasHeaderMenu(): bool {
+		return false;
+	}
+
+	/**
+	 * The empty mount slot for the header menu. The module's Vue component
+	 * teleports its button, and the dialogs the button opens, into this slot.
+	 *
+	 * It reserves the button's own box, so the header does not move when the
+	 * island mounts.
+	 *
+	 * @return string
+	 */
+	protected function getHeaderMenuSlot(): string {
+		return Html::element( 'div', [
+			'id' => 'pd-header-slot-' . $this->getName(),
+			'class' => 'personal-dashboard-module-header-menu',
 		] );
 	}
 

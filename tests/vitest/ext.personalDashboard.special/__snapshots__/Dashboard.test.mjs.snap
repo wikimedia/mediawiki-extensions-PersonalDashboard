@@ -13,11 +13,13 @@ exports[`renders one mount per island at a narrow viewport 1`] = `
   <!--v-if-->
   
   <island-mount-stub
+    activeheadertarget=""
     activetarget=""
     focused="false"
     name="ext.example.one"
   />
   <island-mount-stub
+    activeheadertarget=""
     activetarget=""
     focused="false"
     name="ext.example.two"
@@ -40,11 +42,13 @@ exports[`renders one mount per island at a wide viewport 1`] = `
   <!--v-if-->
   
   <island-mount-stub
+    activeheadertarget=""
     activetarget=""
     focused="false"
     name="ext.example.one"
   />
   <island-mount-stub
+    activeheadertarget=""
     activetarget=""
     focused="false"
     name="ext.example.two"

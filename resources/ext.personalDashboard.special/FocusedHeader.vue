@@ -28,6 +28,18 @@
 				{{ title }}
 			</h2>
 		</div>
+
+		<!--
+			The mount slot for the module's header menu while this header stands
+			in for the card's own. Minted whenever the stand-in names an id, since
+			neither stand-in knows whether the module it shows declares a menu;
+			for one that does not, the slot stays empty and shows nothing.
+		-->
+		<div
+			v-if="actionsTargetId"
+			:id="actionsTargetId"
+			class="personal-dashboard-focused-header__actions">
+		</div>
 	</div>
 </template>
 
@@ -52,6 +64,14 @@ module.exports = defineComponent( {
 		backHref: {
 			type: String,
 			default: ''
+		},
+		// The id to mint for the header menu's mount slot, or '' to mint none.
+		// The dialog and the frame pass different ids: <teleport> only
+		// re-resolves when `to` changes, so a shared id would leave a
+		// breakpoint-crossing swap between the two invisible to it.
+		actionsTargetId: {
+			type: String,
+			default: ''
 		}
 	},
 	emits: [ 'back' ],
@@ -73,6 +93,17 @@ module.exports = defineComponent( {
 	.personal-dashboard-focused-header-content();
 	box-sizing: border-box;
 	width: 100%;
+
+	// Pushed to the far end, opposite the back arrow, as the card header's own
+	// slot is. CSSJanus flips this for RTL.
+	&__actions {
+		display: flex;
+		flex: none;
+		align-items: center;
+		margin-left: auto;
+		min-width: @min-size-interactive-pointer;
+		min-height: @min-size-interactive-pointer;
+	}
 
 	&__title-group {
 		flex-grow: 0;

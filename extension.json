@@ -146,6 +146,8 @@
 				"CdxCard",
 				"CdxDialog",
 				"CdxIcon",
+				"CdxMenuButton",
+				"CdxPopover",
 				"CdxProgressBar"
 			],
 			"dependencies": [
@@ -166,6 +168,8 @@
 				"utils.js",
 				"components/FeedCard.vue",
 				"components/FeedPanel.vue",
+				"components/ModuleHeaderMenu.vue",
+				"components/ModulePanel.vue",
 				"components/MultiStepDialog.vue",
 				"composables/useFeedState.js",
 				{
@@ -173,6 +177,7 @@
 					"callback": "MediaWiki\\ResourceLoader\\CodexModule::getIcons",
 					"callbackParam": [
 						"cdxIconClose",
+						"cdxIconEllipsis",
 						"cdxIconNext",
 						"cdxIconPrevious"
 					]
@@ -249,18 +254,23 @@
 					"callback": "MediaWiki\\ResourceLoader\\CodexModule::getIcons",
 					"callbackParam": [
 						"cdxIconArticle",
+						"cdxIconConfigure",
 						"cdxIconEdit",
 						"cdxIconNotice",
 						"cdxIconUserAvatar",
 						"cdxIconUserTemporary",
-						"cdxIconTextSummary",
-						"cdxIconInfoFilled"
+						"cdxIconTextSummary"
 					]
 				}
 			],
 			"messages": [
 				"personal-dashboard-review-changes-high-revert-risk-label",
 				"personal-dashboard-review-changes-major-changes-label",
+				"personal-dashboard-review-changes-menu-about",
+				"personal-dashboard-review-changes-menu-button-label",
+				"personal-dashboard-review-changes-menu-personalization",
+				"personal-dashboard-review-changes-personalization-description",
+				"personal-dashboard-review-changes-personalization-title",
 				"personal-dashboard-risky-article-edits-header",
 				"personal-dashboard-risky-article-edits-subheader",
 				"personal-dashboard-risky-article-edits-footer-preamble",
@@ -278,6 +288,7 @@
 			"dependencies": [
 				"vue",
 				"mediawiki.api",
+				"mediawiki.jqueryMsg",
 				"mediawiki.Title",
 				"mediawiki.util",
 				"ext.personalDashboard.common"

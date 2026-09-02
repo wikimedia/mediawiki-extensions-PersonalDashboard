@@ -43,6 +43,13 @@ exports[`matches the button-branch snapshot 1`] = `
       Some Module
     </h2>
   </div>
+  <!--
+			The mount slot for the module's header menu while this header stands
+			in for the card's own. Minted whenever the stand-in names an id, since
+			neither stand-in knows whether the module it shows declares a menu;
+			for one that does not, the slot stays empty and shows nothing.
+		-->
+  <!--v-if-->
 </div>
 `;
 
@@ -88,5 +95,12 @@ exports[`matches the link-branch snapshot 1`] = `
       Some Module
     </h2>
   </div>
+  <!--
+			The mount slot for the module's header menu while this header stands
+			in for the card's own. Minted whenever the stand-in names an id, since
+			neither stand-in knows whether the module it shows declares a menu;
+			for one that does not, the slot stays empty and shows nothing.
+		-->
+  <!--v-if-->
 </div>
 `;

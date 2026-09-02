@@ -12,5 +12,10 @@
 	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Text for the Recent activity module list card when there is no edit summary",
 	"personal-dashboard-risky-article-edits-progress-bar-aria-label": "aria-label for the loading progress bar",
 	"personal-dashboard-review-changes-major-changes-label": "Label for the major changes indicator",
-	"personal-dashboard-review-changes-high-revert-risk-label": "Label for the chip shown on an edit whose machine-learning revert-risk score reaches the wiki’s configured threshold."
+	"personal-dashboard-review-changes-high-revert-risk-label": "Label for the chip shown on an edit whose machine-learning revert-risk score reaches the wiki’s configured threshold.",
+	"personal-dashboard-review-changes-menu-button-label": "aria-label for the icon-only overflow menu button in the Review changes module header.",
+	"personal-dashboard-review-changes-menu-personalization": "Item in the Review changes header menu, and the label above {{msg-mw|personal-dashboard-review-changes-personalization-description}} in the panel it opens.",
+	"personal-dashboard-review-changes-menu-about": "Item in the Review changes header menu, and the title of the panel it opens. The panel body is {{msg-mw|personal-dashboard-risky-article-edits-subheader-info}}.",
+	"personal-dashboard-review-changes-personalization-title": "Title of the panel opened by {{msg-mw|personal-dashboard-review-changes-menu-personalization}}.",
+	"personal-dashboard-review-changes-personalization-description": "Body of the personalization panel. Links to the help page about the recommender system."
 }

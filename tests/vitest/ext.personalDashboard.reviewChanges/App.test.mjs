@@ -315,3 +315,70 @@ describe( 'IntersectionObserver lifecycle', () => {
 		expect( fired ).toHaveBeenCalledTimes( 1 );
 	} );
 } );
+
+test( 'no header menu when the frame emits no header slot', () => {
+	const wrapper = mount( RecentActivity );
+
+	expect( wrapper.findComponent( { name: 'ModuleHeaderMenu' } ).exists() )
+		.toStrictEqual( false );
+} );
+
+test( 'teleports the header menu into the header slot', () => {
+	const wrapper = mount( RecentActivity, {
+		props: { headerTarget: '#pd-header-slot-reviewChanges' }
+	} );
+
+	const menu = wrapper.findComponent( { name: 'ModuleHeaderMenu' } );
+
+	expect( menu.exists() ).toStrictEqual( true );
+	// Teleport is stubbed in tests, so assert the target rather than the move.
+	expect( wrapper.find( '[to="#pd-header-slot-reviewChanges"]' ).exists() )
+		.toStrictEqual( true );
+	expect( menu.get( 'button' ).attributes( 'aria-label' ) )
+		.toContain( 'personal-dashboard-review-changes-menu-button-label' );
+
+	expect( menu.props( 'menuItems' ).map( ( item ) => item.value ) )
+		.toStrictEqual( [ 'personalization' ] );
+	// About sits in the footer, which is where the divider above it comes from.
+	expect( menu.props( 'footerItem' ).value ).toStrictEqual( 'about' );
+} );
+
+test.each( [
+	[ 'personalization', 'personal-dashboard-review-changes-personalization-title' ],
+	[ 'about', 'personal-dashboard-review-changes-menu-about' ]
+] )( 'picking %s opens that panel alone', async ( value, title ) => {
+	const wrapper = mount( RecentActivity, {
+		props: { headerTarget: '#pd-header-slot-reviewChanges' }
+	} );
+
+	const panels = wrapper.findAllComponents( { name: 'ModulePanel' } );
+	expect( panels.map( ( panel ) => panel.props( 'open' ) ) )
+		.toStrictEqual( [ false, false ] );
+
+	wrapper.findComponent( { name: 'ModuleHeaderMenu' } ).vm.$emit( 'select', value );
+	await nextTick();
+
+	const open = panels.filter( ( panel ) => panel.props( 'open' ) );
+	expect( open ).toHaveLength( 1 );
+	expect( open[ 0 ].props( 'title' ) ).toContain( title );
+
+	// A panel reports only its own close, and the menu owns which one is open.
+	open[ 0 ].vm.$emit( 'update:open', false );
+	await nextTick();
+	expect( panels.filter( ( panel ) => panel.props( 'open' ) ) ).toHaveLength( 0 );
+} );
+
+// isNarrow is a declared prop here, unlike its fellow island props, so it no
+// longer reaches the scaffold through $attrs. The template has to hand it over
+// by name, and nothing else would notice if it stopped.
+test( 'hands isNarrow to the scaffold as well as to the header panels', () => {
+	const wrapper = mount( RecentActivity, {
+		props: { headerTarget: '#pd-header-slot-reviewChanges', isNarrow: true }
+	} );
+
+	expect( wrapper.findComponent( { name: 'FeedPanel' } ).props( 'isNarrow' ) )
+		.toStrictEqual( true );
+	expect( wrapper.findAllComponents( { name: 'ModulePanel' } )
+		.map( ( panel ) => panel.props( 'isNarrow' ) ) )
+		.toStrictEqual( [ true, true ] );
+} );

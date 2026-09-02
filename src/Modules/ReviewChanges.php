@@ -42,9 +42,14 @@ class ReviewChanges extends BaseModule {
 		return $this->msg( 'personal-dashboard-risky-article-edits-header' )->text();
 	}
 
-	/** @inheritDoc */
-	protected function getSubheaderText(): string {
-		return $this->msg( 'personal-dashboard-risky-article-edits-subheader-info' )->text();
+	/**
+	 * The card carries no description of its own any more: design moved that
+	 * sentence into the header menu, under "About Review changes" (T433725).
+	 * The client reads the same message there.
+	 * @inheritDoc
+	 */
+	protected function hasHeaderMenu(): bool {
+		return true;
 	}
 
 	/**

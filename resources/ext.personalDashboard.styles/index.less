@@ -103,6 +103,41 @@
 				}
 			}
 
+			// A module with a header menu keeps the container a plain div and puts
+			// the forward link inside it. A button must not go inside a link, so
+			// the menu button sits beside the link, not in it. The link wraps the
+			// title alone: such a header carries no arrow.
+			&-link {
+				display: flex;
+				flex: 1;
+				align-items: center;
+				min-width: @size-0;
+
+				&:link,
+				&:active,
+				&:hover,
+				&:visited,
+				&:visited:active,
+				&:visited:hover {
+					color: inherit;
+					text-decoration: none;
+				}
+			}
+
+			// The mount slot for the header menu button. It reserves the button's
+			// own box, not an icon-sized one, so the row does not move when the
+			// island mounts. Codex sizes an icon-only button to the minimum
+			// pointer target, and the button must keep that size: this affordance
+			// opens a bottom sheet, so it is tapped as well as clicked.
+			&-menu {
+				display: flex;
+				flex: none;
+				align-items: center;
+				justify-content: flex-end;
+				min-width: @min-size-interactive-pointer;
+				min-height: @min-size-interactive-pointer;
+			}
+
 			&-text {
 				// Hard-coded instead of @font-size-medium due to T393629
 				.personal-dashboard-module-header-title();
@@ -134,11 +169,24 @@
 				&-container {
 					// As FocusedHeader.vue's own header lays out its arrow and title.
 					.personal-dashboard-focused-header-content();
+					// Here the container is a flex item of the header section, which
+					// the frame mixin lays out as a row; a card's container is a
+					// block child instead and fills the row already. Without this it
+					// shrinks to its content, leaving the menu below nothing to be
+					// pushed past.
+					flex-grow: 1;
 					padding: @spacing-0;
 				}
 
 				&-back-icon {
 					padding: @spacing-35;
+				}
+
+				// The focused row packs to the start so the arrow hugs the title,
+				// unlike the card's space-between. Push the slot to the far end
+				// itself, so the button still sits opposite the back arrow.
+				&-menu {
+					margin-left: auto;
 				}
 			}
 		}

@@ -12,17 +12,19 @@
 
 	<island-mount
 		v-for="island in islands"
-		v-slot="{ detail, focused, isNarrow: islandIsNarrow, active }"
+		v-slot="{ detail, focused, isNarrow: islandIsNarrow, active, headerTarget }"
 		:key="island.name"
 		:name="island.name"
 		:focused="island.name === focusedModule || island.name === mountedName"
-		:active-target="island.name === mountedName ? activeTargetId : ''">
+		:active-target="island.name === mountedName ? activeTargetId : ''"
+		:active-header-target="island.name === mountedName ? activeHeaderTargetId : ''">
 		<component
 			:is="island.component"
 			:detail="detail"
 			:focused="focused"
 			:is-narrow="islandIsNarrow"
-			:active="active">
+			:active="active"
+			:header-target="headerTarget">
 		</component>
 	</island-mount>
 </template>
@@ -32,7 +34,12 @@ const { defineComponent } = require( 'vue' );
 const FocusedFrame = require( './FocusedFrame.vue' );
 const IslandMount = require( './IslandMount.vue' );
 const ModuleDialog = require( './ModuleDialog.vue' );
-const { DIALOG_TARGET_ID, FRAME_TARGET_ID } = require( './teleportTargets.js' );
+const {
+	DIALOG_TARGET_ID,
+	FRAME_TARGET_ID,
+	DIALOG_HEADER_TARGET_ID,
+	FRAME_HEADER_TARGET_ID
+} = require( './teleportTargets.js' );
 const { useViewport } = require( './useViewport.js' );
 
 // The server's card wrapper, which outlives this app and holds every card.
@@ -141,6 +148,14 @@ module.exports = defineComponent( {
 			}
 			return this.frameName ? '#' + FRAME_TARGET_ID : '';
 		},
+		// The header menu's counterpart, resolved against the same two states so
+		// both halves of the card land in the same stand-in.
+		activeHeaderTargetId() {
+			if ( this.isNarrow && this.activeName ) {
+				return '#' + DIALOG_HEADER_TARGET_ID;
+			}
+			return this.frameName ? '#' + FRAME_HEADER_TARGET_ID : '';
+		},
 		open: {
 			get() {
 				return this.isNarrow && !!this.activeName;
@@ -174,7 +189,12 @@ module.exports = defineComponent( {
 			if ( !isPlainClick( event ) ) {
 				return;
 			}
-			const link = event.target.closest( 'a.personal-dashboard-module-header-container' );
+			// Two shapes: the header link is normally the container itself, but a
+			// module with a header menu keeps the container a plain div and nests
+			// the link inside it, to keep its menu button out of the link.
+			const link = event.target.closest(
+				'a.personal-dashboard-module-header-container, a.personal-dashboard-module-header-link'
+			);
 			const card = link ? link.closest( '[data-module-name]' ) : null;
 			const name = card ? card.dataset.moduleName : '';
 			if ( !this.islands.some( ( island ) => island.name === name ) ) {

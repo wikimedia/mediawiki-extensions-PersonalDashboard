@@ -14,7 +14,9 @@
 					:detail="detail"
 					:focused="focused"
 					:is-narrow="isNarrow"
-					:active="active"></slot>
+					:active="active"
+					:header-target="headerTarget">
+				</slot>
 			</template>
 		</suspense>
 	</teleport>
@@ -40,6 +42,13 @@ module.exports = defineComponent( {
 			type: String,
 			default: ''
 		},
+		// The same, for the header menu's slot: the header of whichever stand-in
+		// is showing, or '' to stay in the card's own header slot. A string for
+		// the same reason activeTarget is one.
+		activeHeaderTarget: {
+			type: String,
+			default: ''
+		},
 		// True when this island is the whole focused page rather than a card in
 		// the grouped dashboard.
 		focused: {
@@ -52,10 +61,16 @@ module.exports = defineComponent( {
 		return {
 			isNarrow,
 			activeTargetInternal: ref( props.activeTarget ),
+			activeHeaderTargetInternal: ref( props.activeHeaderTarget ),
 			// The server emits a mount slot for every card-bearing island. A
 			// behavior-only island (onboarding) has none, so it renders in
 			// place and manages its own portal.
-			hasSlot: !!document.getElementById( 'pd-slot-' + props.name )
+			hasSlot: !!document.getElementById( 'pd-slot-' + props.name ),
+			// A second slot, emitted only for a module that declares
+			// hasHeaderMenu() server-side. It holds the header's menu button and
+			// what the menu opens, which need client state and so cannot be
+			// server HTML.
+			hasHeaderSlot: !!document.getElementById( 'pd-header-slot-' + props.name )
 		};
 	},
 	computed: {
@@ -67,6 +82,21 @@ module.exports = defineComponent( {
 			// unescaped '#pd-slot-ext.foo.bar' reads the dots as class selectors
 			// and the teleport target is never found.
 			return this.hasSlot ? '#pd-slot-' + CSS.escape( this.name ) : null;
+		},
+		headerTarget() {
+			// Gated on the card's own slot throughout, not just in the card
+			// branch: the server emits that slot only for a module that declared
+			// a header menu, while a stand-in mints its slot for every module it
+			// shows. Without the gate a module that opted out would be handed a
+			// target the moment it opened.
+			if ( !this.hasHeaderSlot ) {
+				return null;
+			}
+			// A stand-in replaces the whole card, header included, so the menu
+			// follows the body into the dialog or the frame rather than staying
+			// behind in a card the one hides and the other covers.
+			return this.activeHeaderTargetInternal ||
+				'#pd-header-slot-' + CSS.escape( this.name );
 		},
 		active() {
 			return !!this.activeTargetInternal;
@@ -85,6 +115,13 @@ module.exports = defineComponent( {
 			// so defer the move a tick until that target exists.
 			this.$nextTick( () => {
 				this.activeTargetInternal = value;
+			} );
+		},
+		activeHeaderTarget( value ) {
+			// Same deferral, for the same reason: the stand-in's header slot does
+			// not exist until the stand-in has rendered.
+			this.$nextTick( () => {
+				this.activeHeaderTargetInternal = value;
 			} );
 		}
 	}

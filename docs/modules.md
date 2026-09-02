@@ -62,9 +62,13 @@ By default BaseModule emits a card frame whose body is an empty mount slot; the 
 - `serverRendered()`: return true for a module whose whole body is server HTML with no client mount. The client leaves it in place.
 - `getBody()`: the server-rendered body HTML. Consulted only when `serverRendered()` is true; override one without the other and the body silently never renders.
 
+A third override adds a second mount slot rather than removing the first:
+
+- `hasHeaderMenu()`: return true for a module that puts an overflow menu at the end of its header row. The frame then emits `#pd-header-slot-<name>` there, and the module's Vue app teleports `ModuleHeaderMenu` (from `ext.personalDashboard.common`) into it, with a `ModulePanel` per item the menu opens. The affordance cannot be server HTML: a menu holds client state, and Codex-PHP has no menu builder. `./src/Modules/ReviewChanges.php` is the one consumer ([T433725](https://phabricator.wikimedia.org/T433725)).
+
 GrowthExperiments' `includes/PersonalDashboard/Mentorship.php` extends BaseModule from outside this extension and overrides both, so its body is server HTML. `./src/Modules/Impact.php` extends BaseModule but overrides neither, staying an island that queries the database and hands its counts to Vue as config vars.
 
-Client-side (Vue) modules are the island default: BaseModule emits the mount slot, and a matching ResourceLoader module registered under `ResourceModules` in the same extension's `./extension.json` supplies the Vue app the dashboard teleports in. The dashboard app hands it `detail`, `focused`, `active` and `isNarrow`, and the module decides its own presentation from those; it needs no PHP beyond the frame. `./src/Modules/ReviewChanges.php` paired with `./resources/ext.personalDashboard.reviewChanges/` is the fullest in-tree example.
+Client-side (Vue) modules are the island default: BaseModule emits the mount slot, and a matching ResourceLoader module registered under `ResourceModules` in the same extension's `./extension.json` supplies the Vue app the dashboard teleports in. The dashboard app hands it `detail`, `focused`, `active`, `isNarrow` and `headerTarget`, and the module decides its own presentation from those; it needs no PHP beyond the frame. `./src/Modules/ReviewChanges.php` paired with `./resources/ext.personalDashboard.reviewChanges/` is the fullest in-tree example.
 
 ## Feed modules
 

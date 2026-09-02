@@ -11,7 +11,12 @@ import Dashboard from '/resources/ext.personalDashboard.special/Dashboard.vue';
 import FocusedFrame from '/resources/ext.personalDashboard.special/FocusedFrame.vue';
 import IslandMount from '/resources/ext.personalDashboard.special/IslandMount.vue';
 import ModuleDialog from '/resources/ext.personalDashboard.special/ModuleDialog.vue';
-import { DIALOG_TARGET_ID, FRAME_TARGET_ID } from '/resources/ext.personalDashboard.special/teleportTargets.js';
+import {
+	DIALOG_TARGET_ID,
+	FRAME_TARGET_ID,
+	DIALOG_HEADER_TARGET_ID,
+	FRAME_HEADER_TARGET_ID
+} from '/resources/ext.personalDashboard.special/teleportTargets.js';
 
 const islands = [
 	{ name: 'ext.example.one', header: 'One', component: {} },
@@ -62,6 +67,39 @@ function renderCard( name ) {
 	container.append( card );
 	document.body.append( container );
 	return icon;
+}
+
+// The other card shape: a module with a header menu keeps its container a plain
+// div and nests the link inside, so its menu button stays out of the link. It
+// carries no forward arrow. Returns the title inside the link.
+function renderCardWithHeaderMenu( name ) {
+	const container = document.createElement( 'div' );
+	container.className = 'personal-dashboard-container';
+
+	const card = document.createElement( 'div' );
+	card.className = 'personal-dashboard-module';
+	card.dataset.moduleName = name;
+
+	const header = document.createElement( 'div' );
+	header.className = 'personal-dashboard-module-header-container';
+
+	const link = document.createElement( 'a' );
+	link.className = 'personal-dashboard-module-header-link';
+	link.href = '/wiki/Special:PersonalDashboard/' + name;
+
+	const title = document.createElement( 'div' );
+	title.className = 'personal-dashboard-module-header-text';
+
+	const slot = document.createElement( 'div' );
+	slot.className = 'personal-dashboard-module-header-menu';
+	slot.id = 'pd-header-slot-' + name;
+
+	link.append( title );
+	header.append( link, slot );
+	card.append( header );
+	container.append( card );
+	document.body.append( container );
+	return title;
 }
 
 function clickOn( element, init = {} ) {
@@ -190,6 +228,7 @@ test( 'an island opened in the frame is focused and targets the frame teleport',
 		.find( ( component ) => component.props( 'name' ) === 'ext.example.two' );
 	expect( island.props( 'focused' ) ).toBe( true );
 	expect( island.props( 'activeTarget' ) ).toBe( '#' + FRAME_TARGET_ID );
+	expect( island.props( 'activeHeaderTarget' ) ).toBe( '#' + FRAME_HEADER_TARGET_ID );
 } );
 
 test( 'an island opened in the dialog is focused and targets the dialog teleport', () => {
@@ -198,6 +237,7 @@ test( 'an island opened in the dialog is focused and targets the dialog teleport
 		.find( ( component ) => component.props( 'name' ) === 'ext.example.two' );
 	expect( island.props( 'focused' ) ).toBe( true );
 	expect( island.props( 'activeTarget' ) ).toBe( '#' + DIALOG_TARGET_ID );
+	expect( island.props( 'activeHeaderTarget' ) ).toBe( '#' + DIALOG_HEADER_TARGET_ID );
 } );
 
 test( 'the active target differs between the dialog and the frame for the same module', () => {
@@ -268,6 +308,17 @@ test( 'a card link for a module the client does not own is left to navigate', ()
 
 	expect( push ).not.toHaveBeenCalled();
 	expect( event.defaultPrevented ).toBe( false );
+} );
+
+test( 'a card whose header carries a menu button still opens in the dialog', () => {
+	const push = vi.fn();
+	const title = renderCardWithHeaderMenu( 'ext.example.two' );
+	mountDashboard( { push } );
+
+	const event = clickOn( title );
+
+	expect( push ).toHaveBeenCalledWith( '/ext.example.two' );
+	expect( event.defaultPrevented ).toBe( true );
 } );
 
 test( 'a modified click on a card link is left to navigate', () => {

@@ -6,7 +6,9 @@
 // (this module) and the client dialog's own header (FocusedHeader.vue), which
 // import this file so the two stay pixel-identical.
 @personal-dashboard-focused-header-height: 2.875rem;
-@personal-dashboard-focused-header-padding: @spacing-0 @spacing-12;
+// 8px to each edge, from the designs (T433725): it is the box of the header
+// menu button, not its icon, that the eye reads against the screen edge.
+@personal-dashboard-focused-header-padding: @spacing-0 @spacing-50;
 
 // The header's fixed height, matched padding, and the divider beneath it.
 // Split from .personal-dashboard-focused-header-content() below because the

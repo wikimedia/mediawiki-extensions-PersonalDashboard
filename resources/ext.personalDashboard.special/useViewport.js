@@ -6,12 +6,26 @@
  * rather than the server-seeded platform.
  */
 
-const { ref, onUnmounted } = require( 'vue' );
+const { ref } = require( 'vue' );
+
+/**
+ * The one media query and ref that all callers share. The listener stays for the
+ * lifetime of the page, so there is no teardown; the browser releases it when the
+ * user leaves. This also keeps useViewport() free of the Vue lifecycle, so a
+ * caller can use it outside of setup().
+ *
+ * @type {{ isNarrow: import('vue').Ref<boolean> }|undefined}
+ */
+let shared;
 
 /**
  * @return {{ isNarrow: import('vue').Ref<boolean> }}
  */
 function useViewport() {
+	if ( shared ) {
+		return shared;
+	}
+
 	const container = document.querySelector( '.personal-dashboard-container' );
 	// The mobile breakpoint lives in LESS; index.less feeds it to us as a CSS
 	// variable since we can't read a LESS variable at runtime. Fall back to the
@@ -27,11 +41,9 @@ function useViewport() {
 		isNarrow.value = event.matches;
 	}
 	mql.addEventListener( 'change', onChange );
-	onUnmounted( () => {
-		mql.removeEventListener( 'change', onChange );
-	} );
 
-	return { isNarrow };
+	shared = { isNarrow };
+	return shared;
 }
 
 module.exports = { useViewport };

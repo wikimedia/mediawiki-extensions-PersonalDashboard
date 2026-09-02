@@ -27,6 +27,18 @@ export default defineConfig( [
 		}
 	},
 	{
+		// Vitest specs run in Node, not in a browser, so the ES2018 ceiling that
+		// the shipped code must respect does not apply. They need ES2020 for
+		// dynamic import(), which a spec uses to get a fresh copy of a module.
+		files: [ 'tests/vitest/**/*.mjs' ],
+		languageOptions: {
+			ecmaVersion: 2020
+		},
+		rules: {
+			'es-x/no-dynamic-import': 'off'
+		}
+	},
+	{
 		files: [ '**/*.vue' ],
 		extends: compat.extends(
 			'wikimedia/vue3/common',

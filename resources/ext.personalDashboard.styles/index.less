@@ -1,5 +1,6 @@
 @import 'mediawiki.skin.variables.less';
 @import 'mediawiki.mixins';
+@import 'variables.less';
 
 // Below this content width the two-column dashboard gets cramped, so it stacks
 // to one column. Single-sourced: the container query and the observer fallback
@@ -104,11 +105,7 @@
 
 			&-text {
 				// Hard-coded instead of @font-size-medium due to T393629
-				font-size: 1rem;
-				font-weight: @font-weight-bold;
-				text-overflow: @text-overflow-ellipsis;
-				white-space: nowrap;
-				overflow: hidden;
+				.personal-dashboard-module-header-title();
 			}
 
 			&-forward-icon {
@@ -125,17 +122,7 @@
 		&--focused & {
 			&-section {
 				&-header {
-					display: flex;
-					align-items: center;
-					border-bottom: @border-subtle;
-					// The header spec from T433896 follow-up (design feedback), the
-					// same height and padding FocusedHeader.vue carries: no Codex
-					// spacing token lands on 46px, so rem instead of raw px keeps it
-					// scaling with the user's font-size preference. Matched top and
-					// bottom comes for free from align-items: center inside that
-					// fixed height rather than equal padding.
-					height: 2.875rem;
-					padding: @spacing-0 @spacing-12;
+					.personal-dashboard-focused-header-frame();
 				}
 
 				&-body {
@@ -145,10 +132,8 @@
 
 			&-header {
 				&-container {
-					// flex-start, not the space-between the card uses: the arrow hugs the
-					// left-aligned title, as it does in FocusedHeader.vue.
-					justify-content: flex-start;
-					gap: @spacing-50;
+					// As FocusedHeader.vue's own header lays out its arrow and title.
+					.personal-dashboard-focused-header-content();
 					padding: @spacing-0;
 				}
 

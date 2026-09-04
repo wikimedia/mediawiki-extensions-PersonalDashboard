@@ -2,7 +2,6 @@
 	<cdx-dialog
 		v-model:open="openInternal"
 		:title="title"
-		:use-close-button="true"
 		class="personal-dashboard-dialog">
 		<template #header>
 			<focused-header

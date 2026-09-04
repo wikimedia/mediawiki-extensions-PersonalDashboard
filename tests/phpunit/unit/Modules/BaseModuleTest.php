@@ -126,6 +126,7 @@ class BaseModuleTest extends MediaWikiUnitTestCase {
 	public function testCardHeaderLinksToFocusedPageAndIsNamedByItsText() {
 		$module = $this->newModule( true );
 		$module->setName( 'impact' );
+		$module->setPageURL( '/wiki/Special:PersonalDashboard' );
 		$module->headerTextValue = 'Impact';
 
 		$html = $module->callGetHtml();
@@ -139,6 +140,36 @@ class BaseModuleTest extends MediaWikiUnitTestCase {
 		$this->assertStringContainsString( '>Impact<', $html );
 		// The visible text names the link, so an aria-label would only override it.
 		$this->assertStringNotContainsString( 'aria-label', $html );
+	}
+
+	public function testCardHeaderLinkUsesPageURLNotTheDeepLinkedContextTitle() {
+		// The context title carries whatever subpage is already in the current
+		// URL (a deep-linked module render); getPageURL() is the dashboard's
+		// own, subpage-free base, set once per request regardless of which
+		// module is being rendered. getCardHeader() must build its link from
+		// the latter, or a deep link produces a garbled nested path.
+		$context = $this->createMock( IContextSource::class );
+		$title = $this->createMock( Title::class );
+		$title->method( 'getLinkURL' )->willReturn( '/wiki/Special:PersonalDashboard/policiesGuidelines' );
+		$context->method( 'getTitle' )->willReturn( $title );
+
+		$module = new class( $context, true ) extends BaseModule {
+			protected function getHeaderText(): string {
+				return 'Impact';
+			}
+
+			public function callGetHtml(): string {
+				return $this->getHtml();
+			}
+		};
+		$module->setName( 'impact' );
+		$module->setPageURL( '/wiki/Special:PersonalDashboard' );
+
+		$html = $module->callGetHtml();
+
+		$this->assertStringContainsString(
+			'href="/wiki/Special:PersonalDashboard/impact"', $html );
+		$this->assertStringNotContainsString( 'policiesGuidelines', $html );
 	}
 
 	public function testHeaderlessCardHeaderKeepsArrowAndCarriesAccessibleName() {

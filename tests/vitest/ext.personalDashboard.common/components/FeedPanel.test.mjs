@@ -31,9 +31,8 @@ test( 'shows the progress bar while loading', () => {
 } );
 
 test( 'shows the error message instead of the progress bar', () => {
-	// Asserted through $i18n rather than the rendered text: the message mock
-	// drops parameters, so what the failure reaches the reader as is only
-	// visible in the call.
+	// Asserted through the $i18n call rather than the rendered text: the
+	// message mock drops parameters, so the failure is only visible there.
 	const i18n = vi.fn( ( key ) => key );
 	const wrapper = mountPanel(
 		{ error: new Error( 'An Error' ) },
@@ -118,6 +117,7 @@ test( 'hands the item and the viewport to the slot', () => {
 
 test( 'labels the footer control and gives it the module id', () => {
 	const wrapper = mountPanel( {
+		items: makeItems( 5 ),
 		detail: 'compact',
 		footerLabel: 'Show more',
 		footerAriaLabel: 'Show more edits',
@@ -131,7 +131,7 @@ test( 'labels the footer control and gives it the module id', () => {
 } );
 
 test( 'omits the id attribute when no footer id is given', () => {
-	const wrapper = mountPanel( { detail: 'compact' } );
+	const wrapper = mountPanel( { items: makeItems( 5 ), detail: 'compact' } );
 
 	expect( wrapper.find( '.personal-dashboard-feed__show-more' ).attributes( 'id' ) )
 		.toBeUndefined();
@@ -139,7 +139,7 @@ test( 'omits the id attribute when no footer id is given', () => {
 
 test( 'the footer control routes to the module', async () => {
 	const push = vi.fn();
-	const wrapper = mountPanel( { detail: 'compact' }, {
+	const wrapper = mountPanel( { items: makeItems( 5 ), detail: 'compact' }, {
 		global: {
 			mocks: {
 				$router: { push }
@@ -150,4 +150,27 @@ test( 'the footer control routes to the module', async () => {
 	await wrapper.find( '.personal-dashboard-feed__show-more' ).trigger( 'click' );
 
 	expect( push ).toHaveBeenCalledWith( '/ext.test.feed' );
+} );
+
+test( 'hides the footer control while loading, even with enough items to summarize', () => {
+	const wrapper = mountPanel( { items: makeItems( 5 ), detail: 'compact', isLoading: true } );
+
+	expect( wrapper.find( '.personal-dashboard-feed__show-more' ).exists() ).toStrictEqual( false );
+} );
+
+test( 'hides the footer control when there are not enough items to need a summary', () => {
+	const wrapper = mountPanel( { items: makeItems( 2 ), detail: 'compact' } );
+
+	expect( wrapper.find( '.personal-dashboard-feed__show-more' ).exists() ).toStrictEqual( false );
+} );
+
+test( 'drops the "more below" fade whenever the footer control is hidden', () => {
+	// Loading, and not enough items to summarize: the fade hinting at the
+	// footer control must disappear along with it in both cases, or it points
+	// at a button that isn't there.
+	const loading = mountPanel( { items: makeItems( 5 ), detail: 'compact', isLoading: true } );
+	expect( loading.find( '.personal-dashboard-feed__list--summary' ).exists() ).toStrictEqual( false );
+
+	const tooFewItems = mountPanel( { items: makeItems( 2 ), detail: 'compact' } );
+	expect( tooFewItems.find( '.personal-dashboard-feed__list--summary' ).exists() ).toStrictEqual( false );
 } );

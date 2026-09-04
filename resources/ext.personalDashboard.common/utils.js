@@ -1,3 +1,5 @@
+const { formatRelativeTimeOrDate } = require( 'mediawiki.DateFormatter' );
+
 // Gets up to n = limit items from an array
 const getRandomItems = ( array, limit ) => {
 	if ( array.length <= limit ) {
@@ -43,4 +45,18 @@ const handleApiErrors = ( code, data ) => {
 	throw new Error( code );
 };
 
-module.exports = { getRandomItems, handleApiErrors, parseApiStatus };
+// Strips HTML markup down to its plain-text content, for feed data (e.g. a
+// parsed comment or a thread title) that arrives as HTML but renders as text.
+const stripMarkup = ( html ) => {
+	if ( !html ) {
+		return '';
+	}
+	return new DOMParser().parseFromString( html, 'text/html' ).body.textContent;
+};
+
+// Formats a raw ISO timestamp (a feed item's `timestamp` or a discussion
+// thread's `latestReply`) the same way across every ListCard.
+const formatTimestamp = ( rawTimestamp ) => formatRelativeTimeOrDate(
+	new Date( Date.parse( rawTimestamp ) ) );
+
+module.exports = { formatTimestamp, getRandomItems, handleApiErrors, parseApiStatus, stripMarkup };

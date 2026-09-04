@@ -12,7 +12,7 @@
 			class="personal-dashboard-feed__container">
 			<div
 				class="personal-dashboard-feed__list"
-				:class="{ 'personal-dashboard-feed__list--summary': isSummary }"
+				:class="{ 'personal-dashboard-feed__list--summary': showsSummaryFooter }"
 			>
 				<template v-for="item in visibleItems" :key="item.id">
 					<slot
@@ -25,7 +25,7 @@
 		</div>
 
 		<cdx-button
-			v-if="isSummary"
+			v-if="showsSummaryFooter"
 			:id="footerId || undefined"
 			:aria-label="footerAriaLabel"
 			action="progressive"
@@ -50,6 +50,7 @@ const { CdxButton, CdxProgressBar } = require( '../codex.js' );
  * its labels, and one `#item` slot rendering a card per item; everything else
  * lives here.
  */
+
 module.exports = defineComponent( {
 	name: 'FeedPanel',
 	components: {
@@ -146,6 +147,11 @@ module.exports = defineComponent( {
 			return this.isSummary ?
 				this.items.slice( 0, this.summaryLimit ) :
 				this.items;
+		},
+		// The "show more" footer and the fade hinting at it above the list must
+		// agree, or the fade points at a button that isn't there.
+		showsSummaryFooter() {
+			return this.isSummary && !this.isLoading && this.items.length > this.summaryLimit;
 		}
 	},
 	methods: {

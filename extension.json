@@ -146,7 +146,8 @@
 				"CdxProgressBar"
 			],
 			"dependencies": [
-				"vue"
+				"vue",
+				"mediawiki.DateFormatter"
 			],
 			"messages": [
 				"personal-dashboard-multi-step-dialog-progress",
@@ -157,6 +158,7 @@
 			],
 			"packageFiles": [
 				"index.js",
+				"constants.js",
 				"utils.js",
 				"components/FeedCard.vue",
 				"components/FeedPanel.vue",
@@ -261,7 +263,6 @@
 				"personal-dashboard-risky-article-edits-header",
 				"personal-dashboard-risky-article-edits-subheader",
 				"personal-dashboard-risky-article-edits-footer-preamble",
-				"personal-dashboard-risky-article-edits-info-time-text-today",
 				"personal-dashboard-risky-article-edits-list-card-aria-label",
 				"personal-dashboard-risky-article-edits-list-card-no-comment-message",
 				"personal-dashboard-risky-article-edits-mobile-summary-footer-link-text",
@@ -276,7 +277,6 @@
 			"dependencies": [
 				"vue",
 				"pinia",
-				"mediawiki.DateFormatter",
 				"ext.personalDashboard.common"
 			]
 		},
@@ -302,18 +302,15 @@
 			],
 			"messages": [
 				"personal-dashboard-active-discussions-title",
-				"personal-dashboard-active-discussions-description",
 				"personal-dashboard-active-discussions-latest-comment",
-				"personal-dashboard-active-discussions-today",
+				"personal-dashboard-active-discussions-fetch-error",
 				"personal-dashboard-active-discussions-mobile-summary-footer-link-text",
 				"personal-dashboard-active-discussions-mobile-latest-comment",
-				"personal-dashboard-active-discussions-mobile-today",
 				"personal-dashboard-active-discussions-mobile-summary-footer-button-aria-label",
 				"personal-dashboard-active-discussions-progress-bar-aria-label"
 			],
 			"dependencies": [
 				"vue",
-				"mediawiki.DateFormatter",
 				"ext.personalDashboard.common"
 			]
 		},

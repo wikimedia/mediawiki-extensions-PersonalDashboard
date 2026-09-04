@@ -48,8 +48,8 @@ test( 'shows error message when there is one', () => {
 	feedState.isLoading = false;
 	feedState.error = new Error( 'An Error' );
 
-	// The message mock drops parameters, so the failure the reader is shown is
-	// only visible in the $i18n call.
+	// Asserted through the $i18n call rather than the rendered text: the
+	// message mock drops parameters, so the failure is only visible there.
 	const i18n = vi.fn( ( key ) => key );
 	const wrapper = mount( ActiveDiscussions, { global: { mocks: { $i18n: i18n } } } );
 
@@ -66,6 +66,18 @@ test( 'shows discussions with their counts and latest reply', () => {
 	expect( wrapper.text() ).toContain( 'Discussion 0' );
 	expect( wrapper.text() ).toContain( 'Wikipedia:Village pump' );
 	expect( wrapper.text() ).toContain( '1 year ago' );
+} );
+
+test( 'does not leak the synthetic feed id onto the rendered card', () => {
+	feedState.isLoading = false;
+	feedState.items = [ makeItem( 0 ) ];
+
+	const wrapper = mount( ActiveDiscussions );
+
+	// makeItem()'s id contains a "#", so a leaked id would be a malformed
+	// (and non-unique) DOM attribute; FeedPanel keys the list on it instead.
+	expect( wrapper.find( '.personal-dashboard-active-discussions__card' ).attributes( 'id' ) )
+		.toBeUndefined();
 } );
 
 test( 'fetches the full 10-item limit regardless of detail', () => {
@@ -100,6 +112,7 @@ test( 'a full detail card shows every fetched item', () => {
 
 test( 'show more opens the module dialog via the router', async () => {
 	feedState.isLoading = false;
+	feedState.items = Array.from( { length: 5 }, ( _, i ) => makeItem( i ) );
 
 	const push = vi.fn();
 	const wrapper = mount( ActiveDiscussions, {

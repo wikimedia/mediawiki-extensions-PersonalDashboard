@@ -1,0 +1,39 @@
+@import 'mediawiki.skin.variables.less';
+
+// The focused-header spec (T433896 follow-up, design feedback): no Codex
+// spacing token lands on 46px, so rem instead of raw px keeps it scaling with
+// the user's font-size preference. Shared between the SSR focused-card header
+// (this module) and the client dialog's own header (FocusedHeader.vue), which
+// import this file so the two stay pixel-identical.
+@personal-dashboard-focused-header-height: 2.875rem;
+@personal-dashboard-focused-header-padding: @spacing-0 @spacing-12;
+
+// The header's fixed height, matched padding, and the divider beneath it.
+// Split from .personal-dashboard-focused-header-content() below because the
+// SSR markup carries these on a different element than the one that lays out
+// the arrow and title; FocusedHeader.vue's flatter markup calls both on one.
+.personal-dashboard-focused-header-frame() {
+	display: flex;
+	align-items: center;
+	border-bottom: @border-subtle;
+	height: @personal-dashboard-focused-header-height;
+	padding: @personal-dashboard-focused-header-padding;
+}
+
+// The arrow-then-title row: flex-start rather than Codex's centered default,
+// so the arrow hugs the left-aligned title.
+.personal-dashboard-focused-header-content() {
+	justify-content: flex-start;
+	gap: @spacing-50;
+}
+
+// The module header title's text treatment (size, weight, ellipsis
+// truncation), shared by every card header and by the focused dialog's own
+// title, which otherwise renders identically.
+.personal-dashboard-module-header-title() {
+	font-size: 1rem;
+	font-weight: @font-weight-bold;
+	text-overflow: @text-overflow-ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}

@@ -6,22 +6,26 @@
  * state come from the shared feed contract.
  */
 
-const { useFeedState } = require( 'ext.personalDashboard.common' );
+const { useFeedState, utils } = require( 'ext.personalDashboard.common' );
+const { handleApiErrors } = utils;
 
 /**
  * Fetch the most recently active discussions across the configured pages.
  *
  * A thread counts as a discussion only once more than one person has spoken in
- * it, so a single unanswered post doesn't crowd out real conversation.
+ * it, so a single unanswered post doesn't crowd out real conversation. A page
+ * whose response is missing thread data is skipped rather than failing the
+ * whole feed; only a feed with nothing usable from any page throws.
  *
  * @param {number} limit Maximum number of items to return
  * @return {Promise<Object[]>} Feed items, most recent reply first
- * @throws {Error} If a page returns no usable thread data
+ * @throws {Error} If no configured page returns usable thread data
  */
 async function fetchActiveDiscussions( limit ) {
 	const api = new mw.Api();
 	const discussionPages = mw.config.get( 'wgPersonalDashboardActiveDiscussionsPages' ) || [];
 	const activeDiscussions = [];
+	let anyPageUsable = false;
 
 	for ( const discussionPage of discussionPages ) {
 		const result = await api.get( {
@@ -31,15 +35,26 @@ async function fetchActiveDiscussions( limit ) {
 			prop: 'threaditemshtml',
 			threaditemsflags: 'noreplies|excludesignatures|activity',
 			formatversion: '2'
-		} );
+		} ).then(
+			( data ) => data,
+			( code, data ) => handleApiErrors( code, data )
+		);
 
 		if ( result.discussiontoolspageinfo === undefined ||
 			result.discussiontoolspageinfo.threaditemshtml === undefined ) {
-			throw new Error( 'No valid active discussions found' );
+			continue;
 		}
+
+		anyPageUsable = true;
 
 		for ( const item of result.discussiontoolspageinfo.threaditemshtml ) {
 			if ( item.authorCount > 1 ) {
+				// A minority of items are missing the latest-reply metadata below;
+				// skip only that item rather than losing the rest of a valid page.
+				if ( item.latestReplyTimestamp === undefined || item.latestReply === undefined ) {
+					continue;
+				}
+
 				activeDiscussions.push( {
 					id: discussionPage + '#' + item.id,
 					discussionPage: discussionPage,
@@ -51,6 +66,10 @@ async function fetchActiveDiscussions( limit ) {
 				} );
 			}
 		}
+	}
+
+	if ( !anyPageUsable && discussionPages.length > 0 ) {
+		throw new Error( mw.msg( 'personal-dashboard-active-discussions-fetch-error' ) );
 	}
 
 	activeDiscussions.sort( ( a, b ) => b.latestReply.localeCompare( a.latestReply ) );

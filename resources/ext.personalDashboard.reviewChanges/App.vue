@@ -4,12 +4,23 @@
 			v-bind="{ ...$attrs, ...reviewChangesStore.feedState }"
 			module-name="ext.personalDashboard.reviewChanges"
 			summary-mode="card"
+			footer-id="personal-dashboard-go-to-recentchanges"
 			:footer-label="footerLabel"
 			:footer-aria-label="footerLabel"
 			:progress-bar-aria-label="progressBarAriaLabel">
 			<template #item="{ item, isNarrow }">
+				<!-- id, minor, bot, new and tags are FeedItem fields ListCard never
+					declares as props, so left in place they would fall through as
+					DOM attributes (id malformed, the rest meaningless on a card). -->
 				<list-card
-					v-bind="item"
+					v-bind="{
+						...item,
+						id: undefined,
+						minor: undefined,
+						bot: undefined,
+						new: undefined,
+						tags: undefined
+					}"
 					:pages="reviewChangesStore.pages"
 					:is-narrow="isNarrow">
 				</list-card>
@@ -19,16 +30,10 @@
 </template>
 
 <script>
-const { defineComponent, ref } = require( 'vue' );
-const { FeedPanel } = require( 'ext.personalDashboard.common' );
+const { defineComponent, ref, watch } = require( 'vue' );
+const { FeedPanel, FULL_LIMIT } = require( 'ext.personalDashboard.common' );
 const { useReviewChangesStore } = require( './store/reviewChangesStore.js' );
 const ListCard = require( './components/ListCard.vue' );
-
-// The dialog and the card share one component instance (teleported, not
-// remounted), so a fixed fetch covers both: the panel slices it down to a
-// preview, the dialog shows it whole, with no re-fetch on the summary/full
-// transition.
-const FULL_LIMIT = 10;
 
 module.exports = defineComponent( {
 	components: {
@@ -42,13 +47,30 @@ module.exports = defineComponent( {
 	inheritAttrs: false,
 	setup() {
 		const moduleRef = ref();
+		const reviewChangesStore = useReviewChangesStore();
+
+		// Fires once the module has both scrolled into view and its feed has
+		// finished loading, so a module still off-screen when the fetch resolves
+		// doesn't count as an impression (T417757), and the footer link the
+		// instrument looks for isn't queried before fetchRecentActivity() renders it.
+		let hasIntersected = false;
+		let hasFiredLoadedHook = false;
+		function fireLoadedHookWhenReady() {
+			if ( hasFiredLoadedHook || !hasIntersected || reviewChangesStore.isLoading ) {
+				return;
+			}
+			hasFiredLoadedHook = true;
+			mw.hook( 'personaldashboard.recentactivity.loaded' ).fire();
+		}
+
 		const observer = new IntersectionObserver( ( entries ) => {
 			if ( entries[ 0 ].isIntersecting ) {
-				mw.hook( 'personaldashboard.recentactivity.loaded' ).fire();
+				hasIntersected = true;
+				fireLoadedHookWhenReady();
 			}
 		} );
 
-		const reviewChangesStore = useReviewChangesStore();
+		watch( () => reviewChangesStore.isLoading, fireLoadedHookWhenReady );
 
 		return {
 			moduleRef,
@@ -61,6 +83,9 @@ module.exports = defineComponent( {
 	mounted() {
 		this.observer.observe( this.moduleRef );
 		this.reviewChangesStore.fetchRecentActivity( FULL_LIMIT );
+	},
+	unmounted() {
+		this.observer.disconnect();
 	}
 } );
 </script>

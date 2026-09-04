@@ -48,9 +48,9 @@
 <script>
 const { defineComponent } = require( 'vue' );
 const { CdxIcon } = require( '../codex.js' );
-const { FeedCard } = require( 'ext.personalDashboard.common' );
+const { FeedCard, utils } = require( 'ext.personalDashboard.common' );
+const { formatTimestamp, stripMarkup } = utils;
 const { cdxIconUserAvatar, cdxIconSpeechBubble } = require( '../icons.json' );
-const { formatRelativeTimeOrDate } = require( 'mediawiki.DateFormatter' );
 
 module.exports = defineComponent( {
 	name: 'ListCard',
@@ -73,10 +73,10 @@ module.exports = defineComponent( {
 	},
 	computed: {
 		discussionTitleFormatted() {
-			return this.stripMarkup( this.discussionTitle );
+			return stripMarkup( this.discussionTitle );
 		},
 		discussionPageFormatted() {
-			return this.stripMarkup( this.discussionPage );
+			return stripMarkup( this.discussionPage );
 		},
 		discussionUrl() {
 			return mw.util.getUrl( this.discussionPageFormatted + '#' + this.discussionTitleFormatted );
@@ -85,24 +85,7 @@ module.exports = defineComponent( {
 			return mw.util.getUrl( this.discussionPageFormatted + '#' + this.latestReplyId );
 		},
 		timestampFormatted() {
-			const latestReplyTimestamp = new Date( Date.parse( this.latestReply ) );
-			return `${ formatRelativeTimeOrDate( latestReplyTimestamp ) }`;
-		}
-	},
-	methods: {
-		/**
-		 * DiscussionTools hands back thread titles and page names as HTML; the
-		 * card shows them as plain text.
-		 *
-		 * @param {string} html
-		 * @return {string}
-		 */
-		stripMarkup( html ) {
-			if ( !html ) {
-				return '';
-			}
-
-			return new DOMParser().parseFromString( html, 'text/html' ).body.textContent;
+			return formatTimestamp( this.latestReply );
 		}
 	}
 } );

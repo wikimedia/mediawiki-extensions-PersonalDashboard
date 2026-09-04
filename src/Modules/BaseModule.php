@@ -151,7 +151,7 @@ abstract class BaseModule implements IModule, MessageLocalizer {
 
 		if ( $this->shouldWrapModuleWithLink() ) {
 			$tag = 'a';
-			$attribs['href'] = $this->getContext()->getTitle()->getLinkURL() . '/' . $this->name;
+			$attribs['href'] = $this->getPageURL() . '/' . $this->name;
 
 			// Without a header the arrow icon is the link's only content, leaving
 			// nothing for a screen reader to announce.

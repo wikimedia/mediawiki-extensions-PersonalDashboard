@@ -70,30 +70,99 @@ test( 'fetchActiveDiscussions with no items', async () => {
 test( 'fetchActiveDiscussions with key missing', async () => {
 	mw.Api.mock( { discussiontoolspageinfo: {} } );
 	const logError = vi.spyOn( mw.log, 'error' ).mockImplementationOnce( () => {} );
+	const expectedMessage = '⧼personal-dashboard-active-discussions-fetch-error⧽';
 
 	await load();
-	expect( feedState.error.message ).toStrictEqual( 'No valid active discussions found' );
-	expect( logError ).toHaveBeenCalledExactlyOnceWith( 'No valid active discussions found' );
+	expect( feedState.error.message ).toStrictEqual( expectedMessage );
+	expect( logError ).toHaveBeenCalledExactlyOnceWith( expectedMessage );
 } );
 
 test( 'fetchActiveDiscussions with all keys missing', async () => {
 	mw.Api.mock( {} );
 	const logError = vi.spyOn( mw.log, 'error' ).mockImplementationOnce( () => {} );
+	const expectedMessage = '⧼personal-dashboard-active-discussions-fetch-error⧽';
 
 	await load();
-	expect( feedState.error.message ).toStrictEqual( 'No valid active discussions found' );
-	expect( logError ).toHaveBeenCalledExactlyOnceWith( 'No valid active discussions found' );
+	expect( feedState.error.message ).toStrictEqual( expectedMessage );
+	expect( logError ).toHaveBeenCalledExactlyOnceWith( expectedMessage );
 } );
 
 test( 'fetchActiveDiscussions with error', async () => {
-	mw.Api.mock( () => {
-		throw new Error( 'An error' );
-	} );
+	// A real mw.Api rejection surfaces the failure code as a bare value, not an
+	// Error; handleApiErrors is what normalizes it into one.
+	mw.Api.mock( () => Promise.reject( 'http' ) );
 	const logError = vi.spyOn( mw.log, 'error' ).mockImplementationOnce( () => {} );
 
 	await load();
-	expect( feedState.error.message ).toStrictEqual( 'An error' );
-	expect( logError ).toHaveBeenCalledExactlyOnceWith( 'An error' );
+	expect( feedState.error ).toBeInstanceOf( Error );
+	expect( feedState.error.message ).toStrictEqual( 'http' );
+	expect( logError ).toHaveBeenCalledExactlyOnceWith( 'http' );
+} );
+
+test( 'one bad page does not empty an otherwise-successful feed', async () => {
+	mw.config.set( 'wgPersonalDashboardActiveDiscussionsPages', [
+		'Wikipedia:Village_pump', 'Wikipedia:Bad_page'
+	] );
+	let callCount = 0;
+	mw.Api.mock( ( params ) => {
+		callCount++;
+		if ( params.page === 'Wikipedia:Bad_page' ) {
+			// Missing threaditemshtml: the bad-page shape this fix skips.
+			return { discussiontoolspageinfo: {} };
+		}
+		return {
+			discussiontoolspageinfo: {
+				threaditemshtml: [ {
+					id: 'h-comment-1',
+					html: 'Good page comment',
+					commentCount: 2,
+					authorCount: 2,
+					latestReplyTimestamp: '2026-02-19T19:10:00Z',
+					latestReply: { id: 'c-1' }
+				} ]
+			}
+		};
+	} );
+
+	await load();
+
+	expect( callCount ).toStrictEqual( 2 );
+	expect( feedState.error ).toBeNull();
+	expect( feedState.items ).toHaveLength( 1 );
+	expect( feedState.items[ 0 ].discussionPage ).toStrictEqual( 'Wikipedia:Village_pump' );
+
+	mw.config.set( 'wgPersonalDashboardActiveDiscussionsPages', [ 'Wikipedia:Village_pump' ] );
+} );
+
+test( 'one malformed item does not empty an otherwise-successful page', async () => {
+	mw.Api.mock( {
+		discussiontoolspageinfo: {
+			threaditemshtml: [
+				{
+					id: 'h-malformed-comment',
+					html: 'Malformed comment',
+					commentCount: 2,
+					authorCount: 2
+					// Missing latestReplyTimestamp and latestReply: the malformed
+					// shape this fix skips.
+				},
+				{
+					id: 'h-good-comment',
+					html: 'Good comment',
+					commentCount: 2,
+					authorCount: 2,
+					latestReplyTimestamp: '2026-02-19T19:10:00Z',
+					latestReply: { id: 'c-1' }
+				}
+			]
+		}
+	} );
+
+	await load();
+
+	expect( feedState.error ).toBeNull();
+	expect( feedState.items ).toHaveLength( 1 );
+	expect( feedState.items[ 0 ].discussionTitle ).toStrictEqual( 'Good comment' );
 } );
 
 test( 'fetchActiveDiscussions with low author count', async () => {

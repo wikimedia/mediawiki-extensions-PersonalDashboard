@@ -66,23 +66,13 @@ module.exports = defineComponent( {
 
 <style lang="less">
 @import 'mediawiki.skin.variables.less';
+@import '../ext.personalDashboard.styles/variables.less';
 
 .personal-dashboard-focused-header {
-	display: flex;
-	align-items: center;
-	// flex-start, not the centered default Codex uses: arrow hugs the left-aligned
-	// title, matching the old focused-page header.
-	justify-content: flex-start;
-	gap: @spacing-50;
+	.personal-dashboard-focused-header-frame();
+	.personal-dashboard-focused-header-content();
 	box-sizing: border-box;
 	width: 100%;
-	// 46px per T433896 follow-up (design feedback): no Codex spacing token
-	// lands there, so rem instead of raw px keeps it scaling with the user's
-	// font-size preference. Matched top and bottom comes for free from
-	// align-items: center inside that fixed height rather than equal padding.
-	height: 2.875rem;
-	padding: @spacing-0 @spacing-12;
-	border-bottom: @border-subtle;
 
 	&__title-group {
 		flex-grow: 0;
@@ -103,16 +93,12 @@ module.exports = defineComponent( {
 		// exactly instead of beating it would leave the winner up to
 		// stylesheet order.
 		.personal-dashboard-focused-header__title {
+			.personal-dashboard-module-header-title();
 			margin: 0;
 			padding: 0;
 			border: 0;
 			font-family: inherit;
-			font-size: 1rem;
-			font-weight: @font-weight-bold;
 			line-height: 1.5;
-			text-overflow: ellipsis;
-			overflow: hidden;
-			white-space: nowrap;
 		}
 	}
 }

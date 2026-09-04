@@ -8,7 +8,11 @@
  * only job is to coordinate the three sources, merge their output, and
  * expose the result as the shared feed-data contract (see the feedState
  * getter). It keeps its own state rather than using useFeedState because
- * that helper wraps a single loader, and this feed is a merge of three.
+ * a Pinia option store's state has to be plain, patchable data (this file's
+ * tests rely on assigning straight to it, e.g. `store.feed = ...`); wiring in
+ * useFeedState's own refs would mean rewriting the store as a Pinia setup
+ * store instead. useFeedState's loader argument itself has no trouble with a
+ * merge of three sources.
  */
 
 const { defineStore } = require( 'pinia' );

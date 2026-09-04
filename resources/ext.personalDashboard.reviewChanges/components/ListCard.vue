@@ -84,9 +84,9 @@
 <script>
 const { defineComponent, defineAsyncComponent, toRaw } = require( 'vue' );
 const { CdxIcon, CdxInfoChip } = require( '../codex.js' );
-const { FeedCard } = require( 'ext.personalDashboard.common' );
+const { FeedCard, utils } = require( 'ext.personalDashboard.common' );
+const { formatTimestamp, stripMarkup } = utils;
 const { cdxIconNotice, cdxIconUserAvatar, cdxIconUserTemporary } = require( '../icons.json' );
-const { formatRelativeTimeOrDate } = require( 'mediawiki.DateFormatter' );
 const MAJOR_CHANGE_DELTA = 1000;
 
 module.exports = defineComponent( {
@@ -144,18 +144,10 @@ module.exports = defineComponent( {
 			return new mw.Title( this.user, 2 ).getUrl();
 		},
 		comment() {
-			if ( !this.parsedcomment ) {
-				return null;
-			}
-
-			const temp = document.createElement( 'div' );
-			temp.innerHTML = this.parsedcomment;
-
-			return temp.innerText;
+			return stripMarkup( this.parsedcomment );
 		},
 		timestampFormatted() {
-			const changeDateTimestamp = new Date( Date.parse( this.timestamp ) );
-			return `${ formatRelativeTimeOrDate( changeDateTimestamp ) }`;
+			return formatTimestamp( this.timestamp );
 		},
 		description() {
 			const pages = toRaw( this.pages );

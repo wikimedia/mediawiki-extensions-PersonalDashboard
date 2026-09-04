@@ -8,22 +8,18 @@
 		:footer-aria-label="footerAriaLabel"
 		:progress-bar-aria-label="progressBarAriaLabel">
 		<template #item="{ item, isNarrow }">
-			<list-card v-bind="item" :is-narrow="isNarrow"></list-card>
+			<!-- id is minted only for FeedPanel's :key; ListCard never declares it as
+				a prop, so left in place it would fall through as a malformed DOM id. -->
+			<list-card v-bind="{ ...item, id: undefined }" :is-narrow="isNarrow"></list-card>
 		</template>
 	</feed-panel>
 </template>
 
 <script>
 const { defineComponent } = require( 'vue' );
-const { FeedPanel } = require( 'ext.personalDashboard.common' );
+const { FeedPanel, FULL_LIMIT } = require( 'ext.personalDashboard.common' );
 const ListCard = require( './components/ListCard.vue' );
 const { useActiveDiscussionsFeed } = require( './composables/useActiveDiscussionsFeed.js' );
-
-// The dialog and the card share one component instance (teleported, not
-// remounted), so a fixed fetch covers both: the panel slices it down to a
-// preview, the dialog shows it whole, with no re-fetch on the summary/full
-// transition.
-const FULL_LIMIT = 10;
 
 module.exports = defineComponent( {
 	components: {

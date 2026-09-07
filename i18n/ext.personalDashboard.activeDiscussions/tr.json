@@ -1,8 +1,10 @@
 {
 	"@metadata": {
 		"authors": [
+			"Cobija",
 			"Rapsar"
 		]
 	},
-	"personal-dashboard-active-discussions-title": "Etkin tartışmalar"
+	"personal-dashboard-active-discussions-title": "Etkin tartışmalar",
+	"personal-dashboard-active-discussions-fetch-error": "Etkin tartışma bulunamadı"
 }

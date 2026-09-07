@@ -5,10 +5,13 @@
 			"LowensteinYang"
 		]
 	},
+	"personal-dashboard-back-to-dashboard": "回到面板",
+	"personal-dashboard-beta-info-chip-text": "測試版",
 	"personal-dashboard-desc": "一個版主性質的實驗性面板",
 	"personal-dashboard-link-title": "面板",
 	"personal-dashboard-module-no-js-fallback": "除非您的瀏覽器已啟用JavaScript，否則此儀表板的部分內容將不會顯示。",
+	"personal-dashboard-open-module": "開啟此模組",
 	"personal-dashboard-specialpage-title": "{{GENDER:$1|您好}}，{{bidi:$1}}！",
-	"personal-dashboard-survey-text": "這是此頁面的早期版本。請透過[$1 參與此調查]分享您的回饋意見，來告知我們改善功能。",
+	"personal-dashboard-survey-text": "[$1 分享您的回饋意見]",
 	"tooltip-pt-personaldashboard": "{{GENDER:|您的}}個人面板"
 }

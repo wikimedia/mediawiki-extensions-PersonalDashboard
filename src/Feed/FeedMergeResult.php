@@ -23,11 +23,15 @@ readonly class FeedMergeResult {
 	 * @param array<string,bool> $hasMore Source name to whether asking it again
 	 *   may return something. A source is only reported exhausted when the merge
 	 *   used everything it offered and the source itself reported no more.
+	 * @param string[] $servedKeys A hash of the dedup key of every item in
+	 *   $items. The endpoint puts these in the continuation token, so the next
+	 *   merge can move a source past a copy of something already shown.
 	 */
 	public function __construct(
 		public array $items,
 		public array $cursors,
 		public array $hasMore,
+		public array $servedKeys = [],
 	) {
 	}
 }

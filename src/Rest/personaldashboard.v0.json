@@ -1,0 +1,29 @@
+{
+	"mwapi": "1.1.0",
+	"moduleId": "personaldashboard/v0",
+	"info": {
+		"version": "0.1.0",
+		"title": "Personal Dashboard API",
+		"x-i18n-title": "rest-module-personaldashboard.v0-title",
+		"x-i18n-description": "rest-module-personaldashboard.v0-desc"
+	},
+	"externalDocs": {
+		"description": "Personal Dashboard REST API documentation",
+		"url": "https://www.mediawiki.org/wiki/Extension:PersonalDashboard/API"
+	},
+	"paths": {
+		"/feed": {
+			"get": {
+				"x-i18n-summary": "personal-dashboard-rest-endpoint-summary-feed",
+				"x-i18n-description": "personal-dashboard-rest-endpoint-desc-feed",
+				"handler": {
+					"class": "MediaWiki\\Extension\\PersonalDashboard\\Rest\\FeedHandler",
+					"services": [
+						"PersonalDashboardFeedSourceFactory",
+						"PersonalDashboardLogger"
+					]
+				}
+			}
+		}
+	}
+}

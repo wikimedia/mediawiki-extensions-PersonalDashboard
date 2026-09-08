@@ -17,6 +17,9 @@
 	"AutoloadNamespaces": {
 		"MediaWiki\\Extension\\PersonalDashboard\\": "src/"
 	},
+	"RestModuleFiles": [
+		"src/Rest/personaldashboard.v0.json"
+	],
 	"ServiceWiringFiles": [
 		"ServiceWiring.php"
 	],
@@ -62,6 +65,7 @@
 	},
 	"MessagesDirs": {
 		"PersonalDashboard": [
+			"i18n/api",
 			"i18n/ext.personalDashboard.activeDiscussions",
 			"i18n/ext.personalDashboard.common",
 			"i18n/ext.personalDashboard.impact",

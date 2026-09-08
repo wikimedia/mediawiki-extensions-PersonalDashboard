@@ -1,0 +1,33 @@
+{
+	"@metadata": {
+		"authors": [
+			"MusikAnimal"
+		]
+	},
+	"rest-module-personaldashboard.v0-title": "Personal Dashboard API",
+	"rest-module-personaldashboard.v0-desc": "Feeds of recent activity for PersonalDashboard modules",
+	"personal-dashboard-rest-endpoint-summary-feed": "Get feed items from the requested sources",
+	"personal-dashboard-rest-endpoint-desc-feed": "Returns a merged feed of items drawn from the requested sources, newest first.",
+	"personal-dashboard-rest-param-desc-feed-sources": "[Feed sources](https://www.mediawiki.org/wiki/Extension:PersonalDashboard/API#Sources) to draw from, separated by `|`. Items are spread evenly across them.",
+	"personal-dashboard-rest-param-desc-feed-limit": "Maximum number of items to return",
+	"personal-dashboard-rest-param-desc-feed-continue": "Opaque token from a previous response, to fetch the next page of the same feed.",
+	"personal-dashboard-rest-schema-desc-feed-items": "The feed, newest first, spread evenly across the requested sources.",
+	"personal-dashboard-rest-schema-desc-feed-continue": "Token to pass back as `continue` for the next page. Absent once every source is spent.",
+	"personal-dashboard-rest-property-desc-id": "Identifier for this item, unique across every source in one response.",
+	"personal-dashboard-rest-property-desc-feedorigin": "Name of the feed source this item came from.",
+	"personal-dashboard-rest-property-desc-title": "Title of the page that was edited.",
+	"personal-dashboard-rest-property-desc-revid": "Revision ID of this edit.",
+	"personal-dashboard-rest-property-desc-pageid": "Page ID of the page that was edited.",
+	"personal-dashboard-rest-property-desc-old-revid": "Revision ID this edit was made from, or `null` if the edit created the page.",
+	"personal-dashboard-rest-property-desc-user": "Name of the user who made the edit, or their IP address if they were not logged in.",
+	"personal-dashboard-rest-property-desc-timestamp": "When the edit was made, in ISO 8601 format.",
+	"personal-dashboard-rest-property-desc-newlen": "Size of the page after the edit, in bytes.",
+	"personal-dashboard-rest-property-desc-oldlen": "Size of the page before the edit, in bytes.",
+	"personal-dashboard-rest-property-desc-parsedcomment": "Edit summary as parsed HTML. Empty if the summary is hidden from you.",
+	"personal-dashboard-rest-property-desc-description": "Short description of the page. Empty if the page has none.",
+	"personal-dashboard-rest-property-desc-minor": "Whether the edit was marked as minor.",
+	"personal-dashboard-rest-property-desc-bot": "Whether the edit was made by a bot.",
+	"personal-dashboard-rest-property-desc-new": "Whether the edit created the page.",
+	"personal-dashboard-rest-property-desc-tags": "Change tags applied to the edit.",
+	"personal-dashboard-rest-feed-bad-continue": "The continue value is not usable here. Request the feed again without it."
+}

@@ -82,6 +82,8 @@ Three pieces, all exported from `ext.personalDashboard.common`:
 
 A feed source is the server half of a feed: one named query that returns items for one viewer. Sources exist so that a feed module makes a single request instead of one per source, and so that the feed can page past its first batch.
 
+Registered sources are served by `GET /personaldashboard/v0/feed?sources=a|b`, a pipe-separated list in the same style the Action API uses. It also takes `limit` (1–50, default 10) and `continue`, and answers with `{ "items": [ … ], "continue": "…" }`, newest first, with items spread evenly across the sources you named. Omit `sources` and you get `recentchanges` alone. The `continue` token is opaque: hand it back unchanged to get the next page, and expect it to be absent once every source is spent. The endpoint is per-viewer and rejects anonymous and temporary accounts with a 401.
+
 Register a source the same way you register a module, as an ObjectFactory spec under an `extension.json` attribute — this time `PersonalDashboard.FeedSources`, keyed by the source's name:
 
 ```json
@@ -108,7 +110,7 @@ Personal Dashboard ships three, all reading the recentchanges table: `recentchan
 
 Items implement [`IFeedItem`](../src/Feed/IFeedItem.php), which asks for only what the platform needs: an `id` to key the list on, a `timestamp` to merge on, a `cursor` to resume from, a dedup key, and `toArray()` for whatever your card renders. A source over the `recentchanges` table can return `RecentChangeFeedItem` rather than write its own.
 
-`getDedupKey()` is the one worth a second look, because it decides what "the same thing twice" means for your source. Two sources can legitimately return the same subject — a page you edited that you also watch arrives from both — and the ids won't reveal it, since each source prefixes its own and the revisions may differ too. So return a value naming the subject rather than the item: the recentchanges-backed items return the page title. The merge keeps the first item with a given key and lets the losing source draw its next one instead, so that source doesn't forfeit its share of the feed.
+`getDedupKey()` is the one worth a second look, because it decides what "the same thing twice" means for your source. Two sources can legitimately return the same subject — a page you edited that you also watch arrives from both — and the ids won't reveal it, since each source prefixes its own and the revisions may differ too. So return a value naming the subject rather than the item: the recentchanges-backed items return the page title. The merge keeps the first item with a given key and lets the losing source draw its next one instead, so that source doesn't forfeit its share of the feed. Keys also travel, hashed, in the `continue` token, so a source that still holds a copy of something an earlier page showed gets moved past it rather than repeating it. That makes stability part of the contract: the same subject has to produce the same key on the next request.
 
 Return `null` to opt out, and mean it: the item will never be merged away. That's right for something already unique — one discussion thread among many on the same page — and wrong for anything a sibling source might also surface.
 

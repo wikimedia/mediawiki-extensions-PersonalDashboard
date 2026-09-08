@@ -407,4 +407,73 @@ class FeedMergerTest extends MediaWikiUnitTestCase {
 
 		$this->assertFalse( $merged->hasMore['a'] );
 	}
+
+	public function testReportsOneServedKeyForEachItemItSelected() {
+		$merged = ( new FeedMerger() )->merge( [
+			'a' => $this->result( $this->items( 'a', 3, 20 ) ),
+		], 2 );
+
+		$this->assertCount( 2, $merged->servedKeys );
+		// Hashes rather than the keys themselves. The token they travel in has a
+		// size limit, and nothing ever reads a key back out of it.
+		foreach ( $merged->servedKeys as $hash ) {
+			$this->assertMatchesRegularExpression( '/^[0-9a-f]{8}$/', $hash );
+		}
+	}
+
+	public function testAServedKeyIsAlwaysAStringEvenWhenItLooksLikeANumber() {
+		// sha256( 'Page 46' ) starts 97740147, which PHP turns into an integer
+		// the moment it is used as an array key. About one hash in forty is all
+		// digits, and hex2bin() in the token rejects an int outright.
+		$merged = ( new FeedMerger() )->merge( [
+			'a' => $this->result( [ $this->item( 'a', 'Page 46', '2024-06-01T10:00:00Z' ) ] ),
+		], 10 );
+
+		$this->assertSame( [ '97740147' ], $merged->servedKeys );
+	}
+
+	public function testAnItemWithNoDedupKeyIsNotRecordedAsServed() {
+		// A null key means never merge me away, so there is nothing to record and
+		// nothing a later page could match against.
+		$merged = ( new FeedMerger() )->merge( [
+			'a' => $this->result( [ $this->item( 'a', null, '2024-06-01T10:00:00Z' ) ] ),
+		], 10 );
+
+		$this->assertCount( 1, $merged->items );
+		$this->assertSame( [], $merged->servedKeys );
+	}
+
+	public function testSkipsWhatThePageBeforeAlreadyServed() {
+		$first = ( new FeedMerger() )->merge( [
+			'b' => $this->result( [ $this->item( 'b', 'shared', '2024-06-01T10:00:00Z' ) ] ),
+		], 10 );
+		$this->assertSame( [ 'shared' ], $this->keys( $first->items ) );
+
+		// Source a holds its own copy of the same thing. Nothing in this merge has
+		// seen it, so only what the first page recorded can stop it.
+		$second = ( new FeedMerger() )->merge( [
+			'a' => $this->result( [
+				$this->item( 'a', 'shared', '2024-06-01T10:00:00Z' ),
+				$this->item( 'a', 'fresh', '2024-06-01T09:00:00Z' ),
+			] ),
+		], 10, $first->servedKeys );
+
+		$this->assertSame( [ 'fresh' ], $this->keys( $second->items ) );
+	}
+
+	public function testTheCursorAdvancesPastWhatThePageBeforeServed() {
+		$served = ( new FeedMerger() )->merge( [
+			'b' => $this->result( [ $this->item( 'b', 'shared', '2024-06-01T10:00:00Z' ) ] ),
+		], 10 )->servedKeys;
+
+		$copy = $this->item( 'a', 'shared', '2024-06-01T10:00:00Z' );
+		$merged = ( new FeedMerger() )->merge(
+			[ 'a' => $this->result( [ $copy ] ) ], 10, $served
+		);
+
+		$this->assertSame( [], $merged->items );
+		// Leaving the cursor in front of the copy would offer it again on every
+		// later page, where nothing remembers it any more.
+		$this->assertSame( $copy->getCursor(), $merged->cursors['a'] );
+	}
 }

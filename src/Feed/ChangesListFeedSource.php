@@ -80,6 +80,109 @@ abstract class ChangesListFeedSource implements IFeedSource {
 	}
 
 	/**
+	 * Every source here emits RecentChangeFeedItem, so one description serves
+	 * all of them and the endpoint collapses the duplicates.
+	 *
+	 * The field names are the recentchanges vocabulary the Action API already
+	 * uses, so a client that reads one reads the other.
+	 *
+	 * @inheritDoc
+	 */
+	public function getItemSchema(): array {
+		return [
+			'type' => 'object',
+			'required' => [ 'id', 'feedorigin', 'title', 'revid', 'pageid', 'timestamp' ],
+			'properties' => [
+				'id' => [
+					'type' => 'string',
+					'x-i18n-description' => 'personal-dashboard-rest-property-desc-id',
+					'example' => 'recentchanges-4711',
+				],
+				'feedorigin' => [
+					'type' => 'string',
+					'x-i18n-description' => 'personal-dashboard-rest-property-desc-feedorigin',
+					'example' => 'recentchanges',
+				],
+				'title' => [
+					'type' => 'string',
+					'x-i18n-description' => 'personal-dashboard-rest-property-desc-title',
+					'example' => 'Jupiter',
+				],
+				'revid' => [
+					'type' => 'integer',
+					'x-i18n-description' => 'personal-dashboard-rest-property-desc-revid',
+					'example' => 4711,
+				],
+				'pageid' => [
+					'type' => 'integer',
+					'x-i18n-description' => 'personal-dashboard-rest-property-desc-pageid',
+					'example' => 77,
+				],
+				// Null on a page creation, which has no parent revision.
+				'old_revid' => [
+					'type' => 'integer',
+					'nullable' => true,
+					'x-i18n-description' => 'personal-dashboard-rest-property-desc-old-revid',
+					'example' => 4710,
+				],
+				'user' => [
+					'type' => 'string',
+					'x-i18n-description' => 'personal-dashboard-rest-property-desc-user',
+					'example' => 'Carol',
+				],
+				'timestamp' => [
+					'type' => 'string',
+					'x-i18n-description' => 'personal-dashboard-rest-property-desc-timestamp',
+					'example' => '2026-03-10T12:00:00Z',
+				],
+				'newlen' => [
+					'type' => 'integer',
+					'x-i18n-description' => 'personal-dashboard-rest-property-desc-newlen',
+					'example' => 4000,
+				],
+				'oldlen' => [
+					'type' => 'integer',
+					'x-i18n-description' => 'personal-dashboard-rest-property-desc-oldlen',
+					'example' => 3900,
+				],
+				// Empty when the summary is suppressed and the viewer may not
+				// see it, so the change still appears without its comment.
+				'parsedcomment' => [
+					'type' => 'string',
+					'x-i18n-description' => 'personal-dashboard-rest-property-desc-parsedcomment',
+					'example' => 'fixed a typo',
+				],
+				'description' => [
+					'type' => 'string',
+					'x-i18n-description' => 'personal-dashboard-rest-property-desc-description',
+					'example' => 'Fifth planet from the Sun',
+				],
+				'minor' => [
+					'type' => 'boolean',
+					'x-i18n-description' => 'personal-dashboard-rest-property-desc-minor',
+					'example' => false,
+				],
+				'bot' => [
+					'type' => 'boolean',
+					'x-i18n-description' => 'personal-dashboard-rest-property-desc-bot',
+					'example' => false,
+				],
+				'new' => [
+					'type' => 'boolean',
+					'x-i18n-description' => 'personal-dashboard-rest-property-desc-new',
+					'example' => false,
+				],
+				'tags' => [
+					'type' => 'array',
+					'items' => [ 'type' => 'string' ],
+					'x-i18n-description' => 'personal-dashboard-rest-property-desc-tags',
+					'example' => [ 'mw-manual-revert' ],
+				],
+			],
+		];
+	}
+
+	/**
 	 * Narrow the shared query to this source.
 	 *
 	 * Return false to skip the query altogether, for a source that can tell it

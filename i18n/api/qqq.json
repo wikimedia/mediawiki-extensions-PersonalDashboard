@@ -1,0 +1,33 @@
+{
+	"@metadata": {
+		"authors": [
+			"MusikAnimal"
+		]
+	},
+	"rest-module-personaldashboard.v0-title": "Title of the personaldashboard.v0 REST module.",
+	"rest-module-personaldashboard.v0-desc": "Description of the personaldashboard.v0 REST module, shown in the REST API documentation.",
+	"personal-dashboard-rest-endpoint-summary-feed": "Summary of the GET feed endpoint, shown in the REST API documentation.",
+	"personal-dashboard-rest-endpoint-desc-feed": "Description of the GET feed endpoint, shown in the REST API documentation.",
+	"personal-dashboard-rest-param-desc-feed-sources": "Description of the <code>sources</code> query parameter of the feed REST endpoint, shown in the API documentation. The link text is the only translatable part of the Markdown link.",
+	"personal-dashboard-rest-param-desc-feed-limit": "Description of the <code>limit</code> query parameter of the feed REST endpoint, shown in the API documentation.",
+	"personal-dashboard-rest-param-desc-feed-continue": "Description of the <code>continue</code> query parameter of the feed REST endpoint, shown in the API documentation.",
+	"personal-dashboard-rest-schema-desc-feed-items": "Description of the <code>items</code> property of the feed REST endpoint's response, shown in the API documentation.",
+	"personal-dashboard-rest-schema-desc-feed-continue": "Description of the <code>continue</code> property of the feed REST endpoint's response, shown in the API documentation. <code>continue</code> is a parameter name and is not translated.",
+	"personal-dashboard-rest-property-desc-id": "Description of the <code>id</code> property of a feed item, shown in the REST API documentation.",
+	"personal-dashboard-rest-property-desc-feedorigin": "Description of the <code>feedorigin</code> property of a feed item, shown in the REST API documentation. Its value is a source name such as <code>recentchanges</code>, which is not translated.",
+	"personal-dashboard-rest-property-desc-title": "Description of the <code>title</code> property of a feed item, shown in the REST API documentation.",
+	"personal-dashboard-rest-property-desc-revid": "Description of the <code>revid</code> property of a feed item, shown in the REST API documentation.",
+	"personal-dashboard-rest-property-desc-pageid": "Description of the <code>pageid</code> property of a feed item, shown in the REST API documentation.",
+	"personal-dashboard-rest-property-desc-old-revid": "Description of the <code>old_revid</code> property of a feed item, shown in the REST API documentation. <code>null</code> is a JSON literal and is not translated.",
+	"personal-dashboard-rest-property-desc-user": "Description of the <code>user</code> property of a feed item, shown in the REST API documentation.",
+	"personal-dashboard-rest-property-desc-timestamp": "Description of the <code>timestamp</code> property of a feed item, shown in the REST API documentation.",
+	"personal-dashboard-rest-property-desc-newlen": "Description of the <code>newlen</code> property of a feed item, shown in the REST API documentation.",
+	"personal-dashboard-rest-property-desc-oldlen": "Description of the <code>oldlen</code> property of a feed item, shown in the REST API documentation.",
+	"personal-dashboard-rest-property-desc-parsedcomment": "Description of the <code>parsedcomment</code> property of a feed item, shown in the REST API documentation. The summary is withheld when revision deletion hides it from the viewer.",
+	"personal-dashboard-rest-property-desc-description": "Description of the <code>description</code> property of a feed item, shown in the REST API documentation. This is the page's short description, from Wikibase or the ShortDescription extension.",
+	"personal-dashboard-rest-property-desc-minor": "Description of the <code>minor</code> property of a feed item, shown in the REST API documentation.",
+	"personal-dashboard-rest-property-desc-bot": "Description of the <code>bot</code> property of a feed item, shown in the REST API documentation.",
+	"personal-dashboard-rest-property-desc-new": "Description of the <code>new</code> property of a feed item, shown in the REST API documentation.",
+	"personal-dashboard-rest-property-desc-tags": "Description of the <code>tags</code> property of a feed item, shown in the REST API documentation.",
+	"personal-dashboard-rest-feed-bad-continue": "Error returned by the feed REST endpoint when the <code>continue</code> token cannot be read, or was made for a different set of feed sources. <code>continue</code> is a parameter name and is not translated."
+}

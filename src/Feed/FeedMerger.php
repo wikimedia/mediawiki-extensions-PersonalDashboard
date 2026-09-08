@@ -30,9 +30,17 @@ class FeedMerger {
 	 * @param array<string,FeedSourceResult> $bySource Results by source name, in
 	 *   priority order.
 	 * @param int $limit Maximum number of items to return.
+	 * @param string[] $alreadyServed Dedup hashes carried by the continuation
+	 *   token, naming what the page before this one served. A source that still
+	 *   holds a copy of one of those is moved past it rather than offering it
+	 *   again, because another source already showed it.
 	 * @return FeedMergeResult
 	 */
-	public function merge( array $bySource, int $limit ): FeedMergeResult {
+	public function merge(
+		array $bySource,
+		int $limit,
+		array $alreadyServed = []
+	): FeedMergeResult {
 		$names = array_keys( $bySource );
 
 		// Sort defensively. A source promises newest first, but ordering is this
@@ -50,7 +58,10 @@ class FeedMerger {
 		// was skipped as a duplicate. Not the last item selected: a source that
 		// only ever skipped still has to resume after what it skipped.
 		$lastConsumed = array_fill_keys( $names, null );
-		$seenKeys = [];
+		// What the page before this one served comes in hashed. Nothing reads a
+		// key back out, so the merge only ever compares hashes.
+		$seenKeys = array_fill_keys( $alreadyServed, true );
+		$servedKeys = [];
 		$selected = [];
 
 		$drewAnItem = true;
@@ -62,12 +73,11 @@ class FeedMerger {
 					break;
 				}
 
-				// Skip past anything another source already contributed, and
-				// count it as consumed. A key only enters $seenKeys when an item
-				// is selected, so anything skipped here duplicates something
-				// already in this page and is genuinely represented. Leaving the
-				// cursor behind it would offer it again on the next page, where
-				// $seenKeys is empty and nothing would stop it.
+				// Skip past anything already served, and count it as consumed.
+				// $seenKeys holds what this page selected, plus what the token
+				// says the page before it served, so anything skipped here is
+				// already with the client. Leaving the cursor behind it would
+				// offer it again on a later page.
 				while (
 					$positions[$name] < count( $queues[$name] ) &&
 					self::isDuplicate( $queues[$name][$positions[$name]], $seenKeys )
@@ -83,7 +93,9 @@ class FeedMerger {
 				$item = $queues[$name][$positions[$name]++];
 				$key = $item->getDedupKey();
 				if ( $key !== null ) {
-					$seenKeys[$key] = true;
+					$hash = self::hashKey( $key );
+					$seenKeys[$hash] = true;
+					$servedKeys[$hash] = true;
 				}
 
 				$selected[] = $item;
@@ -105,7 +117,15 @@ class FeedMerger {
 				|| $bySource[$name]->mayHaveMore;
 		}
 
-		return new FeedMergeResult( $selected, $cursors, $hasMore );
+		return new FeedMergeResult(
+			$selected,
+			$cursors,
+			$hasMore,
+			// strval() because PHP turns an array key that looks like a number
+			// into one, and about one hash in forty is all digits. The token
+			// packs these as hex, which wants a string.
+			array_map( 'strval', array_keys( $servedKeys ) )
+		);
 	}
 
 	/**
@@ -115,7 +135,23 @@ class FeedMerger {
 	 */
 	private static function isDuplicate( IFeedItem $item, array $seenKeys ): bool {
 		$key = $item->getDedupKey();
-		return $key !== null && isset( $seenKeys[$key] );
+		return $key !== null && isset( $seenKeys[ self::hashKey( $key ) ] );
+	}
+
+	/**
+	 * Shorten a dedup key so a page of them fits in a continuation token.
+	 *
+	 * The token rides in a query string and has a size limit, so it names what
+	 * was served by hash rather than by key. Eight hex characters is enough:
+	 * nothing reads a key back, and the cost of a collision is one item left out
+	 * of one page. At the maximum of 50 keys the chance of that is about 1 in 4
+	 * million.
+	 *
+	 * @param string $key
+	 * @return string
+	 */
+	private static function hashKey( string $key ): string {
+		return substr( hash( 'sha256', $key ), 0, 8 );
 	}
 
 	/**

@@ -33,6 +33,21 @@ interface IFeedSource {
 	public function getItems( FeedRequest $request ): FeedSourceResult;
 
 	/**
+	 * Describe one item this source returns, as an OpenAPI Schema Object.
+	 *
+	 * The endpoint builds its response schema from every registered source, so
+	 * this is how a source contributed by another extension gets documented at
+	 * all. Describe a single item; the endpoint wraps them in the envelope.
+	 *
+	 * It is read only when the API specification is generated, never during a
+	 * request, so it cannot depend on what a caller asked for.
+	 *
+	 * @see https://swagger.io/specification/#schema-object
+	 * @return array
+	 */
+	public function getItemSchema(): array;
+
+	/**
 	 * Sets the source name.
 	 *
 	 * The factory calls this after it builds the source, so a source does not

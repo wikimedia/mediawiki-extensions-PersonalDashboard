@@ -393,6 +393,7 @@
 	],
 	"attributes": {
 		"PersonalDashboard": {
+			"FeedSources": {},
 			"Modules": {
 				"ext.personalDashboard.activeDiscussions": {
 					"class": "MediaWiki\\Extension\\PersonalDashboard\\Modules\\ActiveDiscussions"

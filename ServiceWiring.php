@@ -1,6 +1,7 @@
 <?php
 
 use MediaWiki\Config\Config;
+use MediaWiki\Extension\PersonalDashboard\Feed\PersonalDashboardFeedSourceFactory;
 use MediaWiki\Extension\PersonalDashboard\PersonalDashboardModuleFactory;
 use MediaWiki\Logger\LoggerFactory;
 use MediaWiki\MediaWikiServices;
@@ -15,6 +16,16 @@ return [
 
 	'PersonalDashboardConfig' => static function ( MediaWikiServices $services ): Config {
 		return $services->getConfigFactory()->makeConfig( 'PersonalDashboard' );
+	},
+
+	'PersonalDashboardFeedSourceFactory' => static function (
+		MediaWikiServices $services
+	): PersonalDashboardFeedSourceFactory {
+		return new PersonalDashboardFeedSourceFactory(
+			$services->getExtensionRegistry(),
+			$services->getObjectFactory(),
+			$services->get( 'PersonalDashboardLogger' )
+		);
 	},
 
 	'PersonalDashboardLogger' => static function (): LoggerInterface {

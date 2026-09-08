@@ -3,6 +3,7 @@
 namespace MediaWiki\Extension\PersonalDashboard;
 
 use MediaWiki\Config\Config;
+use MediaWiki\Extension\PersonalDashboard\Feed\PersonalDashboardFeedSourceFactory;
 use MediaWiki\MediaWikiServices;
 use Psr\Log\LoggerInterface;
 
@@ -36,6 +37,10 @@ class PersonalDashboardServices {
 
 	public function getLogger(): LoggerInterface {
 		return $this->coreServices->get( 'PersonalDashboardLogger' );
+	}
+
+	public function getPersonalDashboardFeedSourceFactory(): PersonalDashboardFeedSourceFactory {
+		return $this->coreServices->get( 'PersonalDashboardFeedSourceFactory' );
 	}
 
 	public function getPersonalDashboardModuleFactory(): PersonalDashboardModuleFactory {

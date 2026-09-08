@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace MediaWiki\Extension\PersonalDashboard\Tests\Integration;
 
 use MediaWiki\Config\Config;
+use MediaWiki\Extension\PersonalDashboard\Feed\PersonalDashboardFeedSourceFactory;
 use MediaWiki\Extension\PersonalDashboard\PersonalDashboardModuleFactory;
 use MediaWiki\Extension\PersonalDashboard\PersonalDashboardServices;
 use MediaWikiIntegrationTestCase;
@@ -34,6 +35,13 @@ class PersonalDashboardServicesTest extends MediaWikiIntegrationTestCase {
 
 	public function testGetLogger() {
 		$this->assertInstanceOf( LoggerInterface::class, $this->newServices()->getLogger() );
+	}
+
+	public function testGetPersonalDashboardFeedSourceFactory() {
+		$this->assertInstanceOf(
+			PersonalDashboardFeedSourceFactory::class,
+			$this->newServices()->getPersonalDashboardFeedSourceFactory()
+		);
 	}
 
 	public function testGetPersonalDashboardModuleFactory() {

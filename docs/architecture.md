@@ -28,7 +28,7 @@ Two more paths through the same code:
 
 ## The pieces
 
-**Module registration and composition.** Modules register as ObjectFactory specs under the `PersonalDashboard.Modules` attribute; placement into groups and subgroups is a separate `PersonalDashboard.ModuleGroups` attribute, mergeable across extensions. This is the code-facing "how do I add a module" mechanics. See [`./modules.md`](./modules.md).
+**Module registration and composition.** Modules register as ObjectFactory specs under the `PersonalDashboard.Modules` attribute; placement into groups and subgroups is a separate `PersonalDashboard.ModuleGroups` attribute, mergeable across extensions. Feed sources — the server-side queries behind a feed module — register the same way, under `PersonalDashboard.FeedSources`. This is the code-facing "how do I add a module" mechanics. See [`./modules.md`](./modules.md).
 
 **The server render contract (islands architecture).** How a module's server HTML and its client Vue behavior fit together: which modules are islands, which are server-static, which are progressively enhanced, and why MediaWiki's lack of Vue SSR makes that split load-bearing rather than cosmetic. Also covers the platform-axis removal (detail is now viewport-driven, client-side, not a server render mode). See [`./render-contract.md`](./render-contract.md).
 

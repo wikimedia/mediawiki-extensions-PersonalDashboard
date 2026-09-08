@@ -78,6 +78,34 @@ Three pieces, all exported from `ext.personalDashboard.common`:
 
 `./resources/ext.personalDashboard.activeDiscussions/` is the smaller of the two consumers and the better one to read first: one composable holding the API query, an `App.vue` that is little more than the labels and the fetch limit, and a `ListCard.vue` that is all slot content.
 
+## Register a feed source
+
+A feed source is the server half of a feed: one named query that returns items for one viewer. Sources exist so that a feed module makes a single request instead of one per source, and so that the feed can page past its first batch.
+
+Register a source the same way you register a module, as an ObjectFactory spec under an `extension.json` attribute — this time `PersonalDashboard.FeedSources`, keyed by the source's name:
+
+```json
+"attributes": {
+    "PersonalDashboard": {
+        "FeedSources": {
+            "watchlist": {
+                "class": "MediaWiki\\Extension\\BoilerPlate\\Feed\\WatchlistFeedSource",
+                "services": [ "ChangesListQueryFactory" ]
+            }
+        }
+    }
+}
+```
+
+The attribute merges across extensions, so a source registered from BoilerPlate's own `extension.json` needs no change to Personal Dashboard. `PersonalDashboardFeedSourceFactory` aggregates the declarations and builds each source once per request; an unregistered name returns `null` and logs, so a feed drops the missing source rather than failing.
+
+The class implements [`IFeedSource`](../src/Feed/IFeedSource.php): one `getItems( FeedRequest $request ): FeedSourceResult` method, plus the `setName()` the factory calls for you. Two constraints are worth knowing before you write one:
+
+- **A source is context-free.** It gets an `Authority` on the request, not an `IContextSource`, because the REST endpoint that calls it has none to give. Filter for that authority; don't reach for the global user, and keep message localisation out.
+- **A source doesn't merge, sort across sources, or paginate the response.** It returns its own items newest first, up to the limit it was given, resuming from the cursor it was given. The endpoint owns the rest.
+
+Items implement [`IFeedItem`](../src/Feed/IFeedItem.php), which asks for only what the platform needs: an `id` to key the list on, a `timestamp` to merge on, a `cursor` to resume from, and `toArray()` for whatever your card renders. A source over the `recentchanges` table can return `RecentChangeFeedItem` rather than write its own.
+
 ## Show it on the dashboard
 
 The default dashboard layout lives at `PersonalDashboard.ModuleGroups.default` in **Personal Dashboard's** own `./extension.json`. A group contains subgroups, and a subgroup contains modules. The `default` group has three top-level groups: `utils` (hidden, holds the onboarding module), `main`, and `sidebar`.

@@ -22,6 +22,8 @@ Deliberate divergences from MediaWiki convention, each with the reasoning and a 
 
 **What PD does instead.** Modules and module groups declare themselves as `extension.json` attributes (`PersonalDashboard.Modules`, `PersonalDashboard.ModuleGroups`), and registered dashboards will join them as a third. `PersonalDashboardModuleFactory` aggregates those attributes and instantiates through ObjectFactory. So PD does have a registry service; it reads declarations rather than accepting them at runtime.
 
+Feed sources follow the same rule: `PersonalDashboard.FeedSources` and `PersonalDashboardFeedSourceFactory` are a second instance of the pattern, not a new one. One deliberate divergence: an unregistered feed source resolves to `null` rather than to a placeholder, because a feed drops the missing source and renders the rest, where a module occupies a card that would otherwise be empty.
+
 **Why.** The driver was duplication: hardcoded module definitions meant copying code every time someone added or customized a module. Declarative attributes are the cheapest MediaWiki-idiomatic fix, they merge across extensions for free, and ObjectFactory supplies dependency injection without bespoke wiring.
 
 **Consequence.** Registration is static and load-time, and cross-extension registration works through attribute merge. What's absent isn't coupling between the attributes, since a group already names modules across extension boundaries. It's validation of that coupling: a group naming an unregistered module logs at error and falls back to `ext.personalDashboard.placeholder`, so a dangling reference shows up as an empty card in production instead of failing at registration time.

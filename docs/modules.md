@@ -106,7 +106,11 @@ The class implements [`IFeedSource`](../src/Feed/IFeedSource.php): one `getItems
 
 Personal Dashboard ships three, all reading the recentchanges table: `recentchanges` (recent edits wiki-wide), `watchlist` (edits to pages the viewer watches) and `recentlyedited` (other people's edits to pages the viewer worked on). They share [`ChangesListFeedSource`](../src/Feed/ChangesListFeedSource.php), which owns the query they have in common and keeps the two viewer-relative filters — hiding the viewer's own edits, and showing only unpatrolled edits — as options, so the same class can be registered again with personalization turned off.
 
-Items implement [`IFeedItem`](../src/Feed/IFeedItem.php), which asks for only what the platform needs: an `id` to key the list on, a `timestamp` to merge on, a `cursor` to resume from, and `toArray()` for whatever your card renders. A source over the `recentchanges` table can return `RecentChangeFeedItem` rather than write its own.
+Items implement [`IFeedItem`](../src/Feed/IFeedItem.php), which asks for only what the platform needs: an `id` to key the list on, a `timestamp` to merge on, a `cursor` to resume from, a dedup key, and `toArray()` for whatever your card renders. A source over the `recentchanges` table can return `RecentChangeFeedItem` rather than write its own.
+
+`getDedupKey()` is the one worth a second look, because it decides what "the same thing twice" means for your source. Two sources can legitimately return the same subject — a page you edited that you also watch arrives from both — and the ids won't reveal it, since each source prefixes its own and the revisions may differ too. So return a value naming the subject rather than the item: the recentchanges-backed items return the page title. The merge keeps the first item with a given key and lets the losing source draw its next one instead, so that source doesn't forfeit its share of the feed.
+
+Return `null` to opt out, and mean it: the item will never be merged away. That's right for something already unique — one discussion thread among many on the same page — and wrong for anything a sibling source might also surface.
 
 ## Show it on the dashboard
 

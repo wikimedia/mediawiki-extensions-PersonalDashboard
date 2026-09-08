@@ -53,6 +53,17 @@ class RecentChangeFeedItemTest extends MediaWikiUnitTestCase {
 		$this->assertSame( '2026-03-10T12:00:00Z', $this->newItem()->getTimestamp() );
 	}
 
+	public function testTheDedupKeyIsThePageNotTheEdit() {
+		// The watchlist source and the recently edited source can both return a
+		// change to the same page at different revisions, and the feed should
+		// show that page once. Keying on the revision would show it twice.
+		$this->assertSame( 'Jupiter', $this->newItem()->getDedupKey() );
+		$this->assertSame(
+			$this->newItem( [ 'revid' => 1, 'rcId' => 1 ] )->getDedupKey(),
+			$this->newItem( [ 'revid' => 2, 'rcId' => 2 ] )->getDedupKey()
+		);
+	}
+
 	public function testToArrayMatchesTheClientFeedItemShape() {
 		// These keys are the contract the Vue card reads. Renaming one is a
 		// breaking change for every consumer, so pin the whole shape.

@@ -47,6 +47,25 @@ interface IFeedItem {
 	public function getCursor(): string;
 
 	/**
+	 * Get a value naming the thing this item is about, so the merge shows that
+	 * thing once.
+	 *
+	 * Two sources can legitimately return the same subject: a page you edited
+	 * that you also watch reaches the feed from both. The IDs differ, because
+	 * each source prefixes its own, and the revisions can differ too, so only
+	 * the source knows what makes two of its items the same. The merge keeps
+	 * the first item with a given key and lets the losing source draw its next
+	 * one instead, so that source keeps its share of the feed.
+	 *
+	 * Return null to never be merged away. That is the right answer for an item
+	 * that is already unique, such as one discussion thread among many on one
+	 * page.
+	 *
+	 * @return ?string
+	 */
+	public function getDedupKey(): ?string;
+
+	/**
 	 * Get this item in the shape the client renders.
 	 *
 	 * @return array

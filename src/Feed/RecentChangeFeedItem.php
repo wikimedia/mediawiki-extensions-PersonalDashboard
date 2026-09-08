@@ -79,6 +79,17 @@ readonly class RecentChangeFeedItem implements IFeedItem {
 		return $this->timestamp . '|' . $this->rcId;
 	}
 
+	/**
+	 * The page, not the edit. The watchlist source and the recently edited
+	 * source can both return a change to the same page, at different revisions,
+	 * and the feed should show that page once.
+	 *
+	 * @inheritDoc
+	 */
+	public function getDedupKey(): ?string {
+		return $this->title;
+	}
+
 	/** @inheritDoc */
 	public function toArray(): array {
 		return [

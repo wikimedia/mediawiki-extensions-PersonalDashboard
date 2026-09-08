@@ -104,6 +104,8 @@ The class implements [`IFeedSource`](../src/Feed/IFeedSource.php): one `getItems
 - **A source is context-free.** It gets an `Authority` on the request, not an `IContextSource`, because the REST endpoint that calls it has none to give. Filter for that authority; don't reach for the global user, and keep message localisation out.
 - **A source doesn't merge, sort across sources, or paginate the response.** It returns its own items newest first, up to the limit it was given, resuming from the cursor it was given. The endpoint owns the rest.
 
+Personal Dashboard ships three, all reading the recentchanges table: `recentchanges` (recent edits wiki-wide), `watchlist` (edits to pages the viewer watches) and `recentlyedited` (other people's edits to pages the viewer worked on). They share [`ChangesListFeedSource`](../src/Feed/ChangesListFeedSource.php), which owns the query they have in common and keeps the two viewer-relative filters — hiding the viewer's own edits, and showing only unpatrolled edits — as options, so the same class can be registered again with personalization turned off.
+
 Items implement [`IFeedItem`](../src/Feed/IFeedItem.php), which asks for only what the platform needs: an `id` to key the list on, a `timestamp` to merge on, a `cursor` to resume from, and `toArray()` for whatever your card renders. A source over the `recentchanges` table can return `RecentChangeFeedItem` rather than write its own.
 
 ## Show it on the dashboard

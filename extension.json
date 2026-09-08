@@ -393,7 +393,36 @@
 	],
 	"attributes": {
 		"PersonalDashboard": {
-			"FeedSources": {},
+			"FeedSources": {
+				"recentchanges": {
+					"class": "MediaWiki\\Extension\\PersonalDashboard\\Feed\\Source\\RecentChangesFeedSource",
+					"services": [
+						"ChangesListQueryFactory",
+						"ConnectionProvider",
+						"RowCommentFormatter",
+						"MainConfig"
+					]
+				},
+				"recentlyedited": {
+					"class": "MediaWiki\\Extension\\PersonalDashboard\\Feed\\Source\\RecentlyEditedFeedSource",
+					"services": [
+						"ChangesListQueryFactory",
+						"ConnectionProvider",
+						"RowCommentFormatter",
+						"MainConfig",
+						"ActorNormalization"
+					]
+				},
+				"watchlist": {
+					"class": "MediaWiki\\Extension\\PersonalDashboard\\Feed\\Source\\WatchlistFeedSource",
+					"services": [
+						"ChangesListQueryFactory",
+						"ConnectionProvider",
+						"RowCommentFormatter",
+						"MainConfig"
+					]
+				}
+			},
 			"Modules": {
 				"ext.personalDashboard.activeDiscussions": {
 					"class": "MediaWiki\\Extension\\PersonalDashboard\\Modules\\ActiveDiscussions"

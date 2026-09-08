@@ -2,7 +2,9 @@
 
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\PersonalDashboard\PersonalDashboardModuleFactory;
+use MediaWiki\Logger\LoggerFactory;
 use MediaWiki\MediaWikiServices;
+use Psr\Log\LoggerInterface;
 
 /** @phpcs-require-sorted-array */
 return [
@@ -13,6 +15,10 @@ return [
 
 	'PersonalDashboardConfig' => static function ( MediaWikiServices $services ): Config {
 		return $services->getConfigFactory()->makeConfig( 'PersonalDashboard' );
+	},
+
+	'PersonalDashboardLogger' => static function (): LoggerInterface {
+		return LoggerFactory::getInstance( 'PersonalDashboard' );
 	},
 
 	'PersonalDashboardModuleFactory' => static function (

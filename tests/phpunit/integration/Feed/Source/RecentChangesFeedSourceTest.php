@@ -6,6 +6,8 @@ namespace MediaWiki\Extension\PersonalDashboard\Tests\Integration\Feed\Source;
 
 use MediaWiki\Content\WikitextContent;
 use MediaWiki\Extension\PersonalDashboard\Feed\FeedRequest;
+use MediaWiki\Extension\PersonalDashboard\Feed\IRevisionScoreLookup;
+use MediaWiki\Extension\PersonalDashboard\Feed\NullRevisionScoreLookup;
 use MediaWiki\Extension\PersonalDashboard\Feed\Source\RecentChangesFeedSource;
 use MediaWiki\Permissions\Authority;
 use MediaWiki\Revision\SlotRecord;
@@ -31,6 +33,7 @@ class RecentChangesFeedSourceTest extends MediaWikiIntegrationTestCase {
 			$services->getConnectionProvider(),
 			$services->getRowCommentFormatter(),
 			$services->getMainConfig(),
+			new NullRevisionScoreLookup(),
 			$options
 		);
 		$source->setName( 'recentchanges' );
@@ -215,19 +218,68 @@ class RecentChangesFeedSourceTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( [ 'Public' ], $this->getTitles( new User() ) );
 	}
 
+	public function testScoresAreAttachedToTheItemTheyBelongTo() {
+		// The lookup is keyed by revision id, and the base class asks it once for
+		// the whole page. Getting the key wrong would silently put one edit's
+		// score on another's card.
+		$viewer = $this->getTestUser()->getUser();
+		$other = $this->getTestUser( 'other' )->getUser();
+
+		$this->editPageAs( 'Risky', $other );
+
+		$scored = new class implements IRevisionScoreLookup {
+			/** @var int[] */
+			public array $asked = [];
+
+			public function getScores( array $revIds ): array {
+				$this->asked = $revIds;
+				return array_fill_keys(
+					$revIds,
+					[ 'revertrisklanguageagnostic' => [ 'true' => 0.97, 'false' => 0.03 ] ]
+				);
+			}
+		};
+
+		$services = $this->getServiceContainer();
+		$source = new RecentChangesFeedSource(
+			$services->getChangesListQueryFactory(),
+			$services->getConnectionProvider(),
+			$services->getRowCommentFormatter(),
+			$services->getMainConfig(),
+			$scored
+		);
+		$source->setName( 'recentchanges' );
+
+		$item = $source->getItems( new FeedRequest( $viewer, 10 ) )->items[0]->toArray();
+
+		$this->assertSame( [ $item['revid'] ], $scored->asked );
+		$this->assertSame(
+			[ 'revertrisklanguageagnostic' => [ 'true' => 0.97, 'false' => 0.03 ] ],
+			$item['oresscores']
+		);
+	}
+
 	public function testItemsCarryTheShapeTheClientRenders() {
 		$viewer = $this->getTestUser()->getUser();
 		$other = $this->getTestUser( 'other' )->getUser();
 
 		$this->editPageAs( 'Shaped', $other, 'my summary' );
 
-		$item = $this->newSource()->getItems( new FeedRequest( $viewer, 10 ) )->items[0]->toArray();
+		$source = $this->newSource();
+		$item = $source->getItems( new FeedRequest( $viewer, 10 ) )->items[0]->toArray();
 
 		$this->assertSame( [
 			'id', 'feedorigin', 'title', 'revid', 'pageid', 'old_revid', 'user',
 			'timestamp', 'newlen', 'oldlen', 'parsedcomment', 'description',
-			'minor', 'bot', 'new', 'tags',
+			'minor', 'bot', 'new', 'tags', 'oresscores',
 		], array_keys( $item ) );
+		// The schema is read only when the API specification is generated, so no
+		// request ever notices a field added to the item and not to the schema.
+		$this->assertEqualsCanonicalizing(
+			array_keys( $item ),
+			array_keys( $source->getItemSchema()['properties'] ),
+			'every field the endpoint returns is a field it documents'
+		);
 		$this->assertSame( 'recentchanges', $item['feedorigin'] );
 		$this->assertSame( 'recentchanges-' . $item['revid'], $item['id'] );
 		$this->assertSame( $other->getName(), $item['user'] );

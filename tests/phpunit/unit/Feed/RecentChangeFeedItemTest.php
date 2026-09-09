@@ -30,6 +30,7 @@ class RecentChangeFeedItemTest extends MediaWikiUnitTestCase {
 			'bot' => false,
 			'new' => false,
 			'tags' => [ 'mw-manual-revert' ],
+			'oresscores' => [],
 		], $overrides );
 
 		return new RecentChangeFeedItem( ...$fields );
@@ -84,6 +85,7 @@ class RecentChangeFeedItemTest extends MediaWikiUnitTestCase {
 			'bot' => false,
 			'new' => false,
 			'tags' => [ 'mw-manual-revert' ],
+			'oresscores' => [],
 		], $this->newItem()->toArray() );
 	}
 
@@ -92,6 +94,23 @@ class RecentChangeFeedItemTest extends MediaWikiUnitTestCase {
 
 		$this->assertNull( $item->toArray()['old_revid'] );
 		$this->assertTrue( $item->toArray()['new'] );
+	}
+
+	public function testCarriesMachineLearningScoresWhenThereAreAny() {
+		// The score describes the edit; it never decided whether the edit is
+		// here. The card thresholds it into a "High revert risk" chip (T433724).
+		$scores = [ 'revertrisklanguageagnostic' => [ 'true' => 0.97, 'false' => 0.03 ] ];
+
+		$this->assertSame(
+			$scores,
+			$this->newItem( [ 'oresscores' => $scores ] )->toArray()['oresscores']
+		);
+	}
+
+	public function testScoresDefaultToNoneRatherThanBeingAbsent() {
+		// A wiki without ORES, or an edit nothing scored, still emits the key —
+		// so a client reads one shape either way.
+		$this->assertSame( [], $this->newItem()->toArray()['oresscores'] );
 	}
 
 	public function testRowIdStaysOutOfThePayload() {

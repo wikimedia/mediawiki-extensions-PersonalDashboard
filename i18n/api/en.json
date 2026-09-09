@@ -29,5 +29,6 @@
 	"personal-dashboard-rest-property-desc-bot": "Whether the edit was made by a bot.",
 	"personal-dashboard-rest-property-desc-new": "Whether the edit created the page.",
 	"personal-dashboard-rest-property-desc-tags": "Change tags applied to the edit.",
+	"personal-dashboard-rest-property-desc-oresscores": "Machine learning scores for the edit, by model and class. Empty if the edit has none.",
 	"personal-dashboard-rest-feed-bad-continue": "The continue value is not usable here. Request the feed again without it."
 }

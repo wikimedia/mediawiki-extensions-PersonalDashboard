@@ -1,6 +1,10 @@
 <?php
 
 use MediaWiki\Config\Config;
+use MediaWiki\Extension\PersonalDashboard\Feed\IRevisionScoreLookup;
+use MediaWiki\Extension\PersonalDashboard\Feed\NullRevisionScoreLookup;
+use MediaWiki\Extension\PersonalDashboard\Feed\OresRevisionScoreLookup;
+use MediaWiki\Extension\PersonalDashboard\Feed\OresScoreFormatter;
 use MediaWiki\Extension\PersonalDashboard\Feed\PersonalDashboardFeedSourceFactory;
 use MediaWiki\Extension\PersonalDashboard\PersonalDashboardModuleFactory;
 use MediaWiki\Logger\LoggerFactory;
@@ -38,6 +42,23 @@ return [
 		return new PersonalDashboardModuleFactory(
 			$services->getExtensionRegistry(),
 			$services->getObjectFactory()
+		);
+	},
+
+	'PersonalDashboardRevisionScoreLookup' => static function (
+		MediaWikiServices $services
+	): IRevisionScoreLookup {
+		// PersonalDashboard does not require ORES, so scoring is absent rather
+		// than broken where it is missing. Everything downstream takes the
+		// interface and never learns which of the two it got.
+		if ( !$services->getExtensionRegistry()->isLoaded( 'ORES' ) ) {
+			return new NullRevisionScoreLookup();
+		}
+
+		return new OresRevisionScoreLookup(
+			$services->get( 'ORESScoreLookup' ),
+			new OresScoreFormatter(),
+			$services->getMainConfig()
 		);
 	},
 

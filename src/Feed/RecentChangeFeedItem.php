@@ -37,6 +37,10 @@ readonly class RecentChangeFeedItem implements IFeedItem {
 	 * @param bool $bot Whether a bot made the edit.
 	 * @param bool $new Whether the edit created the page.
 	 * @param string[] $tags Change tags on the edit.
+	 * @param array<string,array<string,float>> $oresscores Machine-learning
+	 *   scores by model and class, in the shape the Action API's `oresscores`
+	 *   uses. Empty when ORES is absent or the edit was never scored. The card
+	 *   decides what counts as a high score; this is only the number.
 	 */
 	public function __construct(
 		private string $source,
@@ -55,6 +59,7 @@ readonly class RecentChangeFeedItem implements IFeedItem {
 		private bool $bot,
 		private bool $new,
 		private array $tags,
+		private array $oresscores = [],
 	) {
 	}
 
@@ -109,6 +114,7 @@ readonly class RecentChangeFeedItem implements IFeedItem {
 			'bot' => $this->bot,
 			'new' => $this->new,
 			'tags' => $this->tags,
+			'oresscores' => $this->oresscores,
 		];
 	}
 }

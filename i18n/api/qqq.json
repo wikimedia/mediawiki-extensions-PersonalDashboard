@@ -29,5 +29,6 @@
 	"personal-dashboard-rest-property-desc-bot": "Description of the <code>bot</code> property of a feed item, shown in the REST API documentation.",
 	"personal-dashboard-rest-property-desc-new": "Description of the <code>new</code> property of a feed item, shown in the REST API documentation.",
 	"personal-dashboard-rest-property-desc-tags": "Description of the <code>tags</code> property of a feed item, shown in the REST API documentation.",
+	"personal-dashboard-rest-property-desc-oresscores": "Description of the <code>oresscores</code> property of a feed item, shown in the REST API documentation. Model and class names such as <code>revertrisklanguageagnostic</code> and <code>true</code> are not translated.",
 	"personal-dashboard-rest-feed-bad-continue": "Error returned by the feed REST endpoint when the <code>continue</code> token cannot be read, or was made for a different set of feed sources. <code>continue</code> is a parameter name and is not translated."
 }

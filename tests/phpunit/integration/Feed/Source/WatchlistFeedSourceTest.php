@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace MediaWiki\Extension\PersonalDashboard\Tests\Integration\Feed\Source;
 
 use MediaWiki\Extension\PersonalDashboard\Feed\FeedRequest;
+use MediaWiki\Extension\PersonalDashboard\Feed\NullRevisionScoreLookup;
 use MediaWiki\Extension\PersonalDashboard\Feed\Source\WatchlistFeedSource;
 use MediaWiki\Permissions\Authority;
 use MediaWiki\Title\Title;
@@ -26,7 +27,11 @@ class WatchlistFeedSourceTest extends MediaWikiIntegrationTestCase {
 			$services->getChangesListQueryFactory(),
 			$services->getConnectionProvider(),
 			$services->getRowCommentFormatter(),
-			$services->getMainConfig()
+			$services->getMainConfig(),
+			// These cases are about which changes the query selects. Scoring is
+			// covered separately, and a real lookup would make them depend on
+			// whether ORES happens to be installed.
+			new NullRevisionScoreLookup()
 		);
 		$source->setName( 'watchlist' );
 

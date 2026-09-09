@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace MediaWiki\Extension\PersonalDashboard\Tests\Integration;
 
 use MediaWiki\Config\Config;
+use MediaWiki\Extension\PersonalDashboard\Feed\IRevisionScoreLookup;
 use MediaWiki\Extension\PersonalDashboard\Feed\PersonalDashboardFeedSourceFactory;
 use MediaWiki\Extension\PersonalDashboard\PersonalDashboardModuleFactory;
 use MediaWiki\Extension\PersonalDashboard\PersonalDashboardServices;
@@ -41,6 +42,16 @@ class PersonalDashboardServicesTest extends MediaWikiIntegrationTestCase {
 		$this->assertInstanceOf(
 			PersonalDashboardFeedSourceFactory::class,
 			$this->newServices()->getPersonalDashboardFeedSourceFactory()
+		);
+	}
+
+	public function testTheRevisionScoreLookupResolves() {
+		// It has no alias on the wrapper, but it is the one service whose wiring
+		// branches on another extension being installed, so it is worth proving
+		// it builds at all. Without ORES that means the null implementation.
+		$this->assertInstanceOf(
+			IRevisionScoreLookup::class,
+			$this->getServiceContainer()->get( 'PersonalDashboardRevisionScoreLookup' )
 		);
 	}
 

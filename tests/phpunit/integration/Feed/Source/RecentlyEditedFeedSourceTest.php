@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace MediaWiki\Extension\PersonalDashboard\Tests\Integration\Feed\Source;
 
 use MediaWiki\Extension\PersonalDashboard\Feed\FeedRequest;
+use MediaWiki\Extension\PersonalDashboard\Feed\NullRevisionScoreLookup;
 use MediaWiki\Extension\PersonalDashboard\Feed\Source\RecentlyEditedFeedSource;
 use MediaWiki\Permissions\Authority;
 use MediaWiki\Revision\RevisionRecord;
@@ -31,6 +32,7 @@ class RecentlyEditedFeedSourceTest extends MediaWikiIntegrationTestCase {
 			$services->getConnectionProvider(),
 			$services->getRowCommentFormatter(),
 			$services->getMainConfig(),
+			new NullRevisionScoreLookup(),
 			$services->getActorNormalization()
 		);
 		$source->setName( 'recentlyedited' );

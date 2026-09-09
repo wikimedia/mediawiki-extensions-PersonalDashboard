@@ -57,6 +57,9 @@ abstract class ChangesListFeedSource implements IFeedSource {
 	 * @param IConnectionProvider $connectionProvider
 	 * @param RowCommentFormatter $rowCommentFormatter
 	 * @param Config $mainConfig
+	 * @param IRevisionScoreLookup $scoreLookup Machine-learning scores for the
+	 *   items, or nothing on a wiki without ORES. Scores describe an item and
+	 *   never select one, so this changes no query.
 	 * @param array $options Set through the ObjectFactory spec's `args` key:
 	 *   - excludeSelf: (bool, default true) hide the viewer's own edits.
 	 *   - unpatrolledOnly: (bool, default true) show only unpatrolled edits when
@@ -68,6 +71,7 @@ abstract class ChangesListFeedSource implements IFeedSource {
 		protected readonly IConnectionProvider $connectionProvider,
 		private readonly RowCommentFormatter $rowCommentFormatter,
 		private readonly Config $mainConfig,
+		private readonly IRevisionScoreLookup $scoreLookup,
 		array $options = [],
 	) {
 		$this->excludeSelf = $options['excludeSelf'] ?? true;
@@ -177,6 +181,16 @@ abstract class ChangesListFeedSource implements IFeedSource {
 					'items' => [ 'type' => 'string' ],
 					'x-i18n-description' => 'personal-dashboard-rest-property-desc-tags',
 					'example' => [ 'mw-manual-revert' ],
+				],
+				// Model name to class name to probability.
+				'oresscores' => [
+					'type' => 'object',
+					'additionalProperties' => [
+						'type' => 'object',
+						'additionalProperties' => [ 'type' => 'number' ],
+					],
+					'x-i18n-description' => 'personal-dashboard-rest-property-desc-oresscores',
+					'example' => [ 'revertrisklanguageagnostic' => [ 'true' => 0.87, 'false' => 0.13 ] ],
 				],
 			],
 		];
@@ -301,6 +315,12 @@ abstract class ChangesListFeedSource implements IFeedSource {
 			'rc_id',
 		);
 
+		// One lookup for the page, beside the comments, for the same reason: a
+		// score per row would be a query per row. Empty on a wiki without ORES.
+		$scores = $this->scoreLookup->getScores(
+			array_map( static fn ( $row ) => (int)$row->rc_this_oldid, $rows )
+		);
+
 		$items = [];
 		foreach ( $rows as $row ) {
 			$canSeeComment = RevisionRecord::userCanBitfield(
@@ -331,6 +351,7 @@ abstract class ChangesListFeedSource implements IFeedSource {
 				bot: (bool)$row->rc_bot,
 				new: $row->rc_source === RecentChange::SRC_NEW,
 				tags: $row->ts_tags ? explode( ',', $row->ts_tags ) : [],
+				oresscores: $scores[(int)$row->rc_this_oldid] ?? [],
 			);
 		}
 

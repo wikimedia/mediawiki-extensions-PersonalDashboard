@@ -8,6 +8,7 @@ use MediaWiki\CommentFormatter\RowCommentFormatter;
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\PersonalDashboard\Feed\ChangesListFeedSource;
 use MediaWiki\Extension\PersonalDashboard\Feed\FeedRequest;
+use MediaWiki\Extension\PersonalDashboard\Feed\IPageDescriptionLookup;
 use MediaWiki\Extension\PersonalDashboard\Feed\IRevisionScoreLookup;
 use MediaWiki\RecentChanges\ChangesListQuery\ChangesListQuery;
 use MediaWiki\RecentChanges\ChangesListQuery\ChangesListQueryFactory;
@@ -36,6 +37,7 @@ class RecentlyEditedFeedSource extends ChangesListFeedSource {
 		RowCommentFormatter $rowCommentFormatter,
 		Config $mainConfig,
 		IRevisionScoreLookup $scoreLookup,
+		IPageDescriptionLookup $pageDescriptionLookup,
 		private readonly ActorNormalization $actorNormalization,
 		array $options = [],
 	) {
@@ -45,6 +47,7 @@ class RecentlyEditedFeedSource extends ChangesListFeedSource {
 			$rowCommentFormatter,
 			$mainConfig,
 			$scoreLookup,
+			$pageDescriptionLookup,
 			$options
 		);
 	}

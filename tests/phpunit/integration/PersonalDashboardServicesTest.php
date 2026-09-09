@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace MediaWiki\Extension\PersonalDashboard\Tests\Integration;
 
 use MediaWiki\Config\Config;
+use MediaWiki\Extension\PersonalDashboard\Feed\IPageDescriptionLookup;
 use MediaWiki\Extension\PersonalDashboard\Feed\IRevisionScoreLookup;
 use MediaWiki\Extension\PersonalDashboard\Feed\PersonalDashboardFeedSourceFactory;
 use MediaWiki\Extension\PersonalDashboard\PersonalDashboardModuleFactory;
@@ -52,6 +53,16 @@ class PersonalDashboardServicesTest extends MediaWikiIntegrationTestCase {
 		$this->assertInstanceOf(
 			IRevisionScoreLookup::class,
 			$this->getServiceContainer()->get( 'PersonalDashboardRevisionScoreLookup' )
+		);
+	}
+
+	public function testThePageDescriptionLookupResolves() {
+		// Like the score lookup, its wiring branches on other extensions being
+		// installed — two of them here — so it is worth proving it builds at
+		// all. Without Wikibase or ShortDescription that means the null one.
+		$this->assertInstanceOf(
+			IPageDescriptionLookup::class,
+			$this->getServiceContainer()->get( 'PersonalDashboardPageDescriptionLookup' )
 		);
 	}
 

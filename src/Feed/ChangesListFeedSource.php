@@ -8,6 +8,7 @@ use MediaWiki\ChangeTags\ChangeTags;
 use MediaWiki\CommentFormatter\RowCommentFormatter;
 use MediaWiki\Config\Config;
 use MediaWiki\MainConfigNames;
+use MediaWiki\Page\PageIdentityValue;
 use MediaWiki\RecentChanges\ChangesListQuery\ChangesListQuery;
 use MediaWiki\RecentChanges\ChangesListQuery\ChangesListQueryFactory;
 use MediaWiki\RecentChanges\RecentChange;
@@ -60,6 +61,9 @@ abstract class ChangesListFeedSource implements IFeedSource {
 	 * @param IRevisionScoreLookup $scoreLookup Machine-learning scores for the
 	 *   items, or nothing on a wiki without ORES. Scores describe an item and
 	 *   never select one, so this changes no query.
+	 * @param IPageDescriptionLookup $pageDescriptionLookup Short descriptions for
+	 *   the pages the items are about, or nothing where no extension supplies
+	 *   them.
 	 * @param array $options Set through the ObjectFactory spec's `args` key:
 	 *   - excludeSelf: (bool, default true) hide the viewer's own edits.
 	 *   - unpatrolledOnly: (bool, default true) show only unpatrolled edits when
@@ -72,6 +76,7 @@ abstract class ChangesListFeedSource implements IFeedSource {
 		private readonly RowCommentFormatter $rowCommentFormatter,
 		private readonly Config $mainConfig,
 		private readonly IRevisionScoreLookup $scoreLookup,
+		private readonly IPageDescriptionLookup $pageDescriptionLookup,
 		array $options = [],
 	) {
 		$this->excludeSelf = $options['excludeSelf'] ?? true;
@@ -321,6 +326,15 @@ abstract class ChangesListFeedSource implements IFeedSource {
 			array_map( static fn ( $row ) => (int)$row->rc_this_oldid, $rows )
 		);
 
+		// Batch-fetch page descriptions.
+		$descriptions = $this->pageDescriptionLookup->getDescriptions(
+			array_map( static fn ( $row ) => PageIdentityValue::localIdentity(
+				pageId: (int)$row->rc_cur_id,
+				namespace: (int)$row->rc_namespace,
+				dbKey: $row->rc_title,
+			), $rows )
+		);
+
 		$items = [];
 		foreach ( $rows as $row ) {
 			$canSeeComment = RevisionRecord::userCanBitfield(
@@ -341,12 +355,7 @@ abstract class ChangesListFeedSource implements IFeedSource {
 				newlen: (int)$row->rc_new_len,
 				oldlen: (int)$row->rc_old_len,
 				parsedcomment: $canSeeComment ? ( $comments[ $row->rc_id ] ?? '' ) : '',
-				// TODO: page descriptions come from WikibaseClient's
-				//   DescriptionLookup, which this endpoint does not reach yet.
-				//   The client still gets the field, so nothing breaks; it has
-				//   to be filled before the client stops fetching descriptions
-				//   for itself.
-				description: '',
+				description: $descriptions[ (int)$row->rc_cur_id ] ?? '',
 				minor: (bool)$row->rc_minor,
 				bot: (bool)$row->rc_bot,
 				new: $row->rc_source === RecentChange::SRC_NEW,

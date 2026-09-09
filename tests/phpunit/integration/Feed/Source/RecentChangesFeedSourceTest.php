@@ -6,7 +6,9 @@ namespace MediaWiki\Extension\PersonalDashboard\Tests\Integration\Feed\Source;
 
 use MediaWiki\Content\WikitextContent;
 use MediaWiki\Extension\PersonalDashboard\Feed\FeedRequest;
+use MediaWiki\Extension\PersonalDashboard\Feed\IPageDescriptionLookup;
 use MediaWiki\Extension\PersonalDashboard\Feed\IRevisionScoreLookup;
+use MediaWiki\Extension\PersonalDashboard\Feed\NullPageDescriptionLookup;
 use MediaWiki\Extension\PersonalDashboard\Feed\NullRevisionScoreLookup;
 use MediaWiki\Extension\PersonalDashboard\Feed\Source\RecentChangesFeedSource;
 use MediaWiki\Permissions\Authority;
@@ -34,6 +36,7 @@ class RecentChangesFeedSourceTest extends MediaWikiIntegrationTestCase {
 			$services->getRowCommentFormatter(),
 			$services->getMainConfig(),
 			new NullRevisionScoreLookup(),
+			new NullPageDescriptionLookup(),
 			$options
 		);
 		$source->setName( 'recentchanges' );
@@ -246,7 +249,8 @@ class RecentChangesFeedSourceTest extends MediaWikiIntegrationTestCase {
 			$services->getConnectionProvider(),
 			$services->getRowCommentFormatter(),
 			$services->getMainConfig(),
-			$scored
+			$scored,
+			new NullPageDescriptionLookup()
 		);
 		$source->setName( 'recentchanges' );
 
@@ -257,6 +261,56 @@ class RecentChangesFeedSourceTest extends MediaWikiIntegrationTestCase {
 			[ 'revertrisklanguageagnostic' => [ 'true' => 0.97, 'false' => 0.03 ] ],
 			$item['oresscores']
 		);
+	}
+
+	public function testDescriptionsAreAttachedToThePageTheyBelongTo() {
+		// The lookup is keyed by page id while the score lookup is keyed by
+		// revision id, and both are read in the same loop. Crossing them would
+		// put one page's description on another's card.
+		$viewer = $this->getTestUser()->getUser();
+		$other = $this->getTestUser( 'other' )->getUser();
+
+		$this->editPageAs( 'Described', $other );
+		$this->editPageAs( 'Undescribed', $other );
+
+		$described = new class implements IPageDescriptionLookup {
+			/** @var array<int,string> */
+			public array $asked = [];
+
+			public function getDescriptions( array $pageIdentities ): array {
+				foreach ( $pageIdentities as $page ) {
+					$this->asked[$page->getId()] = $page->getDBkey();
+				}
+
+				// Only the page whose title says so, so the other item proves an
+				// absent description becomes an empty string rather than a
+				// neighbour's text.
+				$describedId = array_search( 'Described', $this->asked, true );
+
+				return $describedId === false ? [] : [ $describedId => 'A described page' ];
+			}
+		};
+
+		$services = $this->getServiceContainer();
+		$source = new RecentChangesFeedSource(
+			$services->getChangesListQueryFactory(),
+			$services->getConnectionProvider(),
+			$services->getRowCommentFormatter(),
+			$services->getMainConfig(),
+			new NullRevisionScoreLookup(),
+			$described
+		);
+		$source->setName( 'recentchanges' );
+
+		$items = $source->getItems( new FeedRequest( $viewer, 10 ) )->items;
+		$byTitle = [];
+		foreach ( $items as $item ) {
+			$byTitle[$item->toArray()['title']] = $item->toArray()['description'];
+		}
+
+		$this->assertSame( 'A described page', $byTitle['Described'] );
+		$this->assertSame( '', $byTitle['Undescribed'] );
+		$this->assertCount( 2, $described->asked, 'both pages should be looked up in one call' );
 	}
 
 	public function testItemsCarryTheShapeTheClientRenders() {

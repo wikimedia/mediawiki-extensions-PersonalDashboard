@@ -405,7 +405,8 @@
 						"ConnectionProvider",
 						"RowCommentFormatter",
 						"MainConfig",
-						"PersonalDashboardRevisionScoreLookup"
+						"PersonalDashboardRevisionScoreLookup",
+						"PersonalDashboardPageDescriptionLookup"
 					]
 				},
 				"recentlyedited": {
@@ -416,6 +417,7 @@
 						"RowCommentFormatter",
 						"MainConfig",
 						"PersonalDashboardRevisionScoreLookup",
+						"PersonalDashboardPageDescriptionLookup",
 						"ActorNormalization"
 					]
 				},
@@ -426,7 +428,8 @@
 						"ConnectionProvider",
 						"RowCommentFormatter",
 						"MainConfig",
-						"PersonalDashboardRevisionScoreLookup"
+						"PersonalDashboardRevisionScoreLookup",
+						"PersonalDashboardPageDescriptionLookup"
 					]
 				}
 			},

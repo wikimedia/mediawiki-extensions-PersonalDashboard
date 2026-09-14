@@ -398,6 +398,21 @@
 	"attributes": {
 		"PersonalDashboard": {
 			"FeedSources": {
+				"mostedited": {
+					"class": "MediaWiki\\Extension\\PersonalDashboard\\Feed\\Source\\MostEditedFeedSource",
+					"services": [
+						"ChangesListQueryFactory",
+						"ConnectionProvider",
+						"RowCommentFormatter",
+						"MainConfig",
+						"PersonalDashboardRevisionScoreLookup",
+						"PersonalDashboardPageDescriptionLookup",
+						"ActorNormalization",
+						"SearchEngineFactory",
+						"WANObjectCache",
+						"ExtensionRegistry"
+					]
+				},
 				"recentchanges": {
 					"class": "MediaWiki\\Extension\\PersonalDashboard\\Feed\\Source\\RecentChangesFeedSource",
 					"services": [

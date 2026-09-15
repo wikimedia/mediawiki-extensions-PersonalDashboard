@@ -6,6 +6,7 @@
 	},
 	"personal-dashboard-active-discussions-title": "Тековни разговори",
 	"personal-dashboard-active-discussions-latest-comment": "Последен коментар:",
+	"personal-dashboard-active-discussions-fetch-error": "Не пронајдов активни разговори",
 	"personal-dashboard-active-discussions-mobile-latest-comment": "Последен коментар:",
 	"personal-dashboard-active-discussions-mobile-summary-footer-link-text": "Погл. уште",
 	"personal-dashboard-active-discussions-mobile-summary-footer-button-aria-label": "Оди на поактивни дискусии",

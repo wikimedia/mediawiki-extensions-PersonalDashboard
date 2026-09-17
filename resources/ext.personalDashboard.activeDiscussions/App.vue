@@ -8,9 +8,7 @@
 		:footer-aria-label="footerAriaLabel"
 		:progress-bar-aria-label="progressBarAriaLabel">
 		<template #item="{ item, isNarrow }">
-			<!-- id is minted only for FeedPanel's :key; ListCard never declares it as
-				a prop, so left in place it would fall through as a malformed DOM id. -->
-			<list-card v-bind="{ ...item, id: undefined }" :is-narrow="isNarrow"></list-card>
+			<list-card v-bind="item" :is-narrow="isNarrow"></list-card>
 		</template>
 	</feed-panel>
 </template>

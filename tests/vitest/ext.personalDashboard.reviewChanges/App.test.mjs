@@ -170,7 +170,7 @@ test( 'the grid card shows the summary affordances on every viewport', () => {
 	feedState.items = Array.from( { length: 5 }, ( _, i ) => makeFeedItem( i ) );
 
 	const wrapper = mount( RecentActivity );
-	expect( wrapper.find( '.personal-dashboard-feed__show-more' ).exists() ).toStrictEqual( true );
+	expect( wrapper.find( '.personal-dashboard-feed__summary-footer' ).exists() ).toStrictEqual( true );
 	expect( wrapper.find( '.personal-dashboard-feed__list--summary' ).exists() ).toStrictEqual( true );
 } );
 
@@ -179,10 +179,10 @@ test( 'focused or active drops the summary affordances', () => {
 	feedState.items = Array.from( { length: 5 }, ( _, i ) => makeFeedItem( i ) );
 
 	const focused = mount( RecentActivity, { props: { focused: true } } );
-	expect( focused.find( '.personal-dashboard-feed__show-more' ).exists() ).toStrictEqual( false );
+	expect( focused.find( '.personal-dashboard-feed__summary-footer' ).exists() ).toStrictEqual( false );
 
 	const active = mount( RecentActivity, { props: { active: true } } );
-	expect( active.find( '.personal-dashboard-feed__show-more' ).exists() ).toStrictEqual( false );
+	expect( active.find( '.personal-dashboard-feed__summary-footer' ).exists() ).toStrictEqual( false );
 } );
 
 test( 'the summary footer opens the module dialog via the router', async () => {
@@ -198,7 +198,7 @@ test( 'the summary footer opens the module dialog via the router', async () => {
 		}
 	} );
 
-	await wrapper.find( '.personal-dashboard-feed__show-more' ).trigger( 'click' );
+	await wrapper.find( '.personal-dashboard-feed__summary-footer' ).trigger( 'click' );
 
 	expect( push ).toHaveBeenCalledWith( '/ext.personalDashboard.reviewChanges' );
 } );

@@ -49,8 +49,8 @@
 			:aria-label="footerAriaLabel || undefined"
 			action="progressive"
 			weight="quiet"
-			class="personal-dashboard-feed__show-more"
-			@click="showMore"
+			class="personal-dashboard-feed__summary-footer"
+			@click="openFullList"
 		>
 			{{ footerLabel }}
 		</cdx-button>
@@ -180,14 +180,14 @@ module.exports = defineComponent( {
 				this.items.slice( 0, this.summaryLimit ) :
 				this.items;
 		},
-		// The "show more" footer and the fade hinting at it above the list must
+		// The summary footer and the fade hinting at it above the list must
 		// agree, or the fade points at a button that isn't there.
 		showsSummaryFooter() {
 			return this.isSummary && !this.isLoading && this.items.length > this.summaryLimit;
 		}
 	},
 	methods: {
-		showMore() {
+		openFullList() {
 			this.$router.push( '/' + this.moduleName );
 		}
 	}
@@ -223,7 +223,7 @@ module.exports = defineComponent( {
 		}
 	}
 
-	&__show-more.cdx-button,
+	&__summary-footer.cdx-button,
 	&__load-more.cdx-button {
 		width: 100%;
 		max-width: none;

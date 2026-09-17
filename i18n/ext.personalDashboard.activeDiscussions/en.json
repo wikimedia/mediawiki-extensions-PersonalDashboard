@@ -7,7 +7,6 @@
 	"personal-dashboard-active-discussions-title": "Active discussions",
 	"personal-dashboard-active-discussions-latest-comment": "Latest comment:",
 	"personal-dashboard-active-discussions-fetch-error": "No active discussions found",
-	"personal-dashboard-active-discussions-mobile-latest-comment": "Latest comment:",
 	"personal-dashboard-active-discussions-mobile-summary-footer-link-text": "View more",
 	"personal-dashboard-active-discussions-mobile-summary-footer-button-aria-label": "Navigate to more active discussions",
 	"personal-dashboard-active-discussions-progress-bar-aria-label": "inline progress bar that indicates that active discussions are being loaded"

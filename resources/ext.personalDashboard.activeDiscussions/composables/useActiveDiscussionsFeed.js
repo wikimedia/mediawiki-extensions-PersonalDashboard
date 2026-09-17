@@ -28,6 +28,8 @@ async function fetchActiveDiscussions( limit ) {
 	let anyPageUsable = false;
 
 	for ( const discussionPage of discussionPages ) {
+		// catch(), because mw.Api rejects with two arguments and await keeps
+		// only the first. The second is where the wiki's own message is.
 		const result = await api.get( {
 			action: 'discussiontoolspageinfo',
 			format: 'json',
@@ -35,10 +37,7 @@ async function fetchActiveDiscussions( limit ) {
 			prop: 'threaditemshtml',
 			threaditemsflags: 'noreplies|excludesignatures|activity',
 			formatversion: '2'
-		} ).then(
-			( data ) => data,
-			( code, data ) => handleApiErrors( code, data )
-		);
+		} ).catch( handleApiErrors );
 
 		if ( result.discussiontoolspageinfo === undefined ||
 			result.discussiontoolspageinfo.threaditemshtml === undefined ) {

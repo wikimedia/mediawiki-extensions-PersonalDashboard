@@ -1,7 +1,7 @@
 const { formatRelativeTimeOrDate } = require( 'mediawiki.DateFormatter' );
 
 // Gets error or warning messages from api response
-const parseApiStatus = ( data ) => {
+function parseApiStatus( data ) {
 	const messages = [];
 	for ( const index in data ) {
 		const dataObj = data[ index ];
@@ -10,10 +10,10 @@ const parseApiStatus = ( data ) => {
 		messages.push( msg );
 	}
 	return messages;
-};
+}
 
 // Consolidates errors from API response body and throws them in one error
-const handleApiErrors = ( code, data ) => {
+function handleApiErrors( code, data ) {
 	if ( data === undefined ) {
 		throw new Error( code );
 	}
@@ -24,20 +24,21 @@ const handleApiErrors = ( code, data ) => {
 		}
 	}
 	throw new Error( code );
-};
+}
 
 // Strips HTML markup down to its plain-text content, for feed data (e.g. a
 // parsed comment or a thread title) that arrives as HTML but renders as text.
-const stripMarkup = ( html ) => {
+function stripMarkup( html ) {
 	if ( !html ) {
 		return '';
 	}
 	return new DOMParser().parseFromString( html, 'text/html' ).body.textContent;
-};
+}
 
 // Formats a raw ISO timestamp (a feed item's `timestamp` or a discussion
 // thread's `latestReply`) the same way across every ListCard.
-const formatTimestamp = ( rawTimestamp ) => formatRelativeTimeOrDate(
-	new Date( Date.parse( rawTimestamp ) ) );
+function formatTimestamp( rawTimestamp ) {
+	return formatRelativeTimeOrDate( new Date( Date.parse( rawTimestamp ) ) );
+}
 
 module.exports = { formatTimestamp, handleApiErrors, stripMarkup };

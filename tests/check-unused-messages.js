@@ -22,6 +22,10 @@ const path = require( 'path' );
 
 const ROOT = process.cwd();
 const IGNORE_FILE = path.join( ROOT, 'i18n-ignore.json' );
+// Declaring a message in a module's `messages` array is not a use of it. Left
+// in the haystack, the manifest vouches for every key it lists and the check
+// can never fail.
+const MANIFEST_FILE = path.join( ROOT, 'extension.json' );
 const SOURCE_EXTENSIONS = new Set( [ '.php', '.js', '.json', '.vue' ] );
 const EXCLUDED_DIRS = new Set( [ 'node_modules', 'vendor', 'coverage', 'dist' ] );
 
@@ -87,6 +91,7 @@ function getSourceBlob( messageDirs ) {
 				walk( full );
 			} else if (
 				full !== IGNORE_FILE &&
+				full !== MANIFEST_FILE &&
 				SOURCE_EXTENSIONS.has( path.extname( entry.name ) )
 			) {
 				chunks.push( fs.readFileSync( full, 'utf8' ) );

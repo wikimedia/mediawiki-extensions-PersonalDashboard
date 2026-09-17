@@ -55,6 +55,9 @@ const { cdxIconUserAvatar, cdxIconSpeechBubble } = require( '../icons.json' );
 module.exports = defineComponent( {
 	name: 'ListCard',
 	components: { CdxIcon, FeedCard },
+	// See the Review Changes card: the feed item carries fields this card does
+	// not declare, and they would otherwise land in the DOM.
+	inheritAttrs: false,
 	props: {
 		discussionTitle: { type: String, required: true },
 		discussionPage: { type: String, required: true },

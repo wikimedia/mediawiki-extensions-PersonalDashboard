@@ -192,7 +192,6 @@
 			],
 			"messages": [
 				"personal-dashboard-onboarding-title",
-				"personal-dashboard-onboarding-dont-show-again",
 				"personal-dashboard-onboarding-get-started-button",
 				"personal-dashboard-onboarding-step-1-body",
 				"personal-dashboard-onboarding-step-1-alt",
@@ -239,7 +238,7 @@
 		},
 		"ext.personalDashboard.reviewChanges": {
 			"localBasePath": "resources/ext.personalDashboard.reviewChanges",
-			"remoteExtPath": "PersonalDashboard/resources/personalDashboard.reviewChanges",
+			"remoteExtPath": "PersonalDashboard/resources/ext.personalDashboard.reviewChanges",
 			"class": "MediaWiki\\ResourceLoader\\CodexModule",
 			"codexComponents": [
 				"CdxIcon",
@@ -253,13 +252,10 @@
 					"name": "icons.json",
 					"callback": "MediaWiki\\ResourceLoader\\CodexModule::getIcons",
 					"callbackParam": [
-						"cdxIconArticle",
 						"cdxIconConfigure",
-						"cdxIconEdit",
 						"cdxIconNotice",
 						"cdxIconUserAvatar",
-						"cdxIconUserTemporary",
-						"cdxIconTextSummary"
+						"cdxIconUserTemporary"
 					]
 				}
 			],
@@ -271,13 +267,9 @@
 				"personal-dashboard-review-changes-menu-personalization",
 				"personal-dashboard-review-changes-personalization-description",
 				"personal-dashboard-review-changes-personalization-title",
-				"personal-dashboard-risky-article-edits-header",
-				"personal-dashboard-risky-article-edits-subheader",
-				"personal-dashboard-risky-article-edits-footer-preamble",
 				"personal-dashboard-risky-article-edits-list-card-aria-label",
 				"personal-dashboard-risky-article-edits-list-card-no-comment-message",
 				"personal-dashboard-risky-article-edits-mobile-summary-footer-link-text",
-				"personal-dashboard-risky-article-edits-mobile-user-text",
 				"personal-dashboard-risky-article-edits-progress-bar-aria-label",
 				"personal-dashboard-risky-article-edits-subheader-info",
 				"tag-mw-reverted",
@@ -296,7 +288,7 @@
 		},
 		"ext.personalDashboard.activeDiscussions": {
 			"localBasePath": "resources/ext.personalDashboard.activeDiscussions",
-			"remoteExtPath": "PersonalDashboard/resources/personalDashboard.activeDiscussions",
+			"remoteExtPath": "PersonalDashboard/resources/ext.personalDashboard.activeDiscussions",
 			"class": "MediaWiki\\ResourceLoader\\CodexModule",
 			"codexComponents": [
 				"CdxIcon"
@@ -315,16 +307,16 @@
 				}
 			],
 			"messages": [
-				"personal-dashboard-active-discussions-title",
 				"personal-dashboard-active-discussions-latest-comment",
 				"personal-dashboard-active-discussions-fetch-error",
 				"personal-dashboard-active-discussions-mobile-summary-footer-link-text",
-				"personal-dashboard-active-discussions-mobile-latest-comment",
 				"personal-dashboard-active-discussions-mobile-summary-footer-button-aria-label",
 				"personal-dashboard-active-discussions-progress-bar-aria-label"
 			],
 			"dependencies": [
 				"vue",
+				"mediawiki.api",
+				"mediawiki.util",
 				"ext.personalDashboard.common"
 			]
 		},

@@ -5,7 +5,6 @@
 		]
 	},
 	"personal-dashboard-risky-article-edits-header": "Text header for the recent activity module",
-	"personal-dashboard-risky-article-edits-subheader": "Sub header text for the recent activity module",
 	"personal-dashboard-risky-article-edits-subheader-info": "Updated subheader text for the recent activity module.",
 	"personal-dashboard-risky-article-edits-footer-preamble": "Text for the footer of the recent activity module",
 	"personal-dashboard-risky-article-edits-list-card-aria-label": "aria-label for the invisible link covering the list card that opens the diff view.\n\nParameters:\n* $1 - Article title",

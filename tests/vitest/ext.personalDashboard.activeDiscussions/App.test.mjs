@@ -107,10 +107,10 @@ test( 'a full detail card shows every fetched item', () => {
 	const wrapper = mount( ActiveDiscussions, { props: { detail: 'full' } } );
 
 	expect( wrapper.findAllComponents( { name: 'ListCard' } ) ).toHaveLength( 5 );
-	expect( wrapper.find( '.personal-dashboard-feed__show-more' ).exists() ).toStrictEqual( false );
+	expect( wrapper.find( '.personal-dashboard-feed__summary-footer' ).exists() ).toStrictEqual( false );
 } );
 
-test( 'show more opens the module dialog via the router', async () => {
+test( 'the summary footer opens the module dialog via the router', async () => {
 	feedState.isLoading = false;
 	feedState.items = Array.from( { length: 5 }, ( _, i ) => makeItem( i ) );
 

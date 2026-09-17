@@ -65,7 +65,7 @@ test( 'follows the viewport rule unless told otherwise', () => {
 	const wrapper = mountPanel( { items: makeItems( 5 ), detail: 'full', isNarrow: false } );
 
 	expect( wrapper.findAll( '.test-item' ) ).toHaveLength( 5 );
-	expect( wrapper.find( '.personal-dashboard-feed__show-more' ).exists() ).toStrictEqual( false );
+	expect( wrapper.find( '.personal-dashboard-feed__summary-footer' ).exists() ).toStrictEqual( false );
 } );
 
 test( 'card mode summarizes a grid card on every viewport', () => {
@@ -73,24 +73,24 @@ test( 'card mode summarizes a grid card on every viewport', () => {
 
 	expect( wrapper.findAll( '.test-item' ) ).toHaveLength( 3 );
 	expect( wrapper.find( '.personal-dashboard-feed__list--summary' ).exists() ).toStrictEqual( true );
-	expect( wrapper.find( '.personal-dashboard-feed__show-more' ).exists() ).toStrictEqual( true );
+	expect( wrapper.find( '.personal-dashboard-feed__summary-footer' ).exists() ).toStrictEqual( true );
 } );
 
 test.each( [ 'focused', 'active' ] )( 'card mode drops the summary when %s', ( prop ) => {
 	const wrapper = mountPanel( { items: makeItems( 5 ), summaryMode: 'card', [ prop ]: true } );
 
 	expect( wrapper.findAll( '.test-item' ) ).toHaveLength( 5 );
-	expect( wrapper.find( '.personal-dashboard-feed__show-more' ).exists() ).toStrictEqual( false );
+	expect( wrapper.find( '.personal-dashboard-feed__summary-footer' ).exists() ).toStrictEqual( false );
 } );
 
 test( 'viewport mode summarizes only a compact card', () => {
 	const compact = mountPanel( { items: makeItems( 5 ), summaryMode: 'viewport', detail: 'compact' } );
 	expect( compact.findAll( '.test-item' ) ).toHaveLength( 3 );
-	expect( compact.find( '.personal-dashboard-feed__show-more' ).exists() ).toStrictEqual( true );
+	expect( compact.find( '.personal-dashboard-feed__summary-footer' ).exists() ).toStrictEqual( true );
 
 	const full = mountPanel( { items: makeItems( 5 ), summaryMode: 'viewport', detail: 'full' } );
 	expect( full.findAll( '.test-item' ) ).toHaveLength( 5 );
-	expect( full.find( '.personal-dashboard-feed__show-more' ).exists() ).toStrictEqual( false );
+	expect( full.find( '.personal-dashboard-feed__summary-footer' ).exists() ).toStrictEqual( false );
 } );
 
 test( 'honours a module-supplied summary limit', () => {
@@ -124,7 +124,7 @@ test( 'labels the footer control and gives it the module id', () => {
 		footerId: 'test-footer'
 	} );
 
-	const button = wrapper.find( '.personal-dashboard-feed__show-more' );
+	const button = wrapper.find( '.personal-dashboard-feed__summary-footer' );
 	expect( button.text() ).toStrictEqual( 'Show more' );
 	expect( button.attributes( 'aria-label' ) ).toStrictEqual( 'Show more edits' );
 	expect( button.attributes( 'id' ) ).toStrictEqual( 'test-footer' );
@@ -133,7 +133,7 @@ test( 'labels the footer control and gives it the module id', () => {
 test( 'omits the id attribute when no footer id is given', () => {
 	const wrapper = mountPanel( { items: makeItems( 5 ), detail: 'compact' } );
 
-	expect( wrapper.find( '.personal-dashboard-feed__show-more' ).attributes( 'id' ) )
+	expect( wrapper.find( '.personal-dashboard-feed__summary-footer' ).attributes( 'id' ) )
 		.toBeUndefined();
 } );
 
@@ -147,7 +147,7 @@ test( 'the footer control routes to the module', async () => {
 		}
 	} );
 
-	await wrapper.find( '.personal-dashboard-feed__show-more' ).trigger( 'click' );
+	await wrapper.find( '.personal-dashboard-feed__summary-footer' ).trigger( 'click' );
 
 	expect( push ).toHaveBeenCalledWith( '/ext.test.feed' );
 } );
@@ -155,13 +155,13 @@ test( 'the footer control routes to the module', async () => {
 test( 'hides the footer control while loading, even with enough items to summarize', () => {
 	const wrapper = mountPanel( { items: makeItems( 5 ), detail: 'compact', isLoading: true } );
 
-	expect( wrapper.find( '.personal-dashboard-feed__show-more' ).exists() ).toStrictEqual( false );
+	expect( wrapper.find( '.personal-dashboard-feed__summary-footer' ).exists() ).toStrictEqual( false );
 } );
 
 test( 'hides the footer control when there are not enough items to need a summary', () => {
 	const wrapper = mountPanel( { items: makeItems( 2 ), detail: 'compact' } );
 
-	expect( wrapper.find( '.personal-dashboard-feed__show-more' ).exists() ).toStrictEqual( false );
+	expect( wrapper.find( '.personal-dashboard-feed__summary-footer' ).exists() ).toStrictEqual( false );
 } );
 
 test( 'drops the "more below" fade whenever the footer control is hidden', () => {

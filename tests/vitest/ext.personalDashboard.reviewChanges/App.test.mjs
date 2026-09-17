@@ -1,26 +1,24 @@
 import { vi, beforeEach, afterEach, describe, test, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
-import { createPinia, setActivePinia } from 'pinia';
 import { nextTick, reactive } from 'vue';
 
-vi.mock( '/resources/ext.personalDashboard.reviewChanges/store/reviewChangesStore.js', () => {
-	const mockStore = reactive( {
-		feed: [],
-		pages: [],
-		isLoading: true,
-		error: null,
-		// The shared feed-data contract the module hands to the scaffold; a
-		// getter so a test can keep mutating the state fields above.
-		get feedState() {
-			return { items: this.feed, isLoading: this.isLoading, error: this.error };
-		},
-		fetchRecentActivity: vi.fn()
-	} );
-	return { useReviewChangesStore: () => mockStore };
+vi.mock( '/resources/ext.personalDashboard.reviewChanges/composables/useReviewChangesFeed.js', () => {
+	const feed = {
+		feedState: reactive( {
+			items: [],
+			isLoading: true,
+			isLoadingMore: false,
+			hasMore: false,
+			error: null
+		} ),
+		load: vi.fn(),
+		loadMore: vi.fn()
+	};
+	return { useReviewChangesFeed: () => feed };
 } );
 
-import { useReviewChangesStore } from '/resources/ext.personalDashboard.reviewChanges/store/reviewChangesStore.js';
-const store = useReviewChangesStore();
+import { useReviewChangesFeed } from '/resources/ext.personalDashboard.reviewChanges/composables/useReviewChangesFeed.js';
+const { feedState, load, loadMore } = useReviewChangesFeed();
 
 import RecentActivity from '/resources/ext.personalDashboard.reviewChanges/App.vue';
 
@@ -28,12 +26,13 @@ import RecentActivity from '/resources/ext.personalDashboard.reviewChanges/App.v
 mw.loader.using = () => {};
 
 beforeEach( () => {
-	setActivePinia( createPinia() );
-	store.feed = [];
-	store.pages = [];
-	store.isLoading = true;
-	store.error = null;
-	store.fetchRecentActivity.mockReset();
+	feedState.items = [];
+	feedState.isLoading = true;
+	feedState.isLoadingMore = false;
+	feedState.hasMore = false;
+	feedState.error = null;
+	load.mockReset();
+	loadMore.mockReset();
 } );
 
 test( 'mount component', () => {
@@ -47,8 +46,8 @@ test( 'shows progress bar when loading', () => {
 } );
 
 test( 'shows error message when there is one', () => {
-	store.isLoading = false;
-	store.error = new Error( 'An Error' );
+	feedState.isLoading = false;
+	feedState.error = new Error( 'An Error' );
 
 	// Asserted through the $i18n call rather than the rendered text: the
 	// message mock drops parameters, so the failure is only visible there.
@@ -60,51 +59,11 @@ test( 'shows error message when there is one', () => {
 } );
 
 test( 'shows recent changes with information', () => {
-	store.isLoading = false;
-	store.feed = [
+	feedState.isLoading = false;
+	feedState.items = [
 		{
+			id: 'recentchanges-2430984',
 			title: 'Article Title',
-			type: '',
-			ns: 0,
-			pageid: 15864,
-			revid: 2430984,
-			// eslint-disable-next-line camelcase
-			old_revid: 2394508293,
-			rcid: 2348,
-			user: 'User',
-			bot: false,
-			newlen: 250,
-			oldlen: 20,
-			temp: '',
-			parsedcomment: 'A comment',
-			tags: [],
-			timestamp: new Date( 2024, 11, 2 ).toISOString(),
-			feedorigin: 'recentchanges'
-		}
-	];
-	store.pages = [
-		{
-			ns: 0,
-			pageid: 15864,
-			title: 'Article Title',
-			description: 'A description'
-		}
-	];
-
-	const wrapper = mount( RecentActivity );
-
-	expect( wrapper.text() ).toContain( 'Article Title' );
-	expect( wrapper.text() ).toContain( 'A comment' );
-	expect( wrapper.text() ).toContain( 'A description' );
-	expect( wrapper.text() ).toContain( '1 year ago' );
-} );
-
-test( 'does not leak the synthetic feed id or other non-prop fields onto the rendered card', () => {
-	store.isLoading = false;
-	store.feed = [
-		{
-			title: 'Article Title',
-			ns: 0,
 			pageid: 15864,
 			revid: 2430984,
 			// eslint-disable-next-line camelcase
@@ -116,58 +75,74 @@ test( 'does not leak the synthetic feed id or other non-prop fields onto the ren
 			newlen: 250,
 			oldlen: 20,
 			parsedcomment: 'A comment',
+			description: 'A description',
 			tags: [],
+			oresscores: {},
 			timestamp: new Date( 2024, 11, 2 ).toISOString(),
-			feedorigin: 'recentchanges',
-			id: 'recentchanges-2430984'
+			feedorigin: 'recentchanges'
 		}
 	];
 
 	const wrapper = mount( RecentActivity );
 
-	// normalizeFeedItem() stamps every item with these fields for FeedPanel's own
-	// use; ListCard never declares them as props, so a leaked one would be a
-	// malformed (or meaningless) DOM attribute.
-	const card = wrapper.find( '.personal-dashboard-review-changes__card' );
-	expect( card.attributes( 'id' ) ).toBeUndefined();
-	expect( card.attributes( 'minor' ) ).toBeUndefined();
-	expect( card.attributes( 'bot' ) ).toBeUndefined();
-	expect( card.attributes( 'new' ) ).toBeUndefined();
-	expect( card.attributes( 'tags' ) ).toBeUndefined();
-} );
-
-test( 'fetches the full 10-item limit regardless of summary/focused/active', () => {
-	store.isLoading = false;
-
-	mount( RecentActivity );
-	expect( store.fetchRecentActivity ).toHaveBeenCalledWith( 10 );
+	expect( wrapper.text() ).toContain( 'Article Title' );
+	expect( wrapper.text() ).toContain( 'A comment' );
+	expect( wrapper.text() ).toContain( 'A description' );
+	expect( wrapper.text() ).toContain( '1 year ago' );
 } );
 
 function makeFeedItem( index ) {
 	return {
+		id: `recentchanges-${ 2430984 + index }`,
 		title: `Article ${ index }`,
-		type: '',
-		ns: 0,
 		pageid: 15864 + index,
 		revid: 2430984 + index,
 		// eslint-disable-next-line camelcase
 		old_revid: 2394508293 + index,
-		rcid: 2348 + index,
 		user: 'User',
 		bot: false,
+		minor: false,
+		new: false,
 		newlen: 250,
 		oldlen: 20,
-		temp: '',
 		parsedcomment: 'A comment',
+		description: '',
 		tags: [],
+		oresscores: {},
 		timestamp: new Date( 2024, 11, 2 ).toISOString(),
 		feedorigin: 'recentchanges'
 	};
 }
 
+test( 'does not leak the feed id or other non-prop fields onto the rendered card', () => {
+	feedState.isLoading = false;
+	feedState.items = [ makeFeedItem( 0 ) ];
+
+	const wrapper = mount( RecentActivity );
+
+	// The endpoint stamps every item with these fields for FeedPanel's own use
+	// and for a card that wants them; ListCard never declares them as props, so
+	// a leaked one would be a malformed (or meaningless) DOM attribute.
+	const card = wrapper.find( '.personal-dashboard-review-changes__card' );
+	expect( card.attributes( 'id' ) ).toBeUndefined();
+	expect( card.attributes( 'pageid' ) ).toBeUndefined();
+	expect( card.attributes( 'minor' ) ).toBeUndefined();
+	expect( card.attributes( 'bot' ) ).toBeUndefined();
+	expect( card.attributes( 'new' ) ).toBeUndefined();
+	expect( card.attributes( 'tags' ) ).toBeUndefined();
+	expect( card.attributes( 'oresscores' ) ).toBeUndefined();
+} );
+
+test( 'fetches the full 10-item limit regardless of summary/focused/active', () => {
+	feedState.isLoading = false;
+
+	mount( RecentActivity );
+	expect( load ).toHaveBeenCalledWith( 10 );
+} );
+
 test( 'the summary card shows only the first 3 items of a larger fetched feed', () => {
-	store.isLoading = false;
-	store.feed = Array.from( { length: 5 }, ( _, i ) => makeFeedItem( i ) );
+	feedState.isLoading = false;
+	feedState.items = Array.from( { length: 5 }, ( _, i ) => makeFeedItem( i ) );
 
 	const wrapper = mount( RecentActivity );
 
@@ -177,8 +152,8 @@ test( 'the summary card shows only the first 3 items of a larger fetched feed', 
 } );
 
 test( 'a dialog reusing the same teleported instance shows every fetched item, not the summary subset', () => {
-	store.isLoading = false;
-	store.feed = Array.from( { length: 5 }, ( _, i ) => makeFeedItem( i ) );
+	feedState.isLoading = false;
+	feedState.items = Array.from( { length: 5 }, ( _, i ) => makeFeedItem( i ) );
 
 	// The dialog and the card teleport one component instance (see IslandMount.vue),
 	// so this simulates the transition by mounting with active already true rather
@@ -191,8 +166,8 @@ test( 'a dialog reusing the same teleported instance shows every fetched item, n
 } );
 
 test( 'the grid card shows the summary affordances on every viewport', () => {
-	store.isLoading = false;
-	store.feed = Array.from( { length: 5 }, ( _, i ) => makeFeedItem( i ) );
+	feedState.isLoading = false;
+	feedState.items = Array.from( { length: 5 }, ( _, i ) => makeFeedItem( i ) );
 
 	const wrapper = mount( RecentActivity );
 	expect( wrapper.find( '.personal-dashboard-feed__show-more' ).exists() ).toStrictEqual( true );
@@ -200,8 +175,8 @@ test( 'the grid card shows the summary affordances on every viewport', () => {
 } );
 
 test( 'focused or active drops the summary affordances', () => {
-	store.isLoading = false;
-	store.feed = Array.from( { length: 5 }, ( _, i ) => makeFeedItem( i ) );
+	feedState.isLoading = false;
+	feedState.items = Array.from( { length: 5 }, ( _, i ) => makeFeedItem( i ) );
 
 	const focused = mount( RecentActivity, { props: { focused: true } } );
 	expect( focused.find( '.personal-dashboard-feed__show-more' ).exists() ).toStrictEqual( false );
@@ -210,9 +185,9 @@ test( 'focused or active drops the summary affordances', () => {
 	expect( active.find( '.personal-dashboard-feed__show-more' ).exists() ).toStrictEqual( false );
 } );
 
-test( 'show more opens the module dialog via the router', async () => {
-	store.isLoading = false;
-	store.feed = Array.from( { length: 5 }, ( _, i ) => makeFeedItem( i ) );
+test( 'the summary footer opens the module dialog via the router', async () => {
+	feedState.isLoading = false;
+	feedState.items = Array.from( { length: 5 }, ( _, i ) => makeFeedItem( i ) );
 
 	const push = vi.fn();
 	const wrapper = mount( RecentActivity, {
@@ -226,6 +201,44 @@ test( 'show more opens the module dialog via the router', async () => {
 	await wrapper.find( '.personal-dashboard-feed__show-more' ).trigger( 'click' );
 
 	expect( push ).toHaveBeenCalledWith( '/ext.personalDashboard.reviewChanges' );
+} );
+
+describe( 'loading more edits', () => {
+	beforeEach( () => {
+		feedState.isLoading = false;
+		feedState.items = Array.from( { length: 5 }, ( _, i ) => makeFeedItem( i ) );
+		feedState.hasMore = true;
+	} );
+
+	test( 'the full list offers the control, the summary card does not', () => {
+		const full = mount( RecentActivity, { props: { active: true } } );
+		expect( full.find( '.personal-dashboard-feed__load-more' ).exists() )
+			.toStrictEqual( true );
+
+		const summary = mount( RecentActivity );
+		expect( summary.find( '.personal-dashboard-feed__load-more' ).exists() )
+			.toStrictEqual( false );
+	} );
+
+	test( 'asks the feed for the next page', async () => {
+		const wrapper = mount( RecentActivity, { props: { active: true } } );
+
+		await wrapper.find( '.personal-dashboard-feed__load-more' ).trigger( 'click' );
+
+		expect( loadMore ).toHaveBeenCalledTimes( 1 );
+	} );
+
+	test( 'spins a progress bar below the list while the next page loads', () => {
+		feedState.isLoadingMore = true;
+
+		const wrapper = mount( RecentActivity, { props: { active: true } } );
+
+		expect( wrapper.find( '.cdx-progress-bar' ).exists() ).toStrictEqual( true );
+		expect( wrapper.find( '.personal-dashboard-feed__load-more' ).exists() )
+			.toStrictEqual( false );
+		// The edits already loaded stay on screen.
+		expect( wrapper.findAllComponents( { name: 'ListCard' } ) ).toHaveLength( 5 );
+	} );
 } );
 
 // Every mock IntersectionObserver below must be a real function, not an arrow:
@@ -266,7 +279,7 @@ describe( 'IntersectionObserver lifecycle', () => {
 			return { observe: vi.fn(), unobserve: vi.fn(), disconnect: vi.fn() };
 		} );
 
-		store.isLoading = false;
+		feedState.isLoading = false;
 		const fired = vi.fn();
 		mw.hook( 'personaldashboard.recentactivity.loaded' ).add( fired );
 
@@ -286,7 +299,7 @@ describe( 'IntersectionObserver lifecycle', () => {
 			return { observe: vi.fn(), unobserve: vi.fn(), disconnect: vi.fn() };
 		} );
 
-		store.isLoading = true;
+		feedState.isLoading = true;
 		const fired = vi.fn();
 		mw.hook( 'personaldashboard.recentactivity.loaded' ).add( fired );
 
@@ -295,7 +308,7 @@ describe( 'IntersectionObserver lifecycle', () => {
 
 		expect( fired ).not.toHaveBeenCalled();
 
-		store.isLoading = false;
+		feedState.isLoading = false;
 		await nextTick();
 
 		mw.hook( 'personaldashboard.recentactivity.loaded' ).remove( fired );

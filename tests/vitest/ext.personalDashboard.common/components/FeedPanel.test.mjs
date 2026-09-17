@@ -174,3 +174,55 @@ test( 'drops the "more below" fade whenever the footer control is hidden', () =>
 	const tooFewItems = mountPanel( { items: makeItems( 2 ), detail: 'compact' } );
 	expect( tooFewItems.find( '.personal-dashboard-feed__list--summary' ).exists() ).toStrictEqual( false );
 } );
+
+test( 'the full list offers to load more, the summary does not', () => {
+	const full = mountPanel( { items: makeItems( 5 ), detail: 'full', hasMore: true } );
+	expect( full.find( '.personal-dashboard-feed__load-more' ).exists() ).toStrictEqual( true );
+
+	const summary = mountPanel( { items: makeItems( 5 ), detail: 'compact', hasMore: true } );
+	expect( summary.find( '.personal-dashboard-feed__load-more' ).exists() ).toStrictEqual( false );
+} );
+
+test( 'offers to load more only when there is another page', () => {
+	const wrapper = mountPanel( { items: makeItems( 5 ), detail: 'full' } );
+
+	expect( wrapper.find( '.personal-dashboard-feed__load-more' ).exists() ).toStrictEqual( false );
+} );
+
+test( 'the load-more control asks the module for the next page', async () => {
+	const wrapper = mountPanel( { items: makeItems( 5 ), detail: 'full', hasMore: true } );
+
+	await wrapper.find( '.personal-dashboard-feed__load-more' ).trigger( 'click' );
+
+	expect( wrapper.emitted( 'load-more' ) ).toHaveLength( 1 );
+} );
+
+test( 'swaps the load-more control for a progress bar while the next page loads', () => {
+	const wrapper = mountPanel( {
+		items: makeItems( 5 ),
+		detail: 'full',
+		hasMore: true,
+		isLoadingMore: true,
+		progressBarAriaLabel: 'Loading'
+	} );
+
+	// Gone, not disabled, so a second click cannot reach it.
+	expect( wrapper.find( '.personal-dashboard-feed__load-more' ).exists() )
+		.toStrictEqual( false );
+	expect( wrapper.find( '.cdx-progress-bar' ).attributes( 'aria-label' ) )
+		.toStrictEqual( 'Loading' );
+	// The items already loaded stay on screen below the first page.
+	expect( wrapper.findAll( '.test-item' ) ).toHaveLength( 5 );
+} );
+
+test( 'hides the load-more control while the first page loads', () => {
+	const wrapper = mountPanel( {
+		items: makeItems( 5 ),
+		detail: 'full',
+		hasMore: true,
+		isLoading: true
+	} );
+
+	expect( wrapper.find( '.personal-dashboard-feed__load-more' ).exists() )
+		.toStrictEqual( false );
+} );

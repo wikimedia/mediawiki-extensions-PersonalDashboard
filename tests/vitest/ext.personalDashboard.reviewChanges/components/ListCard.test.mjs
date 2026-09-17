@@ -23,13 +23,11 @@ function mountWithLengths( oldlen, newlen ) {
 			// eslint-disable-next-line camelcase
 			old_revid: 0,
 			oldlen,
-			pageid: 8675309,
 			revid: 0,
 			user: 'TestUser',
 			parsedcomment: 'TestComment',
 			timestamp: new Date( 2026, 1, 1, 3, 0 ).toISOString(),
 			tags: [],
-			pages: [],
 			feedorigin: 'recentchanges',
 			isMobile: false
 		},
@@ -56,19 +54,13 @@ test( 'mount component', () => {
 			// eslint-disable-next-line camelcase
 			old_revid: 0,
 			oldlen: 0,
-			pageid: 8675309,
 			rcid: 0,
 			revid: 0,
 			user: 'TestUser',
 			parsedcomment: 'TestComment',
 			tags: [ 'test' ],
 			timestamp: date.toISOString(),
-			pages: [
-				{
-					pageid: 8675309,
-					description: 'a description'
-				}
-			],
+			description: 'a description',
 			feedorigin: 'recentchanges'
 		}
 	} );
@@ -89,14 +81,12 @@ test( 'renders appropriate message when edit is made today', () => {
 			// eslint-disable-next-line camelcase
 			old_revid: 0,
 			oldlen: 0,
-			pageid: 8675309,
 			rcid: 0,
 			revid: 0,
 			user: 'TestUser',
 			parsedcomment: 'TestComment',
 			tags: [ 'test' ],
 			timestamp: date.toISOString(),
-			pages: [],
 			feedorigin: 'recentchanges'
 		}
 	} );
@@ -117,14 +107,12 @@ test( 'renders timestamp without hours when edit is not made today', async () =>
 			// eslint-disable-next-line camelcase
 			old_revid: 0,
 			oldlen: 0,
-			pageid: 8675309,
 			rcid: 0,
 			revid: 0,
 			user: 'TestUser',
 			parsedcomment: 'TestComment',
 			tags: [ 'test' ],
 			timestamp: date.toISOString(),
-			pages: [],
 			feedorigin: 'recentchanges'
 		}
 	} );
@@ -142,14 +130,12 @@ test( 'strips all html formatting from parsedcomment', () => {
 			// eslint-disable-next-line camelcase
 			old_revid: 0,
 			oldlen: 0,
-			pageid: 8675309,
 			rcid: 0,
 			revid: 0,
 			user: 'TestUser',
 			parsedcomment: 'Plain text <h1>heading</h1>, <b>bold</b>, and <a href="#">link</a>.',
 			tags: [ 'test' ],
 			timestamp: new Date( 2024, 11, 2, 4, 29 ).toISOString(),
-			pages: [],
 			feedorigin: 'recentchanges'
 		}
 	} );
@@ -165,13 +151,11 @@ test( 'sets visited on primary link click', async () => {
 			// eslint-disable-next-line camelcase
 			old_revid: 0,
 			oldlen: 0,
-			pageid: 8675309,
 			revid: 0,
 			user: 'TestUser',
 			parsedcomment: 'TestComment',
 			timestamp: new Date().toISOString(),
 			tags: [],
-			pages: [],
 			feedorigin: 'recentchanges',
 			isNarrow: false
 		},
@@ -200,13 +184,11 @@ test( 'does not set visited on other link clicks', async () => {
 			// eslint-disable-next-line camelcase
 			old_revid: 0,
 			oldlen: 0,
-			pageid: 8675309,
 			revid: 0,
 			user: 'TestUser',
 			parsedcomment: 'TestComment',
 			timestamp: new Date().toISOString(),
 			tags: [],
-			pages: [],
 			feedorigin: 'recentchanges',
 			isNarrow: false
 		},
@@ -236,13 +218,11 @@ test( 'title and username are not links on mobile', async () => {
 			// eslint-disable-next-line camelcase
 			old_revid: 0,
 			oldlen: 0,
-			pageid: 8675309,
 			revid: 0,
 			user: 'TestUser',
 			parsedcomment: 'TestComment',
 			timestamp: new Date().toISOString(),
 			tags: [],
-			pages: [],
 			feedorigin: 'recentchanges',
 			isNarrow: true
 		},
@@ -270,13 +250,11 @@ test( 'user info card visible on desktop', () => {
 			// eslint-disable-next-line camelcase
 			old_revid: 0,
 			oldlen: 0,
-			pageid: 8675309,
 			revid: 0,
 			user: 'TestUser',
 			parsedcomment: 'TestComment',
 			timestamp: new Date().toISOString(),
 			tags: [],
-			pages: [],
 			feedorigin: 'recentchanges',
 			isNarrow: false
 		},
@@ -331,13 +309,11 @@ test( 'user info card hidden on mobile', () => {
 			// eslint-disable-next-line camelcase
 			old_revid: 0,
 			oldlen: 0,
-			pageid: 8675309,
 			revid: 0,
 			user: 'TestUser',
 			parsedcomment: 'TestComment',
 			timestamp: new Date().toISOString(),
 			tags: [],
-			pages: [],
 			feedorigin: 'recentchanges',
 			isNarrow: true
 		},
@@ -350,4 +326,160 @@ test( 'user info card hidden on mobile', () => {
 
 	const button = wrapper.findComponent( { name: 'UserInfoButton' } );
 	expect( button.exists() ).toStrictEqual( false );
+} );
+
+test( 'shows the page description the feed item carries', () => {
+	const wrapper = mountWithLengths( 0, 0 );
+	expect( wrapper.find( '.personal-dashboard-review-changes__card__description' ).exists() )
+		.toStrictEqual( false );
+
+	const described = mount( ListCard, {
+		props: {
+			title: 'TestTitle',
+			newlen: 0,
+			// eslint-disable-next-line camelcase
+			old_revid: 0,
+			oldlen: 0,
+			revid: 0,
+			user: 'TestUser',
+			parsedcomment: 'TestComment',
+			timestamp: new Date().toISOString(),
+			tags: [],
+			description: 'Fifth planet from the Sun',
+			feedorigin: 'recentchanges'
+		},
+		global: {
+			stubs: {
+				UserInfoButton: true
+			}
+		}
+	} );
+
+	expect( described.find( '.personal-dashboard-review-changes__card__description' ).text() )
+		.toStrictEqual( 'Fifth planet from the Sun' );
+} );
+
+test( 'leaves oldid out of the diff link for an item with no parent revision', () => {
+	const wrapper = mount( ListCard, {
+		props: {
+			title: 'TestTitle',
+			newlen: 0,
+			oldlen: 0,
+			revid: 4711,
+			user: 'TestUser',
+			parsedcomment: 'TestComment',
+			timestamp: new Date().toISOString(),
+			tags: [],
+			feedorigin: 'recentchanges'
+		},
+		global: {
+			stubs: {
+				UserInfoButton: true
+			}
+		}
+	} );
+
+	// The endpoint declares old_revid nullable, so the prop has to accept it
+	// without turning the link into oldid=null.
+	const href = wrapper.find( '.personal-dashboard-feed__card__link' ).attributes( 'href' );
+	expect( href ).toContain( 'diff=4711' );
+	expect( href ).not.toContain( 'oldid' );
+} );
+
+/**
+ * @param {Object} props Overrides on top of a plain, unflagged edit
+ * @return {Object} A mounted card
+ */
+function mountCard( props ) {
+	return mount( ListCard, {
+		props: Object.assign( {
+			title: 'TestTitle',
+			newlen: 0,
+			oldlen: 0,
+			// eslint-disable-next-line camelcase
+			old_revid: 0,
+			revid: 4711,
+			user: 'TestUser',
+			parsedcomment: 'TestComment',
+			timestamp: new Date( 2026, 1, 1, 3, 0 ).toISOString(),
+			feedorigin: 'recentchanges'
+		}, props ),
+		global: { stubs: { UserInfoButton: true } }
+	} );
+}
+
+const THRESHOLD = { model: 'revertrisklanguageagnostic', class: 'true', min: 0.95 };
+
+test( 'flags an edit whose score reaches the wiki threshold', () => {
+	mw.config.set( 'wgPersonalDashboardHighRiskThreshold', THRESHOLD );
+
+	const wrapper = mountCard( {
+		oresscores: { revertrisklanguageagnostic: { true: 0.97, false: 0.03 } }
+	} );
+
+	expect( wrapper.find( '.cdx-info-chip' ).text() )
+		.toContain( 'personal-dashboard-review-changes-high-revert-risk-label' );
+	expect( wrapper.find( '.cdx-info-chip' ).classes() )
+		.toContain( 'cdx-info-chip--warning' );
+} );
+
+test( 'flags an edit that sits exactly on the threshold', () => {
+	mw.config.set( 'wgPersonalDashboardHighRiskThreshold', THRESHOLD );
+
+	const wrapper = mountCard( {
+		oresscores: { revertrisklanguageagnostic: { true: THRESHOLD.min, false: 0.05 } }
+	} );
+
+	expect( wrapper.find( '.cdx-info-chip' ).text() )
+		.toContain( 'personal-dashboard-review-changes-high-revert-risk-label' );
+} );
+
+test( 'leaves an edit below the threshold unflagged', () => {
+	mw.config.set( 'wgPersonalDashboardHighRiskThreshold', THRESHOLD );
+
+	const wrapper = mountCard( {
+		oresscores: { revertrisklanguageagnostic: { true: 0.5, false: 0.5 } }
+	} );
+
+	expect( wrapper.find( '.cdx-info-chip' ).exists() ).toStrictEqual( false );
+} );
+
+test( 'makes no check where the wiki configured no threshold', () => {
+	mw.config.set( 'wgPersonalDashboardHighRiskThreshold', null );
+
+	const wrapper = mountCard( {
+		oresscores: { revertrisklanguageagnostic: { true: 0.99, false: 0.01 } }
+	} );
+
+	expect( wrapper.find( '.cdx-info-chip' ).exists() ).toStrictEqual( false );
+} );
+
+test( 'makes no check for an edit ORES never scored', () => {
+	mw.config.set( 'wgPersonalDashboardHighRiskThreshold', THRESHOLD );
+
+	expect( mountCard( {} ).find( '.cdx-info-chip' ).exists() ).toStrictEqual( false );
+} );
+
+test( 'shows both flags on an edit that earns both', () => {
+	mw.config.set( 'wgPersonalDashboardHighRiskThreshold', THRESHOLD );
+
+	const wrapper = mountCard( {
+		newlen: 5000,
+		oldlen: 0,
+		oresscores: { revertrisklanguageagnostic: { true: 0.99, false: 0.01 } }
+	} );
+
+	const chips = wrapper.findAll( '.cdx-info-chip' );
+	expect( chips ).toHaveLength( 2 );
+
+	// The chips sit directly in the card's own row, which is what carries the
+	// flex-wrap and the gap. jsdom applies no stylesheet, so the structure is
+	// what a test can hold on to.
+	const row = wrapper.find( '.personal-dashboard-review-changes__card__flags' );
+	expect( Array.from( row.element.children ) ).toHaveLength( 2 );
+
+	// Risk first: it is the reason to look at the edit at all.
+	expect( chips[ 0 ].classes() ).toContain( 'cdx-info-chip--warning' );
+	expect( chips[ 1 ].text() )
+		.toContain( 'personal-dashboard-review-changes-major-changes-label' );
 } );

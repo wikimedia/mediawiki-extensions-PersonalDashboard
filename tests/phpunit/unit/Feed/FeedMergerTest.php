@@ -11,13 +11,8 @@ use MediaWiki\Extension\PersonalDashboard\Feed\IFeedItem;
 use MediaWikiUnitTestCase;
 
 /**
- * The first thirteen cases are ports of the selectEvenlyAcrossFeeds() tests in
- * tests/vitest/ext.personalDashboard.reviewChanges/utils/feedHelpers.test.mjs,
- * one for one. Both implementations exist until the client stops merging for
- * itself, and these prove they agree.
- *
- * The rest cover what the PHP version adds: the cursors and the exhausted flags
- * the endpoint needs to ask for the next page.
+ * The merge: even selection across the sources, and the cursors and exhausted
+ * flags the endpoint needs to ask for the next page.
  *
  * @covers \MediaWiki\Extension\PersonalDashboard\Feed\FeedMerger
  * @covers \MediaWiki\Extension\PersonalDashboard\Feed\FeedMergeResult

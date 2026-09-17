@@ -24,10 +24,29 @@
 			</div>
 		</div>
 
+		<template v-if="!isSummary">
+			<cdx-progress-bar
+				v-if="isLoadingMore"
+				inline
+				:aria-label="progressBarAriaLabel"
+			></cdx-progress-bar>
+			<!-- Absent, not disabled, while a page is in flight or the first
+				one is still loading: there is nothing to ask for yet. -->
+			<cdx-button
+				v-else-if="hasMore && !isLoading"
+				action="progressive"
+				weight="quiet"
+				class="personal-dashboard-feed__load-more"
+				@click="$emit( 'load-more' )"
+			>
+				{{ $i18n( 'personal-dashboard-feed-load-more' ) }}
+			</cdx-button>
+		</template>
+
 		<cdx-button
 			v-if="showsSummaryFooter"
 			:id="footerId || undefined"
-			:aria-label="footerAriaLabel"
+			:aria-label="footerAriaLabel || undefined"
 			action="progressive"
 			weight="quiet"
 			class="personal-dashboard-feed__show-more"
@@ -66,6 +85,18 @@ module.exports = defineComponent( {
 			required: true
 		},
 		isLoading: {
+			type: Boolean,
+			default: false
+		},
+		// Separate from isLoading because the list stays on screen while a
+		// further page loads, with the progress bar below it.
+		isLoadingMore: {
+			type: Boolean,
+			default: false
+		},
+		// Only the full list offers a further page: the summary already ends in
+		// a control that opens that list, and two would compete.
+		hasMore: {
 			type: Boolean,
 			default: false
 		},
@@ -137,6 +168,7 @@ module.exports = defineComponent( {
 			default: false
 		}
 	},
+	emits: [ 'load-more' ],
 	computed: {
 		isSummary() {
 			return this.summaryMode === 'card' ?
@@ -176,8 +208,8 @@ module.exports = defineComponent( {
 		flex-direction: column;
 		gap: @spacing-25;
 
-		// Hints at the "Show more" button below, scoped to the last card itself
-		// so it can never leak into a card beneath it.
+		// Hints at the summary footer below, scoped to the last card itself so
+		// it can never leak into a card beneath it.
 		&--summary > :last-child::after {
 			content: '';
 			position: absolute;
@@ -191,7 +223,8 @@ module.exports = defineComponent( {
 		}
 	}
 
-	&__show-more.cdx-button {
+	&__show-more.cdx-button,
+	&__load-more.cdx-button {
 		width: 100%;
 		max-width: none;
 		padding: @spacing-75 0;

@@ -1,29 +1,15 @@
 <template>
 	<div ref="moduleRef">
 		<feed-panel
-			v-bind="{ ...$attrs, ...reviewChangesStore.feedState }"
+			v-bind="{ ...$attrs, ...feedState }"
 			module-name="ext.personalDashboard.reviewChanges"
 			summary-mode="card"
 			footer-id="personal-dashboard-go-to-recentchanges"
 			:footer-label="footerLabel"
-			:footer-aria-label="footerLabel"
-			:progress-bar-aria-label="progressBarAriaLabel">
+			:progress-bar-aria-label="progressBarAriaLabel"
+			@load-more="loadMore">
 			<template #item="{ item, isNarrow }">
-				<!-- id, minor, bot, new and tags are FeedItem fields ListCard never
-					declares as props, so left in place they would fall through as
-					DOM attributes (id malformed, the rest meaningless on a card). -->
-				<list-card
-					v-bind="{
-						...item,
-						id: undefined,
-						minor: undefined,
-						bot: undefined,
-						new: undefined,
-						tags: undefined
-					}"
-					:pages="reviewChangesStore.pages"
-					:is-narrow="isNarrow">
-				</list-card>
+				<list-card v-bind="item" :is-narrow="isNarrow"></list-card>
 			</template>
 		</feed-panel>
 	</div>
@@ -32,7 +18,7 @@
 <script>
 const { defineComponent, ref, watch } = require( 'vue' );
 const { FeedPanel, FULL_LIMIT } = require( 'ext.personalDashboard.common' );
-const { useReviewChangesStore } = require( './store/reviewChangesStore.js' );
+const { useReviewChangesFeed } = require( './composables/useReviewChangesFeed.js' );
 const ListCard = require( './components/ListCard.vue' );
 
 module.exports = defineComponent( {
@@ -47,16 +33,16 @@ module.exports = defineComponent( {
 	inheritAttrs: false,
 	setup() {
 		const moduleRef = ref();
-		const reviewChangesStore = useReviewChangesStore();
+		const { feedState, load, loadMore } = useReviewChangesFeed();
 
 		// Fires once the module has both scrolled into view and its feed has
 		// finished loading, so a module still off-screen when the fetch resolves
 		// doesn't count as an impression (T417757), and the footer link the
-		// instrument looks for isn't queried before fetchRecentActivity() renders it.
+		// instrument looks for isn't queried before load() renders it.
 		let hasIntersected = false;
 		let hasFiredLoadedHook = false;
 		function fireLoadedHookWhenReady() {
-			if ( hasFiredLoadedHook || !hasIntersected || reviewChangesStore.isLoading ) {
+			if ( hasFiredLoadedHook || !hasIntersected || feedState.isLoading ) {
 				return;
 			}
 			hasFiredLoadedHook = true;
@@ -70,19 +56,21 @@ module.exports = defineComponent( {
 			}
 		} );
 
-		watch( () => reviewChangesStore.isLoading, fireLoadedHookWhenReady );
+		watch( () => feedState.isLoading, fireLoadedHookWhenReady );
 
 		return {
 			moduleRef,
 			observer,
-			reviewChangesStore,
+			feedState,
+			load,
+			loadMore,
 			footerLabel: mw.msg( 'personal-dashboard-risky-article-edits-mobile-summary-footer-link-text' ),
 			progressBarAriaLabel: mw.msg( 'personal-dashboard-risky-article-edits-progress-bar-aria-label' )
 		};
 	},
 	mounted() {
 		this.observer.observe( this.moduleRef );
-		this.reviewChangesStore.fetchRecentActivity( FULL_LIMIT );
+		this.load( FULL_LIMIT );
 	},
 	unmounted() {
 		this.observer.disconnect();

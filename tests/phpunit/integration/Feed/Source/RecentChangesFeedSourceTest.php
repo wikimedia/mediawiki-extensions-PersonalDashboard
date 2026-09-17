@@ -241,6 +241,12 @@ class RecentChangesFeedSourceTest extends MediaWikiIntegrationTestCase {
 					[ 'revertrisklanguageagnostic' => [ 'true' => 0.97, 'false' => 0.03 ] ]
 				);
 			}
+
+			public function getHighRiskThreshold(): ?array {
+				// The source attaches scores and never reads the threshold; the
+				// card does that.
+				return null;
+			}
 		};
 
 		$services = $this->getServiceContainer();

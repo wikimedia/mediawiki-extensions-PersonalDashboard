@@ -16,10 +16,6 @@ use MediaWikiIntegrationTestCase;
 /**
  * The recently edited source: other people's edits to pages the viewer worked on.
  *
- * These cases carry over from ReviewChangesJsConfigVarsTest, which covered the
- * same query while it still lived in the module and shipped its rows in the page
- * HTML.
- *
  * @covers \MediaWiki\Extension\PersonalDashboard\Feed\Source\RecentlyEditedFeedSource
  * @group Database
  */

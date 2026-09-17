@@ -4,10 +4,6 @@ exports[`mount component 1`] = `
 <span
   class="cdx-card personal-dashboard-feed__card personal-dashboard-review-changes__card"
   data-feedorigin="recentchanges"
-  ns="0"
-  rcid="0"
-  tags="test"
-  type="TestType"
 >
   <!--v-if-->
   <span
@@ -29,7 +25,7 @@ exports[`mount component 1`] = `
         <a
           aria-label="⧼personal-dashboard-risky-article-edits-list-card-aria-label⧽"
           class="personal-dashboard-feed__card__link"
-          href="/w/index.php?title=TestTitle&curid=8675309&diff=0&oldid=0"
+          href="/w/index.php?title=TestTitle&diff=0&oldid=0"
           target="_blank"
         />
         <span

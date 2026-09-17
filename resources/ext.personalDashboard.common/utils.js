@@ -1,24 +1,5 @@
 const { formatRelativeTimeOrDate } = require( 'mediawiki.DateFormatter' );
 
-// Gets up to n = limit items from an array
-const getRandomItems = ( array, limit ) => {
-	if ( array.length <= limit ) {
-		mw.log.warn( `unable to randomly sample array: only ${ array.length } found` );
-		return array;
-	}
-	const randomItems = [];
-	while ( randomItems.length < limit ) {
-		const randomIndex = Math.floor(
-			Math.random() * array.length
-		);
-		const randomItem = array[ randomIndex ];
-		if ( !randomItems.includes( randomItem ) ) {
-			randomItems.push( array[ randomIndex ] );
-		}
-	}
-	return randomItems;
-};
-
 // Gets error or warning messages from api response
 const parseApiStatus = ( data ) => {
 	const messages = [];
@@ -59,4 +40,4 @@ const stripMarkup = ( html ) => {
 const formatTimestamp = ( rawTimestamp ) => formatRelativeTimeOrDate(
 	new Date( Date.parse( rawTimestamp ) ) );
 
-module.exports = { formatTimestamp, getRandomItems, handleApiErrors, parseApiStatus, stripMarkup };
+module.exports = { formatTimestamp, handleApiErrors, stripMarkup };

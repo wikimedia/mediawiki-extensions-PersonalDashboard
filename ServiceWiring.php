@@ -87,6 +87,7 @@ return [
 
 		return new OresRevisionScoreLookup(
 			$services->get( 'ORESScoreLookup' ),
+			$services->get( 'ORESThresholdLookup' ),
 			new OresScoreFormatter(),
 			$services->getMainConfig(),
 		);

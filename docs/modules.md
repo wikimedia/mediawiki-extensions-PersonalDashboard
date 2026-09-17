@@ -68,15 +68,15 @@ Client-side (Vue) modules are the island default: BaseModule emits the mount slo
 
 ## Feed modules
 
-A feed module renders a list of items with a loading state, an error state, a compact card summary versus a full list, and a footer control. None of that is yours to write: `ext.personalDashboard.common` ships the scaffold, and a feed module supplies its queries, its labels, and the body of one card ([T433900](https://phabricator.wikimedia.org/T433900)).
+A feed module renders a list of items with a loading state, an error state, a compact card summary versus a full list, a footer control, and a control that adds the next page to the bottom of the full list. None of that is yours to write: `ext.personalDashboard.common` ships the scaffold, and a feed module supplies its queries, its labels, and the body of one card ([T433900](https://phabricator.wikimedia.org/T433900)).
 
 Three pieces, all exported from `ext.personalDashboard.common`:
 
-- **`useFeedState( loader )`** produces the normalized feed-data contract: `{ items, isLoading, error }`, where each item carries a unique `id`. It owns the state transitions a client fetch repeats — flags up, flags down, log and surface the failure — so your loader is just the query. The contract is what matters, not this helper: a Pinia store satisfies it with a getter (`./resources/ext.personalDashboard.reviewChanges/store/reviewChangesStore.js`, which merges three sources and so keeps its own state), and a module handed server-normalized data through `getJsData()` satisfies it with a plain object and no fetch layer at all.
-- **`FeedPanel`** is the scaffold. Bind the contract to it, pass `moduleName` (its route, for the footer control) and the label props, and fill its one `#item` slot. It owns the compact/full derivation: pick the rule with `summaryMode`, either `"card"` or `"viewport"` (see [`./render-contract.md`](./render-contract.md)). Don't declare the island props in your module — let them ride in `$attrs` and forward them, so the derivation lives in one place.
+- **`useFeedState( loader )`** produces the normalized feed-data contract: `{ items, isLoading, isLoadingMore, hasMore, error }`, where each item carries a unique `id`. It owns the state transitions a client fetch repeats — flags up, flags down, log and surface the failure — so your loader is just the query. It also owns paging: resolve to a plain array when your feed cannot page, or to `{ items, continuation }` when it can. `loadMore()` then calls your loader again with the same arguments plus the token the last page returned, and adds what comes back below the items already shown. A first load never passes that extra argument, so a loader that cannot page never finds a token in a parameter it declared for something else. A failed page keeps both the items and the token, so the reader can try again. The contract is what matters, not this helper: a module handed server-normalized data through `getJsData()` satisfies it with a plain object and no fetch layer at all.
+- **`FeedPanel`** is the scaffold. Bind the contract to it, pass `moduleName` (its route, for the footer control) and the label props, and fill its one `#item` slot. It owns the compact/full derivation: pick the rule with `summaryMode`, either `"card"` or `"viewport"` (see [`./render-contract.md`](./render-contract.md)). Don't declare the island props in your module — let them ride in `$attrs` and forward them, so the derivation lives in one place. `hasMore` puts a "Show more" control at the bottom of the full list, never the summary, which already ends in a control of its own; handle its `load-more` event with the pager `useFeedState` gave you.
 - **`FeedCard`** is the card chrome: the Codex card, the whole-card overlay link and its stacking context, the visited state, and the `#header` / `#meta` / `#description` rows. Your card component fills those slots from your item shape and keeps its own class on the element for anything specific to it.
 
-`./resources/ext.personalDashboard.activeDiscussions/` is the smaller of the two consumers and the better one to read first: one composable holding the API query, an `App.vue` that is little more than the labels and the fetch limit, and a `ListCard.vue` that is all slot content.
+`./resources/ext.personalDashboard.activeDiscussions/` is the smaller of the two consumers and the better one to read first: one composable holding the API query, an `App.vue` that is little more than the labels and the fetch limit, and a `ListCard.vue` that is all slot content. `./resources/ext.personalDashboard.reviewChanges/` has the same shape and adds paging, with its one composable asking the feed endpoint below for every source at once.
 
 ## Register a feed source
 
@@ -148,7 +148,7 @@ Personal Dashboard ships most modules itself, and GrowthExperiments ships the Me
 - `./src/Modules/ReturnToHomepage.php`: smallest server-side module; implements `IModule` directly.
 - `./src/Modules/Banner.php`: static content from a wiki message; server-rendered (no client mount), extends `BaseModule`.
 - `./src/Modules/Impact.php`: DB-backed island, passes its counts to Vue via `getJsConfigVars()`; extends `BaseModule`.
-- `./src/Modules/ReviewChanges.php`: full client-side Vue module, the Review Changes experience; extends `BaseModule`.
+- `./src/Modules/ReviewChanges.php`: full client-side Vue module, the Review Changes experience; reads its feed a page at a time from the endpoint below, and the only PHP it still runs hands the card the wiki's high-risk threshold; extends `BaseModule`.
 - `./src/Modules/Placeholder.php`: fallback used when a registered module fails to load; implements `IModule` directly.
 
 ## See also

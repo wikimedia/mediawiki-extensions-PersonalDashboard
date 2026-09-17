@@ -1,6 +1,5 @@
 const { createMwApp, defineAsyncComponent } = require( 'vue' );
 const { createRouter } = require( 'vue-router' );
-const { createPinia } = require( 'pinia' );
 const { createMediaWikiHistory } = require( './mediaWikiHistory.js' );
 const App = require( './App.vue' );
 const Dashboard = require( './Dashboard.vue' );
@@ -69,7 +68,6 @@ const router = createRouter( {
 
 createMwApp( App )
 	.use( router )
-	.use( createPinia() )
 	.mount( '#personal-dashboard-root' );
 
 /*

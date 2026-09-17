@@ -34,4 +34,18 @@ interface IRevisionScoreLookup {
 	 * @return array<int,array<string,array<string,float>>>
 	 */
 	public function getScores( array $revIds ): array;
+
+	/**
+	 * The score at or above which an edit counts as high risk, if the wiki says.
+	 *
+	 * This is the wiki's own configured threshold, not a verdict about any
+	 * edit: the card compares a score against it and decides whether to flag
+	 * that edit. Null where the wiki configured none, which the card reads as
+	 * "make no check".
+	 *
+	 *     [ 'model' => 'revertrisklanguageagnostic', 'class' => 'true', 'min' => 0.95 ]
+	 *
+	 * @return array{model:string,class:string,min:float}|null
+	 */
+	public function getHighRiskThreshold(): ?array;
 }

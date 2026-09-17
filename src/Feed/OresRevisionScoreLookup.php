@@ -7,6 +7,7 @@ namespace MediaWiki\Extension\PersonalDashboard\Feed;
 use MediaWiki\Config\Config;
 use ORES\Storage\ModelNotFoundError;
 use ORES\Storage\StorageScoreLookup;
+use ORES\Storage\ThresholdLookup;
 
 /**
  * The one class in this extension that names an ORES class.
@@ -25,8 +26,21 @@ use ORES\Storage\StorageScoreLookup;
  */
 readonly class OresRevisionScoreLookup implements IRevisionScoreLookup {
 
+	/**
+	 * The filter each model calls its high-risk band. ORES names these per
+	 * model, and only a model listed here can produce a threshold.
+	 */
+	private const array HIGH_RISK_FILTERS = [
+		'revertrisklanguageagnostic' => 'revertrisk',
+		'damaging' => 'likelybad',
+	];
+
+	/** The class holding the probability that an edit is the risky one. */
+	private const string HIGH_RISK_CLASS = 'true';
+
 	public function __construct(
 		private StorageScoreLookup $scoreLookup,
+		private ThresholdLookup $thresholdLookup,
 		private OresScoreFormatter $formatter,
 		private Config $config,
 	) {
@@ -57,12 +71,45 @@ readonly class OresRevisionScoreLookup implements IRevisionScoreLookup {
 		return $this->formatter->format( $rows, $model, $this->getClasses( $model ) );
 	}
 
+	/** @inheritDoc */
+	public function getHighRiskThreshold(): ?array {
+		$model = $this->getModelName();
+		if ( $model === null ) {
+			return null;
+		}
+
+		$filter = self::HIGH_RISK_FILTERS[$model] ?? null;
+		if ( $filter === null ) {
+			return null;
+		}
+
+		// Resolved numbers, not the raw configuration: a threshold may be
+		// written as a statistic ("recall_at_precision(...)") that only ORES
+		// can turn into a value. ORES caches it for a day, but a miss calls the
+		// ORES service.
+		$thresholds = $this->thresholdLookup->getThresholds( $model );
+		if ( !isset( $thresholds[$filter]['min'] ) ) {
+			return null;
+		}
+
+		return [
+			'model' => $model,
+			'class' => self::HIGH_RISK_CLASS,
+			'min' => (float)$thresholds[$filter]['min'],
+		];
+	}
+
 	/**
 	 * The model to score with, or null if it cannot be used.
 	 *
 	 * @return string|null
 	 */
 	private function getModelName(): ?string {
+		// A wiki with the ORES interface switched off wants no scores at all.
+		if ( !$this->config->get( 'OresUiEnabled' ) ) {
+			return null;
+		}
+
 		$model = $this->config->get( 'PersonalDashboardReviewChangesMlModel' );
 		if ( !is_string( $model ) || $model === '' ) {
 			return null;

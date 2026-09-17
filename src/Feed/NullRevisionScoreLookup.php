@@ -17,4 +17,9 @@ class NullRevisionScoreLookup implements IRevisionScoreLookup {
 	public function getScores( array $revIds ): array {
 		return [];
 	}
+
+	/** @inheritDoc */
+	public function getHighRiskThreshold(): ?array {
+		return null;
+	}
 }

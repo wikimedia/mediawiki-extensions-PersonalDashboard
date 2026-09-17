@@ -73,16 +73,23 @@
 			</span>
 		</template>
 
-		<template v-if="isMajorChange" #supporting-text>
-			<cdx-info-chip :icon="noticeIcon">
-				{{ $i18n( 'personal-dashboard-review-changes-major-changes-label' ) }}
-			</cdx-info-chip>
+		<template v-if="flags.length" #supporting-text>
+			<span class="personal-dashboard-review-changes__card__flags">
+				<cdx-info-chip
+					v-for="flag in flags"
+					:key="flag.key"
+					:icon="flag.icon"
+					:status="flag.status"
+				>
+					{{ flag.label }}
+				</cdx-info-chip>
+			</span>
 		</template>
 	</feed-card>
 </template>
 
 <script>
-const { defineComponent, defineAsyncComponent, toRaw } = require( 'vue' );
+const { defineComponent, defineAsyncComponent } = require( 'vue' );
 const { CdxIcon, CdxInfoChip } = require( '../codex.js' );
 const { FeedCard, utils } = require( 'ext.personalDashboard.common' );
 const { formatTimestamp, stripMarkup } = utils;
@@ -104,35 +111,39 @@ module.exports = defineComponent( {
 			onError() {}
 		} )
 	},
+	// The feed item carries fields no card declares. Without this they fall
+	// through onto the rendered element as attributes, and every field the
+	// endpoint gains would need stripping at the call site.
+	inheritAttrs: false,
 	props: {
 		title: { type: String, required: true },
 		// eslint-disable-next-line camelcase, vue/prop-name-casing
-		old_revid: { type: Number, required: true },
-		pageid: { type: Number, required: true },
+		old_revid: { type: Number, default: null },
 		revid: { type: Number, required: true },
 		user: { type: String, required: true },
 		parsedcomment: { type: String, required: true },
 		timestamp: { type: String, default: '' },
 		newlen: { type: Number, required: true },
 		oldlen: { type: Number, required: true },
-		pages: { type: Object, required: true },
+		description: { type: String, default: '' },
+		oresscores: { type: Object, default: () => ( {} ) },
 		feedorigin: { type: String, required: true },
 		isNarrow: { type: Boolean, default: false }
 	},
 	setup() {
 		return {
 			showUserInfoCard: mw.user.options.get( 'checkuser-userinfocard-enable' ),
-			missingCommentMessage: mw.msg( 'personal-dashboard-risky-article-edits-list-card-no-comment-message' ),
-			noticeIcon: cdxIconNotice
+			missingCommentMessage: mw.msg( 'personal-dashboard-risky-article-edits-list-card-no-comment-message' )
 		};
 	},
 	computed: {
 		diffUrl() {
-			return new mw.Title( this.title ).getUrl( {
-				curid: this.pageid,
-				diff: this.revid,
-				oldid: this.old_revid
-			} );
+			const params = { diff: this.revid };
+			// Null on a page creation, which has no parent to diff against.
+			if ( this.old_revid !== null ) {
+				params.oldid = this.old_revid;
+			}
+			return new mw.Title( this.title ).getUrl( params );
 		},
 		ariaLabel() {
 			return mw.msg( 'personal-dashboard-risky-article-edits-list-card-aria-label', this.title );
@@ -149,15 +160,6 @@ module.exports = defineComponent( {
 		timestampFormatted() {
 			return formatTimestamp( this.timestamp );
 		},
-		description() {
-			const pages = toRaw( this.pages );
-
-			const page = ( pages && pages[ 0 ] ) ?
-				pages.find( ( obj ) => obj.pageid === this.pageid && obj.description ) :
-				undefined;
-
-			return ( page && page.description ) ? page.description : '';
-		},
 		userIcon() {
 			return mw.util.isTemporaryUser( this.user ) ?
 				cdxIconUserTemporary :
@@ -165,6 +167,42 @@ module.exports = defineComponent( {
 		},
 		isMajorChange() {
 			return Math.abs( this.newlen - this.oldlen ) > MAJOR_CHANGE_DELTA;
+		},
+		// The wiki's own threshold, resolved server-side. Absent where the wiki
+		// configured none, and then the card makes no check.
+		isHighRevertRisk() {
+			const threshold = mw.config.get( 'wgPersonalDashboardHighRiskThreshold' );
+			if ( !threshold ) {
+				return false;
+			}
+
+			const score = ( this.oresscores[ threshold.model ] || {} )[ threshold.class ];
+
+			return typeof score === 'number' && score >= threshold.min;
+		},
+		flags() {
+			const flags = [];
+
+			if ( this.isHighRevertRisk ) {
+				flags.push( {
+					key: 'high-revert-risk',
+					status: 'warning',
+					// Codex supplies the icon for every status but notice.
+					icon: null,
+					label: mw.msg( 'personal-dashboard-review-changes-high-revert-risk-label' )
+				} );
+			}
+
+			if ( this.isMajorChange ) {
+				flags.push( {
+					key: 'major-change',
+					status: 'notice',
+					icon: cdxIconNotice,
+					label: mw.msg( 'personal-dashboard-review-changes-major-changes-label' )
+				} );
+			}
+
+			return flags;
 		}
 	},
 	mounted() {
@@ -266,6 +304,15 @@ module.exports = defineComponent( {
 	// The visited modifier is FeedCard's, and sits on this same element.
 	&.personal-dashboard-feed__card--visited &__username {
 		font-weight: @font-weight-normal;
+	}
+
+	// The card owns this row rather than styling Codex's supporting-text
+	// wrapper, which is not ours to depend on. A span, because that wrapper is
+	// one too.
+	&__flags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: @spacing-25;
 	}
 }
 </style>

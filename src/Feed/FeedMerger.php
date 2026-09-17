@@ -6,11 +6,6 @@ namespace MediaWiki\Extension\PersonalDashboard\Feed;
 
 /**
  * Combines what several sources returned into one page of feed items.
- *
- * This is the PHP side of selectEvenlyAcrossFeeds() in
- * resources/ext.personalDashboard.reviewChanges/utils/feedHelpers.js, which the
- * client used to run over three separate API responses. The unit tests port that
- * function's cases one for one, so the two stay equivalent while both exist.
  */
 class FeedMerger {
 

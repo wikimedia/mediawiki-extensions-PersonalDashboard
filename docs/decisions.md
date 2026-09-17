@@ -31,3 +31,15 @@ Feed sources follow the same rule: `PersonalDashboard.FeedSources` and `Personal
 **Trigger to revisit.** When finding a dangling reference at render time stops being good enough. [T434341](https://phabricator.wikimedia.org/T434341) pushes toward that by adding a third attribute that references the second.
 
 **Receipt.** [Proposed Architectural Changes for PersonalDashboard](https://docs.google.com/document/d/1-ajWUaqEATw7z2x7XTWsacyk1hMpepwbX7IVRD-v8iI/view) (WMF-internal, 2026-04-17), which introduced both declarative module registration and the aggregating registry service.
+
+## The feed is merged and paged on the server
+
+**The convention.** A dashboard widget queries the Action API from the browser. Several sources mean several queries, and combining them — interleaving, deduplicating, sampling — is the client's problem.
+
+**What PD does instead.** `GET /personaldashboard/v0/feed` answers one request with items from every source a caller names, merged newest first, plus an opaque token that resumes where the page stopped. The browser asks once and renders what comes back.
+
+**Why.** The client version could not page. Each source was fetched, sampled down to a share of a fixed limit, and whatever it did not use was thrown away, so "Show more" had nothing to ask for ([T426182](https://phabricator.wikimedia.org/T426182)). It also filtered after the fact: repeated titles and already-reverted edits were dropped in JavaScript, spending items out of a limit already paid for, where the database can exclude them in the query. And a source the server prefetched carried no page description, because the description came from a generator on the recentchanges query alone; a lookup beside the query gives every source the same field ([T437491](https://phabricator.wikimedia.org/T437491)).
+
+**Consequence.** The response is per-viewer and so uncacheable by design, and it refuses anonymous and temporary accounts with a 401 rather than serving a feed nobody can personalize. One thing stayed on the client: a machine-learning score rides on the item and the wiki's threshold rides in the page as a config var, so the card decides which edits to flag. The endpoint describes an edit and never selects one, which is what let the revert-risk filter become a chip ([T433724](https://phabricator.wikimedia.org/T433724)). Merge order, deduplication and cursors are now covered by PHP tests instead of living in the browser. A feed module's client half is one composable: ask, render, hand the token back.
+
+**Receipt.** [T436570](https://phabricator.wikimedia.org/T436570) for the endpoint; [T426182](https://phabricator.wikimedia.org/T426182) for the paging it made possible.

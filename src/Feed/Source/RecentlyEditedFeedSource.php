@@ -21,10 +21,6 @@ use Wikimedia\Rdbms\IConnectionProvider;
  * A page someone worked on is a page they can review with some context, so this
  * source turns the viewer's own edit history into a watchlist they never had to
  * curate.
- *
- * This is a port of ReviewChanges::getRecentlyEditedItems(), which prefetched
- * the same rows and shipped up to 100 of them in the page HTML. That config var
- * goes away once the client reads this endpoint instead.
  */
 class RecentlyEditedFeedSource extends ChangesListFeedSource {
 

@@ -132,7 +132,7 @@
 			],
 			"dependencies": [
 				"vue",
-				"vue-router"
+				"personaldashboard-vue-router"
 			],
 			"messages": [
 				"personal-dashboard-back-to-dashboard"

@@ -13,7 +13,7 @@ class ResourceLoaderRegisterModulesHandler implements ResourceLoaderRegisterModu
 	/** @inheritDoc */
 	public function onResourceLoaderRegisterModules( ResourceLoader $rl ): void {
 		$rl->register( [
-			'vue-router' => [
+			'personaldashboard-vue-router' => [
 				'packageFiles' => [
 					[
 						'name' => 'resources/lib/vue-router/vue-router.js',

@@ -1,5 +1,5 @@
 const { createMwApp, defineAsyncComponent } = require( 'vue' );
-const { createRouter } = require( 'vue-router' );
+const { createRouter } = require( 'personaldashboard-vue-router' );
 const { createMediaWikiHistory } = require( './mediaWikiHistory.js' );
 const App = require( './App.vue' );
 const Dashboard = require( './Dashboard.vue' );

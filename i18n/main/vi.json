@@ -1,0 +1,16 @@
+{
+	"@metadata": {
+		"authors": [
+			"Hide on Rosé"
+		]
+	},
+	"personal-dashboard-back-to-dashboard": "Trở lại bảng điều khiển",
+	"personal-dashboard-beta-info-chip-text": "Beta",
+	"personal-dashboard-desc": "Bảng điều khiển thử nghiệm dành cho bảo trì viên",
+	"personal-dashboard-link-title": "Bảng điều khiển",
+	"personal-dashboard-module-no-js-fallback": "Một số thành phần của bảng điều khiển này sẽ không xuất hiện trừ khi bạn bật JavaScript trong trình duyệt.",
+	"personal-dashboard-open-module": "Mở mô đun này",
+	"personal-dashboard-specialpage-title": "{{GENDER:$1|Xin chào}}, {{bidi:$1}}!",
+	"personal-dashboard-survey-text": "[$1 Chia sẻ phản hồi]",
+	"tooltip-pt-personaldashboard": "Bảng điều khiển cá nhân của bạn"
+}

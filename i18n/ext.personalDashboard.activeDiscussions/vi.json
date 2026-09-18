@@ -1,0 +1,14 @@
+{
+	"@metadata": {
+		"authors": [
+			"Hide on Rosé"
+		]
+	},
+	"personal-dashboard-active-discussions-title": "Các cuộc thảo luận đang diễn ra",
+	"personal-dashboard-active-discussions-latest-comment": "Bình luận mới nhất:",
+	"personal-dashboard-active-discussions-fetch-error": "Không tìm thấy cuộc thảo luận nào đang diễn ra.",
+	"personal-dashboard-active-discussions-mobile-latest-comment": "Bình luận mới nhất:",
+	"personal-dashboard-active-discussions-mobile-summary-footer-link-text": "Xem thêm",
+	"personal-dashboard-active-discussions-mobile-summary-footer-button-aria-label": "Chuyển đến các cuộc thảo luận sôi nổi hơn",
+	"personal-dashboard-active-discussions-progress-bar-aria-label": "thanh tiến trình nội tuyến cho biết các cuộc thảo luận đang hoạt động đang được tải"
+}

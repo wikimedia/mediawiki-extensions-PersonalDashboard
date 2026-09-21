@@ -95,6 +95,11 @@ const { FeedCard, utils } = require( 'ext.personalDashboard.common' );
 const { formatTimestamp, stripMarkup } = utils;
 const { cdxIconNotice, cdxIconUserAvatar, cdxIconUserTemporary } = require( '../icons.json' );
 const MAJOR_CHANGE_DELTA = 1000;
+// Start of the origin parameter that the diff link carries. The diff page reads
+// the parameter for the diff-health-metrics instrument, to record that the
+// reader came from the dashboard and from which feed (T421397). See
+// ext.wikimediaEvents.diff, which keeps a known set of values and drops the rest.
+const ORIGIN_PREFIX = 'personaldashboard-';
 
 module.exports = defineComponent( {
 	name: 'ListCard',
@@ -143,6 +148,7 @@ module.exports = defineComponent( {
 			if ( this.old_revid !== null ) {
 				params.oldid = this.old_revid;
 			}
+			params.origin = ORIGIN_PREFIX + this.feedorigin;
 			return new mw.Title( this.title ).getUrl( params );
 		},
 		ariaLabel() {

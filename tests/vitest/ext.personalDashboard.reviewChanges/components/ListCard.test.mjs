@@ -386,6 +386,40 @@ test( 'leaves oldid out of the diff link for an item with no parent revision', (
 	expect( href ).not.toContain( 'oldid' );
 } );
 
+test( 'marks the diff link with the feed the item came from', () => {
+	// ext.wikimediaEvents.diff reads this parameter on the diff page, to record
+	// that the reader came from the dashboard and from which feed (T421397).
+	for ( const [ feedorigin, expected ] of [
+		[ 'recentchanges', 'origin=personaldashboard-recentchanges' ],
+		[ 'watchlist', 'origin=personaldashboard-watchlist' ],
+		[ 'recentlyedited', 'origin=personaldashboard-recentlyedited' ]
+	] ) {
+		const wrapper = mount( ListCard, {
+			props: {
+				title: 'TestTitle',
+				newlen: 0,
+				oldlen: 0,
+				// eslint-disable-next-line camelcase
+				old_revid: 4710,
+				revid: 4711,
+				user: 'TestUser',
+				parsedcomment: 'TestComment',
+				timestamp: new Date().toISOString(),
+				tags: [],
+				feedorigin
+			},
+			global: {
+				stubs: {
+					UserInfoButton: true
+				}
+			}
+		} );
+
+		const link = wrapper.find( '.personal-dashboard-feed__card__link' );
+		expect( link.attributes( 'href' ) ).toContain( expected );
+	}
+} );
+
 /**
  * @param {Object} props Overrides on top of a plain, unflagged edit
  * @return {Object} A mounted card

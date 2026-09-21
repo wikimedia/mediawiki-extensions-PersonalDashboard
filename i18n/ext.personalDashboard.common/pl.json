@@ -1,11 +1,13 @@
 {
 	"@metadata": {
 		"authors": [
+			"PanWor",
 			"Woytecr"
 		]
 	},
 	"personal-dashboard-multi-step-dialog-progress": "$1 z $2",
 	"personal-dashboard-multi-step-dialog-next-button": "Dalej",
 	"personal-dashboard-multi-step-dialog-previous-button": "Wstecz",
-	"personal-dashboard-multi-step-dialog-got-it-button": "Zacznijmy"
+	"personal-dashboard-multi-step-dialog-got-it-button": "Zacznijmy",
+	"personal-dashboard-feed-load-more": "Pokaż więcej"
 }

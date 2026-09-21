@@ -5,7 +5,6 @@
 		]
 	},
 	"personal-dashboard-risky-article-edits-header": "Posúdiť zmeny",
-	"personal-dashboard-risky-article-edits-subheader": "Pomôžte udržať Wikipédiu spoľahlivou tým, že posúdite nasledujúce úpravy, ktoré si možno vyžadujú pozornosť.",
 	"personal-dashboard-risky-article-edits-subheader-info": "Tieto úpravy vykonali iní používatelia. Majte prehľad a pomôžte udržiavať kvalitu Wikipédie tým, že ich posúdite.",
 	"personal-dashboard-risky-article-edits-footer-preamble": "Ďalšie úpravy nájdete na [{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}} stránke posledných úprav]",
 	"personal-dashboard-risky-article-edits-list-card-aria-label": "Otvoriť zobrazenie rozdielov pre $1",

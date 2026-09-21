@@ -10,5 +10,6 @@
 	"personal-dashboard-multi-step-dialog-next-button": "다음",
 	"personal-dashboard-multi-step-dialog-previous-button": "이전",
 	"personal-dashboard-multi-step-dialog-got-it-button": "알겠습니다",
-	"personal-dashboard-feed-error": "오류 $1"
+	"personal-dashboard-feed-error": "오류 $1",
+	"personal-dashboard-feed-load-more": "더 보기"
 }

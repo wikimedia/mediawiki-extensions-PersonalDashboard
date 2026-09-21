@@ -5,11 +5,16 @@
 		]
 	},
 	"personal-dashboard-risky-article-edits-header": "Revisar os cambios",
-	"personal-dashboard-risky-article-edits-subheader": "Axuda a manter a fiabilidade da Wikipedia revisando as seguintes edicións que poden precisar atención.",
 	"personal-dashboard-risky-article-edits-subheader-info": "Estas edicións fixéronas outros usuarios. Mantente ao día e axuda a manter a calidade da Wikipedia revisándoas.",
 	"personal-dashboard-risky-article-edits-footer-preamble": "Ver máis edicións na páxina dos [{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}} cambios recentes]",
 	"personal-dashboard-risky-article-edits-list-card-aria-label": "Abrir a vista de diferenzas de «$1»",
 	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Sen resumo de edición",
 	"personal-dashboard-risky-article-edits-progress-bar-aria-label": "barra de progreso en liña para indicar cando se cargan os cambios para a revisión",
-	"personal-dashboard-review-changes-major-changes-label": "Cambios importantes"
+	"personal-dashboard-review-changes-major-changes-label": "Cambios importantes",
+	"personal-dashboard-review-changes-high-revert-risk-label": "Alto risco de reversión",
+	"personal-dashboard-review-changes-menu-button-label": "Máis opcións para a revisión de cambios",
+	"personal-dashboard-review-changes-menu-personalization": "Personalización",
+	"personal-dashboard-review-changes-menu-about": "Acerca da revisión de cambios",
+	"personal-dashboard-review-changes-personalization-title": "Personalizar a revisión de cambios",
+	"personal-dashboard-review-changes-personalization-description": "Suxire cambios relevantes en función da túa actividade de edición. [https://www.mediawiki.org/wiki/Home/Recommendations#Review_Changes Máis información]."
 }

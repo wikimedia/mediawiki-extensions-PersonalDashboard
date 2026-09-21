@@ -5,7 +5,6 @@
 	"personal-dashboard-active-discussions-title": "Aktive Diskussionen",
 	"personal-dashboard-active-discussions-latest-comment": "Letzter Kommentar:",
 	"personal-dashboard-active-discussions-fetch-error": "Es wurden keine aktiven Diskussionen gefunden.",
-	"personal-dashboard-active-discussions-mobile-latest-comment": "Letzter Kommentar:",
 	"personal-dashboard-active-discussions-mobile-summary-footer-link-text": "Mehr anzeigen",
 	"personal-dashboard-active-discussions-mobile-summary-footer-button-aria-label": "Navigiere zu aktiveren Diskussionen.",
 	"personal-dashboard-active-discussions-progress-bar-aria-label": "Ein eingeblendeter Fortschrittsbalken, der anzeigt, dass aktive Diskussionen geladen werden."

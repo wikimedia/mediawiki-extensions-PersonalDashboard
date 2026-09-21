@@ -1,0 +1,14 @@
+{
+	"@metadata": {
+		"authors": [
+			"Hide on Rosé"
+		]
+	},
+	"personal-dashboard-risky-article-edits-header": "Xem xét các thay đổi",
+	"personal-dashboard-risky-article-edits-subheader-info": "Những sửa đổi này được thực hiện bởi những người dùng khác. Hãy cập nhật thông tin và giúp duy trì chất lượng Wikipedia bằng cách kiểm tra chúng.",
+	"personal-dashboard-risky-article-edits-footer-preamble": "Xem thêm các sửa đổi khác tại [{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}} trang thay đổi gần đây]",
+	"personal-dashboard-risky-article-edits-list-card-aria-label": "Mở giao diện xem khác biệt cho $1",
+	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Không có tóm lược sửa đổi",
+	"personal-dashboard-risky-article-edits-progress-bar-aria-label": "thanh tiến trình nội tuyến cho biết các sửa đổi cần xem xét đã được tải",
+	"personal-dashboard-review-changes-major-changes-label": "Thay đổi lớn"
+}

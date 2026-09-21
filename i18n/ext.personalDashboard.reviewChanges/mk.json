@@ -5,7 +5,6 @@
 		]
 	},
 	"personal-dashboard-risky-article-edits-header": "Прегледај промени",
-	"personal-dashboard-risky-article-edits-subheader": "Помогнете ни Википедија да остане меродавна со тоа што ќе ги прегледате следниве уредувања на кои треба да им се обрне внимание.",
 	"personal-dashboard-risky-article-edits-subheader-info": "Овие уредувања беа направени од други корисници. Бидете во тек и помогнете во одржувањето на квалитетот на Википедија со тоа што ќе ги прегледате.",
 	"personal-dashboard-risky-article-edits-footer-preamble": "Погледајте повеќе уредувања на страницата [{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}} скорешни промени]",
 	"personal-dashboard-risky-article-edits-list-card-aria-label": "Отворете го прегледот на разлики за $1",

@@ -7,7 +7,6 @@
 		]
 	},
 	"personal-dashboard-risky-article-edits-header": "Wijzigingen controleren",
-	"personal-dashboard-risky-article-edits-subheader": "Help Wikipedia betrouwbaar te houden door de volgende bewerkingen te bekijken, die mogelijk aandacht nodig hebben.",
 	"personal-dashboard-risky-article-edits-subheader-info": "Deze bewerkingen zijn door andere gebruikers uitgevoerd. Blijf op de hoogte en help de kwaliteit van Wikipedia te behouden door ze te beoordelen.",
 	"personal-dashboard-risky-article-edits-footer-preamble": "Bekijk meer bewerkingen op de [{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}} pagina met recente wijzigingen]",
 	"personal-dashboard-risky-article-edits-list-card-aria-label": "Open de diff-weergave voor $1",

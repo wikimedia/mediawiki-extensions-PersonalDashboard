@@ -5,11 +5,16 @@
 		]
 	},
 	"personal-dashboard-risky-article-edits-header": "Dib u eeg isbeddellada",
-	"personal-dashboard-risky-article-edits-subheader": "Ka caawi ilaalinta kalsoonida Wikipedia adigoo dib u eegaya isbeddellada soo socda ee u baahan feejignaan.",
 	"personal-dashboard-risky-article-edits-subheader-info": "Wax ka beddelladan waxaa sameeyey isticmaaleyaal kale. La soco wixii cusub, kana qayb qaado caawinta tayada Wikipedia adigoo dib u eegaya.",
 	"personal-dashboard-risky-article-edits-footer-preamble": "Eeg isbeddello dheeraad ah bogga [{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}} isbeddellada ugu dambeeyay]",
 	"personal-dashboard-risky-article-edits-list-card-aria-label": "Fur muuqalka kala duwanaanshaha ee $1",
 	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Ma jiro koobitaanka wax ka beddelka",
 	"personal-dashboard-risky-article-edits-progress-bar-aria-label": "bar horumar oo dhexda ku jirta oo muujisa marka isbeddellada dib u eegista lagu soo shubo",
-	"personal-dashboard-review-changes-major-changes-label": "Isbeddello waaweyn"
+	"personal-dashboard-review-changes-major-changes-label": "Isbeddello waaweyn",
+	"personal-dashboard-review-changes-high-revert-risk-label": "Khatar sare oo dib u celin ah",
+	"personal-dashboard-review-changes-menu-button-label": "Ikhtiyaarro dheeraad ah oo loogu talagalay Dib u eegista isbeddellada",
+	"personal-dashboard-review-changes-menu-personalization": "Shakhsiyeyn",
+	"personal-dashboard-review-changes-menu-about": "Ku saabsan Dib u eegista isbeddellada",
+	"personal-dashboard-review-changes-personalization-title": "Shakhsiyey Dib u eegista isbeddellada",
+	"personal-dashboard-review-changes-personalization-description": "Waxay soo jeedinaysaa isbeddello khuseeya iyadoo ku salaynaysa hawshaada tifaftirka. [https://www.mediawiki.org/wiki/Home/Recommendations#Review_Changes Wax badan ka baro]"
 }

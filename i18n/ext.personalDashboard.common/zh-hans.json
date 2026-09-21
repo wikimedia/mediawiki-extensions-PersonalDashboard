@@ -10,5 +10,6 @@
 	"personal-dashboard-multi-step-dialog-next-button": "下一步",
 	"personal-dashboard-multi-step-dialog-previous-button": "上一页",
 	"personal-dashboard-multi-step-dialog-got-it-button": "明白了",
-	"personal-dashboard-feed-error": "错误$1"
+	"personal-dashboard-feed-error": "错误$1",
+	"personal-dashboard-feed-load-more": "显示更多"
 }

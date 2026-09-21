@@ -8,5 +8,6 @@
 	"personal-dashboard-multi-step-dialog-next-button": "Seuraava",
 	"personal-dashboard-multi-step-dialog-previous-button": "Edellinen",
 	"personal-dashboard-multi-step-dialog-got-it-button": "Selvä",
-	"personal-dashboard-feed-error": "Virhe $1"
+	"personal-dashboard-feed-error": "Virhe $1",
+	"personal-dashboard-feed-load-more": "Näytä lisää"
 }

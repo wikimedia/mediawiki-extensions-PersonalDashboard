@@ -4,9 +4,13 @@
 			"Asteralee",
 			"Beta16",
 			"Daimona Eaytoy",
-			"FL2226"
+			"FL2226",
+			"Matroz"
 		]
 	},
 	"personal-dashboard-risky-article-edits-subheader-info": "Queste modifiche sono state apportate da altri utenti. Rimani aggiornato e contribuisci a mantenere la qualità di Wikipedia revisionandole.",
-	"personal-dashboard-risky-article-edits-progress-bar-aria-label": "barra di avanzamento in linea per indicare quando vengono caricate le modifiche da revisionare"
+	"personal-dashboard-risky-article-edits-progress-bar-aria-label": "barra di avanzamento in linea per indicare quando vengono caricate le modifiche da revisionare",
+	"personal-dashboard-review-changes-menu-personalization": "Personalizzazione",
+	"personal-dashboard-review-changes-menu-about": "Informazioni sulle modifiche di revisione",
+	"personal-dashboard-review-changes-personalization-title": "Personalizza la revisione delle modifiche"
 }

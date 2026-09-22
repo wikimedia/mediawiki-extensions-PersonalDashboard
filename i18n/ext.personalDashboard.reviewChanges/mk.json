@@ -10,5 +10,11 @@
 	"personal-dashboard-risky-article-edits-list-card-aria-label": "Отворете го прегледот на разлики за $1",
 	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Нема опис на уредувањето",
 	"personal-dashboard-risky-article-edits-progress-bar-aria-label": "лента за напредок во редови која покажува вчитување на промените за преглед",
-	"personal-dashboard-review-changes-major-changes-label": "Крупни промени"
+	"personal-dashboard-review-changes-major-changes-label": "Крупни промени",
+	"personal-dashboard-review-changes-high-revert-risk-label": "Висок ризик од враќање",
+	"personal-dashboard-review-changes-menu-button-label": "Повеќе можности за Враќање на промени",
+	"personal-dashboard-review-changes-menu-personalization": "Персонализација",
+	"personal-dashboard-review-changes-menu-about": "За Прегледот на промените",
+	"personal-dashboard-review-changes-personalization-title": "Персонализација на Прегледот на промените",
+	"personal-dashboard-review-changes-personalization-description": "Предлага релевантни промени според вашата уредувачка активност. [https://www.mediawiki.org/wiki/Home/Recommendations#Review_Changes Дознајте повеќе]"
 }

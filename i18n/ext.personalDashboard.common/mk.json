@@ -8,5 +8,6 @@
 	"personal-dashboard-multi-step-dialog-next-button": "Следно",
 	"personal-dashboard-multi-step-dialog-previous-button": "Претходно",
 	"personal-dashboard-multi-step-dialog-got-it-button": "Јасно",
-	"personal-dashboard-feed-error": "Грешка $1"
+	"personal-dashboard-feed-error": "Грешка $1",
+	"personal-dashboard-feed-load-more": "Прикажи повеќе"
 }

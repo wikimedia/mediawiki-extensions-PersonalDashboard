@@ -2,13 +2,14 @@
 	<feed-panel
 		v-bind="{ ...$attrs, ...feedState }"
 		module-name="ext.personalDashboard.activeDiscussions"
-		summary-mode="viewport"
+		:is-narrow="isNarrow"
+		summary-mode="card"
 		footer-id="personal-dashboard-go-to-active-discussions"
 		:footer-label="footerLabel"
 		:footer-aria-label="footerAriaLabel"
 		:progress-bar-aria-label="progressBarAriaLabel">
-		<template #item="{ item, isNarrow }">
-			<list-card v-bind="item" :is-narrow="isNarrow"></list-card>
+		<template #item="{ item, isNarrow: itemIsNarrow }">
+			<list-card v-bind="item" :is-narrow="itemIsNarrow"></list-card>
 		</template>
 	</feed-panel>
 </template>
@@ -29,6 +30,12 @@ module.exports = defineComponent( {
 	// which owns the compact/full derivation. This module only decides which
 	// rule it follows, via summary-mode, and hands over the feed contract.
 	inheritAttrs: false,
+	props: {
+		isNarrow: {
+			type: Boolean,
+			default: false
+		}
+	},
 	setup() {
 		const { feedState, load } = useActiveDiscussionsFeed();
 

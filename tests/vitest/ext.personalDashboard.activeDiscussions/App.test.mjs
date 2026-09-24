@@ -98,13 +98,11 @@ test( 'the compact summary shows only the first 3 items of a larger fetched feed
 	expect( wrapper.text() ).not.toContain( 'Discussion 3' );
 } );
 
-// This module follows the viewport rule rather than Review Changes' card rule,
-// so a wide viewport shows the whole feed in the card itself.
-test( 'a full detail card shows every fetched item', () => {
+test( 'a focused module shows every fetched item', () => {
 	feedState.isLoading = false;
 	feedState.items = Array.from( { length: 5 }, ( _, i ) => makeItem( i ) );
 
-	const wrapper = mount( ActiveDiscussions, { props: { detail: 'full' } } );
+	const wrapper = mount( ActiveDiscussions, { props: { focused: true } } );
 
 	expect( wrapper.findAllComponents( { name: 'ListCard' } ) ).toHaveLength( 5 );
 	expect( wrapper.find( '.personal-dashboard-feed__summary-footer' ).exists() ).toStrictEqual( false );

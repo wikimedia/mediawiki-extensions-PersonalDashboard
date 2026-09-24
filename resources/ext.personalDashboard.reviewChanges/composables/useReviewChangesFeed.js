@@ -12,7 +12,7 @@ const FEED_PATH = '/personaldashboard/v0/feed';
 
 // Priority order: the endpoint gives the earlier sources the extra slots when
 // the limit does not divide evenly.
-const SOURCES = [ 'watchlist', 'recentchanges', 'recentlyedited' ];
+const SOURCES = [ 'watchlist', 'recentlyedited', 'mostedited' ];
 
 /**
  * Turn a mw.Rest rejection into an error the scaffold can show.

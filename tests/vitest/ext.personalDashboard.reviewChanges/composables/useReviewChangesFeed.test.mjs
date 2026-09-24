@@ -63,7 +63,7 @@ test( 'asks the feed endpoint for every source', async () => {
 	await load( 10 );
 
 	expect( get ).toHaveBeenCalledWith( '/personaldashboard/v0/feed', {
-		sources: 'watchlist|recentchanges|recentlyedited',
+		sources: 'watchlist|recentlyedited|mostedited',
 		limit: 10
 	} );
 } );
@@ -96,7 +96,7 @@ test( 'hands the token back and adds the next page below the first', async () =>
 	await loadMore();
 
 	expect( get ).toHaveBeenLastCalledWith( '/personaldashboard/v0/feed', {
-		sources: 'watchlist|recentchanges|recentlyedited',
+		sources: 'watchlist|recentlyedited|mostedited',
 		limit: 10,
 		continue: 'token-1'
 	} );

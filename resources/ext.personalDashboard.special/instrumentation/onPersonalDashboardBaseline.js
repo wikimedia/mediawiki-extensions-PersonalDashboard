@@ -22,7 +22,8 @@ mw.loader.using( 'ext.wikimediaEvents.testKitchen' ).then( ( require ) => {
 	const friendlyNamesByOrigin = {
 		recentchanges: friendlyNameDiff,
 		watchlist: 'Personal Dashboard watched diff link',
-		recentlyedited: 'Personal Dashboard recently edited diff link'
+		recentlyedited: 'Personal Dashboard recently edited diff link',
+		mostedited: 'Personal Dashboard most edited diff link'
 	};
 
 	function instrumentReviewChangesLinks( selector ) {

@@ -1,0 +1,12 @@
+{
+	"@metadata": {
+		"authors": [
+			"Hide on Rosé",
+			"Veritas Sapientiae"
+		]
+	},
+	"personal-dashboard-multi-step-dialog-progress": "$1 trong số $2",
+	"personal-dashboard-multi-step-dialog-next-button": "Kế",
+	"personal-dashboard-multi-step-dialog-previous-button": "Trước",
+	"personal-dashboard-multi-step-dialog-got-it-button": "Đã hiểu"
+}

@@ -8,7 +8,8 @@
 			footer-id="personal-dashboard-go-to-recentchanges"
 			:footer-label="footerLabel"
 			:progress-bar-aria-label="progressBarAriaLabel"
-			@load-more="loadMore">
+			@load-more="loadMore"
+		>
 			<!-- Renamed, because isNarrow is a prop of this component as well.
 				The scaffold owns the value the slot supplies. -->
 			<template #item="{ item, isNarrow: itemIsNarrow }">
@@ -29,27 +30,23 @@
 			:menu-items="menuItems"
 			:footer-item="menuFooterItem"
 			:button-label="menuButtonLabel"
-			@select="openPanel = $event">
-			<module-panel
+			@select="openPanel = $event"
+		>
+			<personalization-panel
 				:open="openPanel === 'personalization'"
-				:anchor="anchor"
-				:is-narrow="isNarrow"
-				:title="personalizationTitle"
-				@update:open="closePanel">
-				<p class="personal-dashboard-review-changes__panel-label">
-					{{ personalizationLabel }}
-				</p>
-				<p v-i18n-html:personal-dashboard-review-changes-personalization-description></p>
-			</module-panel>
+				:anchor
+				:is-narrow
+				:disabled="feedState.isLoading || feedState.isLoadingMore"
+				@update:open="closePanel"
+				@change="reloadFeed"
+			></personalization-panel>
 
-			<module-panel
+			<about-panel
 				:open="openPanel === 'about'"
-				:anchor="anchor"
-				:is-narrow="isNarrow"
-				:title="aboutTitle"
-				@update:open="closePanel">
-				<p>{{ aboutBody }}</p>
-			</module-panel>
+				:anchor
+				:is-narrow
+				@update:open="closePanel"
+			></about-panel>
 		</module-header-menu>
 	</teleport>
 </template>
@@ -59,19 +56,21 @@ const { defineComponent, ref, watch } = require( 'vue' );
 const {
 	FeedPanel,
 	FULL_LIMIT,
-	ModuleHeaderMenu,
-	ModulePanel
+	ModuleHeaderMenu
 } = require( 'ext.personalDashboard.common' );
 const { useReviewChangesFeed } = require( './composables/useReviewChangesFeed.js' );
+const AboutPanel = require( './components/AboutPanel.vue' );
 const ListCard = require( './components/ListCard.vue' );
+const PersonalizationPanel = require( './components/PersonalizationPanel.vue' );
 const { cdxIconConfigure } = require( './icons.json' );
 
 module.exports = defineComponent( {
 	components: {
+		AboutPanel,
 		FeedPanel,
 		ListCard,
 		ModuleHeaderMenu,
-		ModulePanel
+		PersonalizationPanel
 	},
 	// The compact/full island props (detail, focused, active) are never declared
 	// here: they ride in $attrs and are forwarded untouched to the scaffold,
@@ -134,6 +133,7 @@ module.exports = defineComponent( {
 			feedState,
 			load,
 			loadMore,
+			reloadFeed: () => load( FULL_LIMIT ),
 			openPanel,
 			// A panel only ever reports itself closed: it is opened from the menu
 			// above, never by its own model.
@@ -155,14 +155,7 @@ module.exports = defineComponent( {
 			},
 			footerLabel: mw.msg( 'personal-dashboard-risky-article-edits-mobile-summary-footer-link-text' ),
 			progressBarAriaLabel: mw.msg( 'personal-dashboard-risky-article-edits-progress-bar-aria-label' ),
-			menuButtonLabel: mw.msg( 'personal-dashboard-review-changes-menu-button-label' ),
-			// The menu item names the panel it opens, so both read one message.
-			aboutTitle: mw.msg( 'personal-dashboard-review-changes-menu-about' ),
-			// The sentence the card used to carry as its subheader, until design
-			// moved it in here (T433725).
-			aboutBody: mw.msg( 'personal-dashboard-risky-article-edits-subheader-info' ),
-			personalizationTitle: mw.msg( 'personal-dashboard-review-changes-personalization-title' ),
-			personalizationLabel: mw.msg( 'personal-dashboard-review-changes-menu-personalization' )
+			menuButtonLabel: mw.msg( 'personal-dashboard-review-changes-menu-button-label' )
 		};
 	},
 	mounted() {
@@ -174,15 +167,3 @@ module.exports = defineComponent( {
 	}
 } );
 </script>
-
-<style lang="less">
-@import 'mediawiki.skin.variables.less';
-
-.personal-dashboard-review-changes {
-	// A panel teleports to <body>, so its content cannot be styled from inside
-	// the card container.
-	&__panel-label {
-		font-weight: @font-weight-bold;
-	}
-}
-</style>

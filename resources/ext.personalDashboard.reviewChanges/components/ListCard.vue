@@ -8,20 +8,24 @@
 		<template #header>
 			<span
 				v-if="isNarrow"
-				class="personal-dashboard-review-changes__card__title">
+				class="personal-dashboard-review-changes__card__title"
+			>
 				{{ title }}
 			</span>
+
 			<a
 				v-else
 				:href="titleUrl"
 				target="_blank"
-				class="personal-dashboard-review-changes__card__title">
+				class="personal-dashboard-review-changes__card__title"
+			>
 				{{ title }}
 			</a>
 
 			<span
 				v-if="description"
-				class="personal-dashboard-review-changes__card__description">
+				class="personal-dashboard-review-changes__card__description"
+			>
 				{{ description }}
 			</span>
 		</template>
@@ -40,7 +44,8 @@
 
 				<span
 					v-if="isNarrow"
-					class="personal-dashboard-review-changes__card__username">
+					class="personal-dashboard-review-changes__card__username"
+				>
 					{{ user }}
 				</span>
 
@@ -48,7 +53,8 @@
 					v-else
 					:href="userUrl"
 					target="_blank"
-					class="personal-dashboard-review-changes__card__username">
+					class="personal-dashboard-review-changes__card__username"
+				>
 					{{ user }}
 				</a>
 			</span>

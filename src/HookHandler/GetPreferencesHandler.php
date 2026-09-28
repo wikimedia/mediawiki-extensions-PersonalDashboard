@@ -9,5 +9,6 @@ class GetPreferencesHandler implements GetPreferencesHook {
 	public function onGetPreferences( $user, &$preferences ) {
 		$preferences['personaldashboard-eligible'] = [ 'type' => 'api' ];
 		$preferences['personaldashboard-visited'] = [ 'type' => 'api' ];
+		$preferences['moderatortoolkit-reviewchanges-personalize'] = [ 'type' => 'api' ];
 	}
 }

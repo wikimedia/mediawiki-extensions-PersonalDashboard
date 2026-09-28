@@ -3,6 +3,8 @@ import { useReviewChangesFeed } from '/resources/ext.personalDashboard.reviewCha
 
 const { feedState, load, loadMore } = useReviewChangesFeed();
 
+const PERSONALIZE_OPTION_NAME = 'moderatortoolkit-reviewchanges-personalize';
+
 let get;
 
 /**
@@ -38,6 +40,7 @@ function errorBody( responseJSON ) {
 }
 
 beforeEach( async () => {
+	mw.user.options.set( PERSONALIZE_OPTION_NAME, '1' );
 	get = vi.fn();
 	// A real function, not an arrow: the composable calls `new mw.Rest()`, and
 	// arrows can't be constructors.
@@ -57,13 +60,25 @@ afterEach( () => {
 	vi.restoreAllMocks();
 } );
 
-test( 'asks the feed endpoint for every source', async () => {
+test( 'asks for the personalized sources when personalization is on', async () => {
 	get.mockResolvedValue( { items: [] } );
 
 	await load( 10 );
 
 	expect( get ).toHaveBeenCalledWith( '/personaldashboard/v0/feed', {
 		sources: 'watchlist|recentlyedited|mostedited',
+		limit: 10
+	} );
+} );
+
+test( 'asks only for recent changes when personalization is off', async () => {
+	mw.user.options.set( PERSONALIZE_OPTION_NAME, '0' );
+	get.mockResolvedValue( { items: [] } );
+
+	await load( 10 );
+
+	expect( get ).toHaveBeenCalledWith( '/personaldashboard/v0/feed', {
+		sources: 'recentchanges',
 		limit: 10
 	} );
 } );

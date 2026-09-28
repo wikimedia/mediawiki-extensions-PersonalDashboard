@@ -21,6 +21,7 @@ import { useReviewChangesFeed } from '/resources/ext.personalDashboard.reviewCha
 const { feedState, load, loadMore } = useReviewChangesFeed();
 
 import RecentActivity from '/resources/ext.personalDashboard.reviewChanges/App.vue';
+import PersonalizationPanel from '/resources/ext.personalDashboard.reviewChanges/components/PersonalizationPanel.vue';
 
 // Safely ignore error: Cannot find package 'ext.checkUser.userInfoCard'
 mw.loader.using = () => {};
@@ -381,4 +382,27 @@ test( 'hands isNarrow to the scaffold as well as to the header panels', () => {
 	expect( wrapper.findAllComponents( { name: 'ModulePanel' } )
 		.map( ( panel ) => panel.props( 'isNarrow' ) ) )
 		.toStrictEqual( [ true, true ] );
+} );
+
+test( 'loads the feed again when personalization changes', () => {
+	const wrapper = mount( RecentActivity, {
+		props: { headerTarget: '#pd-header-slot-reviewChanges' }
+	} );
+	load.mockClear();
+
+	wrapper.findComponent( PersonalizationPanel ).vm.$emit( 'change' );
+
+	expect( load ).toHaveBeenCalledWith( 10 );
+} );
+
+// load() ignores a call while another is in flight, so a change then is lost.
+test.each( [ 'isLoading', 'isLoadingMore' ] )( 'disables the personalization toggle while %s', ( field ) => {
+	feedState.isLoading = false;
+	feedState[ field ] = true;
+	const wrapper = mount( RecentActivity, {
+		props: { headerTarget: '#pd-header-slot-reviewChanges' }
+	} );
+
+	expect( wrapper.findComponent( PersonalizationPanel ).props( 'disabled' ) )
+		.toBe( true );
 } );

@@ -40,7 +40,8 @@
 	},
 	"DefaultUserOptions": {
 		"personaldashboard-eligible": false,
-		"personaldashboard-visited": false
+		"personaldashboard-visited": false,
+		"moderatortoolkit-reviewchanges-personalize": true
 	},
 	"HookHandlers": {
 		"skintemplatenav-universal": {
@@ -242,11 +243,15 @@
 			"class": "MediaWiki\\ResourceLoader\\CodexModule",
 			"codexComponents": [
 				"CdxIcon",
-				"CdxInfoChip"
+				"CdxInfoChip",
+				"CdxToggleSwitch"
 			],
 			"packageFiles": [
 				"App.vue",
+				"utils.js",
+				"components/AboutPanel.vue",
 				"components/ListCard.vue",
+				"components/PersonalizationPanel.vue",
 				"composables/useReviewChangesFeed.js",
 				{
 					"name": "icons.json",
@@ -283,6 +288,7 @@
 				"mediawiki.jqueryMsg",
 				"mediawiki.Title",
 				"mediawiki.util",
+				"user.options",
 				"ext.personalDashboard.common"
 			]
 		},

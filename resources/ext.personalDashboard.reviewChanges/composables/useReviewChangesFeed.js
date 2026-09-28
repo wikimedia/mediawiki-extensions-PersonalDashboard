@@ -7,12 +7,16 @@
  */
 
 const { useFeedState } = require( 'ext.personalDashboard.common' );
+const { isPersonalized } = require( '../utils.js' );
 
 const FEED_PATH = '/personaldashboard/v0/feed';
 
 // Priority order: the endpoint gives the earlier sources the extra slots when
 // the limit does not divide evenly.
-const SOURCES = [ 'watchlist', 'recentlyedited', 'mostedited' ];
+const PERSONALIZED_SOURCES = [ 'watchlist', 'recentlyedited', 'mostedited' ];
+
+// Human edits to articles that are not reverted, the same for every user.
+const UNPERSONALIZED_SOURCES = [ 'recentchanges' ];
 
 /**
  * Turn a mw.Rest rejection into an error the scaffold can show.
@@ -47,7 +51,8 @@ function feedError( code, details ) {
  * @throws {Error} If the endpoint refuses the request
  */
 async function fetchReviewChanges( limit, continuation ) {
-	const query = { sources: SOURCES.join( '|' ), limit };
+	const sources = isPersonalized() ? PERSONALIZED_SOURCES : UNPERSONALIZED_SOURCES;
+	const query = { sources: sources.join( '|' ), limit };
 	if ( continuation ) {
 		query.continue = continuation;
 	}

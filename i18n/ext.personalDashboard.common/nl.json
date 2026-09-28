@@ -8,5 +8,6 @@
 	"personal-dashboard-multi-step-dialog-next-button": "Volgende",
 	"personal-dashboard-multi-step-dialog-previous-button": "Vorige",
 	"personal-dashboard-multi-step-dialog-got-it-button": "Begrepen",
-	"personal-dashboard-feed-error": "Fout: $1"
+	"personal-dashboard-feed-error": "Fout: $1",
+	"personal-dashboard-feed-load-more": "Meer weergeven"
 }

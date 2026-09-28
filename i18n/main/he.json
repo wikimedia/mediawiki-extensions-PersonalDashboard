@@ -1,8 +1,11 @@
 {
 	"@metadata": {
 		"authors": [
+			"Amire80",
 			"Neriah"
 		]
 	},
+	"personal-dashboard-back-to-dashboard": "חזרה ללוח הבקרה",
+	"personal-dashboard-beta-info-chip-text": "בטא",
 	"personal-dashboard-link-title": "לוח בקרה"
 }

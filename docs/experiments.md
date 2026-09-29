@@ -11,6 +11,8 @@ stand-in for a third-party team's own extension.
 
 ## Before you start
 
+The manifest in `./src/Experiments.php` is the **Moderator Tools dashboard's**, declared by `SpecialPersonalDashboard::getExperimentManifest()`. A manifest names module groups, and a module group by convention belongs to one dashboard, so an experiment only reaches the dashboard whose subclass declares it. Another dashboard declares its own; a dashboard that declares nothing runs no experiments, which is the default. See [./modules.md](./modules.md#serve-your-own-dashboard).
+
 An experiment needs, outside `./src/Experiments.php`:
 
 - A module group already registered on the wikis the experiment targets (see
@@ -106,6 +108,8 @@ took effect this render, keyed by experiment name:
 }
 ```
 
+`module_group` also says which dashboard the event came from, because a group ID by convention belongs to one dashboard. That is why the instrument name stays a constant: the group already carries the distinction.
+
 `module_group` alone can't identify a cohort: one group ID can be the
 baseline for unenrolled users, one experiment's control, and another
 experiment's treatment at the same time. Filter on `module_variants`, keyed
@@ -147,7 +151,11 @@ either counter.
 `PersonalDashboardAllowOverride` config switch (`false` by default; WMF's
 deployment config sets it `true`). Setting it via URL param also sets a
 session cookie, so a single tagged link keeps routing a QA session across
-reloads. `pdo` is suppressed by an active experiment override, but not by a
+reloads. That cookie is named for the dashboard that wrote it
+(`pdo-<PageName>`, so `pdo-PersonalDashboard`), because two dashboards share
+one browser: pinning a module group on one of them leaves every other
+dashboard on its own baseline, and pinning both takes one tagged link each.
+`pdo` is suppressed by an active experiment override, but not by a
 non-overriding or tag-only assignment: a control-arm test account can still
 use `pdo`, since nothing about that assignment claims the module-group slot.
 No exposure fires when `pdo` wins — dev/QA traffic never contaminates
@@ -163,9 +171,11 @@ semantics.
 
 | Symptom | Likely cause |
 |---|---|
+| My dashboard is never rerouted, though the experiment is live | Its subclass declares no manifest; `getExperimentManifest()` defaults to none |
 | TestKitchen reports no enrollment | Name mismatch between `MANIFEST` and TK's config, or the experiment isn't using the `mw-user` identifier type |
 | Module group never served | Not registered on this wiki — check `special_dashboard_experiment_unroutable_total` |
 | Enrolled, but health metrics show no variant | `pdo` is active for this session, or the user genuinely isn't enrolled |
+| `pdo` stopped applying after an upgrade | The cookie is now per dashboard; follow your `?pdo=` link again to write `pdo-<PageName>` |
 | Exposure or variant missing despite enrollment | This experiment was preempted by another routing experiment — check `special_dashboard_experiment_routing_conflicts_total` |
 
 ## See also

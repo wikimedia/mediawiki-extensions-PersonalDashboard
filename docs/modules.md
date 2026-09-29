@@ -2,7 +2,7 @@
 
 Personal Dashboard is experimental; the details below will change.
 
-A module is a discrete unit of content on `Special:PersonalDashboard` (Impact, Active Discussions, Review Changes, and so on). Modules render their own content; the module-group registry places them into the page.
+A module is a discrete unit of content on a dashboard (Impact, Active Discussions, Review Changes, and so on). Modules render their own content; the module-group registry places them into the page.
 
 Any extension can contribute a module via the `PersonalDashboard.Modules` attribute. This doc uses [BoilerPlate](https://www.mediawiki.org/wiki/Extension:BoilerPlate) as a stand-in; it isn't actually shipping a module. For a real one, GrowthExperiments registers its Mentorship module this way ([T432039](https://phabricator.wikimedia.org/T432039)), extending `BaseModule` rather than implementing `IModule` directly.
 
@@ -49,7 +49,7 @@ Modules implement `MediaWiki\Extension\PersonalDashboard\IModule`. Six methods:
 
 For BoilerPlate, the class lives at `src/ModuleExample.php` under `MediaWiki\Extension\BoilerPlate\`. `./src/Modules/ReturnToHomepage.php` is the smallest working example in Personal Dashboard: no context, no services, `render()` returns a static link.
 
-If the module needs a context or services, the constructor takes an `IContextSource` first, then any services declared in the registry. `SpecialPersonalDashboard` supplies the context via `getRequestedModule()` in `./src/Specials/SpecialPersonalDashboard.php`; services come from the `"services"` list above.
+If the module needs a context or services, the constructor takes an `IContextSource` first, then any services declared in the registry. The dashboard page supplies the context via `getRequestedModule()` in `./src/Specials/AbstractSpecialDashboard.php`; services come from the `"services"` list above.
 
 Personal Dashboard's own modules extend an internal helper, `MediaWiki\Extension\PersonalDashboard\Modules\BaseModule`, that composes `render()` from a header/subheader/body/footer skeleton so subclasses only supply the pieces. The helper isn't part of the platform contract, but it's a decent example of what a helper can look like. Typical overrides:
 
@@ -139,9 +139,71 @@ Modules can carry optional per-placement keys such as `"style": "thin"` and `"st
 
 **Register a named group.** For an experiment or opt-in preview, register a new group in BoilerPlate's own `./extension.json` under `PersonalDashboard.ModuleGroups`. GrowthExperiments' `home` group is a working example ([T432039](https://phabricator.wikimedia.org/T432039)).
 
-Registering the group is the platform mechanism today. User-facing `?moduleGroup=` routing, which let anyone silently re-target their own dashboard, is gone as part of [T430805](https://phabricator.wikimedia.org/T430805). `?pdo=<ModuleGroupId>` replaces it: a dev/QA-only override gated by the `PersonalDashboardAllowOverride` kill switch. The switch defaults to `false` in the extension's own config, so a third-party install or local dev checkout gets `pdo` disabled out of the box; WMF's deployment config sets it `true`. Setting `pdo` via URL param also sets a `pdo` session cookie, so a single tagged link keeps routing a QA session across reloads until the browser session ends. A real TestKitchen enrollment always wins over `pdo`, and PersonalDashboard suppresses its own instrumentation entirely while `pdo` is active, so dev/QA traffic never contaminates analysis data.
+A group can also declare a feedback survey, which puts a Beta chip and a link to that survey above the dashboard:
+
+```json
+"betaFeedback": "https://example.com/survey?Q_lang=$1"
+```
+
+`$1` becomes the viewer's language code, for a survey tool that takes the language as a parameter; a URL without it is linked as written. The survey belongs to the group, not to the wiki and not to the page, so your group sends your users to your own survey. A group that declares nothing gets no chip. Personal Dashboard's `default` group declares the Moderator Tools survey.
+
+Registering the group is the platform mechanism today. User-facing `?moduleGroup=` routing, which let anyone silently re-target their own dashboard, is gone as part of [T430805](https://phabricator.wikimedia.org/T430805). `?pdo=<ModuleGroupId>` replaces it: a dev/QA-only override gated by the `PersonalDashboardAllowOverride` kill switch. The switch defaults to `false` in the extension's own config, so a third-party install or local dev checkout gets `pdo` disabled out of the box; WMF's deployment config sets it `true`. Setting `pdo` via URL param also sets a session cookie named for the dashboard that wrote it (`pdo-<PageName>`), so a single tagged link keeps routing a QA session across reloads until the browser session ends, and pinning one dashboard never re-targets another. A real TestKitchen enrollment always wins over `pdo`, and PersonalDashboard suppresses its own instrumentation entirely while `pdo` is active, so dev/QA traffic never contaminates analysis data.
 
 `pdo` and TestKitchen's own `?mpo=` solve different problems: `pdo` previews a module group before any TestKitchen experiment exists to validate it, while `mpo` validates a specific variant once a real experiment is live.
+
+## Serve your own dashboard {#serve-your-own-dashboard}
+
+Registering a group puts BoilerPlate's modules on the shelf. To serve them at a page BoilerPlate owns, rather than at `Special:PersonalDashboard`, subclass Personal Dashboard's abstract special page. GrowthExperiments serves `Special:Home` this way ([T438582](https://phabricator.wikimedia.org/T438582)).
+
+Register the page in BoilerPlate's own `./extension.json`. It needs exactly one service, and it always will: Personal Dashboard can add a dependency to the bundle without a change here.
+
+```json
+"SpecialPages": {
+    "BoilerPlateDashboard": {
+        "class": "MediaWiki\\Extension\\BoilerPlate\\Specials\\SpecialBoilerPlateDashboard",
+        "services": [
+            "PersonalDashboardPageDependencies"
+        ]
+    }
+}
+```
+
+`PersonalDashboardPageDependencies` must come first in `"services"`, because it is the base constructor's first parameter. List any services of your own after it and take them in your own constructor.
+
+The class extends [`AbstractSpecialDashboard`](../src/Specials/AbstractSpecialDashboard.php), which is `@stable to extend`. Two accessors are abstract:
+
+```php
+class SpecialBoilerPlateDashboard extends AbstractSpecialDashboard {
+    protected function getPageName(): string {
+        return 'BoilerPlateDashboard';
+    }
+
+    protected function getBaselineModuleGroup(): string {
+        return 'boilerPlate';
+    }
+}
+```
+
+That is a working dashboard. Four more accessors have defaults you may want to change:
+
+- `getStatsComponent()`: the StatsFactory component the server-side render timings report under. It defaults to `PersonalDashboard`, so your dashboard's timings land in Personal Dashboard's metrics. Return your own extension's name to tell them apart in Grafana.
+- `getBackLinkTarget()`: the `Title` a focused module's back link returns to. It defaults to your own dashboard. Override it to send the user somewhere else, for example the page your dashboard is reached from.
+- `getExperimentManifest()`: the TestKitchen experiments that can reroute your dashboard to another module group. It defaults to none, so leave it alone until you run one. A manifest names module groups, and a module group by convention belongs to one dashboard, so only declare your own experiments here. See [./experiments.md](./experiments.md).
+- `requiresNamedUser()`: whether the page refuses anyone who is not logged in. It defaults to `true`, which is what every dashboard wants that reads the viewer's own activity. Return `false` only if yours renders something for a logged-out reader.
+
+Two more things your extension has to supply, because MediaWiki asks every special page for them:
+
+- **An alias.** Add the page to your `$specialPageAliases` file and declare it under `ExtensionMessagesFiles`; `./PersonalDashboard.i18n.alias.php` is the template. Without one, `SpecialPageFactory` warns on every request and the page has no localised name.
+- **A title.** The base does not override `getDescription()`, so core's default applies and asks for the message named after your page, lowercased. Add that message, or override `getDescription()` to return a `Message` of your own. `SpecialPersonalDashboard::getDescription()` is an example: it passes the user's name into the title.
+
+`isListed()` and `getGroupName()` are yours too, under core's own contract. Personal Dashboard does not decide them. Its own `isListed()` returns `false` because that dashboard is in beta, which is a product decision about that dashboard and not a rule for yours.
+
+What you do not get to change, and why:
+
+- **`execute()` and the render helpers.** `execute()` is `final` and the helpers are `private`. The render sequence is not a contract; Personal Dashboard changes it without notice. See [./decisions.md](./decisions.md).
+- **The frontend.** The CSS prefix, the `#personal-dashboard-root` mount point, the ResourceLoader modules and the `wgPersonalDashboard*` config vars are shared. Two dashboards never render on the same page, so one frontend serves all of them.
+
+An accessor must be pure configuration. `getPageName()` runs from the base constructor, so no accessor can read the context, the config, or your own constructor state.
 
 ## Serve a group through a TestKitchen experiment
 

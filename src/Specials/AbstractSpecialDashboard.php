@@ -37,6 +37,7 @@ use Wikimedia\Codex\Utility\Codex;
  *   - getBackLinkTarget(): where a focused module's back link returns to.
  *   - getExperimentManifest(): the TestKitchen experiments that may reroute
  *     this dashboard. Return [] if it has none.
+ *   - requiresNamedUser(): whether the page refuses a logged-out reader.
  *
  * An accessor must be pure configuration. getPageName() runs from the
  * constructor, so no accessor can read the context, the config, or subclass

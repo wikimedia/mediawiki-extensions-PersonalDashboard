@@ -20,7 +20,7 @@ Deliberate divergences from MediaWiki convention, each with the reasoning and a 
 
 **The convention.** A platform that lets other code plug in often exposes a runtime registration API (Echo's attribute manager is the model): extensions call in to register, and the platform validates and orders the entries as they arrive.
 
-**What PD does instead.** Modules and module groups declare themselves as `extension.json` attributes (`PersonalDashboard.Modules`, `PersonalDashboard.ModuleGroups`), and registered dashboards will join them as a third. `PersonalDashboardModuleFactory` aggregates those attributes and instantiates through ObjectFactory. So PD does have a registry service; it reads declarations rather than accepting them at runtime.
+**What PD does instead.** Modules and module groups declare themselves as `extension.json` attributes (`PersonalDashboard.Modules`, `PersonalDashboard.ModuleGroups`), and those two are the whole set. `PersonalDashboardModuleFactory` aggregates those attributes and instantiates through ObjectFactory. So PD does have a registry service; it reads declarations rather than accepting them at runtime. A dashboard is not a third attribute; see *A dashboard is a subclass, not a registration* below.
 
 Feed sources follow the same rule: `PersonalDashboard.FeedSources` and `PersonalDashboardFeedSourceFactory` are a second instance of the pattern, not a new one. One deliberate divergence: an unregistered feed source resolves to `null` rather than to a placeholder, because a feed drops the missing source and renders the rest, where a module occupies a card that would otherwise be empty.
 
@@ -28,7 +28,7 @@ Feed sources follow the same rule: `PersonalDashboard.FeedSources` and `Personal
 
 **Consequence.** Registration is static and load-time, and cross-extension registration works through attribute merge. What's absent isn't coupling between the attributes, since a group already names modules across extension boundaries. It's validation of that coupling: a group naming an unregistered module logs at error and falls back to `ext.personalDashboard.placeholder`, so a dangling reference shows up as an empty card in production instead of failing at registration time.
 
-**Trigger to revisit.** When finding a dangling reference at render time stops being good enough. [T434341](https://phabricator.wikimedia.org/T434341) pushes toward that by adding a third attribute that references the second.
+**Trigger to revisit.** When finding a dangling reference at render time stops being good enough. [T434341](https://phabricator.wikimedia.org/T434341) looked like it would push toward that by adding a third attribute referencing the second, and it did not: a dashboard turned out to be a special page rather than a registration, so the coupling still has exactly two levels.
 
 **Receipt.** [Proposed Architectural Changes for PersonalDashboard](https://docs.google.com/document/d/1-ajWUaqEATw7z2x7XTWsacyk1hMpepwbX7IVRD-v8iI/view) (WMF-internal, 2026-04-17), which introduced both declarative module registration and the aggregating registry service.
 
@@ -45,3 +45,17 @@ Feed sources follow the same rule: `PersonalDashboard.FeedSources` and `Personal
 **Probe, never parse.** A source that needs something expensive to build (Active Discussions needs DiscussionTools' Parsoid thread data) looks in the parser cache first and treats a miss as "nothing yet", answering short rather than parsing. A GET has no PoolCounter in front of it, so a parse inside one is an unprotected synchronous parse that any viewer's page load can trigger. The cost is that a cold wiki answers empty until a page view (or DiscussionTools' edit-time warming, where it is on) fills the cache. See `DiscussionToolsThreadLookup`.
 
 **Receipt.** [T436570](https://phabricator.wikimedia.org/T436570) for the endpoint; [T426182](https://phabricator.wikimedia.org/T426182) for the paging it made possible.
+
+## A dashboard is a subclass, not a registration
+
+**The convention.** Core's `SpecialPreferences` is extended by making its render helpers protected or public, and letting subclasses reach into them; `SpecialPage` carries `@stable to extend` and `SpecialPreferences` does not, yet extensions subclass it anyway. PD's own instinct, from *Registration is declarative, not a runtime API* above, was that anything pluggable becomes an `extension.json` attribute.
+
+**What PD does instead.** A dashboard is a special page extending [`AbstractSpecialDashboard`](../src/Specials/AbstractSpecialDashboard.php). There is no third attribute and no registration call. The subclass answers six configuration questions — its page name, its baseline module group, its StatsFactory component, its back-link target, its experiment manifest and whether it requires a logged-in reader — and `execute()` is `final` while every render helper is `private`. `SpecialPersonalDashboard` is itself a subclass, so PD's own dashboard renders through the same code as anyone else's.
+
+**Why.** Public visibility is not the contract in MediaWiki; the annotation is. Making the render pipeline public would freeze the part PD most needs to keep refactoring, and configuration accessors are a surface PD can honour indefinitely without conceding the pipeline. An attribute was the wrong shape besides: a dashboard is a URL, and MediaWiki already has a registry for URLs.
+
+**Consequence.** PD has no way to enumerate dashboards, and nothing needs one. A subclass's `extension.json` entry names one service, `PersonalDashboardPageDependencies`, so PD can add a dependency without breaking any subclass. The CSS prefix, the `#personal-dashboard-root` mount and the frontend ResourceLoader modules are deliberately not configurable: two dashboards never render on the same page, so one frontend serves all of them. Chrome that belongs to a set of modules rather than to a page — the Beta chip and its feedback link — is scoped to the module group's declaration, which names that group's own survey (`"betaFeedback"`), rather than being answered by each subclass. Two of the six accessors are abstract, because a dashboard that fell through to PD's baseline group would serve another team's modules. The experiment manifest defaults the same way round: to none, so an inherited manifest can never reroute a dashboard to a module group it does not own. `SpecialPersonalDashboard` declares PD's own manifest, like any other subclass.
+
+**Trigger to revisit.** When a subclass has a legitimate reason to change the rendered frame rather than to configure it. That is when "configuration accessors only" stops being enough and the render boundary needs a real seam.
+
+**Receipt.** [T434341](https://phabricator.wikimedia.org/T434341); [T438582](https://phabricator.wikimedia.org/T438582) for the first consumer.

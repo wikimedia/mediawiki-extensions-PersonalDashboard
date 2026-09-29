@@ -5,9 +5,13 @@ declare( strict_types = 1 );
 namespace MediaWiki\Extension\PersonalDashboard;
 
 /**
- * Manifest of TestKitchen experiments PersonalDashboard resolves module groups
- * and health-metrics variant tags against. Adding an experiment is a one-line
- * addition to MANIFEST.
+ * Manifest of TestKitchen experiments the Moderator Tools dashboard resolves
+ * module groups and health-metrics variant tags against. Adding an experiment
+ * is a one-line addition to MANIFEST.
+ *
+ * This manifest belongs to one dashboard, because it names that dashboard's
+ * module groups. SpecialPersonalDashboard::getExperimentManifest() declares
+ * it. Another dashboard declares its own, and declares none by default.
  *
  * Each entry's value is a variant => module group map containing only the
  * variants that override the baseline. A variant absent from that map

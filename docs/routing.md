@@ -10,7 +10,7 @@ See [`./architecture.md`](./architecture.md) for how this fits with the rest of 
 
 The route is `/:module(.*)`, matching the special page's `$par`. The module name is the whole meaningful part of the route; it's simultaneously:
 
-- the subpage `SpecialPersonalDashboard::execute()` reads to decide what to render server-side,
+- the subpage `AbstractSpecialDashboard::execute()` reads to decide what to render server-side,
 - the destination an expandable card's header links to, and
 - the name `ModuleDialog.vue` opens over the dashboard when a client-side route push carries it.
 
@@ -24,7 +24,7 @@ An expandable card's header is a server-rendered link to the module's own URL: `
 
 `isPlainClick()` decides which clicks to take, mirroring `guardEvent`, which vue-router doesn't export: a modified or middle click means "open this somewhere else" and belongs to the link. The `href` is untouched, so those clicks still open the page in a tab, and a module the client doesn't own as an island is left to navigate.
 
-A real load of that URL, whether from a bookmark, a cold start, a modified click or a browser with no JavaScript, gets `SpecialPersonalDashboard::renderFocusedFrame()`: a whole-page server render of just that module, with a page-owned back link injected into its header. What happens next with JavaScript splits by viewport.
+A real load of that URL, whether from a bookmark, a cold start, a modified click or a browser with no JavaScript, gets `AbstractSpecialDashboard::renderFocusedFrame()`: a whole-page server render of just that module, with a page-owned back link injected into its header. What happens next with JavaScript splits by viewport.
 
 At a narrow viewport, the client opens that same module in the dialog over the page it just loaded, because `activeName` reads the module out of the route path rather than the one the server named. The code used to read the server's name, and a dialog keyed to it could never close: that name is fixed for the whole page load. The server's own render stays underneath with its `#pd-slot-` body empty, since the island teleports into the dialog rather than into its slot.
 

@@ -4,6 +4,7 @@ namespace MediaWiki\Extension\PersonalDashboard;
 
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\PersonalDashboard\Feed\PersonalDashboardFeedSourceFactory;
+use MediaWiki\Extension\PersonalDashboard\Specials\DashboardPageDependencies;
 use MediaWiki\MediaWikiServices;
 use Psr\Log\LoggerInterface;
 
@@ -45,5 +46,9 @@ class PersonalDashboardServices {
 
 	public function getPersonalDashboardModuleFactory(): PersonalDashboardModuleFactory {
 		return $this->coreServices->get( 'PersonalDashboardModuleFactory' );
+	}
+
+	public function getPersonalDashboardPageDependencies(): DashboardPageDependencies {
+		return $this->coreServices->get( 'PersonalDashboardPageDependencies' );
 	}
 }

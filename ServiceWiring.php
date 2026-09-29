@@ -13,6 +13,7 @@ use MediaWiki\Extension\PersonalDashboard\Feed\PersonalDashboardFeedSourceFactor
 use MediaWiki\Extension\PersonalDashboard\Feed\ShortDescriptionPageDescriptionLookup;
 use MediaWiki\Extension\PersonalDashboard\Feed\WikibasePageDescriptionLookup;
 use MediaWiki\Extension\PersonalDashboard\PersonalDashboardModuleFactory;
+use MediaWiki\Extension\PersonalDashboard\Specials\DashboardPageDependencies;
 use MediaWiki\Logger\LoggerFactory;
 use MediaWiki\MediaWikiServices;
 use Psr\Log\LoggerInterface;
@@ -48,6 +49,25 @@ return [
 		return new PersonalDashboardModuleFactory(
 			$services->getExtensionRegistry(),
 			$services->getObjectFactory(),
+		);
+	},
+
+	'PersonalDashboardPageDependencies' => static function (
+		MediaWikiServices $services
+	): DashboardPageDependencies {
+		/*
+		 * TestKitchen is optional, so a wiki without it gets null and every user
+		 * reads as unenrolled. has() asks exactly the question get() needs
+		 * answered; the other optional-dependency branches in this file use
+		 * isLoaded() because they also name classes the missing extension owns,
+		 * and this one does not.
+		 */
+		return new DashboardPageDependencies(
+			$services->get( 'PersonalDashboardModuleFactory' ),
+			$services->getStatsFactory(),
+			$services->has( 'TestKitchen.ExperimentManager' )
+				? $services->get( 'TestKitchen.ExperimentManager' )
+				: null,
 		);
 	},
 

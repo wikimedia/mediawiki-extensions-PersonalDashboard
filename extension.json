@@ -27,11 +27,7 @@
 		"PersonalDashboard": {
 			"class": "MediaWiki\\Extension\\PersonalDashboard\\Specials\\SpecialPersonalDashboard",
 			"services": [
-				"PersonalDashboardModuleFactory",
-				"StatsFactory"
-			],
-			"optional_services": [
-				"TestKitchen.ExperimentManager"
+				"PersonalDashboardPageDependencies"
 			]
 		}
 	},

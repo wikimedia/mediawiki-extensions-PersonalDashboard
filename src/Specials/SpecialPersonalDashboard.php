@@ -12,9 +12,7 @@ use MediaWiki\Extension\PersonalDashboard\ExperimentResolver;
 use MediaWiki\Extension\PersonalDashboard\Experiments;
 use MediaWiki\Extension\PersonalDashboard\IModule;
 use MediaWiki\Extension\PersonalDashboard\Modules\BaseModule;
-use MediaWiki\Extension\PersonalDashboard\PersonalDashboardModuleFactory;
 use MediaWiki\Extension\PersonalDashboard\Util;
-use MediaWiki\Extension\TestKitchen\Sdk\ExperimentManagerInterface;
 use MediaWiki\Html\Html;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\SpecialPage\SpecialPage;
@@ -23,7 +21,6 @@ use MediaWiki\WikiMap\WikiMap;
 use Throwable;
 use Wikimedia\Codex\Localization\MediaWikiLocalization;
 use Wikimedia\Codex\Utility\Codex;
-use Wikimedia\Stats\StatsFactory;
 
 class SpecialPersonalDashboard extends SpecialPage {
 	/** @var Codex Shared Codex-PHP instance used by beta chip and no-js message */
@@ -51,9 +48,7 @@ class SpecialPersonalDashboard extends SpecialPage {
 	private bool $pdoOverrideActive = false;
 
 	public function __construct(
-		private readonly PersonalDashboardModuleFactory $moduleFactory,
-		private readonly StatsFactory $statsFactory,
-		private readonly ?ExperimentManagerInterface $experimentManager = null,
+		private readonly DashboardPageDependencies $dependencies,
 	) {
 		parent::__construct( 'PersonalDashboard' );
 		$this->codex = new Codex( new MediaWikiLocalization( $this->getContext() ) );
@@ -183,7 +178,7 @@ class SpecialPersonalDashboard extends SpecialPage {
 		] );
 
 		$overallSsrTimeInSeconds = microtime( true ) - $startTime;
-		$this->statsFactory->withComponent( 'PersonalDashboard' )
+		$this->dependencies->statsFactory->withComponent( 'PersonalDashboard' )
 			->getTiming( 'special_dashboard_server_side_render_seconds' )
 			->setLabel( 'platform', $this->device )
 			->observeSeconds( $overallSsrTimeInSeconds );
@@ -216,7 +211,7 @@ class SpecialPersonalDashboard extends SpecialPage {
 		if ( !$moduleConfig || !array_key_exists( 'enabled', $moduleConfig ) || $moduleConfig['enabled'] !== true ) {
 			return null;
 		}
-		return $this->moduleFactory->getModule( $moduleConfig[ 'name' ], [ $context ] );
+		return $this->dependencies->moduleFactory->getModule( $moduleConfig[ 'name' ], [ $context ] );
 	}
 
 	/**
@@ -253,8 +248,8 @@ class SpecialPersonalDashboard extends SpecialPage {
 		$registry = ExtensionRegistry::getInstance()->getAttribute( 'PersonalDashboardModuleGroups' );
 
 		$resolver = new ExperimentResolver(
-			$this->experimentManager,
-			$this->statsFactory,
+			$this->dependencies->experimentManager,
+			$this->dependencies->statsFactory,
 			Experiments::all(),
 			$registry
 		);
@@ -492,7 +487,7 @@ class SpecialPersonalDashboard extends SpecialPage {
 
 	private function recordModuleRenderingTime( string $moduleName, float $timeToRecordInSeconds ): void {
 		$wiki = WikiMap::getCurrentWikiId();
-		$this->statsFactory->withComponent( 'PersonalDashboard' )
+		$this->dependencies->statsFactory->withComponent( 'PersonalDashboard' )
 			->getTiming( 'special_dashboard_ssr_per_module_seconds' )
 			->setLabel( 'wiki', $wiki )
 			->setLabel( 'module', $moduleName )

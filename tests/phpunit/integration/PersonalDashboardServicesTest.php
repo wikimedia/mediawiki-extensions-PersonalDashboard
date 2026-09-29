@@ -10,6 +10,7 @@ use MediaWiki\Extension\PersonalDashboard\Feed\IRevisionScoreLookup;
 use MediaWiki\Extension\PersonalDashboard\Feed\PersonalDashboardFeedSourceFactory;
 use MediaWiki\Extension\PersonalDashboard\PersonalDashboardModuleFactory;
 use MediaWiki\Extension\PersonalDashboard\PersonalDashboardServices;
+use MediaWiki\Extension\PersonalDashboard\Specials\DashboardPageDependencies;
 use MediaWikiIntegrationTestCase;
 use Psr\Log\LoggerInterface;
 
@@ -70,6 +71,15 @@ class PersonalDashboardServicesTest extends MediaWikiIntegrationTestCase {
 		$this->assertInstanceOf(
 			PersonalDashboardModuleFactory::class,
 			$this->newServices()->getPersonalDashboardModuleFactory()
+		);
+	}
+
+	public function testGetPersonalDashboardPageDependencies() {
+		// Its wiring branches on TestKitchen being installed, so building it
+		// also proves the optional branch resolves either way.
+		$this->assertInstanceOf(
+			DashboardPageDependencies::class,
+			$this->newServices()->getPersonalDashboardPageDependencies()
 		);
 	}
 }

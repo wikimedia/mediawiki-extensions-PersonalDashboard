@@ -1,6 +1,7 @@
 <?php
 use MediaWiki\Context\RequestContext;
 use MediaWiki\Extension\PersonalDashboard\PersonalDashboardServices;
+use MediaWiki\Extension\PersonalDashboard\Specials\DashboardPageDependencies;
 use MediaWiki\Extension\PersonalDashboard\Specials\SpecialPersonalDashboard;
 use MediaWiki\Extension\TestKitchen\Sdk\ExperimentInterface;
 use MediaWiki\Extension\TestKitchen\Sdk\ExperimentManagerInterface;
@@ -38,11 +39,11 @@ class SpecialPersonalDashboardExperimentsTest extends MediaWikiIntegrationTestCa
 	private function newSpecialPage( ?ExperimentManagerInterface $experimentManager ): SpecialPersonalDashboard {
 		$services = $this->getServiceContainer();
 		$dashboardServices = PersonalDashboardServices::wrap( $services );
-		return new SpecialPersonalDashboard(
+		return new SpecialPersonalDashboard( new DashboardPageDependencies(
 			$dashboardServices->getPersonalDashboardModuleFactory(),
 			$services->getStatsFactory(),
 			$experimentManager,
-		);
+		) );
 	}
 
 	/**

@@ -382,6 +382,43 @@ class AbstractSpecialDashboardTest extends SpecialPageTestBase {
 	}
 
 	/**
+	 * The Beta chip and its feedback link are Moderator Tools chrome, declared
+	 * by that dashboard's module group. A group that declares no survey gets
+	 * no chip. The positive case is in SpecialPersonalDashboardTest.
+	 */
+	public function testBetaFeedbackIsAbsentForAGroupThatDoesNotDeclareIt() {
+		$dashboard = $this->wrap( new TestDashboardSpecialPage( $this->dependencies() ) );
+
+		$this->assertNull( $dashboard->getBetaFeedbackUrl() );
+	}
+
+	/**
+	 * The same rule asserted on what the page actually emits, not on the
+	 * accessor behind it. Reading getBetaFeedbackUrl() through the wrapper
+	 * leaves the one conditional in execute() uncovered: invert it and an
+	 * accessor-level test still passes.
+	 *
+	 * The chip is a page indicator on every skin but Minerva, and
+	 * OutputPage::getHTML() omits those, so asserting its absence in the
+	 * returned HTML would pass either way. Render into a context we hold and
+	 * read the indicators back.
+	 */
+	public function testBetaFeedbackIsAbsentFromTheRenderedPage() {
+		$context = new RequestContext();
+		$context->setRequest( new FauxRequest() );
+		$context->setLanguage( 'en' );
+		$context->setUser( ( new TestUser( 'ADashboardUser' ) )->getUser() );
+		$context->setTitle( SpecialPage::getTitleFor( 'PersonalDashboardTestDouble' ) );
+
+		$this->executeSpecialPage( '', null, null, null, false, $context );
+
+		$this->assertArrayNotHasKey(
+			'mw-ext-personal-dashboard-survey',
+			$context->getOutput()->getIndicators()
+		);
+	}
+
+	/**
 	 * A dashboard can name a group the wiki does not have, because the
 	 * extension that registers it may be disabled here. Render nothing rather
 	 * than fatal, the same way a group naming an unregistered module degrades
@@ -393,7 +430,8 @@ class AbstractSpecialDashboardTest extends SpecialPageTestBase {
 		$this->setLogger( 'PersonalDashboard', $logger );
 
 		$this->page = new TestDashboardSpecialPage(
-			$this->dependencies(), 'PersonalDashboardTestDouble', 'notARegisteredGroup' );
+			$this->dependencies(), 'PersonalDashboardTestDouble', 'notARegisteredGroup'
+		);
 
 		[ $html ] = $this->executeSpecialPage(
 			'', null, null, ( new TestUser( 'ADashboardUser' ) )->getUser() );

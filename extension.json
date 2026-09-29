@@ -363,10 +363,6 @@
 			"description": "Catch fewer errors for easier troubleshooting",
 			"value": false
 		},
-		"PersonalDashboardSurveyLink": {
-			"description": "External link to the Personal Dashboard feedback survey.",
-			"value": null
-		},
 		"PersonalDashboardUserMenu": {
 			"description": "Show a link to the Personal Dashboard in the user menu.",
 			"value": true
@@ -495,6 +491,7 @@
 				"default": {
 					"description": "The Moderator Tools default Personal Dashboard experience",
 					"version": 0,
+					"betaFeedback": "https://wikimediafoundation.limesurvey.net/179424?lang=$1",
 					"groups": [
 						{
 							"name": "utils",
@@ -593,6 +590,7 @@
 				"review-changes-home": {
 					"description": "Treatment group for the Review Changes in Home experiment",
 					"version": 0,
+					"betaFeedback": "https://wikimediafoundation.limesurvey.net/179424?lang=$1",
 					"groups": [
 						{
 							"name": "main",

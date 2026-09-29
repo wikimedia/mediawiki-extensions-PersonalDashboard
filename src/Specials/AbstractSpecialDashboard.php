@@ -171,9 +171,11 @@ abstract class AbstractSpecialDashboard extends SpecialPage {
 		$out->addModules( 'ext.personalDashboard.special' );
 		$out->addModuleStyles( 'ext.personalDashboard.styles' );
 
-		$surveyLink = $this->createSurveyLinkBetaChip();
+		$surveyUrl = $this->getBetaFeedbackUrl();
 
-		if ( $surveyLink ) {
+		if ( $surveyUrl !== null ) {
+			$surveyLink = $this->createSurveyLinkBetaChip( $surveyUrl );
+
 			if ( $out->getSkin()->getSkinName() === 'minerva' ) {
 				$out->addHTML( $surveyLink );
 			} else {
@@ -442,14 +444,38 @@ abstract class AbstractSpecialDashboard extends SpecialPage {
 	}
 
 	/**
-	 * Create the survey link header HTML if the config value is set and valid
-	 * and create an info chip that indicates that this extension is in Beta.
+	 * The survey this dashboard asks for feedback on, or null where its module
+	 * group declares none.
+	 *
+	 * The chrome belongs to a set of modules and not to a page: it is the
+	 * Moderator Tools dashboard that is in beta and collects feedback. So the
+	 * survey travels with the module group's own `betaFeedback` declaration in
+	 * extension.json, and each dashboard points at a survey of its own.
+	 *
+	 * `$1` in the declared URL becomes the viewer's language code, for a
+	 * survey tool that takes the language as a parameter.
+	 *
+	 * @return ?string
 	 */
-	public function createSurveyLinkBetaChip(): ?string {
-		$surveyLink = $this->getConfig()->get( 'PersonalDashboardSurveyLink' );
-		$url = $surveyLink ? $surveyLink . $this->getLanguage()->getCode() :
-			'https://www.mediawiki.org/wiki/Talk:Moderator_Tools/Dashboard';
+	private function getBetaFeedbackUrl(): ?string {
+		// getModuleGroups() returns the whole resolved declaration and memoises
+		// it, so the URL is already in hand.
+		$url = $this->getModuleGroups()[ 'betaFeedback' ] ?? null;
 
+		if ( !is_string( $url ) || $url === '' ) {
+			return null;
+		}
+
+		return str_replace( '$1', $this->getLanguage()->getCode(), $url );
+	}
+
+	/**
+	 * The feedback link, plus an info chip that marks the dashboard as Beta.
+	 *
+	 * @param string $url Survey to link to, from getBetaFeedbackUrl()
+	 * @return string
+	 */
+	private function createSurveyLinkBetaChip( string $url ): string {
 		$betaChip = $this->codex
 			->infoChip()
 			->setStatus( 'notice' )

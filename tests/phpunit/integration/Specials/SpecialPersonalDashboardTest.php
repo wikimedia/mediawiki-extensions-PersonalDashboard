@@ -5,6 +5,7 @@ use MediaWiki\Request\FauxRequest;
 use MediaWiki\Tests\Specials\SpecialPageTestBase;
 
 /**
+ * @covers \MediaWiki\Extension\PersonalDashboard\Specials\AbstractSpecialDashboard
  * @covers \MediaWiki\Extension\PersonalDashboard\Specials\SpecialPersonalDashboard
  *
  * @group SpecialPage

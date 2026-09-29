@@ -17,6 +17,9 @@
 	"AutoloadNamespaces": {
 		"MediaWiki\\Extension\\PersonalDashboard\\": "src/"
 	},
+	"TestAutoloadNamespaces": {
+		"MediaWiki\\Extension\\PersonalDashboard\\Tests\\Integration\\": "tests/phpunit/integration/"
+	},
 	"RestModuleFiles": [
 		"src/Rest/personaldashboard.v0.json"
 	],

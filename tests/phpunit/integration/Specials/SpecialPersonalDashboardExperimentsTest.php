@@ -14,6 +14,7 @@ use Wikimedia\TestingAccessWrapper;
  * Concurrency and conflict-detection behaviour live in ExperimentResolverTest;
  * this suite pins the real, single-experiment Experiments::all() manifest.
  *
+ * @covers \MediaWiki\Extension\PersonalDashboard\Specials\AbstractSpecialDashboard
  * @covers \MediaWiki\Extension\PersonalDashboard\Specials\SpecialPersonalDashboard
  *
  * @group Database
@@ -25,6 +26,13 @@ class SpecialPersonalDashboardExperimentsTest extends MediaWikiIntegrationTestCa
 	 * against, not real extension.json content.
 	 */
 	private const REGISTRY = [ 'default' => [], 'T426615' => [] ];
+
+	/**
+	 * The `pdo` cookie this page reads and writes. resolvePdoOverride()
+	 * suffixes the name with the page, so two dashboards sharing a browser do
+	 * not share a pinned session; see AbstractSpecialDashboardTest.
+	 */
+	private const PDO_COOKIE = 'pdo-PersonalDashboard';
 
 	protected function setUp(): void {
 		parent::setUp();
@@ -128,7 +136,7 @@ class SpecialPersonalDashboardExperimentsTest extends MediaWikiIntegrationTestCa
 
 	public function testPdoCookieResolvesModuleGroupWithNoUrlParam() {
 		$sp = $this->newWrappedSpecialPageWithRequest();
-		$sp->getRequest()->setCookie( 'pdo', 'T426615' );
+		$sp->getRequest()->setCookie( self::PDO_COOKIE, 'T426615' );
 
 		$this->assertSame( 'T426615', $sp->resolvePdoOverride( self::REGISTRY ) );
 	}
@@ -146,20 +154,20 @@ class SpecialPersonalDashboardExperimentsTest extends MediaWikiIntegrationTestCa
 		$sp->resolvePdoOverride( self::REGISTRY );
 
 		$response = $sp->getRequest()->response();
-		$this->assertSame( 'T426615', $response->getCookie( 'pdo' ) );
+		$this->assertSame( 'T426615', $response->getCookie( self::PDO_COOKIE ) );
 		// Regression test: the cookie must not inherit core's HttpOnly default,
 		// or a client-side reader couldn't see it.
-		$this->assertFalse( $response->getCookieData( 'pdo' )['httpOnly'] );
+		$this->assertFalse( $response->getCookieData( self::PDO_COOKIE )['httpOnly'] );
 		// A session cookie, so following someone else's `?pdo=` link doesn't pin
 		// the module group (and suppress instrumentation) for $wgCookieExpiration.
-		$this->assertSame( 0, $response->getCookieData( 'pdo' )['expire'] );
+		$this->assertSame( 0, $response->getCookieData( self::PDO_COOKIE )['expire'] );
 	}
 
 	public function testInvalidPdoValueFallsThroughWithNoCookieSet() {
 		$sp = $this->newWrappedSpecialPageWithRequest( [ 'pdo' => 'not-a-real-group' ] );
 
 		$this->assertNull( $sp->resolvePdoOverride( self::REGISTRY ) );
-		$this->assertNull( $sp->getRequest()->response()->getCookie( 'pdo' ) );
+		$this->assertNull( $sp->getRequest()->response()->getCookie( self::PDO_COOKIE ) );
 	}
 
 	public function testRealEnrollmentWinsOverValidPdoParam() {

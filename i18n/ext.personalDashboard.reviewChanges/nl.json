@@ -12,5 +12,11 @@
 	"personal-dashboard-risky-article-edits-list-card-aria-label": "Open de diff-weergave voor $1",
 	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Geen bewerkingssamenvatting",
 	"personal-dashboard-risky-article-edits-progress-bar-aria-label": "ingebedde voortgangsbalk om te vermelden wanneer wijzigingen voor herziening worden geladen",
-	"personal-dashboard-review-changes-major-changes-label": "Grote wijzigingen"
+	"personal-dashboard-review-changes-major-changes-label": "Grote wijzigingen",
+	"personal-dashboard-review-changes-high-revert-risk-label": "Hoog risico op terugdraaien",
+	"personal-dashboard-review-changes-menu-button-label": "Meer opties voor het beoordelen van wijzigingen",
+	"personal-dashboard-review-changes-menu-personalization": "Personalisatie",
+	"personal-dashboard-review-changes-menu-about": "Over wijzigingen beoordelen",
+	"personal-dashboard-review-changes-personalization-title": "Wijzigingen beoordelen personaliseren",
+	"personal-dashboard-review-changes-personalization-description": "Stelt relevante wijzigingen voor op basis van uw bewerkingsactiviteit. [https://www.mediawiki.org/wiki/Home/Recommendations#Review_Changes Meer informatie]"
 }

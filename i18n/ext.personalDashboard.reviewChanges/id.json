@@ -1,11 +1,13 @@
 {
 	"@metadata": {
 		"authors": [
-			"Samwalton9 (WMF)"
+			"Samwalton9 (WMF)",
+			"Veracious"
 		]
 	},
 	"personal-dashboard-risky-article-edits-header": "Periksa perubahan suntingan",
 	"personal-dashboard-risky-article-edits-subheader-info": "Bantulah agar Wikipedia tetap tepercaya.",
 	"personal-dashboard-risky-article-edits-footer-preamble": "Lihat suntingan lainnya di [{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}} halaman Perubahan Terbaru]",
-	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Tidak ada ringkasan suntingan"
+	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Tidak ada ringkasan suntingan",
+	"personal-dashboard-review-changes-menu-personalization": "Personalisasi"
 }

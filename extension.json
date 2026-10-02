@@ -18,7 +18,8 @@
 		"MediaWiki\\Extension\\PersonalDashboard\\": "src/"
 	},
 	"TestAutoloadNamespaces": {
-		"MediaWiki\\Extension\\PersonalDashboard\\Tests\\Integration\\": "tests/phpunit/integration/"
+		"MediaWiki\\Extension\\PersonalDashboard\\Tests\\Integration\\": "tests/phpunit/integration/",
+		"MediaWiki\\Extension\\PersonalDashboard\\Tests\\Unit\\": "tests/phpunit/unit/"
 	},
 	"RestModuleFiles": [
 		"src/Rest/personaldashboard.v0.json"
@@ -589,8 +590,8 @@
 					]
 
 				},
-				"T426615": {
-					"description": "An A/B test linking to PersonalDashboard Review Changes module from Newcomer Homepage",
+				"review-changes-home": {
+					"description": "Treatment group for the Review Changes in Home experiment",
 					"version": 0,
 					"groups": [
 						{

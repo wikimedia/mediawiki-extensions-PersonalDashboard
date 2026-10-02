@@ -50,7 +50,7 @@ class AbstractSpecialDashboardTest extends SpecialPageTestBase {
 			'version' => 0,
 			'groups' => [],
 		],
-		'T426615' => [
+		'review-changes-home' => [
 			'description' => 'Stands in for the module group an experiment routes to',
 			'version' => 0,
 			'groups' => [],
@@ -236,7 +236,7 @@ class AbstractSpecialDashboardTest extends SpecialPageTestBase {
 			$this->dependencies( $experimentManager ) ) );
 		$personalDashboard->getModuleGroups();
 
-		$this->assertSame( 'T426615', $personalDashboard->resolvedModuleGroupName );
+		$this->assertSame( 'review-changes-home', $personalDashboard->resolvedModuleGroupName );
 	}
 
 	/**
@@ -254,7 +254,7 @@ class AbstractSpecialDashboardTest extends SpecialPageTestBase {
 		) );
 		$dashboard->getModuleGroups();
 
-		$this->assertSame( 'T426615', $dashboard->resolvedModuleGroupName );
+		$this->assertSame( 'review-changes-home', $dashboard->resolvedModuleGroupName );
 	}
 
 	public function testStatsComponentAccessorIsHonoured() {
@@ -317,12 +317,12 @@ class AbstractSpecialDashboardTest extends SpecialPageTestBase {
 	public function testPdoCookieIsNotSharedBetweenDashboards() {
 		// What a browser already holding a pinned Special:PersonalDashboard
 		// session would send to both pages.
-		$cookies = [ 'pdo-PersonalDashboard' => 'T426615' ];
+		$cookies = [ 'pdo-PersonalDashboard' => 'review-changes-home' ];
 
 		$personalDashboard = $this->wrapWithRequest(
 			new SpecialPersonalDashboard( $this->dependencies() ), [], $cookies );
 		$this->assertSame(
-			'T426615',
+			'review-changes-home',
 			$personalDashboard->resolvePdoOverride( self::REGISTRY ),
 			'the dashboard that wrote the cookie still reads it'
 		);
@@ -364,13 +364,13 @@ class AbstractSpecialDashboardTest extends SpecialPageTestBase {
 	public function testPdoCookieOverridesOnlyTheDashboardThatSetIt() {
 		$this->overrideConfigValue( 'PersonalDashboardAllowOverride', true );
 
-		$cookies = [ 'pdo-PersonalDashboardTestDouble' => 'T426615' ];
+		$cookies = [ 'pdo-PersonalDashboardTestDouble' => 'review-changes-home' ];
 
 		$dashboard = $this->wrapWithRequest(
 			new TestDashboardSpecialPage( $this->dependencies() ), [], $cookies );
 		$dashboard->getModuleGroups();
 
-		$this->assertSame( 'T426615', $dashboard->resolvedModuleGroupName );
+		$this->assertSame( 'review-changes-home', $dashboard->resolvedModuleGroupName );
 		$this->assertTrue( $dashboard->pdoOverrideActive );
 
 		$personalDashboard = $this->wrapWithRequest(

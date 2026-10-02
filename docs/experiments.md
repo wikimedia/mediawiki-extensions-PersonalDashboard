@@ -24,7 +24,7 @@ An experiment needs, outside `./src/Experiments.php`:
   "TestKitchen reports no enrollment" symptom below. Easy to trip over when
   registering a local-only test double for an experiment that isn't live
   yet, since it's tempting to give the test double a distinguishing suffix
-  (e.g. `T426615x`) — don't; use the manifest name exactly.
+  (e.g. `my-experiment-x`) — don't; use the manifest name exactly.
 - The `mw-user` identifier type. `edge-unique` can't be read server-side, so
   module-group routing and server-side variant tagging only work for
   logged-in users.
@@ -112,10 +112,9 @@ experiment's treatment at the same time. Filter on `module_variants`, keyed
 by your experiment's name, not on `module_group`.
 
 Experiment names become PHP array keys and, through `module_variants`, JSON
-object keys — a purely numeric name (e.g. `"426615"` instead of `"T426615"`)
-gets reordered as an integer key and can confuse consumers expecting string
-keys. Use a name with a letter in it (a TK experiment slug or a task ID like
-`T426615`).
+object keys: a purely numeric name gets reordered as an integer key and can
+confuse consumers expecting string keys. The manifest name has to match TK's
+slug exactly, so pick one with a letter in it when registering in TK.
 
 ## Concurrency and conflicts
 

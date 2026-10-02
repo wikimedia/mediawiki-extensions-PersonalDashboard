@@ -22,8 +22,8 @@ namespace MediaWiki\Extension\PersonalDashboard;
  */
 class Experiments {
 	private const MANIFEST = [
-		'T426615' => [
-			'treatment' => 'T426615',
+		'review-changes-home' => [
+			'treatment' => 'review-changes-home',
 		],
 	];
 

@@ -64,7 +64,7 @@ abstract class AbstractSpecialDashboard extends SpecialPage {
 	/** Per-request memo of getModuleGroups()'s result. */
 	private ?array $resolvedModuleGroup = null;
 
-	/** Per-request memo of getModuleGroups()'s resolved registry key (e.g. 'default', 'T426615'). */
+	/** Per-request memo of getModuleGroups()'s resolved registry key (e.g. 'default', 'review-changes-home'). */
 	private ?string $resolvedModuleGroupName = null;
 
 	/** Per-request memo of experiment name => assigned variant, for every assignment that took effect. */

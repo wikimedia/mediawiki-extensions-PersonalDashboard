@@ -1,4 +1,9 @@
 <?php
+
+declare( strict_types = 1 );
+
+namespace MediaWiki\Extension\PersonalDashboard\Tests\Integration\Specials;
+
 use MediaWiki\Context\RequestContext;
 use MediaWiki\Extension\PersonalDashboard\PersonalDashboardServices;
 use MediaWiki\Extension\PersonalDashboard\Specials\DashboardPageDependencies;
@@ -7,6 +12,7 @@ use MediaWiki\Extension\TestKitchen\Sdk\ExperimentInterface;
 use MediaWiki\Extension\TestKitchen\Sdk\ExperimentManagerInterface;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Request\FauxRequest;
+use MediaWikiIntegrationTestCase;
 use Wikimedia\TestingAccessWrapper;
 
 /**
@@ -26,7 +32,7 @@ class SpecialPersonalDashboardExperimentsTest extends MediaWikiIntegrationTestCa
 	 * A minimal fixture: only the keys getModuleGroups() checks membership
 	 * against, not real extension.json content.
 	 */
-	private const REGISTRY = [ 'default' => [], 'T426615' => [] ];
+	private const REGISTRY = [ 'default' => [], 'review-changes-home' => [] ];
 
 	/**
 	 * The `pdo` cookie this page reads and writes. resolvePdoOverride()
@@ -78,7 +84,7 @@ class SpecialPersonalDashboardExperimentsTest extends MediaWikiIntegrationTestCa
 
 		$experimentManager = $this->createMock( ExperimentManagerInterface::class );
 		$experimentManager->method( 'getExperiment' )
-			->with( 'T426615' )
+			->with( 'review-changes-home' )
 			->willReturn( $experiment );
 
 		return $experimentManager;
@@ -94,8 +100,8 @@ class SpecialPersonalDashboardExperimentsTest extends MediaWikiIntegrationTestCa
 
 		$sp->getModuleGroups();
 
-		$this->assertSame( 'T426615', $sp->resolvedModuleGroupName );
-		$this->assertSame( [ 'T426615' => 'treatment' ], $sp->resolvedExperimentVariants );
+		$this->assertSame( 'review-changes-home', $sp->resolvedModuleGroupName );
+		$this->assertSame( [ 'review-changes-home' => 'treatment' ], $sp->resolvedExperimentVariants );
 	}
 
 	public function testGetModuleGroupsRecordsDefaultNameWithNoExperimentManager() {
@@ -126,20 +132,20 @@ class SpecialPersonalDashboardExperimentsTest extends MediaWikiIntegrationTestCa
 		$sp->getModuleGroups();
 
 		$this->assertSame( 'default', $sp->resolvedModuleGroupName );
-		$this->assertSame( [ 'T426615' => 'control' ], $sp->resolvedExperimentVariants );
+		$this->assertSame( [ 'review-changes-home' => 'control' ], $sp->resolvedExperimentVariants );
 	}
 
 	public function testPdoUrlParamResolvesModuleGroup() {
-		$sp = $this->newWrappedSpecialPageWithRequest( [ 'pdo' => 'T426615' ] );
+		$sp = $this->newWrappedSpecialPageWithRequest( [ 'pdo' => 'review-changes-home' ] );
 
-		$this->assertSame( 'T426615', $sp->resolvePdoOverride( self::REGISTRY ) );
+		$this->assertSame( 'review-changes-home', $sp->resolvePdoOverride( self::REGISTRY ) );
 	}
 
 	public function testPdoCookieResolvesModuleGroupWithNoUrlParam() {
 		$sp = $this->newWrappedSpecialPageWithRequest();
-		$sp->getRequest()->setCookie( self::PDO_COOKIE, 'T426615' );
+		$sp->getRequest()->setCookie( self::PDO_COOKIE, 'review-changes-home' );
 
-		$this->assertSame( 'T426615', $sp->resolvePdoOverride( self::REGISTRY ) );
+		$this->assertSame( 'review-changes-home', $sp->resolvePdoOverride( self::REGISTRY ) );
 	}
 
 	public function testPdoUrlParamAlsoSetsResponseCookie() {
@@ -150,12 +156,12 @@ class SpecialPersonalDashboardExperimentsTest extends MediaWikiIntegrationTestCa
 		// empty so this test isn't at the mercy of that environment quirk.
 		$this->overrideConfigValue( 'CookiePrefix', '' );
 
-		$sp = $this->newWrappedSpecialPageWithRequest( [ 'pdo' => 'T426615' ] );
+		$sp = $this->newWrappedSpecialPageWithRequest( [ 'pdo' => 'review-changes-home' ] );
 
 		$sp->resolvePdoOverride( self::REGISTRY );
 
 		$response = $sp->getRequest()->response();
-		$this->assertSame( 'T426615', $response->getCookie( self::PDO_COOKIE ) );
+		$this->assertSame( 'review-changes-home', $response->getCookie( self::PDO_COOKIE ) );
 		// Regression test: the cookie must not inherit core's HttpOnly default,
 		// or a client-side reader couldn't see it.
 		$this->assertFalse( $response->getCookieData( self::PDO_COOKIE )['httpOnly'] );
@@ -177,13 +183,13 @@ class SpecialPersonalDashboardExperimentsTest extends MediaWikiIntegrationTestCa
 			'PersonalDashboardModuleGroups', self::REGISTRY );
 
 		// A differing 'pdo=default' request param must have no effect: the
-		// mocked experiment above resolves enrollment to 'T426615' first.
+		// mocked experiment above resolves enrollment to 'review-changes-home' first.
 		$sp = $this->newWrappedSpecialPageWithRequest(
 			[ 'pdo' => 'default' ], $this->experimentManagerAssigning( 'treatment' ) );
 
 		$sp->getModuleGroups();
 
-		$this->assertSame( 'T426615', $sp->resolvedModuleGroupName );
+		$this->assertSame( 'review-changes-home', $sp->resolvedModuleGroupName );
 		$this->assertFalse( $sp->pdoOverrideActive );
 	}
 
@@ -202,18 +208,18 @@ class SpecialPersonalDashboardExperimentsTest extends MediaWikiIntegrationTestCa
 
 		$experimentManager = $this->createMock( ExperimentManagerInterface::class );
 		$experimentManager->method( 'getExperiment' )
-			->with( 'T426615' )
+			->with( 'review-changes-home' )
 			->willReturn( $experiment );
 
 		$this->overrideConfigValue( 'PersonalDashboardAllowOverride', true );
 		$scope = ExtensionRegistry::getInstance()->setAttributeForTest(
 			'PersonalDashboardModuleGroups', self::REGISTRY );
 
-		$sp = $this->newWrappedSpecialPageWithRequest( [ 'pdo' => 'T426615' ], $experimentManager );
+		$sp = $this->newWrappedSpecialPageWithRequest( [ 'pdo' => 'review-changes-home' ], $experimentManager );
 
 		$sp->getModuleGroups();
 
-		$this->assertSame( 'T426615', $sp->resolvedModuleGroupName );
+		$this->assertSame( 'review-changes-home', $sp->resolvedModuleGroupName );
 		$this->assertTrue( $sp->pdoOverrideActive );
 		$this->assertSame( [], $sp->resolvedExperimentVariants );
 	}
@@ -223,11 +229,11 @@ class SpecialPersonalDashboardExperimentsTest extends MediaWikiIntegrationTestCa
 		$scope = ExtensionRegistry::getInstance()->setAttributeForTest(
 			'PersonalDashboardModuleGroups', self::REGISTRY );
 
-		$sp = $this->newWrappedSpecialPageWithRequest( [ 'pdo' => 'T426615' ] );
+		$sp = $this->newWrappedSpecialPageWithRequest( [ 'pdo' => 'review-changes-home' ] );
 
 		$sp->getModuleGroups();
 
-		$this->assertSame( 'T426615', $sp->resolvedModuleGroupName );
+		$this->assertSame( 'review-changes-home', $sp->resolvedModuleGroupName );
 		$this->assertTrue( $sp->pdoOverrideActive );
 	}
 
@@ -241,7 +247,7 @@ class SpecialPersonalDashboardExperimentsTest extends MediaWikiIntegrationTestCa
 		$scope = ExtensionRegistry::getInstance()->setAttributeForTest(
 			'PersonalDashboardModuleGroups', self::REGISTRY );
 
-		$sp = $this->newWrappedSpecialPageWithRequest( [ 'pdo' => 'T426615' ] );
+		$sp = $this->newWrappedSpecialPageWithRequest( [ 'pdo' => 'review-changes-home' ] );
 
 		$sp->getModuleGroups();
 

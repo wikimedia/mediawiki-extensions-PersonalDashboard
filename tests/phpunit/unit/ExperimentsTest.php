@@ -11,7 +11,7 @@ class ExperimentsTest extends MediaWikiUnitTestCase {
 
 	public function testAllPinsTheRegisteredExperiment() {
 		$this->assertSame(
-			[ 'T426615' => [ 'treatment' => 'T426615' ] ],
+			[ 'review-changes-home' => [ 'treatment' => 'review-changes-home' ] ],
 			Experiments::all()
 		);
 	}

@@ -13,10 +13,12 @@ use MediaWiki\Extension\PersonalDashboard\Feed\IFeedItem;
 use MediaWiki\Extension\PersonalDashboard\Feed\PersonalDashboardFeedSourceFactory;
 use MediaWiki\Rest\Handler;
 use MediaWiki\Rest\LocalizedHttpException;
+use MediaWiki\WikiMap\WikiMap;
 use Psr\Log\LoggerInterface;
 use Wikimedia\Message\MessageValue;
 use Wikimedia\ParamValidator\ParamValidator;
 use Wikimedia\ParamValidator\TypeDef\IntegerDef;
+use Wikimedia\Stats\StatsFactory;
 
 /**
  * GET /personaldashboard/v0/feed
@@ -46,6 +48,7 @@ class FeedHandler extends Handler {
 	public function __construct(
 		private readonly PersonalDashboardFeedSourceFactory $feedSourceFactory,
 		private readonly LoggerInterface $logger,
+		private readonly StatsFactory $statsFactory,
 	) {
 	}
 
@@ -74,6 +77,8 @@ class FeedHandler extends Handler {
 			);
 		}
 
+		$stats = $this->statsFactory->withComponent( 'PersonalDashboard' );
+		$handlerTimer = $stats->getTiming( 'feed_handler_seconds' )->start();
 		$params = $this->getValidatedParams();
 		$limit = $params['limit'];
 		// Already deduplicated: ParamValidator drops repeats from a multi-value
@@ -83,6 +88,7 @@ class FeedHandler extends Handler {
 
 		$continuation = $this->readContinuation( $params['continue'], $sources );
 		$cursors = $continuation?->cursors;
+		$page = $continuation === null ? 'first' : 'continue';
 		$live = $cursors === null
 			? $sources
 			: array_values( array_filter(
@@ -95,17 +101,27 @@ class FeedHandler extends Handler {
 			$source = $this->feedSourceFactory->getSource( $name );
 			// Validation already rejected unregistered names, so this is only
 			// reachable if a source disappeared between the two calls.
-			$results[$name] = $source === null
-				? FeedSourceResult::newEmpty()
-				: $source->getItems( new FeedRequest(
-					$authority,
-					// Every source is asked for the whole limit, not its share of
-					// it. One source has to be able to fill the page when the
-					// others come up dry, which is the point of the merge giving
-					// away the share of a source that runs out.
-					$limit,
-					$cursors[$name] ?? null
-				) );
+			if ( $source === null ) {
+				$results[$name] = FeedSourceResult::newEmpty();
+				continue;
+			}
+
+			// Timed per source, not per set of sources: a set label grows
+			// exponentially with the registered sources.
+			$sourceTimer = $stats->getTiming( 'feed_source_seconds' )->start();
+			$results[$name] = $source->getItems( new FeedRequest(
+				$authority,
+				// Every source is asked for the whole limit, not its share of
+				// it. One source has to be able to fill the page when the
+				// others come up dry, which is the point of the merge giving
+				// away the share of a source that runs out.
+				$limit,
+				$cursors[$name] ?? null
+			) );
+			$sourceTimer->setLabel( 'wiki', WikiMap::getCurrentWikiId() )
+				->setLabel( 'source', $name )
+				->setLabel( 'page', $page )
+				->stop();
 		}
 
 		// The token names everything the walk has served. Without it a source
@@ -159,6 +175,9 @@ class FeedHandler extends Handler {
 				->encode( $sources );
 		}
 
+		$handlerTimer->setLabel( 'wiki', WikiMap::getCurrentWikiId() )
+			->setLabel( 'page', $page )
+			->stop();
 		return $response;
 	}
 

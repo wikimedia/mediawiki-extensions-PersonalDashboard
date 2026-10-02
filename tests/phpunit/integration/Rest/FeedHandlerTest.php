@@ -20,6 +20,7 @@ use Psr\Log\AbstractLogger;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Psr\Log\NullLogger;
+use Wikimedia\Stats\StatsFactory;
 use Wikimedia\TestingAccessWrapper;
 
 /**
@@ -37,6 +38,9 @@ class FeedHandlerTest extends MediaWikiIntegrationTestCase {
 
 	/** Set by a test that wants to watch what the handler logs. */
 	private ?LoggerInterface $logger = null;
+
+	/** Set by a test that wants to watch what the handler records. */
+	private ?StatsFactory $statsFactory = null;
 
 	private function item( string $source, string $key, string $timestamp ): IFeedItem {
 		return new class( $source, $key, $timestamp ) implements IFeedItem {
@@ -136,7 +140,8 @@ class FeedHandlerTest extends MediaWikiIntegrationTestCase {
 				$this->getServiceContainer()->getObjectFactory(),
 				new NullLogger()
 			),
-			$this->logger ?? new NullLogger()
+			$this->logger ?? new NullLogger(),
+			$this->statsFactory ?? StatsFactory::newNull()
 		);
 	}
 
@@ -368,6 +373,39 @@ class FeedHandlerTest extends MediaWikiIntegrationTestCase {
 
 		$this->assertSame( [ 'b1' ], array_column( $data['items'], 'key' ) );
 		$this->assertArrayHasKey( 'continue', $data );
+	}
+
+	public function testRecordsTheTimingPerSourceAndPage(): void {
+		$statsHelper = StatsFactory::newUnitTestingHelper()->withComponent( 'PersonalDashboard' );
+		$this->statsFactory = $statsHelper->getStatsFactory();
+		$sources = [
+			'beta' => $this->source( [ $this->item( 'beta', 'b1', '2026-03-10T11:00:00Z' ) ] ),
+			'alpha' => $this->source( [
+				$this->item( 'alpha', 'a1', '2026-03-10T12:00:00Z' ),
+				$this->item( 'alpha', 'a2', '2026-03-10T09:00:00Z' ),
+			] ),
+		];
+
+		$page = $this->executeHandlerAndGetBodyData(
+			$this->newHandler( $sources ),
+			$this->request( 'beta|alpha', [ 'limit' => '1' ] ),
+			[], [], [], [],
+			$this->viewer()
+		);
+		$this->executeHandlerAndGetBodyData(
+			$this->newHandler( $sources ),
+			$this->request( 'beta|alpha', [ 'limit' => '1', 'continue' => $page['continue'] ] ),
+			[], [], [], [],
+			$this->viewer()
+		);
+
+		$this->assertSame( 1, $statsHelper->count( 'feed_handler_seconds{page="first"}' ) );
+		$this->assertSame( 1, $statsHelper->count( 'feed_handler_seconds{page="continue"}' ) );
+		$this->assertSame( 1, $statsHelper->count( 'feed_source_seconds{source="alpha",page="first"}' ) );
+		$this->assertSame( 1, $statsHelper->count( 'feed_source_seconds{source="beta",page="first"}' ) );
+		$this->assertSame( 1, $statsHelper->count( 'feed_source_seconds{source="alpha",page="continue"}' ) );
+		// Beta ran out on the first page, so the continuation does not call it.
+		$this->assertSame( 3, $statsHelper->count( 'feed_source_seconds' ) );
 	}
 
 	public function testTheContinuationResumesEachSourceFromItsCursor(): void {

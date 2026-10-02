@@ -20,7 +20,8 @@
 					"class": "MediaWiki\\Extension\\PersonalDashboard\\Rest\\FeedHandler",
 					"services": [
 						"PersonalDashboardFeedSourceFactory",
-						"PersonalDashboardLogger"
+						"PersonalDashboardLogger",
+						"StatsFactory"
 					]
 				}
 			}

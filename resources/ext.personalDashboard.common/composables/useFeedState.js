@@ -11,6 +11,7 @@
  */
 
 const { computed, reactive, ref } = require( 'vue' );
+const { recordTiming } = require( '../stats.js' );
 
 /**
  * @typedef {Object} FeedState
@@ -45,10 +46,12 @@ const { computed, reactive, ref } = require( 'vue' );
  *   to load() are forwarded to it; a loadMore() adds the token the last page
  *   returned after them, so a paged loader declares one parameter more than
  *   load() passes.
+ * @param {string} [module] Module name to record the fetch timing under. No
+ *   timing is recorded without it.
  * @return {{feedState: FeedState, load: function(...*): Promise<void>,
  *   loadMore: function(): Promise<void>}}
  */
-function useFeedState( loader ) {
+function useFeedState( loader, module ) {
 	const items = ref( [] );
 	const isLoading = ref( false );
 	const isLoadingMore = ref( false );
@@ -89,11 +92,15 @@ function useFeedState( loader ) {
 		}
 
 		try {
+			const startTime = performance.now();
 			// Never hand a first load the token: a loader that cannot page
 			// would find it in a parameter it declared for something else.
 			const result = append ?
 				await loader( ...loadArgs, continuation.value ) :
 				await loader( ...loadArgs );
+			if ( module ) {
+				recordTiming( module, append ? 'feed_fetch_more' : 'feed_fetch', performance.now() - startTime );
+			}
 
 			// A loader with nothing to page through resolves to a plain array.
 			const page = Array.isArray( result ) ? { items: result } : result;

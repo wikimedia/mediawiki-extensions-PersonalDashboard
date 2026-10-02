@@ -232,3 +232,17 @@ test( 'an active header target wins over the card header slot', async () => {
 
 	slot.remove();
 } );
+
+test( 'records the island render timing once the island resolves', async () => {
+	const track = mw.track = vi.fn();
+	mw.config.set( 'wgPersonalDashboardStats', { component: 'PersonalDashboard', labels: {} } );
+
+	await mountIsland();
+	mw.config.set( 'wgPersonalDashboardStats', null );
+
+	expect( track ).toHaveBeenCalledTimes( 1 );
+	expect( track.mock.calls[ 0 ][ 2 ] ).toStrictEqual( {
+		module: 'ext_example_one',
+		operation: 'island_render'
+	} );
+} );

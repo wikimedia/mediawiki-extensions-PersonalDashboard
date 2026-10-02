@@ -329,3 +329,20 @@ test( 'ignores loadMore while the first page is still loading', async () => {
 	releaseFirst( { items: [], continuation: null } );
 	await first;
 } );
+
+test( 'records the fetch timing under the module it was given', async () => {
+	const track = mw.track = vi.fn();
+	mw.config.set( 'wgPersonalDashboardStats', { component: 'PersonalDashboard', labels: {} } );
+	const { load, loadMore } = useFeedState(
+		async () => ( { items: [ { id: 'a' } ], continuation: 'next' } ),
+		'ext.example'
+	);
+
+	await load();
+	await loadMore();
+	mw.config.set( 'wgPersonalDashboardStats', null );
+
+	expect( track.mock.calls.map( ( call ) => call[ 2 ].operation ) )
+		.toStrictEqual( [ 'feed_fetch', 'feed_fetch_more' ] );
+	expect( track.mock.calls[ 0 ][ 2 ].module ).toBe( 'ext_example' );
+} );

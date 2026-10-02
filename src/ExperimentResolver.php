@@ -27,13 +27,15 @@ final readonly class ExperimentResolver {
 	 * @param string $statsComponent StatsFactory component the counters
 	 *   report under, so they sit with that dashboard's other metrics
 	 * @param array $moduleGroupRegistry Registered module groups, keyed by ID
+	 * @param string $specialPage Name of the dashboard's special page, for the metrics
 	 */
 	public function __construct(
 		private ?ExperimentManagerInterface $experimentManager,
 		private StatsFactory $statsFactory,
 		private array $manifest,
 		private string $statsComponent,
-		private array $moduleGroupRegistry
+		private array $moduleGroupRegistry,
+		private string $specialPage
 	) {
 	}
 
@@ -110,6 +112,7 @@ final readonly class ExperimentResolver {
 		$this->statsFactory->withComponent( $this->statsComponent )
 			->getCounter( 'special_dashboard_experiment_unroutable_total' )
 			->setLabel( 'wiki', WikiMap::getCurrentWikiId() )
+			->setLabel( 'special_page', $this->specialPage )
 			->setLabel( 'experiment', $experimentName )
 			->setLabel( 'module_group', $moduleGroup )
 			->increment();
@@ -135,6 +138,8 @@ final readonly class ExperimentResolver {
 			$this->statsFactory->withComponent( $this->statsComponent )
 				->getCounter( 'special_dashboard_experiment_routing_conflicts_total' )
 				->setLabel( 'wiki', WikiMap::getCurrentWikiId() )
+				->setLabel( 'special_page', $this->specialPage )
+				->setLabel( 'module_group', $moduleGroup )
 				->setLabel( 'winner', $winner )
 				->setLabel( 'preempted', $preemptedName )
 				->increment();

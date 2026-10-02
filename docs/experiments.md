@@ -135,11 +135,12 @@ experiments, not something Personal Dashboard arbitrates further. It's
 visible via:
 
 - A `special_dashboard_experiment_routing_conflicts_total` counter
-  (labels: `wiki`, `winner`, `preempted`), and a matching error log line, when
-  two experiments both resolve to a real override in the same request.
+  (labels: `wiki`, `special_page`, `module_group`, `winner`, `preempted`), and
+  a matching error log line, when two experiments both resolve to a real
+  override in the same request.
 - A `special_dashboard_experiment_unroutable_total` counter (labels: `wiki`,
-  `experiment`, `module_group`), and a matching error log line, when an
-  experiment's variant maps to a module group this wiki doesn't have.
+  `special_page`, `experiment`, `module_group`), and a matching error log line,
+  when an experiment's variant maps to a module group this wiki doesn't have.
 
 Both counters report under the dashboard's own StatsFactory component, the
 one `getStatsComponent()` names, so they sit beside that dashboard's render

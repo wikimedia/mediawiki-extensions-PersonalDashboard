@@ -277,13 +277,17 @@ abstract class AbstractSpecialDashboard extends SpecialPage {
 			// unenrolled case (most requests) needs {} on the wire.
 			'wgPersonalDashboardExperimentVariants' => (object)$this->resolvedExperimentVariants,
 			'wgPersonalDashboardPdoActive' => $this->pdoOverrideActive,
+			// Null in a pdo session, for the same reason as in recordTiming().
+			'wgPersonalDashboardStats' => $this->pdoOverrideActive ? null : [
+				'component' => $this->getStatsComponent(),
+				'labels' => $this->getStatsLabels(),
+			],
 		] );
 
-		$overallSsrTimeInSeconds = microtime( true ) - $startTime;
-		$this->dependencies->statsFactory->withComponent( $this->getStatsComponent() )
-			->getTiming( 'special_dashboard_server_side_render_seconds' )
-			->setLabel( 'platform', $this->device )
-			->observeSeconds( $overallSsrTimeInSeconds );
+		$this->recordTiming(
+			'special_dashboard_server_side_render_seconds',
+			microtime( true ) - $startTime
+		);
 	}
 
 	/**
@@ -345,7 +349,8 @@ abstract class AbstractSpecialDashboard extends SpecialPage {
 			$this->dependencies->statsFactory,
 			$this->getExperimentManifest(),
 			$this->getStatsComponent(),
-			$registry
+			$registry,
+			$this->getPageName()
 		);
 		$resolution = $resolver->resolve();
 
@@ -678,13 +683,45 @@ abstract class AbstractSpecialDashboard extends SpecialPage {
 	}
 
 	private function recordModuleRenderingTime( string $moduleName, float $timeToRecordInSeconds ): void {
-		$wiki = WikiMap::getCurrentWikiId();
-		$this->dependencies->statsFactory->withComponent( $this->getStatsComponent() )
-			->getTiming( 'special_dashboard_ssr_per_module_seconds' )
-			->setLabel( 'wiki', $wiki )
-			->setLabel( 'module', $moduleName )
-			->setLabel( 'mode', $this->device )
-			->observeSeconds( $timeToRecordInSeconds );
+		$this->recordTiming(
+			'special_dashboard_ssr_per_module_seconds',
+			$timeToRecordInSeconds,
+			[ 'module' => $moduleName ]
+		);
+	}
+
+	/**
+	 * Record a timing with the labels that every dashboard timing has.
+	 *
+	 * @param string $name
+	 * @param float $seconds
+	 * @param array<string,string> $labels Labels in addition to the shared ones
+	 */
+	private function recordTiming( string $name, float $seconds, array $labels = [] ): void {
+		// A pdo session is QA traffic, and its module group is forced.
+		if ( $this->pdoOverrideActive ) {
+			return;
+		}
+		$timing = $this->dependencies->statsFactory->withComponent( $this->getStatsComponent() )
+			->getTiming( $name );
+		foreach ( $labels + $this->getStatsLabels() as $key => $value ) {
+			$timing->setLabel( $key, $value );
+		}
+		$timing->observeSeconds( $seconds );
+	}
+
+	/**
+	 * The labels shared by every timing, on the server and on the client.
+	 *
+	 * @return array<string,string>
+	 */
+	private function getStatsLabels(): array {
+		return [
+			'wiki' => WikiMap::getCurrentWikiId(),
+			'special_page' => $this->getPageName(),
+			'module_group' => $this->resolvedModuleGroupName ?? 'unknown',
+			'platform' => $this->device,
+		];
 	}
 
 	/**

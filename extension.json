@@ -123,6 +123,7 @@
 				"useViewport.js",
 				"instrumentation/onPersonalDashboardBaseline.js",
 				"instrumentation/experiments.js",
+				"../ext.personalDashboard.common/stats.js",
 				{
 					"name": "icons.json",
 					"callback": "MediaWiki\\ResourceLoader\\CodexModule::getIcons",
@@ -178,6 +179,7 @@
 				"components/ModulePanel.vue",
 				"components/MultiStepDialog.vue",
 				"composables/useFeedState.js",
+				"stats.js",
 				{
 					"name": "icons.json",
 					"callback": "MediaWiki\\ResourceLoader\\CodexModule::getIcons",

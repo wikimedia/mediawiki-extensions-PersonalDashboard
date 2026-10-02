@@ -20,7 +20,7 @@ function fetchReviewChanges( limit, continuation ) {
 
 // One state for the whole module: the card and the dialog are the same
 // teleported instance, so both read the same feed.
-const { feedState, load, loadMore } = useFeedState( fetchReviewChanges );
+const { feedState, load, loadMore } = useFeedState( fetchReviewChanges, 'ext.personalDashboard.reviewChanges' );
 
 /**
  * @return {{feedState: Object, load: function(number): Promise<void>,

@@ -16,10 +16,12 @@ use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Request\FauxRequest;
 use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\Tests\Specials\SpecialPageTestBase;
+use MediaWiki\WikiMap\WikiMap;
 use Psr\Log\LoggerInterface;
 use TestUser;
 use Wikimedia\ScopedCallback;
 use Wikimedia\Stats\StatsFactory;
+use Wikimedia\Stats\StatsUtils;
 use Wikimedia\TestingAccessWrapper;
 
 /**
@@ -540,6 +542,65 @@ class AbstractSpecialDashboardTest extends SpecialPageTestBase {
 		// One assertion again, for the reason the test above gives.
 		$this->assertSame( 1, $statsHelper->count(
 			'special_dashboard_experiment_unroutable_total{experiment="T426615"}' ) );
+	}
+
+	public function testTimingsNameTheSpecialPageAndModuleGroup() {
+		$statsHelper = StatsFactory::newUnitTestingHelper()
+			->withComponent( 'PersonalDashboardTestDouble' );
+		$this->page = new TestDashboardSpecialPage( new DashboardPageDependencies(
+			PersonalDashboardServices::wrap( $this->getServiceContainer() )
+				->getPersonalDashboardModuleFactory(),
+			$statsHelper->getStatsFactory(),
+		) );
+
+		$this->executeSpecialPage( '', null, null, ( new TestUser( 'ADashboardUser' ) )->getUser() );
+
+		$wiki = StatsUtils::normalizeString( WikiMap::getCurrentWikiId() );
+		$labels = "wiki=\"$wiki\",special_page=\"PersonalDashboardTestDouble\","
+			. 'module_group="testDouble",platform="desktop"';
+		$this->assertSame( 1, $statsHelper->count(
+			"special_dashboard_server_side_render_seconds{{$labels}}" ) );
+		$this->assertSame( 1, $statsHelper->count(
+			'special_dashboard_ssr_per_module_seconds'
+				. '{module="ext_personalDashboard_policiesGuidelines",' . $labels . '}' ) );
+		$this->assertSame(
+			'PersonalDashboardTestDouble',
+			$this->page->getOutput()->getJsConfigVars()['wgPersonalDashboardStats']['component']
+		);
+	}
+
+	public static function providePdoRequests(): iterable {
+		yield 'URL parameter' => [ [ 'pdo' => 'testDouble' ], [] ];
+		yield 'cookie' => [ [], [ 'pdo-PersonalDashboardTestDouble' => 'testDouble' ] ];
+	}
+
+	/**
+	 * @dataProvider providePdoRequests
+	 */
+	public function testPdoSessionRecordsNoTimings( array $query, array $cookies ) {
+		$this->overrideConfigValue( 'PersonalDashboardAllowOverride', true );
+		$statsHelper = StatsFactory::newUnitTestingHelper()
+			->withComponent( 'PersonalDashboardTestDouble' );
+		$this->page = new TestDashboardSpecialPage( new DashboardPageDependencies(
+			PersonalDashboardServices::wrap( $this->getServiceContainer() )
+				->getPersonalDashboardModuleFactory(),
+			$statsHelper->getStatsFactory(),
+		) );
+
+		$request = new FauxRequest( $query );
+		foreach ( $cookies as $name => $value ) {
+			$request->setCookie( $name, $value );
+		}
+		$this->executeSpecialPage(
+			'',
+			$request,
+			null,
+			( new TestUser( 'ADashboardUser' ) )->getUser()
+		);
+
+		$this->assertTrue( $this->wrap( $this->page )->pdoOverrideActive );
+		$this->assertSame( [], $statsHelper->consumeAllFormatted() );
+		$this->assertNull( $this->page->getOutput()->getJsConfigVars()['wgPersonalDashboardStats'] );
 	}
 
 	public function testBackLinkTargetDefaultsToThisDashboard() {

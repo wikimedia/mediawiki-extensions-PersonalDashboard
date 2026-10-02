@@ -71,6 +71,7 @@ class ExperimentResolverTest extends MediaWikiIntegrationTestCase {
 			$manifest,
 			statsComponent: self::STATS_COMPONENT,
 			moduleGroupRegistry: $registry,
+			specialPage: 'PersonalDashboard',
 		);
 	}
 
@@ -185,7 +186,8 @@ class ExperimentResolverTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( [], $resolution->getVariants() );
 		$this->assertSame(
 			1,
-			$statsHelper->count( 'special_dashboard_experiment_unroutable_total{experiment="T426615"}' )
+			$statsHelper->count( 'special_dashboard_experiment_unroutable_total'
+				. '{special_page="PersonalDashboard",experiment="T426615"}' )
 		);
 	}
 
@@ -221,7 +223,8 @@ class ExperimentResolverTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame(
 			1,
 			$statsHelper->count(
-				'special_dashboard_experiment_routing_conflicts_total{winner="T426615",preempted="T430001"}'
+				'special_dashboard_experiment_routing_conflicts_total'
+					. '{special_page="PersonalDashboard",winner="T426615",preempted="T430001"}'
 			)
 		);
 	}

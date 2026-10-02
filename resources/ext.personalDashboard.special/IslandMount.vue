@@ -8,7 +8,7 @@
 		whitespace text node into the slot alongside it.
 	-->
 	<teleport :to="target" :disabled="!target">
-		<suspense>
+		<suspense @resolve="onResolve">
 			<template #default>
 				<slot
 					:detail="detail"
@@ -25,6 +25,7 @@
 <script>
 const { defineComponent, ref } = require( 'vue' );
 const { useViewport } = require( './useViewport.js' );
+const { recordTiming } = require( '../ext.personalDashboard.common/stats.js' );
 
 module.exports = defineComponent( {
 	name: 'IslandMount',
@@ -107,6 +108,13 @@ module.exports = defineComponent( {
 			// or a focused whole-page render is always full regardless of width.
 			const full = this.active || this.focused;
 			return ( this.isNarrow && !full ) ? 'compact' : 'full';
+		}
+	},
+	methods: {
+		onResolve() {
+			// Since navigation start, until the island mounts. A feed fills in
+			// after this, so its card waits about island_render + feed_fetch.
+			recordTiming( this.name, 'island_render', performance.now() );
 		}
 	},
 	watch: {

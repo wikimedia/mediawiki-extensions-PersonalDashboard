@@ -5,6 +5,7 @@ use MediaWiki\Extension\PersonalDashboard\Specials\DashboardPageDependencies;
 use MediaWiki\Extension\PersonalDashboard\Specials\SpecialPersonalDashboard;
 use MediaWiki\Extension\TestKitchen\Sdk\ExperimentInterface;
 use MediaWiki\Extension\TestKitchen\Sdk\ExperimentManagerInterface;
+use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Request\FauxRequest;
 use Wikimedia\TestingAccessWrapper;
 

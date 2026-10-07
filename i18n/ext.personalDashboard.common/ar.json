@@ -1,11 +1,14 @@
 {
 	"@metadata": {
 		"authors": [
+			"Meno25",
 			"Mohammed Qays"
 		]
 	},
 	"personal-dashboard-multi-step-dialog-progress": "$1 من $2",
 	"personal-dashboard-multi-step-dialog-next-button": "التالي",
 	"personal-dashboard-multi-step-dialog-previous-button": "السابق",
-	"personal-dashboard-multi-step-dialog-got-it-button": "عُلِم"
+	"personal-dashboard-multi-step-dialog-got-it-button": "عُلِم",
+	"personal-dashboard-feed-error": "خطأ $1",
+	"personal-dashboard-feed-load-more": "عرض المزيد"
 }

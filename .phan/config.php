@@ -16,11 +16,20 @@ $cfg['exclude_analysis_directory_list'][] = '../ORES/includes';
 $cfg['directory_list'][] = '../Wikibase/client/includes';
 $cfg['exclude_analysis_directory_list'][] = '../Wikibase/client/includes';
 
+$cfg['directory_list'][] = '../DiscussionTools/includes';
+$cfg['exclude_analysis_directory_list'][] = '../DiscussionTools/includes';
+
+// In favour of .phan/stubs/DomImpl.php, as DiscussionTools does.
+$cfg['exclude_file_list'] = array_merge(
+	$cfg['exclude_file_list'],
+	glob( "$VP/vendor/wikimedia/parsoid/src/DOM/*.php" )
+);
+
 // Drop a stub if the real code is present. Phan prefers the stub over the real
 // definition, and then reports PhanRedefinedClassReference at every use of the
-// class. CI installs these extensions, so there the real definition wins. The
-// keys are anchored to this file rather than the working directory, unlike the
-// paths phan resolves above.
+// class. CI installs all of these but DiscussionTools, so there the real
+// definition wins for the rest. The keys are anchored to this file rather than
+// the working directory, unlike the paths phan resolves above.
 $stubbedDependencies = [
 	'/../../TestKitchen/includes/Sdk/ExperimentManagerInterface.php' => [
 		'.phan/stubs/ExperimentInterface.php',
@@ -28,6 +37,9 @@ $stubbedDependencies = [
 	],
 	'/../../Wikibase/client/includes' => [
 		'.phan/stubs/DescriptionLookup.php',
+	],
+	'/../../DiscussionTools/includes' => [
+		'.phan/stubs/DiscussionTools.php',
 	],
 ];
 

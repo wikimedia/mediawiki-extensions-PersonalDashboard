@@ -3,8 +3,11 @@
 declare( strict_types = 1 );
 
 use MediaWiki\Config\Config;
+use MediaWiki\Extension\PersonalDashboard\Feed\DiscussionToolsThreadLookup;
+use MediaWiki\Extension\PersonalDashboard\Feed\IDiscussionThreadLookup;
 use MediaWiki\Extension\PersonalDashboard\Feed\IPageDescriptionLookup;
 use MediaWiki\Extension\PersonalDashboard\Feed\IRevisionScoreLookup;
+use MediaWiki\Extension\PersonalDashboard\Feed\NullDiscussionThreadLookup;
 use MediaWiki\Extension\PersonalDashboard\Feed\NullPageDescriptionLookup;
 use MediaWiki\Extension\PersonalDashboard\Feed\NullRevisionScoreLookup;
 use MediaWiki\Extension\PersonalDashboard\Feed\OresRevisionScoreLookup;
@@ -27,6 +30,26 @@ return [
 
 	'PersonalDashboardConfig' => static function ( MediaWikiServices $services ): Config {
 		return $services->getConfigFactory()->makeConfig( 'PersonalDashboard' );
+	},
+
+	'PersonalDashboardDiscussionThreadLookup' => static function (
+		MediaWikiServices $services
+	): IDiscussionThreadLookup {
+		// PersonalDashboard does not require DiscussionTools, so thread data is
+		// absent rather than broken where it is missing. Everything downstream
+		// takes the interface and never learns which of the two it got.
+		if ( !$services->getExtensionRegistry()->isLoaded( 'DiscussionTools' ) ) {
+			return new NullDiscussionThreadLookup();
+		}
+
+		return new DiscussionToolsThreadLookup(
+			$services->getPageStore(),
+			$services->getRevisionLookup(),
+			$services->getParserOutputAccess(),
+			$services->getMainWANObjectCache(),
+			$services->getStatsFactory(),
+			$services->get( 'PersonalDashboardLogger' ),
+		);
 	},
 
 	'PersonalDashboardFeedSourceFactory' => static function (

@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace MediaWiki\Extension\PersonalDashboard\Tests\Integration;
 
 use MediaWiki\Config\Config;
+use MediaWiki\Extension\PersonalDashboard\Feed\IDiscussionThreadLookup;
 use MediaWiki\Extension\PersonalDashboard\Feed\IPageDescriptionLookup;
 use MediaWiki\Extension\PersonalDashboard\Feed\IRevisionScoreLookup;
 use MediaWiki\Extension\PersonalDashboard\Feed\PersonalDashboardFeedSourceFactory;
@@ -54,6 +55,16 @@ class PersonalDashboardServicesTest extends MediaWikiIntegrationTestCase {
 		$this->assertInstanceOf(
 			IRevisionScoreLookup::class,
 			$this->getServiceContainer()->get( 'PersonalDashboardRevisionScoreLookup' )
+		);
+	}
+
+	public function testTheDiscussionThreadLookupResolves() {
+		// Like the score lookup, its wiring branches on DiscussionTools being
+		// installed, so it is worth proving it builds at all. Without it that
+		// means the null implementation.
+		$this->assertInstanceOf(
+			IDiscussionThreadLookup::class,
+			$this->getServiceContainer()->get( 'PersonalDashboardDiscussionThreadLookup' )
 		);
 	}
 

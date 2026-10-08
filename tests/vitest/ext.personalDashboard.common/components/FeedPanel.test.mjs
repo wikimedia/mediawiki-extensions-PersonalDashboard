@@ -44,6 +44,22 @@ test( 'shows the error message instead of the progress bar', () => {
 	expect( wrapper.text() ).toContain( 'personal-dashboard-feed-error' );
 } );
 
+test( 'says so when a load comes back empty', () => {
+	const wrapper = mountPanel( { emptyLabel: 'Nothing here' } );
+
+	expect( wrapper.find( '.personal-dashboard-feed__empty' ).text() ).toStrictEqual( 'Nothing here' );
+} );
+
+test.each( [
+	[ 'still loading', { isLoading: true } ],
+	[ 'failed', { error: new Error( 'An Error' ) } ],
+	[ 'has items', { items: makeItems( 1 ) } ]
+] )( 'keeps the empty label away while the feed %s', ( _, props ) => {
+	const wrapper = mountPanel( { emptyLabel: 'Nothing here', ...props } );
+
+	expect( wrapper.find( '.personal-dashboard-feed__empty' ).exists() ).toStrictEqual( false );
+} );
+
 test( 'renders one item slot per item', () => {
 	const wrapper = mountPanel( { items: makeItems( 2 ), detail: 'full' } );
 

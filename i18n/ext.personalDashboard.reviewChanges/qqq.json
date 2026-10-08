@@ -10,6 +10,7 @@
 	"personal-dashboard-risky-article-edits-list-card-aria-label": "aria-label for the invisible link covering the list card that opens the diff view.\n\nParameters:\n* $1 - Article title",
 	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Text for the Recent activity module list card when there is no edit summary",
 	"personal-dashboard-risky-article-edits-progress-bar-aria-label": "aria-label for the loading progress bar",
+	"personal-dashboard-review-changes-empty": "Shown in the Review changes module in place of the list when there are no changes to review.",
 	"personal-dashboard-review-changes-major-changes-label": "Label for the major changes indicator",
 	"personal-dashboard-review-changes-high-revert-risk-label": "Label for the chip shown on an edit whose machine-learning revert-risk score reaches the wiki’s configured threshold.",
 	"personal-dashboard-review-changes-menu-button-label": "aria-label for the icon-only overflow menu button in the Review changes module header.",

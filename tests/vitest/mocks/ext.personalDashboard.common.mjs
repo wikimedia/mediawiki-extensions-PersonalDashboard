@@ -1,5 +1,6 @@
 export { default as FeedCard } from '/resources/ext.personalDashboard.common/components/FeedCard.vue';
 export { default as FeedPanel } from '/resources/ext.personalDashboard.common/components/FeedPanel.vue';
+export { fetchFeed } from '/resources/ext.personalDashboard.common/fetchFeed.js';
 export { FULL_LIMIT } from '/resources/ext.personalDashboard.common/constants.js';
 export { default as ModuleHeaderMenu } from '/resources/ext.personalDashboard.common/components/ModuleHeaderMenu.vue';
 export { default as ModulePanel } from '/resources/ext.personalDashboard.common/components/ModulePanel.vue';

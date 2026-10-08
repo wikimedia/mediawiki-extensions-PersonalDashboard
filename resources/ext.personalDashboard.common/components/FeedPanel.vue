@@ -6,6 +6,9 @@
 		<div v-else-if="error">
 			<p>{{ $i18n( 'personal-dashboard-feed-error', error.message ) }}</p>
 		</div>
+		<p v-else-if="!items.length && emptyLabel" class="personal-dashboard-feed__empty">
+			{{ emptyLabel }}
+		</p>
 
 		<div
 			v-show="items.length"
@@ -62,8 +65,8 @@ const { defineComponent } = require( 'vue' );
 const { CdxButton, CdxProgressBar } = require( '../codex.js' );
 
 /**
- * The shared feed scaffold: loading, error, compact-versus-full, and the footer
- * control every feed module would otherwise re-implement.
+ * The shared feed scaffold: loading, error, empty, compact-versus-full, and the
+ * footer control every feed module would otherwise re-implement.
  *
  * A module supplies the normalized feed state (see composables/useFeedState.js),
  * its labels, and one `#item` slot rendering a card per item; everything else
@@ -145,6 +148,11 @@ module.exports = defineComponent( {
 			default: ''
 		},
 		progressBarAriaLabel: {
+			type: String,
+			default: ''
+		},
+		// Shown in place of the list when a load succeeds with nothing in it.
+		emptyLabel: {
 			type: String,
 			default: ''
 		},

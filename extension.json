@@ -153,6 +153,7 @@
 			],
 			"dependencies": [
 				"vue",
+				"mediawiki.api",
 				"mediawiki.DateFormatter"
 			],
 			"messages": [
@@ -166,6 +167,7 @@
 			"packageFiles": [
 				"index.js",
 				"constants.js",
+				"fetchFeed.js",
 				"utils.js",
 				"components/FeedCard.vue",
 				"components/FeedPanel.vue",
@@ -265,6 +267,7 @@
 				}
 			],
 			"messages": [
+				"personal-dashboard-review-changes-empty",
 				"personal-dashboard-review-changes-high-revert-risk-label",
 				"personal-dashboard-review-changes-major-changes-label",
 				"personal-dashboard-review-changes-menu-about",

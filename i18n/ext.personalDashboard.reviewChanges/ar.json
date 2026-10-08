@@ -16,5 +16,6 @@
 	"personal-dashboard-review-changes-menu-button-label": "خيارات إضافية لمراجعة التغييرات",
 	"personal-dashboard-review-changes-menu-personalization": "التخصيص",
 	"personal-dashboard-review-changes-menu-about": "حول تغييرات المراجعة",
-	"personal-dashboard-review-changes-personalization-title": "تخصيص مراجعة التغييرات"
+	"personal-dashboard-review-changes-personalization-title": "تخصيص مراجعة التغييرات",
+	"personal-dashboard-review-changes-personalization-description": "يقترح تغييرات مناسبة بناءً على نشاط التحرير الخاص بك. [https://www.mediawiki.org/wiki/Home/Recommendations#Review_Changes للمزيد من المعلومات]"
 }

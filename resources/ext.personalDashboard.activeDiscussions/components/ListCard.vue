@@ -2,11 +2,11 @@
 	<feed-card
 		class="personal-dashboard-active-discussions__card"
 		:url="discussionUrl"
-		:aria-label="discussionTitleFormatted"
+		:aria-label="ariaLabel"
 	>
 		<template #header>
 			<span class="personal-dashboard-active-discussions__card__title">
-				{{ discussionTitleFormatted }}
+				{{ section }}
 			</span>
 
 			<span class="personal-dashboard-active-discussions__card__icons">
@@ -24,7 +24,7 @@
 
 		<template #meta>
 			<span class="personal-dashboard-active-discussions__card__subheader">
-				{{ discussionPageFormatted }}
+				{{ metaText }}
 			</span>
 		</template>
 
@@ -49,7 +49,7 @@
 const { defineComponent } = require( 'vue' );
 const { CdxIcon } = require( '../codex.js' );
 const { FeedCard, utils } = require( 'ext.personalDashboard.common' );
-const { formatTimestamp, stripMarkup } = utils;
+const { formatTimestamp } = utils;
 const { cdxIconUserAvatar, cdxIconSpeechBubble } = require( '../icons.json' );
 
 module.exports = defineComponent( {
@@ -59,11 +59,16 @@ module.exports = defineComponent( {
 	// not declare, and they would otherwise land in the DOM.
 	inheritAttrs: false,
 	props: {
-		discussionTitle: { type: String, required: true },
-		discussionPage: { type: String, required: true },
+		title: { type: String, required: true },
+		section: { type: String, required: true },
+		// Empty where the heading has no id to link to.
+		anchor: { type: String, default: '' },
+		// The top-level discussion a sub-thread sits under; null on one that
+		// already is.
+		topic: { type: String, default: null },
 		commentCount: { type: Number, required: true },
 		authorCount: { type: Number, required: true },
-		latestReply: { type: String, required: true },
+		timestamp: { type: String, required: true },
 		latestReplyId: { type: String, required: true },
 		isNarrow: { type: Boolean, default: false }
 	},
@@ -75,20 +80,22 @@ module.exports = defineComponent( {
 		};
 	},
 	computed: {
-		discussionTitleFormatted() {
-			return stripMarkup( this.discussionTitle );
+		metaText() {
+			return this.topic ?
+				mw.msg( 'personal-dashboard-active-discussions-in-topic', this.title, this.topic ) :
+				this.title;
 		},
-		discussionPageFormatted() {
-			return stripMarkup( this.discussionPage );
+		ariaLabel() {
+			return this.section + mw.msg( 'comma-separator' ) + this.metaText;
 		},
 		discussionUrl() {
-			return mw.util.getUrl( this.discussionPageFormatted + '#' + this.discussionTitleFormatted );
+			return mw.util.getUrl( this.title ) + ( this.anchor ? '#' + this.anchor : '' );
 		},
 		commentUrl() {
-			return mw.util.getUrl( this.discussionPageFormatted + '#' + this.latestReplyId );
+			return mw.util.getUrl( this.title ) + '#' + this.latestReplyId;
 		},
 		timestampFormatted() {
-			return formatTimestamp( this.latestReply );
+			return formatTimestamp( this.timestamp );
 		}
 	}
 } );
@@ -109,6 +116,16 @@ module.exports = defineComponent( {
 			flex-direction: column;
 			align-items: start;
 		}
+	}
+
+	// The page and topic keep to one line; a long one ends in an ellipsis.
+	// `min-width: 0` lets the flex item shrink below its text.
+	&__subheader {
+		max-width: 100%;
+		min-width: 0;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
 	}
 
 	&__icons {

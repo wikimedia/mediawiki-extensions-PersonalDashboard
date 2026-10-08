@@ -22,9 +22,9 @@ exports[`mount component 1`] = `
         class="personal-dashboard-feed__card__container"
       >
         <a
-          aria-label="Test Title"
+          aria-label="Test Title⧼comma-separator⧽Wikipedia:Village pump (idea lab)"
           class="personal-dashboard-feed__card__link"
-          href="/wiki/Wikipedia:Village_Pump#Test_Title"
+          href="/wiki/Wikipedia:Village_pump_(idea_lab)#Test_Title"
           target="_blank"
         />
         <span
@@ -100,7 +100,7 @@ exports[`mount component 1`] = `
           <span
             class="personal-dashboard-active-discussions__card__subheader"
           >
-            Wikipedia:Village Pump
+            Wikipedia:Village pump (idea lab)
           </span>
           
         </span>
@@ -110,7 +110,7 @@ exports[`mount component 1`] = `
           
           ⧼personal-dashboard-active-discussions-latest-comment⧽ 
           <a
-            href="/wiki/Wikipedia:Village_Pump#foo"
+            href="/wiki/Wikipedia:Village_pump_(idea_lab)#foo"
             target="_blank"
           >
             in 7 hours

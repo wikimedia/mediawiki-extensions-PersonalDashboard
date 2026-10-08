@@ -7,7 +7,9 @@
 		footer-id="personal-dashboard-go-to-active-discussions"
 		:footer-label="footerLabel"
 		:footer-aria-label="footerAriaLabel"
-		:progress-bar-aria-label="progressBarAriaLabel">
+		:progress-bar-aria-label="progressBarAriaLabel"
+		:empty-label="emptyLabel"
+		@load-more="loadMore">
 		<template #item="{ item, isNarrow: itemIsNarrow }">
 			<list-card v-bind="item" :is-narrow="itemIsNarrow"></list-card>
 		</template>
@@ -37,14 +39,16 @@ module.exports = defineComponent( {
 		}
 	},
 	setup() {
-		const { feedState, load } = useActiveDiscussionsFeed();
+		const { feedState, load, loadMore } = useActiveDiscussionsFeed();
 
 		return {
 			feedState,
 			load,
+			loadMore,
 			footerLabel: mw.msg( 'personal-dashboard-active-discussions-mobile-summary-footer-link-text' ),
 			footerAriaLabel: mw.msg( 'personal-dashboard-active-discussions-mobile-summary-footer-button-aria-label' ),
-			progressBarAriaLabel: mw.msg( 'personal-dashboard-active-discussions-progress-bar-aria-label' )
+			progressBarAriaLabel: mw.msg( 'personal-dashboard-active-discussions-progress-bar-aria-label' ),
+			emptyLabel: mw.msg( 'personal-dashboard-active-discussions-fetch-error' )
 		};
 	},
 	mounted() {

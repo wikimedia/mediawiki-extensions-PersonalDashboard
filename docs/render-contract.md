@@ -35,7 +35,7 @@ MediaWiki has no Vue SSR or hydration. A prior stretch of work (the Vue Router m
 
 `IslandMount` hands the island `focused`, `active` and the raw `isNarrow` alongside `detail` (and `headerTarget`, which is orthogonal to detail), so a module can decide for itself rather than take the computed answer. The feed modules don't decide individually any more: `FeedPanel.vue` (`./resources/ext.personalDashboard.common/components/`) owns the derivation for both, and a module picks which rule it follows with one `summaryMode` prop.
 
-- `summaryMode="viewport"` (the default) is the dashboard-wide rule above, read off `detail`: compact on a narrow card, full everywhere else. `ActiveDiscussions` uses it.
-- `summaryMode="card"` reads `focused` and `active` instead: the dashboard grid card is a summary on every viewport, and the full list belongs to the dialog, the frame, or the focused page. `ReviewChanges` uses it, per T426181's desktop/mobile convergence.
+- `summaryMode="viewport"` (the default) is the dashboard-wide rule above, read off `detail`: compact on a narrow card, full everywhere else. None of the feed modules uses it today.
+- `summaryMode="card"` reads `focused` and `active` instead: the dashboard grid card is a summary on every viewport, and the full list belongs to the dialog, the frame, or the focused page. `ReviewChanges` and `ActiveDiscussions` use it, the first per T426181's desktop/mobile convergence.
 
 A feed module never declares those four island props. They ride in `$attrs` and the module forwards them straight to the scaffold, so the compact/full decision exists in exactly one place. See [`./modules.md`](./modules.md#feed-modules) for the rest of the scaffold.

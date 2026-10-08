@@ -4,25 +4,30 @@ import { reactive } from 'vue';
 
 vi.mock( '/resources/ext.personalDashboard.activeDiscussions/composables/useActiveDiscussionsFeed.js', () => {
 	const mock = {
-		feedState: reactive( { items: [], isLoading: true, error: null } ),
-		load: vi.fn()
+		feedState: reactive( { items: [], isLoading: true, error: null, hasMore: false } ),
+		load: vi.fn(),
+		loadMore: vi.fn()
 	};
 	return { useActiveDiscussionsFeed: () => mock };
 } );
 
 import { useActiveDiscussionsFeed } from '/resources/ext.personalDashboard.activeDiscussions/composables/useActiveDiscussionsFeed.js';
-const { feedState, load } = useActiveDiscussionsFeed();
+const { feedState, load, loadMore } = useActiveDiscussionsFeed();
 
 import ActiveDiscussions from '/resources/ext.personalDashboard.activeDiscussions/App.vue';
 
 function makeItem( index ) {
 	return {
-		id: `Wikipedia:Village pump#Discussion ${ index }`,
-		discussionPage: 'Wikipedia:Village pump',
-		discussionTitle: `Discussion ${ index }`,
+		id: `activediscussions-77-h-Discussion_${ index }`,
+		feedorigin: 'activediscussions',
+		title: 'Wikipedia:Village pump',
+		pageid: 77,
+		section: `Discussion ${ index }`,
+		anchor: `Discussion_${ index }`,
+		topic: null,
 		commentCount: 4,
 		authorCount: 3,
-		latestReply: new Date( 2024, 11, 2 ).toISOString(),
+		timestamp: new Date( 2024, 11, 2 ).toISOString(),
 		latestReplyId: `c-Username-${ index }`
 	};
 }
@@ -31,7 +36,9 @@ beforeEach( () => {
 	feedState.items = [];
 	feedState.isLoading = true;
 	feedState.error = null;
+	feedState.hasMore = false;
 	load.mockReset();
+	loadMore.mockReset();
 } );
 
 test( 'mount component', () => {
@@ -74,8 +81,8 @@ test( 'does not leak the synthetic feed id onto the rendered card', () => {
 
 	const wrapper = mount( ActiveDiscussions );
 
-	// makeItem()'s id contains a "#", so a leaked id would be a malformed
-	// (and non-unique) DOM attribute; FeedPanel keys the list on it instead.
+	// FeedPanel keys the list on the item id, so it must not also land on the
+	// card as a DOM id.
 	expect( wrapper.find( '.personal-dashboard-active-discussions__card' ).attributes( 'id' ) )
 		.toBeUndefined();
 } );
@@ -125,4 +132,24 @@ test( 'the summary footer opens the module dialog via the router', async () => {
 	await wrapper.find( '#personal-dashboard-go-to-active-discussions' ).trigger( 'click' );
 
 	expect( push ).toHaveBeenCalledWith( '/ext.personalDashboard.activeDiscussions' );
+} );
+
+test( 'says so when no discussion qualifies', () => {
+	feedState.isLoading = false;
+
+	const wrapper = mount( ActiveDiscussions );
+
+	expect( wrapper.find( '.personal-dashboard-feed__empty' ).text() )
+		.toStrictEqual( '⧼personal-dashboard-active-discussions-fetch-error⧽' );
+} );
+
+test( 'Show more asks the composable for the next page', async () => {
+	feedState.isLoading = false;
+	feedState.hasMore = true;
+	feedState.items = Array.from( { length: 5 }, ( _, i ) => makeItem( i ) );
+
+	const wrapper = mount( ActiveDiscussions, { props: { focused: true } } );
+	await wrapper.find( '.personal-dashboard-feed__load-more' ).trigger( 'click' );
+
+	expect( loadMore ).toHaveBeenCalledOnce();
 } );

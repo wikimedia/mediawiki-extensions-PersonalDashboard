@@ -23,12 +23,4 @@ class ActiveDiscussions extends BaseModule {
 	protected function getModules(): array {
 		return [ 'ext.personalDashboard.activeDiscussions' ];
 	}
-
-	/** @inheritDoc */
-	public function getJsConfigVars(): array {
-		return [
-			'wgPersonalDashboardActiveDiscussionsPages' =>
-				$this->getConfig()->get( 'PersonalDashboardActiveDiscussionsPages' ),
-		];
-	}
 }

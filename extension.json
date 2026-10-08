@@ -318,13 +318,14 @@
 			"messages": [
 				"personal-dashboard-active-discussions-latest-comment",
 				"personal-dashboard-active-discussions-fetch-error",
+				"personal-dashboard-active-discussions-in-topic",
+				"comma-separator",
 				"personal-dashboard-active-discussions-mobile-summary-footer-link-text",
 				"personal-dashboard-active-discussions-mobile-summary-footer-button-aria-label",
 				"personal-dashboard-active-discussions-progress-bar-aria-label"
 			],
 			"dependencies": [
 				"vue",
-				"mediawiki.api",
 				"mediawiki.util",
 				"ext.personalDashboard.common"
 			]

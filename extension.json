@@ -402,6 +402,15 @@
 	"attributes": {
 		"PersonalDashboard": {
 			"FeedSources": {
+				"activediscussions": {
+					"class": "MediaWiki\\Extension\\PersonalDashboard\\Feed\\Source\\ActiveDiscussionsFeedSource",
+					"services": [
+						"MainConfig",
+						"PageStore",
+						"PersonalDashboardDiscussionThreadLookup",
+						"PersonalDashboardLogger"
+					]
+				},
 				"mostedited": {
 					"class": "MediaWiki\\Extension\\PersonalDashboard\\Feed\\Source\\MostEditedFeedSource",
 					"services": [

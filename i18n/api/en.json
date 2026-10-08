@@ -30,5 +30,14 @@
 	"personal-dashboard-rest-property-desc-new": "Whether the edit created the page.",
 	"personal-dashboard-rest-property-desc-tags": "Change tags applied to the edit.",
 	"personal-dashboard-rest-property-desc-oresscores": "Machine learning scores for the edit, by model and class. Empty if the edit has none.",
+	"personal-dashboard-rest-property-desc-thread-title": "Title of the page the discussion is on.",
+	"personal-dashboard-rest-property-desc-thread-pageid": "Page ID of the page the discussion is on.",
+	"personal-dashboard-rest-property-desc-thread-timestamp": "When the most recent comment in the discussion was made, in ISO 8601 format.",
+	"personal-dashboard-rest-property-desc-thread-section": "Heading the discussion is under, as plain text.",
+	"personal-dashboard-rest-property-desc-thread-anchor": "Fragment that links to the heading on the page. Empty if the heading has none.",
+	"personal-dashboard-rest-property-desc-thread-topic": "Heading of the discussion this one sits under, or `null` if it is already a top-level discussion.",
+	"personal-dashboard-rest-property-desc-thread-comment-count": "Number of comments under the heading, including those under its sub-headings.",
+	"personal-dashboard-rest-property-desc-thread-author-count": "Number of people who commented under the heading, including under its sub-headings.",
+	"personal-dashboard-rest-property-desc-thread-latest-reply-id": "Identifier of the most recent comment in the discussion.",
 	"personal-dashboard-rest-feed-bad-continue": "The continue value is not usable here. Request the feed again without it."
 }

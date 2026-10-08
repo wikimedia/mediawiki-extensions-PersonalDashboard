@@ -30,5 +30,14 @@
 	"personal-dashboard-rest-property-desc-new": "Description of the <code>new</code> property of a feed item, shown in the REST API documentation.",
 	"personal-dashboard-rest-property-desc-tags": "Description of the <code>tags</code> property of a feed item, shown in the REST API documentation.",
 	"personal-dashboard-rest-property-desc-oresscores": "Description of the <code>oresscores</code> property of a feed item, shown in the REST API documentation. Model and class names such as <code>revertrisklanguageagnostic</code> and <code>true</code> are not translated.",
+	"personal-dashboard-rest-property-desc-thread-title": "Description of the <code>title</code> property of a discussion thread feed item, shown in the REST API documentation.",
+	"personal-dashboard-rest-property-desc-thread-pageid": "Description of the <code>pageid</code> property of a discussion thread feed item, shown in the REST API documentation.",
+	"personal-dashboard-rest-property-desc-thread-timestamp": "Description of the <code>timestamp</code> property of a discussion thread feed item, shown in the REST API documentation.",
+	"personal-dashboard-rest-property-desc-thread-section": "Description of the <code>section</code> property of a discussion thread feed item, shown in the REST API documentation. A section is the heading a discussion is held under on a talk page.",
+	"personal-dashboard-rest-property-desc-thread-anchor": "Description of the <code>anchor</code> property of a discussion thread feed item, shown in the REST API documentation. The anchor is the fragment part of a URL, after the <code>#</code>.",
+	"personal-dashboard-rest-property-desc-thread-topic": "Description of the <code>topic</code> property of a discussion thread feed item, shown in the REST API documentation. A discussion held under a sub-heading names the top-level discussion it belongs to. <code>null</code> is a JSON literal and is not translated.",
+	"personal-dashboard-rest-property-desc-thread-comment-count": "Description of the <code>commentCount</code> property of a discussion thread feed item, shown in the REST API documentation.",
+	"personal-dashboard-rest-property-desc-thread-author-count": "Description of the <code>authorCount</code> property of a discussion thread feed item, shown in the REST API documentation.",
+	"personal-dashboard-rest-property-desc-thread-latest-reply-id": "Description of the <code>latestReplyId</code> property of a discussion thread feed item, shown in the REST API documentation.",
 	"personal-dashboard-rest-feed-bad-continue": "Error returned by the feed REST endpoint when the <code>continue</code> token cannot be read, or was made for a different set of feed sources. <code>continue</code> is a parameter name and is not translated."
 }

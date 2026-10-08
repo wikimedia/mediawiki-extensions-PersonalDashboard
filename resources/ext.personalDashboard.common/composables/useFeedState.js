@@ -19,6 +19,8 @@ const { computed, reactive, ref } = require( 'vue' );
  * @property {boolean} isLoading Whether a first load is in flight.
  * @property {boolean} isLoadingMore Whether a further page is in flight.
  * @property {boolean} hasMore Whether a further page can be asked for.
+ * @property {boolean} isIncomplete Whether the first page left out what a source
+ *   couldn't read, so an empty list isn't proof there is nothing to show.
  * @property {Error|null} error The last load failure, or null.
  */
 
@@ -27,6 +29,7 @@ const { computed, reactive, ref } = require( 'vue' );
  * @property {Object[]} items The items in this page.
  * @property {?string} continuation Token that resumes after this page, or null
  *   when nothing follows it.
+ * @property {boolean} [incomplete] Whether a source couldn't be read in full.
  */
 
 /**
@@ -49,6 +52,7 @@ function useFeedState( loader ) {
 	const items = ref( [] );
 	const isLoading = ref( false );
 	const isLoadingMore = ref( false );
+	const isIncomplete = ref( false );
 	const error = ref( null );
 
 	const continuation = ref( null );
@@ -81,6 +85,7 @@ function useFeedState( loader ) {
 		if ( !append ) {
 			loadArgs = args;
 			continuation.value = null;
+			isIncomplete.value = false;
 		}
 
 		try {
@@ -96,6 +101,9 @@ function useFeedState( loader ) {
 
 			items.value = append ? items.value.concat( pageItems ) : pageItems;
 			continuation.value = page.continuation || null;
+			if ( !append ) {
+				isIncomplete.value = page.incomplete === true;
+			}
 		} catch ( err ) {
 			mw.log.error( err.message );
 			error.value = err;
@@ -136,7 +144,7 @@ function useFeedState( loader ) {
 	return {
 		// reactive(), so a consumer can v-bind the contract however it was
 		// produced: a getJsData() payload hands over plain values.
-		feedState: reactive( { items, isLoading, isLoadingMore, hasMore, error } ),
+		feedState: reactive( { items, isLoading, isLoadingMore, hasMore, isIncomplete, error } ),
 		load,
 		loadMore
 	};

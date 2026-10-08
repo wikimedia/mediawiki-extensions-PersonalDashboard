@@ -122,6 +122,14 @@ class FeedHandler extends Handler {
 			),
 		];
 
+		$incomplete = array_values( array_filter(
+			$live,
+			static fn ( string $name ) => !$results[$name]->complete
+		) );
+		if ( $incomplete ) {
+			$response['incomplete'] = $incomplete;
+		}
+
 		$next = [];
 		$movedOn = false;
 		foreach ( $live as $name ) {
@@ -231,6 +239,11 @@ class FeedHandler extends Handler {
 				'continue' => [
 					'type' => 'string',
 					'x-i18n-description' => 'personal-dashboard-rest-schema-desc-feed-continue',
+				],
+				'incomplete' => [
+					'type' => 'array',
+					'items' => [ 'type' => 'string' ],
+					'x-i18n-description' => 'personal-dashboard-rest-schema-desc-feed-incomplete',
 				],
 			],
 		];

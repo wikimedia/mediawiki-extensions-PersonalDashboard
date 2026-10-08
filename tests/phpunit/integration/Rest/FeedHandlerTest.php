@@ -80,9 +80,10 @@ class FeedHandlerTest extends MediaWikiIntegrationTestCase {
 	private function source(
 		array $items,
 		bool $mayHaveMore = false,
-		?array $itemSchema = null
+		?array $itemSchema = null,
+		bool $complete = true
 	): IFeedSource {
-		return new class( $items, $mayHaveMore, $itemSchema ) implements IFeedSource {
+		return new class( $items, $mayHaveMore, $itemSchema, $complete ) implements IFeedSource {
 			public ?FeedRequest $seen = null;
 			public string $name = '';
 
@@ -90,12 +91,13 @@ class FeedHandlerTest extends MediaWikiIntegrationTestCase {
 				private readonly array $items,
 				private readonly bool $mayHaveMore,
 				private readonly ?array $itemSchema,
+				private readonly bool $complete,
 			) {
 			}
 
 			public function getItems( FeedRequest $request ): FeedSourceResult {
 				$this->seen = $request;
-				return new FeedSourceResult( $this->items, $this->mayHaveMore );
+				return new FeedSourceResult( $this->items, $this->mayHaveMore, $this->complete );
 			}
 
 			public function setName( string $name ): void {
@@ -188,6 +190,41 @@ class FeedHandlerTest extends MediaWikiIntegrationTestCase {
 			[ 'a1', 'b1', 'a2' ],
 			array_column( $data['items'], 'key' )
 		);
+	}
+
+	public function testNamesTheSourcesThatCameBackIncomplete(): void {
+		// Listed in request order, and regardless of the other sources having
+		// items to show.
+		$handler = $this->newHandler( [
+			'alpha' => $this->source( [], complete: false ),
+			'beta' => $this->source( [ $this->item( 'beta', 'b1', '2026-03-10T11:00:00Z' ) ] ),
+			'gamma' => $this->source( [], complete: false ),
+		] );
+
+		$data = $this->executeHandlerAndGetBodyData(
+			$handler,
+			$this->request( 'gamma|beta|alpha', [ 'limit' => '10' ] ),
+			[], [], [], [],
+			$this->viewer()
+		);
+
+		$this->assertSame( [ 'gamma', 'alpha' ], $data['incomplete'] );
+		$this->assertSame( [ 'b1' ], array_column( $data['items'], 'key' ) );
+	}
+
+	public function testOmitsIncompleteWhenEverySourceWasRead(): void {
+		$handler = $this->newHandler( [
+			'alpha' => $this->source( [ $this->item( 'alpha', 'a1', '2026-03-10T12:00:00Z' ) ] ),
+		] );
+
+		$data = $this->executeHandlerAndGetBodyData(
+			$handler,
+			$this->request( 'alpha', [ 'limit' => '10' ] ),
+			[], [], [], [],
+			$this->viewer()
+		);
+
+		$this->assertArrayNotHasKey( 'incomplete', $data );
 	}
 
 	public function testTurnsAwayAnAnonymousViewer(): void {
@@ -549,6 +586,7 @@ class FeedHandlerTest extends MediaWikiIntegrationTestCase {
 			$schema['properties']['items']['items']['oneOf']
 		);
 		$this->assertSame( 'string', $schema['properties']['continue']['type'] );
+		$this->assertSame( 'array', $schema['properties']['incomplete']['type'] );
 	}
 
 	public function testSourcesSharingAnItemShapeAreDescribedOnce(): void {

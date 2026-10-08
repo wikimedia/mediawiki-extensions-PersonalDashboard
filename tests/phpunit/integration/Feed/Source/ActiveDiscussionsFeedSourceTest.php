@@ -242,6 +242,7 @@ class ActiveDiscussionsFeedSourceTest extends MediaWikiIntegrationTestCase {
 
 		$this->assertSame( [ 'activediscussions-11-h-a' ], self::idsOf( $result->items ) );
 		$this->assertFalse( $result->mayHaveMore );
+		$this->assertFalse( $result->complete );
 	}
 
 	public function testKeepsTheOtherPagesWhenOneOfThemThrows(): void {
@@ -254,6 +255,17 @@ class ActiveDiscussionsFeedSourceTest extends MediaWikiIntegrationTestCase {
 
 		$this->assertSame( [ 'activediscussions-11-h-a' ], self::idsOf( $result->items ) );
 		$this->assertFalse( $result->mayHaveMore );
+		$this->assertFalse( $result->complete );
+	}
+
+	public function testIsCompleteWhenEveryPageWasRead(): void {
+		$this->threadsByPage['Village_pump'] = new DiscussionThreadResult( [
+			self::newThread( 'h-a', '2026-03-11T12:00:00Z' ),
+		], true );
+
+		$result = $this->newSource( self::TALK_PAGES )->getItems( $this->newRequest( 10 ) );
+
+		$this->assertTrue( $result->complete );
 	}
 
 	public function testSkipsAPageTheViewerMayNotRead(): void {
@@ -268,6 +280,7 @@ class ActiveDiscussionsFeedSourceTest extends MediaWikiIntegrationTestCase {
 
 		$this->assertSame( [], $result->items );
 		$this->assertFalse( $result->mayHaveMore );
+		$this->assertTrue( $result->complete );
 	}
 
 	public function testSkipsAPageNameThePageStoreCannotResolve(): void {

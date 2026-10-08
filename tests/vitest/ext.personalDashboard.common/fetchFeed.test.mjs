@@ -73,14 +73,26 @@ test( 'returns the items and the token for the next page', async () => {
 	get.mockResolvedValue( { items, continue: 'token-1' } );
 
 	expect( await fetchFeed( [ 'recentchanges' ], 10, null ) )
-		.toStrictEqual( { items, continuation: 'token-1' } );
+		.toStrictEqual( { items, continuation: 'token-1', incomplete: false } );
 } );
 
 test( 'returns no token once every source is spent', async () => {
 	get.mockResolvedValue( {} );
 
 	expect( await fetchFeed( [ 'recentchanges' ], 10, null ) )
-		.toStrictEqual( { items: [], continuation: null } );
+		.toStrictEqual( { items: [], continuation: null, incomplete: false } );
+} );
+
+test( 'reports a feed that left a source out', async () => {
+	get.mockResolvedValue( { items: [], incomplete: [ 'activediscussions' ] } );
+
+	expect( ( await fetchFeed( [ 'activediscussions' ], 10, null ) ).incomplete ).toBe( true );
+} );
+
+test( 'does not report an empty incomplete list', async () => {
+	get.mockResolvedValue( { items: [], incomplete: [] } );
+
+	expect( ( await fetchFeed( [ 'activediscussions' ], 10, null ) ).incomplete ).toBe( false );
 } );
 
 test( 'rejects with the wiki message for the failure', async () => {

@@ -10,5 +10,6 @@
 	"personal-dashboard-multi-step-dialog-previous-button": "Previous",
 	"personal-dashboard-multi-step-dialog-got-it-button": "Got it",
 	"personal-dashboard-feed-error": "Error $1",
+	"personal-dashboard-feed-incomplete": "Couldn't load this right now. Try again later.",
 	"personal-dashboard-feed-load-more": "Show more"
 }

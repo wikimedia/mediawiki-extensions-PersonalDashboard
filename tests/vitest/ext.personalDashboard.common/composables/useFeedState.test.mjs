@@ -231,6 +231,60 @@ test( 'ignores a load while a further page is in flight', async () => {
 	expect( feedState.isLoadingMore ).toBe( false );
 } );
 
+test( 'a first load takes isIncomplete from the page, and a later one clears it', async () => {
+	let incomplete = true;
+	const { feedState, load } = useFeedState(
+		async () => ( { items: [], continuation: null, incomplete } )
+	);
+
+	expect( feedState.isIncomplete ).toBe( false );
+
+	await load();
+	expect( feedState.isIncomplete ).toBe( true );
+
+	incomplete = false;
+	await load();
+	expect( feedState.isIncomplete ).toBe( false );
+} );
+
+test( 'a plain array result is never incomplete', async () => {
+	const { feedState, load } = useFeedState( async () => [] );
+
+	await load();
+
+	expect( feedState.isIncomplete ).toBe( false );
+} );
+
+test( 'a further page leaves isIncomplete alone', async () => {
+	const loader = vi.fn()
+		.mockResolvedValueOnce( { items: [ { id: 'a' } ], continuation: 'token-1', incomplete: true } )
+		.mockResolvedValueOnce( { items: [ { id: 'b' } ], continuation: null, incomplete: false } );
+	const { feedState, load, loadMore } = useFeedState( loader );
+
+	await load( 10 );
+	await loadMore();
+
+	expect( feedState.isIncomplete ).toBe( true );
+} );
+
+test( 'a failed first load leaves isIncomplete false', async () => {
+	vi.spyOn( mw.log, 'error' ).mockImplementation( () => {} );
+	let shouldFail = false;
+	const { feedState, load } = useFeedState( async () => {
+		if ( shouldFail ) {
+			throw new Error( 'boom' );
+		}
+		return { items: [], incomplete: true };
+	} );
+
+	await load();
+	expect( feedState.isIncomplete ).toBe( true );
+
+	shouldFail = true;
+	await load();
+	expect( feedState.isIncomplete ).toBe( false );
+} );
+
 test( 'treats a page with no items as an empty one', async () => {
 	const { feedState, load } = useFeedState( async () => ( { continuation: null } ) );
 

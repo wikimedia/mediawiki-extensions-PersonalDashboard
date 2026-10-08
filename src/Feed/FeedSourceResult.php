@@ -18,15 +18,19 @@ readonly class FeedSourceResult {
 	 * @param bool $mayHaveMore Whether more items may follow the last one here.
 	 *   This is a hint, not a promise: a source that cannot tell cheaply must
 	 *   report true, and the next request may then return nothing.
+	 * @param bool $complete False when the source could not read part of what it
+	 *   covers, so the items are a short answer rather than the whole one.
 	 */
 	public function __construct(
 		public array $items,
 		public bool $mayHaveMore,
+		public bool $complete = true,
 	) {
 	}
 
 	/**
-	 * Build the result for a source that has nothing to contribute.
+	 * Build the result for a source that has nothing to contribute. It is
+	 * complete: there was nothing to read, not something it failed to read.
 	 *
 	 * @return self
 	 */

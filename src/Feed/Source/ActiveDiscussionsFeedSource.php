@@ -123,6 +123,7 @@ class ActiveDiscussionsFeedSource implements IFeedSource {
 	/** @inheritDoc */
 	public function getItems( FeedRequest $request ): FeedSourceResult {
 		$items = [];
+		$complete = true;
 
 		foreach ( $this->getConfiguredPages() as $page ) {
 			if ( !$request->authority->probablyCan( 'read', $page ) ) {
@@ -141,9 +142,11 @@ class ActiveDiscussionsFeedSource implements IFeedSource {
 					'PersonalDashboard: failed to read discussion threads from {page}',
 					[ 'page' => Title::newFromPageIdentity( $page )->getPrefixedText(), 'exception' => $e ]
 				);
+				$complete = false;
 				continue;
 			}
 
+			$complete = $complete && $result->complete;
 			array_push( $items, ...$this->buildItems( $page, $result->threads ) );
 		}
 
@@ -174,7 +177,8 @@ class ActiveDiscussionsFeedSource implements IFeedSource {
 		 */
 		return new FeedSourceResult(
 			array_slice( $items, 0, $request->limit ),
-			count( $items ) > $request->limit
+			count( $items ) > $request->limit,
+			$complete
 		);
 	}
 

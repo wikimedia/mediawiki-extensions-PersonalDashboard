@@ -162,6 +162,7 @@
 				"personal-dashboard-multi-step-dialog-previous-button",
 				"personal-dashboard-multi-step-dialog-got-it-button",
 				"personal-dashboard-feed-error",
+				"personal-dashboard-feed-incomplete",
 				"personal-dashboard-feed-load-more"
 			],
 			"packageFiles": [

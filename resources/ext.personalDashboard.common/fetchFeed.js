@@ -39,7 +39,8 @@ function feedError( code, details ) {
  * @param {number} limit Items per page
  * @param {?string} continuation Token from the page before, or null to start
  *   from the newest items
- * @return {Promise<{items: Object[], continuation: ?string}>}
+ * @return {Promise<{items: Object[], continuation: ?string, incomplete: boolean}>}
+ *   `incomplete` is true when the endpoint names a source it couldn't read in full
  * @throws {Error} If the endpoint refuses the request
  */
 async function fetchFeed( sources, limit, continuation ) {
@@ -59,7 +60,9 @@ async function fetchFeed( sources, limit, continuation ) {
 	return {
 		items: data.items || [],
 		// Absent once every source is spent.
-		continuation: data.continue || null
+		continuation: data.continue || null,
+		// Absent when every source was read in full.
+		incomplete: Array.isArray( data.incomplete ) && data.incomplete.length > 0
 	};
 }
 

@@ -6,6 +6,9 @@
 		<div v-else-if="error">
 			<p>{{ $i18n( 'personal-dashboard-feed-error', error.message ) }}</p>
 		</div>
+		<p v-else-if="!items.length && isIncomplete" class="personal-dashboard-feed__empty">
+			{{ $i18n( 'personal-dashboard-feed-incomplete' ) }}
+		</p>
 		<p v-else-if="!items.length && emptyLabel" class="personal-dashboard-feed__empty">
 			{{ emptyLabel }}
 		</p>
@@ -100,6 +103,12 @@ module.exports = defineComponent( {
 		// Only the full list offers a further page: the summary already ends in
 		// a control that opens that list, and two would compete.
 		hasMore: {
+			type: Boolean,
+			default: false
+		},
+		// A source couldn't be read in full, so an empty list isn't proof that
+		// there is nothing to show.
+		isIncomplete: {
 			type: Boolean,
 			default: false
 		},

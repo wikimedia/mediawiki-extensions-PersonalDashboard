@@ -13,6 +13,7 @@
 	"personal-dashboard-rest-param-desc-feed-continue": "Description of the <code>continue</code> query parameter of the feed REST endpoint, shown in the API documentation.",
 	"personal-dashboard-rest-schema-desc-feed-items": "Description of the <code>items</code> property of the feed REST endpoint's response, shown in the API documentation.",
 	"personal-dashboard-rest-schema-desc-feed-continue": "Description of the <code>continue</code> property of the feed REST endpoint's response, shown in the API documentation. <code>continue</code> is a parameter name and is not translated.",
+	"personal-dashboard-rest-schema-desc-feed-incomplete": "Description of the <code>incomplete</code> property of the feed REST endpoint's response, shown in the API documentation. <code>incomplete</code> is a property name and is not translated.",
 	"personal-dashboard-rest-property-desc-id": "Description of the <code>id</code> property of a feed item, shown in the REST API documentation.",
 	"personal-dashboard-rest-property-desc-feedorigin": "Description of the <code>feedorigin</code> property of a feed item, shown in the REST API documentation. Its value is a source name such as <code>recentchanges</code>, which is not translated.",
 	"personal-dashboard-rest-property-desc-title": "Description of the <code>title</code> property of a feed item, shown in the REST API documentation.",

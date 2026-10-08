@@ -60,6 +60,21 @@ test.each( [
 	expect( wrapper.find( '.personal-dashboard-feed__empty' ).exists() ).toStrictEqual( false );
 } );
 
+test( 'says it could not load, not that there is nothing, when the feed is incomplete and empty', () => {
+	const wrapper = mountPanel( { isIncomplete: true, emptyLabel: 'Nothing here' } );
+
+	const notice = wrapper.find( '.personal-dashboard-feed__empty' );
+	expect( notice.text() ).toContain( 'personal-dashboard-feed-incomplete' );
+	expect( wrapper.text() ).not.toContain( 'Nothing here' );
+} );
+
+test( 'shows the items and no notice when an incomplete feed has items', () => {
+	const wrapper = mountPanel( { isIncomplete: true, items: makeItems( 2 ), detail: 'full' } );
+
+	expect( wrapper.findAll( '.test-item' ) ).toHaveLength( 2 );
+	expect( wrapper.find( '.personal-dashboard-feed__empty' ).exists() ).toStrictEqual( false );
+} );
+
 test( 'renders one item slot per item', () => {
 	const wrapper = mountPanel( { items: makeItems( 2 ), detail: 'full' } );
 

@@ -11,7 +11,7 @@
 					v-if="url"
 					class="personal-dashboard-feed__card__link"
 					:href="url"
-					target="_blank"
+					:target="openInNewTab ? '_blank' : null"
 					:aria-label="ariaLabel"
 					@click="hasVisited = true">
 				</a>
@@ -63,6 +63,11 @@ module.exports = defineComponent( {
 		url: {
 			type: String,
 			default: ''
+		},
+		// When the card is clicked, navigate to the url in a new tab.
+		openInNewTab: {
+			type: Boolean,
+			default: false
 		},
 		// Labels the overlay link, which has no text of its own.
 		ariaLabel: {

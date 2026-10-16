@@ -2,6 +2,7 @@
 	<feed-card
 		class="personal-dashboard-review-changes__card"
 		:url="diffUrl"
+		open-in-new-tab
 		:aria-label="ariaLabel"
 		:data-feedorigin="feedorigin"
 	>

@@ -48,6 +48,19 @@ test( 'covers the card with a labelled link to its destination', () => {
 	const link = wrapper.find( LINK_SELECTOR );
 	expect( link.attributes( 'href' ) ).toStrictEqual( '/wiki/Foo' );
 	expect( link.attributes( 'aria-label' ) ).toStrictEqual( 'Review the edit to Foo' );
+} );
+
+test( 'opens the link in the current tab by default', () => {
+	const wrapper = mountCard( { url: '/wiki/Foo' } );
+
+	const link = wrapper.find( LINK_SELECTOR );
+	expect( link.attributes( 'target' ) ).toBeUndefined();
+} );
+
+test( 'opens the link in a new tab when openInNewTab is set', () => {
+	const wrapper = mountCard( { url: '/wiki/Foo', openInNewTab: true } );
+
+	const link = wrapper.find( LINK_SELECTOR );
 	expect( link.attributes( 'target' ) ).toStrictEqual( '_blank' );
 } );
 

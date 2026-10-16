@@ -2,6 +2,7 @@
 	<feed-card
 		class="personal-dashboard-active-discussions__card"
 		:url="discussionUrl"
+		open-in-new-tab
 		:aria-label="ariaLabel"
 	>
 		<template #header>

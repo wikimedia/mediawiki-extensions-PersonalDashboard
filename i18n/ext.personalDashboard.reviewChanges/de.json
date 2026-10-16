@@ -10,6 +10,7 @@
 	"personal-dashboard-risky-article-edits-list-card-aria-label": "Versionsunterschied für $1 öffnen",
 	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Keine Bearbeitungszusammenfassung",
 	"personal-dashboard-risky-article-edits-progress-bar-aria-label": "eingebetteter Fortschrittsbalken zur Anzeige des Ladevorgangs der zu überprüfenden Änderungen.",
+	"personal-dashboard-review-changes-empty": "Keine Änderungen gefunden",
 	"personal-dashboard-review-changes-major-changes-label": "Größere Änderungen",
 	"personal-dashboard-review-changes-menu-personalization": "Personalisierung",
 	"personal-dashboard-review-changes-personalization-description": "Schlägt basierend auf deinen Bearbeitungsaktivitäten relevante Änderungen vor. [https://www.mediawiki.org/wiki/Home/Recommendations#Review_Changes Mehr erfahren]"

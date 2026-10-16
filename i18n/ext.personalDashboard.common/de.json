@@ -7,5 +7,6 @@
 	"personal-dashboard-multi-step-dialog-previous-button": "Vorherige",
 	"personal-dashboard-multi-step-dialog-got-it-button": "Verstanden",
 	"personal-dashboard-feed-error": "Fehler $1",
+	"personal-dashboard-feed-incomplete": "Diese Seite konnte momentan nicht geladen werden. Bitte versuche es später erneut.",
 	"personal-dashboard-feed-load-more": "Mehr anzeigen"
 }

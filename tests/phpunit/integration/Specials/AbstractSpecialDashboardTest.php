@@ -101,6 +101,9 @@ class AbstractSpecialDashboardTest extends SpecialPageTestBase {
 	 */
 	private ?ScopedCallback $moduleGroupsScope = null;
 
+	/** Keeps the slug alias file fixture registered, the same way. */
+	private ?ScopedCallback $slugAliasFilesScope = null;
+
 	protected function setUp(): void {
 		parent::setUp();
 
@@ -119,6 +122,7 @@ class AbstractSpecialDashboardTest extends SpecialPageTestBase {
 
 	protected function tearDown(): void {
 		$this->moduleGroupsScope = null;
+		$this->slugAliasFilesScope = null;
 		parent::tearDown();
 	}
 
@@ -127,10 +131,12 @@ class AbstractSpecialDashboardTest extends SpecialPageTestBase {
 		?StatsFactory $statsFactory = null
 	): DashboardPageDependencies {
 		$services = $this->getServiceContainer();
+		$dashboardServices = PersonalDashboardServices::wrap( $services );
 		return new DashboardPageDependencies(
-			PersonalDashboardServices::wrap( $services )->getPersonalDashboardModuleFactory(),
+			$dashboardServices->getPersonalDashboardModuleFactory(),
 			$statsFactory ?? $services->getStatsFactory(),
 			$experimentManager,
+			$dashboardServices->getPersonalDashboardSlugAliasLookup(),
 		);
 	}
 
@@ -312,6 +318,71 @@ class AbstractSpecialDashboardTest extends SpecialPageTestBase {
 		// The focused module is named internally: everything client-side keys
 		// on that, the route only ever appears in the URL.
 		$this->assertSame( self::MODULE, $vars['wgPersonalDashboardFocusedModule'] );
+	}
+
+	/**
+	 * Point the slug alias lookup at this directory's fixture and make German
+	 * the content language, so the dashboard publishes German routes.
+	 */
+	private function withGermanSlugs(): void {
+		$this->slugAliasFilesScope = ExtensionRegistry::getInstance()->setAttributeForTest(
+			'PersonalDashboardSlugAliasFiles', [ 'TestSlugs' ] );
+		// Added to the registered files, never substituted for them: every
+		// loaded extension's magic words and aliases come from this same
+		// setting, and replacing it wholesale breaks the parser.
+		$this->overrideConfigValues( [
+			MainConfigNames::LanguageCode => 'de',
+			MainConfigNames::ExtensionMessagesFiles =>
+				[ 'TestSlugs' => __DIR__ . '/fixtures/slugs-de.php' ]
+				+ $this->getConfVar( MainConfigNames::ExtensionMessagesFiles ),
+		] );
+	}
+
+	/**
+	 * A route is part of a page URL, so it reads the same for every viewer of
+	 * the wiki: the content language's first slug, not the viewer's.
+	 */
+	public function testACardLinksAtTheContentLanguagesSlug() {
+		$this->withGermanSlugs();
+
+		[ $html ] = $this->executeSpecialPage(
+			'', null, 'en', ( new TestUser( 'ADashboardUser' ) )->getUser() );
+
+		$this->assertStringContainsString(
+			'PersonalDashboardTestDouble/diskussionen"', $html );
+		$this->assertStringNotContainsString(
+			'PersonalDashboardTestDouble/' . self::LINKED_SLUG, $html );
+	}
+
+	/**
+	 * Every slug resolves, not just the published one: a link minted before the
+	 * translation, or after a later one replaced it, still has to work.
+	 *
+	 * @dataProvider provideGermanSlugs
+	 */
+	public function testEverySlugStillResolves( string $segment ) {
+		$this->withGermanSlugs();
+
+		[ $html ] = $this->executeSpecialPage(
+			$segment, null, null, ( new TestUser( 'ADashboardUser' ) )->getUser() );
+
+		$this->assertStringContainsString(
+			'personal-dashboard-module-header-back-icon', $html );
+		$this->assertStringContainsString(
+			'data-module-name="' . self::MODULE . '"', $html );
+	}
+
+	public static function provideGermanSlugs() {
+		return [
+			'the published slug' => [ 'richtlinien' ],
+			'a second declared slug' => [ 'regeln' ],
+			'in whatever case the link carried' => [ 'Richtlinien' ],
+			// $par reaches execute() from the title's DBkey, so a two-word slug
+			// arrives underscored however the link was written.
+			'a two-word slug, underscored' => [ 'gute_praxis' ],
+			'the canonical slug' => [ self::SLUG ],
+			'the full module name' => [ self::MODULE ],
+		];
 	}
 
 	/**

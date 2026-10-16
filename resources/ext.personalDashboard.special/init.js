@@ -42,7 +42,7 @@ for ( const group of groups ) {
 				name: module.name,
 				// The public route: the group's slug for this module, or its name
 				// where the group named none. The name stays the island's id and
-				// the ResourceLoader module below; only the URL gets the short form.
+				// the ResourceLoader module below; only the URL gets the slug.
 				route: module.route || module.name,
 				header: module.header || '',
 				component: defineAsyncComponent( lazyLoader( module.name ) )

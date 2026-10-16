@@ -418,7 +418,10 @@ abstract class AbstractSpecialDashboard extends SpecialPage {
 			return $this->routeMap;
 		}
 
-		$this->routeMap = ModuleRouteMap::build( $this->getModuleGroups()[ 'groups' ] );
+		$this->routeMap = ModuleRouteMap::build(
+			$this->getModuleGroups()[ 'groups' ],
+			$this->dependencies->slugAliasLookup
+		);
 
 		foreach ( $this->routeMap->getConflicts() as $conflict ) {
 			Util::logText( 'Module route slug refused', $conflict + [

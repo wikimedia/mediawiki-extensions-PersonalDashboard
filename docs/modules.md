@@ -144,12 +144,55 @@ Modules can carry optional per-placement keys such as `"style": "thin"` and `"st
 
 Four rules go with it:
 
-- **The module name is unchanged by it.** The full namespaced name stays the ObjectFactory key, the ResourceLoader module the island lazy-loads, the `pd-slot-<name>` DOM id and the card's `data-module-name`. Only the URL takes the short form.
+- **The module name is unchanged by it.** The full namespaced name stays the ObjectFactory key, the ResourceLoader module the island lazy-loads, the `pd-slot-<name>` DOM id and the card's `data-module-name`. Only the URL takes the slug.
 - **The full name still resolves.** A bookmark or a logged URL from before the slug keeps working; nothing redirects.
 - **A slug is unique within a group, not globally.** Module names are namespaced per extension, so two teams can both route an `impact` on their own dashboards. Declaring a slug another module in the same group already claimed loses: the first claim keeps the route, the loser keeps its own name, and the dashboard logs it.
 - **Give a module the same slug in every group it appears in.** Nothing enforces this across extensions, but an experiment or a `?pdo=` switch moves a reader between groups, and a bookmark that stops resolving is the cost of diverging. [T434346](https://phabricator.wikimedia.org/T434346).
 
 Omit `slug` and the module simply routes at its full name. A module whose card isn't link-wrapped (a banner, the onboarding behavior module) is never routed to and needs none. See [`./routing.md`](./routing.md) for how a segment resolves.
+
+### Localizing a slug
+
+A slug is editorial, so it is translatable, in the style MediaWiki already uses for special page and magic word aliases. The slugs go in BoilerPlate's own `./BoilerPlate.i18n.alias.php`, beside `$specialPageAliases`:
+
+```php
+$personalDashboardSlugAliases = [];
+
+/** English (English) */
+$personalDashboardSlugAliases['en'] = [
+    'example' => [ 'example' ],
+];
+
+/** German (Deutsch) */
+$personalDashboardSlugAliases['de'] = [
+    'example' => [ 'beispiel', 'muster' ],
+];
+```
+
+The key is the canonical slug from the group config; the value is the slugs that resolve to it in that language, the first being the one the dashboard prefers.
+
+Then point Personal Dashboard at that file in BoilerPlate's `./extension.json`:
+
+```json
+"ExtensionMessagesFiles": {
+    "BoilerPlateAlias": "BoilerPlate.i18n.alias.php"
+},
+"attributes": {
+    "PersonalDashboard": {
+        "SlugAliasFiles": [ "BoilerPlateAlias" ]
+    }
+}
+```
+
+An extension with no alias file of its own simply creates one for this. The `ExtensionMessagesFiles` entry is almost certainly there already, for the special page aliases.
+
+The attribute names the `ExtensionMessagesFiles` *key*, not a path. extension.json attributes are merged verbatim while `ExtensionMessagesFiles` values are rewritten to absolute paths, so the indirection is what finds the file in your extension's directory. The attribute merges across extensions, so registering a file needs no change to Personal Dashboard.
+
+Three things to know:
+
+- **Output is content language, input is every language.** The published route is the content language's first slug, walking its fallback chain — or the next one down, if something else in the group already claimed it. A route is part of a page URL: it has to read the same for every viewer, survive being pasted into a wiki page, and not split one module's analytics across a slug per language. Every slug down the chain still *resolves*, as does the canonical slug and the full module name, so a `?uselang=` visitor's bookmark keeps working and so does a link minted before a translation landed.
+- **`LocalisationCache` does not read this global.** `readPHPFile()` keeps only the keys it knows and `$personalDashboardSlugAliases` is not one, so `PersonalDashboardSlugAliasLookup` reads the file itself. Sharing the alias file costs nothing: core already includes it for `$specialPageAliases`.
+- **translatewiki does not manage any of this.** A localized slug arrives as a patch, not a translation export. The same is true of `$specialPageAliases`: the `aliasfile` key in translatewiki's group config is parsed into Translate's group config and then read by nothing, and Special:Magic, which used to write these files back, is gone from Translate and disabled in translatewiki's own settings.
 
 **Register a named group.** For an experiment or opt-in preview, register a new group in BoilerPlate's own `./extension.json` under `PersonalDashboard.ModuleGroups`. GrowthExperiments' `home` group is a working example ([T432039](https://phabricator.wikimedia.org/T432039)).
 

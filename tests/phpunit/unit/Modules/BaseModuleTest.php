@@ -177,7 +177,7 @@ class BaseModuleTest extends MediaWikiUnitTestCase {
 		$this->assertStringContainsString(
 			'href="/wiki/Special:PersonalDashboard/impact"', $html );
 		// The name stays the internal id everywhere the DOM carries it; only the
-		// URL takes the short form.
+		// URL takes the slug.
 		$this->assertStringContainsString(
 			'data-module-name="ext.personalDashboard.impact"', $html );
 		$this->assertStringContainsString( 'id="pd-slot-ext.personalDashboard.impact"', $html );

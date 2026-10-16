@@ -16,6 +16,7 @@ use MediaWiki\Extension\PersonalDashboard\Feed\PersonalDashboardFeedSourceFactor
 use MediaWiki\Extension\PersonalDashboard\Feed\ShortDescriptionPageDescriptionLookup;
 use MediaWiki\Extension\PersonalDashboard\Feed\WikibasePageDescriptionLookup;
 use MediaWiki\Extension\PersonalDashboard\PersonalDashboardModuleFactory;
+use MediaWiki\Extension\PersonalDashboard\Routing\SlugAliasLookup;
 use MediaWiki\Extension\PersonalDashboard\Specials\DashboardPageDependencies;
 use MediaWiki\Logger\LoggerFactory;
 use MediaWiki\MediaWikiServices;
@@ -91,6 +92,7 @@ return [
 			$services->has( 'TestKitchen.ExperimentManager' )
 				? $services->get( 'TestKitchen.ExperimentManager' )
 				: null,
+			$services->get( 'PersonalDashboardSlugAliasLookup' ),
 		);
 	},
 
@@ -133,6 +135,18 @@ return [
 			$services->get( 'ORESThresholdLookup' ),
 			new OresScoreFormatter(),
 			$services->getMainConfig(),
+		);
+	},
+
+	'PersonalDashboardSlugAliasLookup' => static function (
+		MediaWikiServices $services
+	): SlugAliasLookup {
+		return new SlugAliasLookup(
+			$services->getExtensionRegistry(),
+			$services->getMainConfig(),
+			$services->getContentLanguage(),
+			$services->getLanguageFallback(),
+			$services->get( 'PersonalDashboardLogger' ),
 		);
 	},
 

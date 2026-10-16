@@ -37,7 +37,7 @@ final class ModuleRouteMap {
 	/**
 	 * @param array<string,true> $names Internal module names in this group
 	 * @param array<string,string> $byRoute Normalised slug => internal module name
-	 * @param array<string,string> $byModule Internal module name => emitted route
+	 * @param array<string,string> $byModule Internal module name => published slug
 	 * @param list<array<string,string>> $conflicts Refused slugs, for the caller to log
 	 */
 	private function __construct(
@@ -55,10 +55,15 @@ final class ModuleRouteMap {
 	 * whose supports() is false still has a route. Whether it renders stays the
 	 * special page's question.
 	 *
+	 * Canonical slugs are registered before any localized slug, so a canonical
+	 * slug always outranks another module's alias however the group ordered
+	 * them. Pass no lookup and the map is the canonical slugs alone.
+	 *
 	 * @param array $groups The `groups` tree of a registered module group
+	 * @param ?SlugAliasLookup $aliases Localized slugs for the canonical ones
 	 * @return self
 	 */
-	public static function build( array $groups ): self {
+	public static function build( array $groups, ?SlugAliasLookup $aliases = null ): self {
 		$names = [];
 		$entries = [];
 
@@ -77,11 +82,13 @@ final class ModuleRouteMap {
 			}
 		}
 
+		$aliasTable = $aliases ? $aliases->getAliases() : [];
 		$byRoute = [];
 		$byModule = [];
 		$conflicts = [];
 		$slugged = [];
 
+		// Pass one: the identity routes and the canonical slugs.
 		foreach ( $entries as [ $name, $slug ] ) {
 			$byModule[$name] ??= $name;
 
@@ -127,7 +134,51 @@ final class ModuleRouteMap {
 
 			$byRoute[$key] = $name;
 			$byModule[$name] = $slug;
-			$slugged[$name] = true;
+			$slugged[$name] = $slug;
+		}
+
+		// Pass two: the localized slugs of the canonical ones that survived
+		// pass one. A localized slug is whatever a translator wrote, so it is
+		// held only to the rules a URL segment cannot do without.
+		foreach ( $slugged as $name => $slug ) {
+			foreach ( $aliasTable[$slug] ?? [] as $alias ) {
+				$key = self::normalize( $alias );
+
+				if ( $key === '' || str_contains( $alias, '/' ) || isset( $names[$alias] ) ) {
+					$conflicts[] = [ 'slug' => $alias, 'module' => $name, 'reason' => 'malformed-alias' ];
+					continue;
+				}
+
+				if ( isset( $byRoute[$key] ) ) {
+					// Already this module's, from its canonical slug or an
+					// earlier alias: nothing to report, nothing to do.
+					if ( $byRoute[$key] !== $name ) {
+						$conflicts[] = [
+							'slug' => $alias,
+							'module' => $name,
+							'claimedBy' => $byRoute[$key],
+							'reason' => 'duplicate-alias',
+						];
+					}
+					continue;
+				}
+
+				$byRoute[$key] = $name;
+			}
+		}
+
+		// Pass three: publish the first localized slug that resolve() really
+		// does answer with this module. Choosing before pass two had its say
+		// let a module publish a slug that pass two then refused, so the card
+		// linked at a route that opened another module, or nothing at all.
+		// Where no localized slug survives, pass one's canonical slug stands.
+		foreach ( $slugged as $name => $slug ) {
+			foreach ( $aliasTable[$slug] ?? [] as $alias ) {
+				if ( ( $byRoute[ self::normalize( $alias ) ] ?? null ) === $name ) {
+					$byModule[$name] = $alias;
+					break;
+				}
+			}
 		}
 
 		return new self( $names, $byRoute, $byModule, $conflicts );
@@ -158,8 +209,9 @@ final class ModuleRouteMap {
 	}
 
 	/**
-	 * The route this module is published at: its slug where the group gave it
-	 * one, its own name otherwise. Both resolve.
+	 * The slug this module is published at: its group's slug, localized where
+	 * a localized one resolves back to it, or its own name where the group
+	 * gave it none. Every one of those resolves.
 	 *
 	 * @param string $moduleName Internal module name
 	 * @return string

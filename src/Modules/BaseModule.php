@@ -28,7 +28,7 @@ abstract class BaseModule implements IModule, MessageLocalizer {
 	 * @var ?string The public route segment this module is reached at: the slug
 	 * its module group gave it, or null to fall back to the module name. The
 	 * name stays the internal id everywhere else (the DOM slot, the ObjectFactory
-	 * key, the ResourceLoader module); only the URL gets the short form.
+	 * key, the ResourceLoader module); only the URL gets the slug.
 	 */
 	private ?string $route = null;
 
@@ -186,7 +186,7 @@ abstract class BaseModule implements IModule, MessageLocalizer {
 			$linkAttribs = [
 				// The route, not the name: the slug is what the URL publishes.
 				// Encoded because a localized slug is not necessarily ASCII, and
-				// underscored because that is the form a subpage takes in a title.
+				// underscored because that is how a title spells a subpage segment.
 				'href' => $this->getPageURL() . '/'
 					. wfUrlencode( strtr( $this->getRoute(), ' ', '_' ) )
 			];

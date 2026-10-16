@@ -128,7 +128,14 @@ module.exports = defineComponent( {
 			}
 			const key = normaliseRoute( segment );
 			const island = this.islands.find( ( i ) => i.name === segment ) ||
-				this.islands.find( ( i ) => normaliseRoute( i.route ) === key );
+				this.islands.find( ( i ) => normaliseRoute( i.route ) === key ) ||
+				// The client knows only the slug the dashboard publishes, while
+				// the server resolves every localized slug for it. So where the
+				// server named a module for this very URL and
+				// we can't place the segment, take its word: a link carrying a
+				// non-published alias would otherwise load the focused page and
+				// then open no dialog over it at a narrow viewport.
+				this.islands.find( ( i ) => i.name === this.focusedModule );
 			return island ? island.name : '';
 		},
 		activeHeader() {

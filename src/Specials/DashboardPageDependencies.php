@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace MediaWiki\Extension\PersonalDashboard\Specials;
 
 use MediaWiki\Extension\PersonalDashboard\PersonalDashboardModuleFactory;
+use MediaWiki\Extension\PersonalDashboard\Routing\SlugAliasLookup;
 use MediaWiki\Extension\TestKitchen\Sdk\ExperimentManagerInterface;
 use Wikimedia\Stats\StatsFactory;
 
@@ -27,11 +28,14 @@ final readonly class DashboardPageDependencies {
 	 * @param StatsFactory $statsFactory
 	 * @param ?ExperimentManagerInterface $experimentManager TestKitchen's
 	 *   enrollment reader, or null where TestKitchen is not installed
+	 * @param ?SlugAliasLookup $slugAliasLookup Localized module route slugs,
+	 *   or null to route at the canonical slugs alone
 	 */
 	public function __construct(
 		public PersonalDashboardModuleFactory $moduleFactory,
 		public StatsFactory $statsFactory,
 		public ?ExperimentManagerInterface $experimentManager = null,
+		public ?SlugAliasLookup $slugAliasLookup = null,
 	) {
 	}
 }

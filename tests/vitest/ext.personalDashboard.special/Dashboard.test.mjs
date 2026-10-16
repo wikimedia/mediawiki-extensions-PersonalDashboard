@@ -176,6 +176,27 @@ test( 'an island with no slug still routes at its own name', () => {
 	expect( dialog.props( 'title' ) ).toBe( 'One' );
 } );
 
+test( 'a localized alias the client does not know falls back to the server', () => {
+	// The server publishes one slug and resolves every localized slug for it;
+	// the client only ever sees the published one. On a cold load
+	// of an alias the server has already named the module, so take its word.
+	const dialog = mountDashboard( {
+		module: 'zwei',
+		focusedModule: 'ext.example.two',
+		narrow: true
+	} ).findComponent( ModuleDialog );
+	expect( dialog.props( 'open' ) ).toBe( true );
+	expect( dialog.props( 'title' ) ).toBe( 'Two' );
+} );
+
+test( 'an unplaceable segment on the grouped dashboard still opens nothing', () => {
+	// The fallback above is only the server's word on a focused render; with no
+	// focusedModule there is nothing to fall back to.
+	const dialog = mountDashboard( { module: 'zwei', narrow: true } )
+		.findComponent( ModuleDialog );
+	expect( dialog.props( 'open' ) ).toBe( false );
+} );
+
 test( 'no active module leaves the dialog closed and untitled', () => {
 	const dialog = mountDashboard( { narrow: true } ).findComponent( ModuleDialog );
 	expect( dialog.props( 'open' ) ).toBe( false );

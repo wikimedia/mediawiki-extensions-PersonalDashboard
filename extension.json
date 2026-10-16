@@ -412,6 +412,9 @@
 	],
 	"attributes": {
 		"PersonalDashboard": {
+			"SlugAliasFiles": [
+				"PersonalDashboardAlias"
+			],
 			"FeedSources": {
 				"activediscussions": {
 					"class": "MediaWiki\\Extension\\PersonalDashboard\\Feed\\Source\\ActiveDiscussionsFeedSource",

@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace MediaWiki\Extension\PersonalDashboard\Tests\Unit\Routing;
 
 use MediaWiki\Extension\PersonalDashboard\Routing\ModuleRouteMap;
+use MediaWiki\Extension\PersonalDashboard\Routing\SlugAliasLookup;
 use MediaWikiUnitTestCase;
 
 /**
@@ -29,6 +30,17 @@ class ModuleRouteMapTest extends MediaWikiUnitTestCase {
 				],
 			],
 		];
+	}
+
+	/**
+	 * @param array<string,string[]> $aliases Canonical slug => its slugs
+	 * @return SlugAliasLookup
+	 */
+	private function lookup( array $aliases ): SlugAliasLookup {
+		$lookup = $this->createMock( SlugAliasLookup::class );
+		$lookup->method( 'getAliases' )->willReturn( $aliases );
+
+		return $lookup;
 	}
 
 	public function testASlugResolvesToItsModule() {
@@ -79,7 +91,7 @@ class ModuleRouteMapTest extends MediaWikiUnitTestCase {
 	 *
 	 * @dataProvider provideEquivalentSegments
 	 */
-	public function testASlugMatchesEveryFormOfItself( string $segment ) {
+	public function testASlugMatchesEverySpellingOfItself( string $segment ) {
 		$map = ModuleRouteMap::build( $this->groups( [
 			[ 'name' => 'ext.example.impact', 'enabled' => true, 'slug' => 'my-impact' ],
 		] ) );
@@ -206,5 +218,166 @@ class ModuleRouteMapTest extends MediaWikiUnitTestCase {
 		] ) );
 
 		$this->assertNull( $map->resolve( 'impact' ) );
+	}
+
+	public function testALocalizedSlugResolvesAndIsWhatGetsPublished() {
+		$map = ModuleRouteMap::build(
+			$this->groups( [
+				[ 'name' => 'ext.example.impact', 'enabled' => true, 'slug' => 'impact' ],
+			] ),
+			$this->lookup( [ 'impact' => [ 'wirkung', 'auswirkung' ] ] )
+		);
+
+		// The content language's first slug is the one the card links to.
+		$this->assertSame( 'wirkung', $map->routeFor( 'ext.example.impact' ) );
+		// Every slug resolves, the canonical one included, so a link that was
+		// minted before the translation keeps working.
+		$this->assertSame( 'ext.example.impact', $map->resolve( 'wirkung' ) );
+		$this->assertSame( 'ext.example.impact', $map->resolve( 'auswirkung' ) );
+		$this->assertSame( 'ext.example.impact', $map->resolve( 'impact' ) );
+		$this->assertSame( 'ext.example.impact', $map->resolve( 'ext.example.impact' ) );
+	}
+
+	public function testALocalizedSlugIsMatchedUnderscoredAndInAnyCase() {
+		$map = ModuleRouteMap::build(
+			$this->groups( [
+				[ 'name' => 'ext.example.impact', 'enabled' => true, 'slug' => 'impact' ],
+			] ),
+			$this->lookup( [ 'impact' => [ 'tác động' ] ] )
+		);
+
+		$this->assertSame( 'ext.example.impact', $map->resolve( 'tác_động' ) );
+		$this->assertSame( 'ext.example.impact', $map->resolve( 'Tác Động' ) );
+	}
+
+	/**
+	 * Canonical slugs are registered before any localized slug, whatever order
+	 * the group listed the modules in, so a canonical slug always wins.
+	 */
+	public function testACanonicalSlugOutranksAnotherModulesAlias() {
+		$map = ModuleRouteMap::build(
+			$this->groups( [
+				[ 'name' => 'ext.one.work', 'enabled' => true, 'slug' => 'work' ],
+				[ 'name' => 'ext.two.impact', 'enabled' => true, 'slug' => 'impact' ],
+			] ),
+			$this->lookup( [ 'work' => [ 'work', 'impact' ] ] )
+		);
+
+		$this->assertSame( 'ext.two.impact', $map->resolve( 'impact' ) );
+		$this->assertSame( 'duplicate-alias', $map->getConflicts()[0]['reason'] );
+	}
+
+	public function testASlugThatWouldEatTheSubPathIsRefused() {
+		$map = ModuleRouteMap::build(
+			$this->groups( [
+				[ 'name' => 'ext.example.impact', 'enabled' => true, 'slug' => 'impact' ],
+			] ),
+			$this->lookup( [ 'impact' => [ 'my/impact' ] ] )
+		);
+
+		// Neither published nor resolvable; the canonical slug carries on.
+		$this->assertSame( 'impact', $map->routeFor( 'ext.example.impact' ) );
+		$this->assertSame( 'ext.example.impact', $map->resolve( 'impact' ) );
+		$this->assertNull( $map->resolve( 'my/impact' ) );
+		// Refused once, by pass two. It used to be reported twice, because
+		// the published slug was chosen before pass two could refuse it.
+		$this->assertSame(
+			[ 'malformed-alias' ],
+			array_column( $map->getConflicts(), 'reason' )
+		);
+	}
+
+	public function testASlugSpelledLikeAModuleInTheGroupIsRefused() {
+		$map = ModuleRouteMap::build(
+			$this->groups( [
+				[ 'name' => 'impact', 'enabled' => true ],
+				[ 'name' => 'ext.example.work', 'enabled' => true, 'slug' => 'work' ],
+			] ),
+			$this->lookup( [ 'work' => [ 'work', 'impact' ] ] )
+		);
+
+		$this->assertSame( 'impact', $map->resolve( 'impact' ) );
+		$this->assertSame( 'malformed-alias', $map->getConflicts()[0]['reason'] );
+	}
+
+	/**
+	 * A module publishes only a slug that resolves back to itself.
+	 *
+	 * The preferred slug is whatever the alias file lists first, and pass two
+	 * can refuse exactly that one. Publishing it anyway pointed the card at a
+	 * route that opened another module, or nothing. Each case below lists the
+	 * doomed slug first, which is what makes it a regression test.
+	 *
+	 * @dataProvider provideUnpublishableFirstSlugs
+	 */
+	public function testAModulePublishesOnlyASlugThatResolvesBackToIt(
+		array $modules, array $aliases, string $module, string $expected
+	) {
+		$map = ModuleRouteMap::build( $this->groups( $modules ), $this->lookup( $aliases ) );
+
+		$this->assertSame( $expected, $map->routeFor( $module ) );
+		// Whatever it publishes has to come back to it.
+		$this->assertSame( $module, $map->resolve( $map->routeFor( $module ) ) );
+	}
+
+	public static function provideUnpublishableFirstSlugs() {
+		$work = [ 'name' => 'ext.one.work', 'enabled' => true, 'slug' => 'work' ];
+
+		return [
+			'first slug is another module\'s canonical slug' => [
+				[ $work, [ 'name' => 'ext.two.impact', 'enabled' => true, 'slug' => 'impact' ] ],
+				[ 'work' => [ 'impact', 'work' ] ],
+				'ext.one.work',
+				'work',
+			],
+			'first slug is the name of a module in the group' => [
+				[ $work, [ 'name' => 'impact', 'enabled' => true ] ],
+				[ 'work' => [ 'impact', 'work' ] ],
+				'ext.one.work',
+				'work',
+			],
+			'first slug was already claimed by another module\'s alias' => [
+				[
+					[ 'name' => 'ext.one.a', 'enabled' => true, 'slug' => 'a' ],
+					[ 'name' => 'ext.two.b', 'enabled' => true, 'slug' => 'b' ],
+				],
+				[ 'a' => [ 'x' ], 'b' => [ 'X' ] ],
+				'ext.two.b',
+				'b',
+			],
+			'first slug normalises to nothing' => [
+				[ [ 'name' => 'ext.one.a', 'enabled' => true, 'slug' => 'a' ] ],
+				[ 'a' => [ '_' ] ],
+				'ext.one.a',
+				'a',
+			],
+		];
+	}
+
+	/**
+	 * The companion to the above: where the preferred slug is fine, it is the
+	 * one published, and a later slug does not steal the job.
+	 */
+	public function testThePreferredSlugIsPublishedWhenNothingRefusesIt() {
+		$map = ModuleRouteMap::build(
+			$this->groups( [
+				[ 'name' => 'ext.one.work', 'enabled' => true, 'slug' => 'work' ],
+			] ),
+			$this->lookup( [ 'work' => [ 'arbeit', 'werk' ] ] )
+		);
+
+		$this->assertSame( 'arbeit', $map->routeFor( 'ext.one.work' ) );
+	}
+
+	public function testAModuleWithNoDeclaredSlugGainsNoLocalizedOnes() {
+		$map = ModuleRouteMap::build(
+			$this->groups( [
+				[ 'name' => 'ext.example.impact', 'enabled' => true ],
+			] ),
+			$this->lookup( [ 'impact' => [ 'wirkung' ] ] )
+		);
+
+		$this->assertNull( $map->resolve( 'wirkung' ) );
+		$this->assertSame( 'ext.example.impact', $map->routeFor( 'ext.example.impact' ) );
 	}
 }

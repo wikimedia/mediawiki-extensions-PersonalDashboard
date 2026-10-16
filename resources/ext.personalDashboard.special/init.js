@@ -40,6 +40,10 @@ for ( const group of groups ) {
 			}
 			islands.push( {
 				name: module.name,
+				// The public route: the group's slug for this module, or its name
+				// where the group named none. The name stays the island's id and
+				// the ResourceLoader module below; only the URL gets the short form.
+				route: module.route || module.name,
 				header: module.header || '',
 				component: defineAsyncComponent( lazyLoader( module.name ) )
 			} );
@@ -51,9 +55,11 @@ const router = createRouter( {
 	history: createMediaWikiHistory(),
 	routes: [
 		{
-			// The module name is the whole route: it is the page subpage ($par on
-			// the server), the focused page a card falls through to with no JS, and
-			// the island the dashboard app opens in a dialog. A step within a module
+			// The module's route is the whole path: it is the page subpage ($par
+			// on the server), the focused page a card falls through to with no JS,
+			// and the island the dashboard app opens in a dialog. That route is the
+			// group's slug for the module, with the full module name still
+			// resolving behind it. A step within a module
 			// (the policies walkthrough's policy) rides in the URL hash, which the
 			// module reads for itself; the dashboard app never reads the hash. The
 			// greedy (.*) matches any subpage, even an unknown or multi-segment one,

@@ -138,11 +138,16 @@ module.exports = defineComponent( {
 			default: 'viewport',
 			validator: ( value ) => [ 'card', 'viewport' ].includes( value )
 		},
-		// The module name, which is also its route: the footer control pushes it
-		// to open this module's full list.
-		moduleName: {
+		// This module's public route, which the footer control pushes to open
+		// its full list. It is the slug the module group gave the module, not
+		// the module name: a slug belongs to a placement, so the dashboard app
+		// resolves it and hands it down through $attrs rather than the module
+		// naming its own. Optional like the other props that arrive that way,
+		// so a module mounted outside the dashboard still renders; the footer
+		// control then has nowhere to go and says so by doing nothing.
+		route: {
 			type: String,
-			required: true
+			default: ''
 		},
 		footerLabel: {
 			type: String,
@@ -205,7 +210,10 @@ module.exports = defineComponent( {
 	},
 	methods: {
 		openFullList() {
-			this.$router.push( '/' + this.moduleName );
+			if ( !this.route ) {
+				return;
+			}
+			this.$router.push( '/' + this.route );
 		}
 	}
 } );

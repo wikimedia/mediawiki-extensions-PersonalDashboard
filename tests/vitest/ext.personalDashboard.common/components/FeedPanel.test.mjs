@@ -12,7 +12,7 @@ function mountPanel( props = {}, options = {} ) {
 	return mount( FeedPanel, {
 		props: Object.assign( {
 			items: [],
-			moduleName: 'ext.test.feed',
+			route: 'feed',
 			footerLabel: 'Show more'
 		}, props ),
 		slots: {
@@ -134,7 +134,7 @@ test( 'hands the item and the viewport to the slot', () => {
 	const wrapper = mount( FeedPanel, {
 		props: {
 			items: makeItems( 1 ),
-			moduleName: 'ext.test.feed',
+			route: 'feed',
 			footerLabel: 'Show more',
 			isNarrow: true
 		},
@@ -180,7 +180,24 @@ test( 'the footer control routes to the module', async () => {
 
 	await wrapper.find( '.personal-dashboard-feed__summary-footer' ).trigger( 'click' );
 
-	expect( push ).toHaveBeenCalledWith( '/ext.test.feed' );
+	expect( push ).toHaveBeenCalledWith( '/feed' );
+} );
+
+test( 'the footer control goes nowhere when no route reached the panel', async () => {
+	// A module mounted outside the dashboard app is handed no route, so the
+	// control must not push a path built out of nothing.
+	const push = vi.fn();
+	const wrapper = mountPanel( { items: makeItems( 5 ), detail: 'compact', route: '' }, {
+		global: {
+			mocks: {
+				$router: { push }
+			}
+		}
+	} );
+
+	await wrapper.find( '.personal-dashboard-feed__summary-footer' ).trigger( 'click' );
+
+	expect( push ).not.toHaveBeenCalled();
 } );
 
 test( 'hides the footer control while loading, even with enough items to summarize', () => {

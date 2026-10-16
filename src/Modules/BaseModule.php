@@ -25,6 +25,14 @@ abstract class BaseModule implements IModule, MessageLocalizer {
 	private ?string $pageURL = null;
 
 	/**
+	 * @var ?string The public route segment this module is reached at: the slug
+	 * its module group gave it, or null to fall back to the module name. The
+	 * name stays the internal id everywhere else (the DOM slot, the ObjectFactory
+	 * key, the ResourceLoader module); only the URL gets the short form.
+	 */
+	private ?string $route = null;
+
+	/**
 	 * @var bool Whether the module is rendering as the whole focused page.
 	 */
 	private bool $focused = false;
@@ -71,6 +79,25 @@ abstract class BaseModule implements IModule, MessageLocalizer {
 	/** @inheritDoc */
 	public function setName( string $name ): void {
 		$this->name = $name;
+	}
+
+	/**
+	 * Set the public route segment this module is reached at. The special page
+	 * resolves it from the module group and hands it in, because a slug belongs
+	 * to a placement and not to a module: the same module in two groups can
+	 * route at two different slugs.
+	 */
+	public function setRoute( string $route ): void {
+		$this->route = $route;
+	}
+
+	/**
+	 * @return string The public route segment: the group's slug for this module,
+	 * or the module name where the group named none. Both resolve server-side,
+	 * so a link built on either works.
+	 */
+	public function getRoute(): string {
+		return $this->route ?? $this->name;
 	}
 
 	/**
@@ -157,7 +184,11 @@ abstract class BaseModule implements IModule, MessageLocalizer {
 
 		if ( $this->shouldWrapModuleWithLink() ) {
 			$linkAttribs = [
-				'href' => $this->getPageURL() . '/' . $this->name
+				// The route, not the name: the slug is what the URL publishes.
+				// Encoded because a localized slug is not necessarily ASCII, and
+				// underscored because that is the form a subpage takes in a title.
+				'href' => $this->getPageURL() . '/'
+					. wfUrlencode( strtr( $this->getRoute(), ' ', '_' ) )
 			];
 
 			// Without a header the arrow icon is the link's only content, leaving

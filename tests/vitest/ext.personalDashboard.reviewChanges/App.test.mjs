@@ -191,7 +191,10 @@ test( 'the summary footer opens the module dialog via the router', async () => {
 	feedState.items = Array.from( { length: 5 }, ( _, i ) => makeFeedItem( i ) );
 
 	const push = vi.fn();
+	// route rides in $attrs: the dashboard app resolves this module's slug from
+	// the group it is placed in and hands it down, so the module never names it.
 	const wrapper = mount( RecentActivity, {
+		props: { route: 'review' },
 		global: {
 			mocks: {
 				$router: { push }
@@ -201,7 +204,7 @@ test( 'the summary footer opens the module dialog via the router', async () => {
 
 	await wrapper.find( '.personal-dashboard-feed__summary-footer' ).trigger( 'click' );
 
-	expect( push ).toHaveBeenCalledWith( '/ext.personalDashboard.reviewChanges' );
+	expect( push ).toHaveBeenCalledWith( '/review' );
 } );
 
 describe( 'loading more edits', () => {

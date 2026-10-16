@@ -2,7 +2,6 @@
 	<div ref="moduleRef">
 		<feed-panel
 			v-bind="{ ...$attrs, ...feedState }"
-			module-name="ext.personalDashboard.reviewChanges"
 			:is-narrow="isNarrow"
 			summary-mode="card"
 			footer-id="personal-dashboard-go-to-recentchanges"
@@ -73,10 +72,11 @@ module.exports = defineComponent( {
 		ModuleHeaderMenu,
 		PersonalizationPanel
 	},
-	// The compact/full island props (detail, focused, active) are never declared
-	// here: they ride in $attrs and are forwarded untouched to the scaffold,
-	// which owns the compact/full derivation. This module only decides which
-	// rule it follows, via summary-mode, and hands over the feed contract.
+	// The compact/full island props (detail, focused, active) and the module's
+	// route are never declared here: they ride in $attrs and are forwarded
+	// untouched to the scaffold, which owns the compact/full derivation. This
+	// module only decides which rule it follows, via summary-mode, and hands
+	// over the feed contract.
 	inheritAttrs: false,
 	props: {
 		// Selector for the mount slot in the server-rendered module header, or

@@ -41,8 +41,14 @@ class AbstractSpecialDashboardTest extends SpecialPageTestBase {
 	/** A server-rendered module that needs no services. */
 	private const MODULE = 'ext.personalDashboard.policiesGuidelines';
 
+	/** The route the fixture group publishes MODULE at. */
+	private const SLUG = 'policies';
+
 	/** A module whose card wraps in a link to its own focused subpage. */
 	private const LINKED_MODULE = 'ext.personalDashboard.activeDiscussions';
+
+	/** The route the fixture group publishes LINKED_MODULE at. */
+	private const LINKED_SLUG = 'discussions';
 
 	private const REGISTRY = [
 		'default' => [
@@ -67,8 +73,12 @@ class AbstractSpecialDashboardTest extends SpecialPageTestBase {
 							'name' => 'primary',
 							'enabled' => true,
 							'modules' => [
-								[ 'name' => self::MODULE, 'enabled' => true ],
-								[ 'name' => self::LINKED_MODULE, 'enabled' => true ],
+								[ 'name' => self::MODULE, 'enabled' => true, 'slug' => self::SLUG ],
+								[
+									'name' => self::LINKED_MODULE,
+									'enabled' => true,
+									'slug' => self::LINKED_SLUG,
+								],
 							],
 						],
 					],
@@ -193,9 +203,157 @@ class AbstractSpecialDashboardTest extends SpecialPageTestBase {
 			'', null, null, ( new TestUser( 'ADashboardUser' ) )->getUser() );
 
 		$this->assertStringContainsString(
-			'PersonalDashboardTestDouble/' . self::LINKED_MODULE, $html );
+			'PersonalDashboardTestDouble/' . self::LINKED_SLUG, $html );
 		$this->assertStringNotContainsString(
-			'/Special:PersonalDashboard/' . self::LINKED_MODULE, $html );
+			'/Special:PersonalDashboard/' . self::LINKED_SLUG, $html );
+	}
+
+	/**
+	 * The card link publishes the group's slug, while the DOM keeps naming the
+	 * module by its internal id: the slot the client teleports into, and the
+	 * attribute the click handler reads, are both still the full name.
+	 */
+	public function testACardLinksAtItsSlugButIsStillNamedInternally() {
+		[ $html ] = $this->executeSpecialPage(
+			'', null, null, ( new TestUser( 'ADashboardUser' ) )->getUser() );
+
+		$this->assertStringContainsString(
+			'PersonalDashboardTestDouble/' . self::LINKED_SLUG . '"', $html );
+		$this->assertStringNotContainsString(
+			'PersonalDashboardTestDouble/' . self::LINKED_MODULE, $html );
+		$this->assertStringContainsString(
+			'data-module-name="' . self::LINKED_MODULE . '"', $html );
+		$this->assertStringContainsString( 'pd-slot-' . self::LINKED_MODULE, $html );
+	}
+
+	public function testASlugRendersTheModuleAsTheWholePage() {
+		[ $html ] = $this->executeSpecialPage(
+			self::SLUG, null, null, ( new TestUser( 'ADashboardUser' ) )->getUser() );
+
+		$this->assertStringContainsString(
+			'personal-dashboard-module-header-back-icon', $html );
+		// MODULE is server-rendered, so it has no mount slot; the wrapper's own
+		// data-module-name is what says which module the page is.
+		$this->assertStringContainsString(
+			'data-module-name="' . self::MODULE . '"', $html );
+		// The focused page is one module; the other card is not on it.
+		$this->assertStringNotContainsString(
+			'data-module-name="' . self::LINKED_MODULE . '"', $html );
+	}
+
+	/**
+	 * The fallback the slugs were added behind: a bookmark or a logged URL from
+	 * before them carries the full namespaced name and has to keep resolving.
+	 */
+	public function testTheFullModuleNameStillRendersTheWholePage() {
+		[ $html ] = $this->executeSpecialPage(
+			self::MODULE, null, null, ( new TestUser( 'ADashboardUser' ) )->getUser() );
+
+		$this->assertStringContainsString(
+			'personal-dashboard-module-header-back-icon', $html );
+		$this->assertStringContainsString(
+			'data-module-name="' . self::MODULE . '"', $html );
+		$this->assertStringNotContainsString(
+			'data-module-name="' . self::LINKED_MODULE . '"', $html );
+	}
+
+	public function testAnUnknownSegmentFallsThroughToTheGroupedDashboard() {
+		[ $html ] = $this->executeSpecialPage(
+			'nothing-routes-here', null, null, ( new TestUser( 'ADashboardUser' ) )->getUser() );
+
+		$this->assertStringNotContainsString(
+			'personal-dashboard-module-header-back-icon', $html );
+		$this->assertStringContainsString( 'pd-slot-' . self::LINKED_MODULE, $html );
+	}
+
+	/**
+	 * A slug replaces the first segment and nothing else: what follows is still
+	 * the module's own deep route, which it reads for a no-JS visitor.
+	 */
+	public function testADeepSubPathBehindASlugStillReachesTheModule() {
+		[ $html ] = $this->executeSpecialPage(
+			self::SLUG . '/verifiability',
+			null,
+			null,
+			( new TestUser( 'ADashboardUser' ) )->getUser()
+		);
+
+		// A deep subpath composes the whole dashboard, not the focused page.
+		$this->assertStringNotContainsString(
+			'personal-dashboard-module-header-back-icon', $html );
+		// The accordion the subpath names is the one that opened.
+		$this->assertMatchesRegularExpression(
+			'/id="verifiability"[^>]*\sopen/', $html );
+	}
+
+	/**
+	 * The client is told each module's route so it can push one and match one,
+	 * but the module is still named by its internal id: that name is the
+	 * ResourceLoader module the island lazy-loads.
+	 */
+	public function testTheClientBootstrapCarriesBothNames() {
+		$context = new RequestContext();
+		$context->setRequest( new FauxRequest() );
+		$context->setLanguage( 'en' );
+		$context->setUser( ( new TestUser( 'ADashboardUser' ) )->getUser() );
+		$context->setTitle( SpecialPage::getTitleFor( 'PersonalDashboardTestDouble' ) );
+
+		$this->executeSpecialPage( self::SLUG, null, null, null, false, $context );
+
+		$vars = $context->getOutput()->getJsConfigVars();
+		$modules = $vars['wgPersonalDashboardGroups'][0]['subgroups'][0]['modules'];
+		$routes = array_column( $modules, 'route', 'name' );
+
+		$this->assertSame( self::SLUG, $routes[ self::MODULE ] );
+		$this->assertSame( self::LINKED_SLUG, $routes[ self::LINKED_MODULE ] );
+		// The focused module is named internally: everything client-side keys
+		// on that, the route only ever appears in the URL.
+		$this->assertSame( self::MODULE, $vars['wgPersonalDashboardFocusedModule'] );
+	}
+
+	/**
+	 * A module group is merged from every loaded extension's attributes, so two
+	 * of them can land on the same slug. Report it and keep the first claim,
+	 * rather than fatal on a dashboard that is otherwise fine.
+	 */
+	public function testADuplicateSlugIsLoggedAndTheFirstClaimWins() {
+		// Release setUp()'s registration before taking the attribute over again:
+		// ExtensionRegistry refuses a second live override of the same key.
+		$this->moduleGroupsScope = null;
+		$this->moduleGroupsScope = ExtensionRegistry::getInstance()->setAttributeForTest(
+			'PersonalDashboardModuleGroups',
+			[ 'testDouble' => [
+				'description' => 'Two modules claiming one slug',
+				'version' => 0,
+				'groups' => [ [
+					'name' => 'main',
+					'enabled' => true,
+					'subgroups' => [ [
+						'name' => 'primary',
+						'enabled' => true,
+						'modules' => [
+							[ 'name' => self::MODULE, 'enabled' => true, 'slug' => 'both' ],
+							[ 'name' => self::LINKED_MODULE, 'enabled' => true, 'slug' => 'both' ],
+						],
+					] ],
+				] ],
+			] ]
+		);
+
+		$logger = $this->createMock( LoggerInterface::class );
+		$logger->expects( $this->atLeastOnce() )
+			->method( 'error' )
+			->with( 'Module route slug refused', $this->anything() );
+		$this->setLogger( 'PersonalDashboard', $logger );
+
+		[ $html ] = $this->executeSpecialPage(
+			'both', null, null, ( new TestUser( 'ADashboardUser' ) )->getUser() );
+
+		// The first claim renders as the focused page; the loser keeps its name.
+		$this->assertStringContainsString(
+			'data-module-name="' . self::MODULE . '"', $html );
+		$this->assertStringNotContainsString(
+			'data-module-name="' . self::LINKED_MODULE . '"', $html );
 	}
 
 	public function testBaselineModuleGroupAccessorSelectsTheGroup() {

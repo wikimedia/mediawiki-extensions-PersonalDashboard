@@ -18,9 +18,12 @@ import {
 	FRAME_HEADER_TARGET_ID
 } from '/resources/ext.personalDashboard.special/teleportTargets.js';
 
+// Each island carries its internal name and its public route. 'one' has no slug
+// in its group, so its route is its own name; 'two' has one, which is what keeps
+// the two apart in every route assertion below.
 const islands = [
-	{ name: 'ext.example.one', header: 'One', component: {} },
-	{ name: 'ext.example.two', header: 'Two', component: {} }
+	{ name: 'ext.example.one', route: 'ext.example.one', header: 'One', component: {} },
+	{ name: 'ext.example.two', route: 'two', header: 'Two', component: {} }
 ];
 
 function mountDashboard( {
@@ -137,6 +140,40 @@ test( 'the active module opens and titles the dialog', () => {
 	const dialog = mountDashboard( { module: 'ext.example.two', narrow: true } ).findComponent( ModuleDialog );
 	expect( dialog.props( 'open' ) ).toBe( true );
 	expect( dialog.props( 'title' ) ).toBe( 'Two' );
+} );
+
+test( 'a slug in the path opens the island it routes to', () => {
+	// 'two' is the group's slug for ext.example.two; the internal name never
+	// appears in the URL any more, but everything downstream still keys on it.
+	const dialog = mountDashboard( { module: 'two', narrow: true } ).findComponent( ModuleDialog );
+	expect( dialog.props( 'open' ) ).toBe( true );
+	expect( dialog.props( 'title' ) ).toBe( 'Two' );
+} );
+
+test( 'a full module name still opens its island', () => {
+	// The fallback the slugs were added behind: an old bookmark or a logged URL
+	// carries the full namespaced name and has to keep working.
+	const dialog = mountDashboard( { module: 'ext.example.two', narrow: true } )
+		.findComponent( ModuleDialog );
+	expect( dialog.props( 'open' ) ).toBe( true );
+} );
+
+test( 'a slug matches whatever case the URL carried', () => {
+	const dialog = mountDashboard( { module: 'TwO', narrow: true } ).findComponent( ModuleDialog );
+	expect( dialog.props( 'open' ) ).toBe( true );
+} );
+
+test( 'a segment that is neither a slug nor a module name opens nothing', () => {
+	const dialog = mountDashboard( { module: 'nothing-routes-here', narrow: true } )
+		.findComponent( ModuleDialog );
+	expect( dialog.props( 'open' ) ).toBe( false );
+} );
+
+test( 'an island with no slug still routes at its own name', () => {
+	const dialog = mountDashboard( { module: 'ext.example.one', narrow: true } )
+		.findComponent( ModuleDialog );
+	expect( dialog.props( 'open' ) ).toBe( true );
+	expect( dialog.props( 'title' ) ).toBe( 'One' );
 } );
 
 test( 'no active module leaves the dialog closed and untitled', () => {
@@ -283,7 +320,7 @@ test( 'a mount with no soft nav active never marks the card container replaced',
 
 test( "the frame's back emit pushes the dashboard root", () => {
 	const push = vi.fn();
-	const wrapper = mountDashboard( { module: 'ext.example.two', push } );
+	const wrapper = mountDashboard( { module: 'two', push } );
 	wrapper.findComponent( FocusedFrame ).vm.$emit( 'back' );
 	expect( push ).toHaveBeenCalledWith( '/' );
 } );
@@ -295,7 +332,7 @@ test( 'a card link opens its island in the dialog rather than loading a page', (
 
 	const event = clickOn( icon );
 
-	expect( push ).toHaveBeenCalledWith( '/ext.example.two' );
+	expect( push ).toHaveBeenCalledWith( '/two' );
 	expect( event.defaultPrevented ).toBe( true );
 } );
 
@@ -317,7 +354,7 @@ test( 'a card whose header carries a menu button still opens in the dialog', () 
 
 	const event = clickOn( title );
 
-	expect( push ).toHaveBeenCalledWith( '/ext.example.two' );
+	expect( push ).toHaveBeenCalledWith( '/two' );
 	expect( event.defaultPrevented ).toBe( true );
 } );
 

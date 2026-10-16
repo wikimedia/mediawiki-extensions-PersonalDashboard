@@ -120,8 +120,10 @@ test( 'the summary footer opens the module dialog via the router', async () => {
 	feedState.items = Array.from( { length: 5 }, ( _, i ) => makeItem( i ) );
 
 	const push = vi.fn();
+	// route rides in $attrs: the dashboard app resolves this module's slug from
+	// the group it is placed in and hands it down, so the module never names it.
 	const wrapper = mount( ActiveDiscussions, {
-		props: { detail: 'compact' },
+		props: { detail: 'compact', route: 'discussions' },
 		global: {
 			mocks: {
 				$router: { push }
@@ -131,7 +133,7 @@ test( 'the summary footer opens the module dialog via the router', async () => {
 
 	await wrapper.find( '#personal-dashboard-go-to-active-discussions' ).trigger( 'click' );
 
-	expect( push ).toHaveBeenCalledWith( '/ext.personalDashboard.activeDiscussions' );
+	expect( push ).toHaveBeenCalledWith( '/discussions' );
 } );
 
 test( 'says so when no discussion qualifies', () => {

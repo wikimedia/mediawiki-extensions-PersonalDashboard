@@ -11,6 +11,7 @@ use MediaWiki\Exception\UserNotLoggedIn;
 use MediaWiki\Extension\PersonalDashboard\ExperimentResolver;
 use MediaWiki\Extension\PersonalDashboard\IModule;
 use MediaWiki\Extension\PersonalDashboard\Modules\BaseModule;
+use MediaWiki\Extension\PersonalDashboard\Routing\ModuleRouteMap;
 use MediaWiki\Extension\PersonalDashboard\Util;
 use MediaWiki\Html\Html;
 use MediaWiki\Registration\ExtensionRegistry;
@@ -73,6 +74,9 @@ abstract class AbstractSpecialDashboard extends SpecialPage {
 
 	/** Per-request memo of whether the pdo ModuleGroup override resolved this request's module group. */
 	private bool $pdoOverrideActive = false;
+
+	/** Per-request memo of getRouteMap()'s result. */
+	private ?ModuleRouteMap $routeMap = null;
 
 	public function __construct(
 		private readonly DashboardPageDependencies $dependencies,
@@ -216,21 +220,30 @@ abstract class AbstractSpecialDashboard extends SpecialPage {
 						$module[ $key ] = $value;
 					}
 
+					// The route the client pushes for this module, and matches an
+					// incoming one against. Set after the module's own data so a
+					// module cannot take the key over: the route belongs to the
+					// placement, not to the module.
+					$module[ 'route' ] = $this->getRouteMap()->routeFor( $module[ 'name' ] );
+
 					$out->addJsConfigVars( $resolved->getJsConfigVars() );
 				}
 			}
 		}
 
-		// The first subpage segment names a module. A bare module name is the
-		// isolated focused page: the real page a card's in-body link falls through
-		// to with no JS (a "see examples" link). A deeper subpath instead opens that
-		// module in place within the full dashboard, so the URL composes the whole
-		// page around the deep-linked state (the right policy, the right example)
-		// rather than showing the module alone; the module renders what it owns
-		// server-side and the client router owns anything deeper. An unknown module,
-		// or a subpath behind one that reads none, falls through to the plain grouped
-		// dashboard.
-		[ $moduleName, $subPath ] = array_pad( explode( '/', $par ?? '', 2 ), 2, '' );
+		// The first subpage segment is a module's public route: its group's slug,
+		// or its full name, which keeps resolving so older links survive. A bare
+		// route is the isolated focused page: the real page a card's in-body link
+		// falls through to with no JS (a "see examples" link). A deeper subpath
+		// instead opens that module in place within the full dashboard, so the URL
+		// composes the whole page around the deep-linked state (the right policy,
+		// the right example) rather than showing the module alone; the module
+		// renders what it owns server-side and the client router owns anything
+		// deeper. The route replaces the first segment and nothing else, so
+		// $subPath stays the module's own. An unknown route, or a subpath behind
+		// one that reads none, falls through to the plain grouped dashboard.
+		[ $segment, $subPath ] = array_pad( explode( '/', $par ?? '', 2 ), 2, '' );
+		$moduleName = $this->getRouteMap()->resolve( $segment ) ?? '';
 		$matched = ( $moduleName !== '' && isset( $modules[$moduleName] )
 			&& $modules[$moduleName]->supports() ) ? $modules[$moduleName] : null;
 		$isolated = $matched !== null && $subPath === '';
@@ -388,6 +401,33 @@ abstract class AbstractSpecialDashboard extends SpecialPage {
 		$this->resolvedModuleGroupName = $baseline;
 		$this->resolvedModuleGroup = $registry[ $baseline ];
 		return $this->resolvedModuleGroup;
+	}
+
+	/**
+	 * This request's module group as a route table: which URL segment names
+	 * which module, and which route each module publishes.
+	 *
+	 * Built from the resolved group, so it follows an experiment or a `?pdo=`
+	 * switch for free. A refused slug is logged here rather than inside the
+	 * map, which stays a pure value object: a group is merged from every loaded
+	 * extension's attributes, so a clash is a deploy to report, not a fatal.
+	 */
+	private function getRouteMap(): ModuleRouteMap {
+		if ( $this->routeMap !== null ) {
+			return $this->routeMap;
+		}
+
+		$this->routeMap = ModuleRouteMap::build( $this->getModuleGroups()[ 'groups' ] );
+
+		foreach ( $this->routeMap->getConflicts() as $conflict ) {
+			Util::logText( 'Module route slug refused', $conflict + [
+				'page' => $this->getName(),
+				'moduleGroup' => $this->resolvedModuleGroupName,
+				'origin' => __METHOD__,
+			] );
+		}
+
+		return $this->routeMap;
 	}
 
 	/**
@@ -613,9 +653,14 @@ abstract class AbstractSpecialDashboard extends SpecialPage {
 	private function emitModuleFrame( string $name, IModule $module ): void {
 		$startTime = microtime( true );
 		// getPageTitle(), not getBackLinkTarget(): this is the route base each
-		// module appends its own name to for its focused subpage, so it must
+		// module appends its own route to for its focused subpage, so it must
 		// stay on this dashboard even where the back link points elsewhere.
 		$module->setPageURL( $this->getPageTitle()->getLinkURL() );
+		// The name identifies the module; the route is what its card links to.
+		// Only BaseModule builds that link, so only BaseModule is told.
+		if ( $module instanceof BaseModule ) {
+			$module->setRoute( $this->getRouteMap()->routeFor( $name ) );
+		}
 		$this->getOutput()->addHTML( $this->getModuleRenderHtmlSafe( $module ) );
 		$this->recordModuleRenderingTime( $name, microtime( true ) - $startTime );
 	}

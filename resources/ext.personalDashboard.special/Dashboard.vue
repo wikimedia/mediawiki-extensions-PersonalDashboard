@@ -24,6 +24,7 @@
 			:focused="focused"
 			:is-narrow="islandIsNarrow"
 			:active="active"
+			:route="island.route"
 			:header-target="headerTarget">
 		</component>
 	</island-mount>
@@ -49,6 +50,15 @@ const CARD_CONTAINER = '.personal-dashboard-container';
 // container already holds the one right module, and hiding it would hide the
 // page.
 const CONTAINER_REPLACED = 'personal-dashboard-container__replaced';
+
+/*
+ * Fold a route segment to its comparison key, matching ModuleRouteMap::normalize()
+ * on the server. The same segment reaches us underscored from a path URL and
+ * spaced from a ?title= one, and a slug is matched case-insensitively either way.
+ */
+function normaliseRoute( segment ) {
+	return ( segment || '' ).replace( /_/g, ' ' ).trim().toLowerCase();
+}
 
 /*
  * The click a router link would act on: a primary click, unmodified, that
@@ -105,9 +115,21 @@ module.exports = defineComponent( {
 			 * reading the path rather than the module the server named is what
 			 * lets a narrow dialog close, and what lets serverFocused below tell
 			 * a true server render apart from a soft nav into a different module.
+			 *
+			 * The path carries the island's route (its group's slug), but what
+			 * comes back is always the internal name: every consumer below, and
+			 * focusedModule itself, is keyed on that. The full module name is
+			 * matched first and untransformed, mirroring the server's precedence,
+			 * so an older full-name link still opens its module.
 			 */
-			const name = this.$route.params.module || '';
-			return this.islands.some( ( island ) => island.name === name ) ? name : '';
+			const segment = this.$route.params.module || '';
+			if ( !segment ) {
+				return '';
+			}
+			const key = normaliseRoute( segment );
+			const island = this.islands.find( ( i ) => i.name === segment ) ||
+				this.islands.find( ( i ) => normaliseRoute( i.route ) === key );
+			return island ? island.name : '';
 		},
 		activeHeader() {
 			const active = this.islands.find( ( island ) => island.name === this.activeName );
@@ -197,11 +219,14 @@ module.exports = defineComponent( {
 			);
 			const card = link ? link.closest( '[data-module-name]' ) : null;
 			const name = card ? card.dataset.moduleName : '';
-			if ( !this.islands.some( ( island ) => island.name === name ) ) {
+			// The card names the module, which is the DOM contract and stays the
+			// internal name; what we push is that island's public route.
+			const island = this.islands.find( ( i ) => i.name === name );
+			if ( !island ) {
 				return;
 			}
 			event.preventDefault();
-			this.$router.push( '/' + name );
+			this.$router.push( '/' + island.route );
 		},
 		// The frame only ever shows over a live grouped dashboard, so there's
 		// always something to push back to; unlike the dialog's open setter,

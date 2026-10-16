@@ -6,17 +6,28 @@ See [`./architecture.md`](./architecture.md) for how this fits with the rest of 
 
 `./resources/lib/vue-router` is vendored (core ships `vue` and `pinia` but not `vue-router`). `createMediaWikiHistory()` (`./resources/ext.personalDashboard.special/mediaWikiHistory.js`) binds the router to real MediaWiki subpage URLs rather than a hash router.
 
-## The module-name-as-subpage route
+## The module-as-subpage route
 
-The route is `/:module(.*)`, matching the special page's `$par`. The module name is the whole meaningful part of the route; it's simultaneously:
+The route is `/:module(.*)`, matching the special page's `$par`. Its first segment is the whole meaningful part of the route; it's simultaneously:
 
 - the subpage `AbstractSpecialDashboard::execute()` reads to decide what to render server-side,
 - the destination an expandable card's header links to, and
-- the name `ModuleDialog.vue` opens over the dashboard when a client-side route push carries it.
+- what `ModuleDialog.vue` opens over the dashboard when a client-side route push carries it.
 
-A subpath deeper than the module name (`ext.personalDashboard.policiesGuidelines/neutral-point-of-view`) is a step within that module, not dashboard-app routing: it rides in the URL hash and the module reads it for itself (`BaseModule::acceptsFocusedSubPath()`/`setFocusedSubPath()` server-side for the no-JS destination; the module's own client router for anything deeper). `Dashboard.vue` explicitly keeps the module dialog shut when `$route.hash` is set, so a module's own deep link doesn't collide with the card dialog opening over it.
+A module has two names ([T434346](https://phabricator.wikimedia.org/T434346)):
 
-The router keys on the full module name, which makes for long URLs; shortening them with group-defined slugs is [T434346](https://phabricator.wikimedia.org/T434346).
+| | scope | value |
+|---|---|---|
+| internal id | globally unique | the full namespaced module name. The ObjectFactory key, the ResourceLoader module the island lazy-loads, the `pd-slot-<name>` DOM id, and `data-module-name` on the card. |
+| public route | unique within a group | the short `slug` the module's group entry gives it. The one the dashboard publishes in a URL. |
+
+`ModuleRouteMap` (`./src/Routing/ModuleRouteMap.php`) is that table, built per request from the *resolved* module group, so it follows an experiment or a `?pdo=` switch for free. `resolve()`'s precedence is the whole collision policy: an exact, untransformed module name answers first, so a slug can never shadow a real module — and the internal name therefore goes on resolving as a route of its own, which is what a bookmark or a logged URL minted before the slug relies on. A slug answers second, case-insensitively and with underscores and spaces treated alike, because the same segment reaches us underscored from a path URL and spaced from a `?title=` one. A segment that is neither falls through to the grouped dashboard, as an unrecognized `$par` always has.
+
+Slugs are scoped to a group rather than global because module names are namespaced per extension: two teams can both want `impact` on their own dashboards. A group that declares a malformed or already-claimed slug keeps the first claim and the dashboard logs the rest — a group is merged from every loaded extension's attributes, so a clash is somebody's deploy rather than a programming error. `ModuleGroupSlugsTest` is the dev-time half of that: it holds *this* repo's own declarations to the rule, including that a module keeps one slug across every group, so a bookmark survives the switch that moved the reader between them.
+
+Client-side, each island carries both names: `name` for the ResourceLoader module and the slot, `route` for the URL. `Dashboard.vue`'s `activeName()` maps an incoming segment back to the internal name, so every consumer below it — `serverFocused`, `mountedName`, the teleport targets — still keys on that one id. `normaliseRoute()` there mirrors `ModuleRouteMap::normalize()` byte for byte, which is why both are language-independent rather than content-language folding.
+
+A subpath deeper than the first segment (`policies/neutral-point-of-view`) is a step within that module, not dashboard-app routing: the slug replaces the first segment and nothing else. It rides in the URL hash and the module reads it for itself (`BaseModule::acceptsFocusedSubPath()`/`setFocusedSubPath()` server-side for the no-JS destination; the module's own client router for anything deeper). `Dashboard.vue` explicitly keeps the module dialog shut when `$route.hash` is set, so a module's own deep link doesn't collide with the card dialog opening over it.
 
 ## Reaching a focused module
 

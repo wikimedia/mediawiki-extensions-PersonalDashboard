@@ -147,6 +147,48 @@ class BaseModuleTest extends MediaWikiUnitTestCase {
 		$this->assertStringNotContainsString( 'aria-label', $html );
 	}
 
+	public function testCardHeaderLinksToTheRouteRatherThanTheName() {
+		$module = $this->newModule( true );
+		$module->setName( 'ext.personalDashboard.impact' );
+		$module->setRoute( 'impact' );
+		$module->setPageURL( '/wiki/Special:PersonalDashboard' );
+		$module->headerTextValue = 'Impact';
+
+		$html = $module->callGetHtml();
+
+		$this->assertStringContainsString(
+			'href="/wiki/Special:PersonalDashboard/impact"', $html );
+		// The name stays the internal id everywhere the DOM carries it; only the
+		// URL takes the short form.
+		$this->assertStringContainsString(
+			'data-module-name="ext.personalDashboard.impact"', $html );
+		$this->assertStringContainsString( 'id="pd-slot-ext.personalDashboard.impact"', $html );
+	}
+
+	public function testCardHeaderRouteDefaultsToTheModuleName() {
+		$module = $this->newModule( true );
+		$module->setName( 'ext.personalDashboard.impact' );
+		$module->setPageURL( '/wiki/Special:PersonalDashboard' );
+
+		$this->assertSame( 'ext.personalDashboard.impact', $module->getRoute() );
+		$this->assertStringContainsString(
+			'href="/wiki/Special:PersonalDashboard/ext.personalDashboard.impact"',
+			$module->callGetHtml()
+		);
+	}
+
+	public function testCardHeaderEncodesARouteThatIsNotAscii() {
+		$module = $this->newModule( true );
+		$module->setName( 'ext.personalDashboard.impact' );
+		$module->setRoute( 'tác động' );
+		$module->setPageURL( '/wiki/Special:PersonalDashboard' );
+
+		$this->assertStringContainsString(
+			'href="/wiki/Special:PersonalDashboard/t%C3%A1c_%C4%91%E1%BB%99ng"',
+			$module->callGetHtml()
+		);
+	}
+
 	public function testCardHeaderLinkUsesPageURLNotTheDeepLinkedContextTitle() {
 		// The context title carries whatever subpage is already in the current
 		// URL (a deep-linked module render); getPageURL() is the dashboard's

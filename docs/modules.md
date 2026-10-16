@@ -77,7 +77,7 @@ A feed module renders a list of items with a loading state, an error state, an e
 Four pieces, all exported from `ext.personalDashboard.common`:
 
 - **`useFeedState( loader )`** produces the normalized feed-data contract: `{ items, isLoading, isLoadingMore, hasMore, isIncomplete, error }`, where each item carries a unique `id`. It owns the state transitions a client fetch repeats — flags up, flags down, log and surface the failure — so your loader is just the query. It also owns paging: resolve to a plain array when your feed cannot page, or to `{ items, continuation }` when it can. `loadMore()` then calls your loader again with the same arguments plus the token the last page returned, and adds what comes back below the items already shown. A first load never passes that extra argument, so a loader that cannot page never finds a token in a parameter it declared for something else. A failed page keeps both the items and the token, so the reader can try again. `isIncomplete` is true when the first page reports that a source couldn't be read in full (`{ items, continuation, incomplete }`); only a first load sets it, and `loadMore()` leaves it alone. The contract is what matters, not this helper: a module handed server-normalized data through `getJsData()` satisfies it with a plain object and no fetch layer at all.
-- **`FeedPanel`** is the scaffold. Bind the contract to it, pass `moduleName` (its route, for the footer control) and the label props, and fill its one `#item` slot. It owns the compact/full derivation: pick the rule with `summaryMode`, either `"card"` or `"viewport"` (see [`./render-contract.md`](./render-contract.md)). Don't declare the island props in your module — let them ride in `$attrs` and forward them, so the derivation lives in one place. `hasMore` puts a "Show more" control at the bottom of the full list, never the summary, which already ends in a control of its own; handle its `load-more` event with the pager `useFeedState` gave you. Pass `emptyLabel` to say so when a load succeeds with no items; without it the panel shows nothing. When `isIncomplete` is set and there are no items, the panel shows its own "couldn't load this" message in place of `emptyLabel`.
+- **`FeedPanel`** is the scaffold. Bind the contract to it, pass the label props, and fill its one `#item` slot. Its footer control needs the module's route, but don't pass that either: a slug belongs to a placement, not to a module, so the dashboard app resolves it and hands it down with the other island props. It owns the compact/full derivation: pick the rule with `summaryMode`, either `"card"` or `"viewport"` (see [`./render-contract.md`](./render-contract.md)). Don't declare the island props in your module — let them ride in `$attrs` and forward them, so the derivation lives in one place. `hasMore` puts a "Show more" control at the bottom of the full list, never the summary, which already ends in a control of its own; handle its `load-more` event with the pager `useFeedState` gave you. Pass `emptyLabel` to say so when a load succeeds with no items; without it the panel shows nothing. When `isIncomplete` is set and there are no items, the panel shows its own "couldn't load this" message in place of `emptyLabel`.
 - **`fetchFeed( sources, limit, continuation )`** is a loader for `useFeedState` over the feed endpoint below: one page of the named sources, resolving to `{ items, continuation, incomplete }`, and rejecting with the wiki's own message for a refused request.
 - **`FeedCard`** is the card chrome: the Codex card, the whole-card overlay link and its stacking context, the visited state, and the `#header` / `#meta` / `#description` rows. Your card component fills those slots from your item shape and keeps its own class on the element for anything specific to it.
 
@@ -131,11 +131,25 @@ Two paths for a BoilerPlate module to appear:
 ```json
 {
     "name": "ext.boilerPlate.example",
-    "enabled": true
+    "enabled": true,
+    "slug": "example"
 }
 ```
 
 Modules can carry optional per-placement keys such as `"style": "thin"` and `"styleMobile": "minimized"`; see existing entries in Personal Dashboard's `./extension.json` for examples.
+
+### The slug
+
+`slug` is the module's public route: `Special:PersonalDashboard/example` rather than `Special:PersonalDashboard/ext.boilerPlate.example`. It is editorial, so keep it short and readable. Lowercase ASCII letters, digits and hyphens only — a dot is what tells a module name apart from a slug, and a slash would eat the module's own deep sub-path.
+
+Four rules go with it:
+
+- **The module name is unchanged by it.** The full namespaced name stays the ObjectFactory key, the ResourceLoader module the island lazy-loads, the `pd-slot-<name>` DOM id and the card's `data-module-name`. Only the URL takes the short form.
+- **The full name still resolves.** A bookmark or a logged URL from before the slug keeps working; nothing redirects.
+- **A slug is unique within a group, not globally.** Module names are namespaced per extension, so two teams can both route an `impact` on their own dashboards. Declaring a slug another module in the same group already claimed loses: the first claim keeps the route, the loser keeps its own name, and the dashboard logs it.
+- **Give a module the same slug in every group it appears in.** Nothing enforces this across extensions, but an experiment or a `?pdo=` switch moves a reader between groups, and a bookmark that stops resolving is the cost of diverging. [T434346](https://phabricator.wikimedia.org/T434346).
+
+Omit `slug` and the module simply routes at its full name. A module whose card isn't link-wrapped (a banner, the onboarding behavior module) is never routed to and needs none. See [`./routing.md`](./routing.md) for how a segment resolves.
 
 **Register a named group.** For an experiment or opt-in preview, register a new group in BoilerPlate's own `./extension.json` under `PersonalDashboard.ModuleGroups`. GrowthExperiments' `home` group is a working example ([T432039](https://phabricator.wikimedia.org/T432039)).
 

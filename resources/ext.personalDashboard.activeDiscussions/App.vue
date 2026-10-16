@@ -1,7 +1,6 @@
 <template>
 	<feed-panel
 		v-bind="{ ...$attrs, ...feedState }"
-		module-name="ext.personalDashboard.activeDiscussions"
 		:is-narrow="isNarrow"
 		summary-mode="card"
 		footer-id="personal-dashboard-go-to-active-discussions"
@@ -27,10 +26,11 @@ module.exports = defineComponent( {
 		FeedPanel,
 		ListCard
 	},
-	// The island props (detail, focused, active, isNarrow) are never declared
-	// here: they ride in $attrs and are forwarded untouched to the scaffold,
-	// which owns the compact/full derivation. This module only decides which
-	// rule it follows, via summary-mode, and hands over the feed contract.
+	// The island props (detail, focused, active, isNarrow) and the module's
+	// route are never declared here: they ride in $attrs and are forwarded
+	// untouched to the scaffold, which owns the compact/full derivation. This
+	// module only decides which rule it follows, via summary-mode, and hands
+	// over the feed contract.
 	inheritAttrs: false,
 	props: {
 		isNarrow: {

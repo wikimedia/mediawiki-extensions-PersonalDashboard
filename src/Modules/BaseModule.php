@@ -290,7 +290,6 @@ abstract class BaseModule implements IModule, MessageLocalizer {
 		return $this->getContext()->getConfig();
 	}
 
-	/** @inheritDoc */
 	final protected function getName(): string {
 		return $this->name;
 	}

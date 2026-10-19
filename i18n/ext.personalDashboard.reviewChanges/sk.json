@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"KormiSK",
 			"Wizzard"
 		]
 	},
@@ -9,5 +10,6 @@
 	"personal-dashboard-risky-article-edits-footer-preamble": "Ďalšie úpravy nájdete na [{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}} stránke posledných úprav]",
 	"personal-dashboard-risky-article-edits-list-card-aria-label": "Otvoriť zobrazenie rozdielov pre $1",
 	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Bez zhrnutia úpravy",
-	"personal-dashboard-risky-article-edits-progress-bar-aria-label": "vložený ukazovateľ priebehu naznačujúci, kedy sú zmeny na posúdenie načítané"
+	"personal-dashboard-risky-article-edits-progress-bar-aria-label": "vložený ukazovateľ priebehu naznačujúci, kedy sú zmeny na posúdenie načítané",
+	"personal-dashboard-review-changes-empty": "Nenašli sa žiadne zmeny"
 }

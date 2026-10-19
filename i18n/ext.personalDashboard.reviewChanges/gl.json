@@ -10,6 +10,7 @@
 	"personal-dashboard-risky-article-edits-list-card-aria-label": "Abrir a vista de diferenzas de «$1»",
 	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Sen resumo de edición",
 	"personal-dashboard-risky-article-edits-progress-bar-aria-label": "barra de progreso en liña para indicar cando se cargan os cambios para a revisión",
+	"personal-dashboard-review-changes-empty": "Non se atopou ningún cambio",
 	"personal-dashboard-review-changes-major-changes-label": "Cambios importantes",
 	"personal-dashboard-review-changes-high-revert-risk-label": "Alto risco de reversión",
 	"personal-dashboard-review-changes-menu-button-label": "Máis opcións para a revisión de cambios",

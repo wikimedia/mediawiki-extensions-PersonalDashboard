@@ -11,5 +11,6 @@
 	"personal-dashboard-multi-step-dialog-previous-button": "上一页",
 	"personal-dashboard-multi-step-dialog-got-it-button": "明白了",
 	"personal-dashboard-feed-error": "错误$1",
+	"personal-dashboard-feed-incomplete": "目前无法加载。请稍后再试。",
 	"personal-dashboard-feed-load-more": "显示更多"
 }

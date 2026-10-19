@@ -9,5 +9,6 @@
 	"personal-dashboard-multi-step-dialog-previous-button": "Anterior",
 	"personal-dashboard-multi-step-dialog-got-it-button": "Entendido",
 	"personal-dashboard-feed-error": "Erro $1",
+	"personal-dashboard-feed-incomplete": "Non se puido cargar isto agora mesmo. Inténtao de novo máis tarde.",
 	"personal-dashboard-feed-load-more": "Mostrar máis"
 }

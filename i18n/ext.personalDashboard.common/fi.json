@@ -9,5 +9,6 @@
 	"personal-dashboard-multi-step-dialog-previous-button": "Edellinen",
 	"personal-dashboard-multi-step-dialog-got-it-button": "Selvä",
 	"personal-dashboard-feed-error": "Virhe $1",
+	"personal-dashboard-feed-incomplete": "Tätä ei voitu ladata juuri nyt. Yritä myöhemmin uudelleen.",
 	"personal-dashboard-feed-load-more": "Näytä lisää"
 }

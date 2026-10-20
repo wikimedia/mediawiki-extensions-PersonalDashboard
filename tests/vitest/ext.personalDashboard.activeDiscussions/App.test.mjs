@@ -41,11 +41,6 @@ beforeEach( () => {
 	loadMore.mockReset();
 } );
 
-test( 'mount component', () => {
-	const wrapper = mount( ActiveDiscussions );
-	expect( wrapper.element ).toMatchSnapshot();
-} );
-
 test( 'shows progress bar when loading', () => {
 	const wrapper = mount( ActiveDiscussions );
 	expect( wrapper.find( '.cdx-progress-bar' ).exists() ).toStrictEqual( true );
@@ -112,10 +107,10 @@ test( 'a focused module shows every fetched item', () => {
 	const wrapper = mount( ActiveDiscussions, { props: { focused: true } } );
 
 	expect( wrapper.findAllComponents( { name: 'ListCard' } ) ).toHaveLength( 5 );
-	expect( wrapper.find( '.personal-dashboard-feed__summary-footer' ).exists() ).toStrictEqual( false );
+	expect( wrapper.find( '.personal-dashboard-feed__show-more' ).exists() ).toStrictEqual( false );
 } );
 
-test( 'the summary footer opens the module dialog via the router', async () => {
+test( 'the show more button opens the module dialog via the router on a narrow viewport', async () => {
 	feedState.isLoading = false;
 	feedState.items = Array.from( { length: 5 }, ( _, i ) => makeItem( i ) );
 
@@ -123,7 +118,7 @@ test( 'the summary footer opens the module dialog via the router', async () => {
 	// route rides in $attrs: the dashboard app resolves this module's slug from
 	// the group it is placed in and hands it down, so the module never names it.
 	const wrapper = mount( ActiveDiscussions, {
-		props: { detail: 'compact', route: 'discussions' },
+		props: { isNarrow: true, route: 'discussions' },
 		global: {
 			mocks: {
 				$router: { push }
@@ -131,7 +126,7 @@ test( 'the summary footer opens the module dialog via the router', async () => {
 		}
 	} );
 
-	await wrapper.find( '#personal-dashboard-go-to-active-discussions' ).trigger( 'click' );
+	await wrapper.find( '.personal-dashboard-feed__show-more' ).trigger( 'click' );
 
 	expect( push ).toHaveBeenCalledWith( '/discussions' );
 } );

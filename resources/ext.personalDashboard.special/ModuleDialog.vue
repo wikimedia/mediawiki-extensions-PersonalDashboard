@@ -63,18 +63,37 @@ module.exports = defineComponent( {
 
 <style lang="less">
 @import 'mediawiki.skin.variables.less';
+@import '../ext.personalDashboard.styles/variables.less';
 
 .personal-dashboard-dialog.cdx-dialog {
-	width: 100%;
-	height: 100%;
+	width: @size-full;
+	height: @size-full;
 	max-width: none;
 	max-height: none;
 	border: 0;
 
-	// FocusedHeader.vue carries the real header spec now; zero the padding
-	// Codex applies here so its spec is not applied twice.
+	// FocusedHeader.vue draws the header and its divider. Remove the Codex header
+	// padding, and the divider that Codex adds when the body scrolls.
 	.cdx-dialog__header {
-		padding: 0;
+		border-bottom: 0;
+		padding: @spacing-0;
+	}
+
+	// On the header itself, so the divider spans the full width.
+	.personal-dashboard-focused-header {
+		padding: @personal-dashboard-focused-header-padding;
+
+		// The design centers the title.
+		&__title {
+			.personal-dashboard-centered-header-title();
+		}
+	}
+
+	// 16px on every side, as in the design, not the Codex dialog padding. A long
+	// word breaks, as in a module, because the island content is outside one.
+	.cdx-dialog__body {
+		padding: @spacing-100;
+		overflow-wrap: anywhere;
 	}
 }
 </style>

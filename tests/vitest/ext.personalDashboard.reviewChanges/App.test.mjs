@@ -1,4 +1,4 @@
-import { vi, beforeEach, afterEach, describe, test, expect } from 'vitest';
+import { vi, beforeEach, describe, test, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
 import { nextTick, reactive } from 'vue';
 
@@ -34,11 +34,6 @@ beforeEach( () => {
 	feedState.error = null;
 	load.mockReset();
 	loadMore.mockReset();
-} );
-
-test( 'mount component', () => {
-	const wrapper = mount( RecentActivity );
-	expect( wrapper.element ).toMatchSnapshot();
 } );
 
 test( 'shows progress bar when loading', () => {
@@ -171,8 +166,7 @@ test( 'the grid card shows the summary affordances on every viewport', () => {
 	feedState.items = Array.from( { length: 5 }, ( _, i ) => makeFeedItem( i ) );
 
 	const wrapper = mount( RecentActivity );
-	expect( wrapper.find( '.personal-dashboard-feed__summary-footer' ).exists() ).toStrictEqual( true );
-	expect( wrapper.find( '.personal-dashboard-feed__list--summary' ).exists() ).toStrictEqual( true );
+	expect( wrapper.find( '.personal-dashboard-feed__show-more' ).exists() ).toStrictEqual( true );
 } );
 
 test( 'focused or active drops the summary affordances', () => {
@@ -180,13 +174,13 @@ test( 'focused or active drops the summary affordances', () => {
 	feedState.items = Array.from( { length: 5 }, ( _, i ) => makeFeedItem( i ) );
 
 	const focused = mount( RecentActivity, { props: { focused: true } } );
-	expect( focused.find( '.personal-dashboard-feed__summary-footer' ).exists() ).toStrictEqual( false );
+	expect( focused.find( '.personal-dashboard-feed__show-more' ).exists() ).toStrictEqual( false );
 
 	const active = mount( RecentActivity, { props: { active: true } } );
-	expect( active.find( '.personal-dashboard-feed__summary-footer' ).exists() ).toStrictEqual( false );
+	expect( active.find( '.personal-dashboard-feed__show-more' ).exists() ).toStrictEqual( false );
 } );
 
-test( 'the summary footer opens the module dialog via the router', async () => {
+test( 'the show more button opens the module dialog via the router on a narrow viewport', async () => {
 	feedState.isLoading = false;
 	feedState.items = Array.from( { length: 5 }, ( _, i ) => makeFeedItem( i ) );
 
@@ -194,7 +188,7 @@ test( 'the summary footer opens the module dialog via the router', async () => {
 	// route rides in $attrs: the dashboard app resolves this module's slug from
 	// the group it is placed in and hands it down, so the module never names it.
 	const wrapper = mount( RecentActivity, {
-		props: { route: 'review' },
+		props: { isNarrow: true, route: 'review' },
 		global: {
 			mocks: {
 				$router: { push }
@@ -202,9 +196,30 @@ test( 'the summary footer opens the module dialog via the router', async () => {
 		}
 	} );
 
-	await wrapper.find( '.personal-dashboard-feed__summary-footer' ).trigger( 'click' );
+	await wrapper.find( '.personal-dashboard-feed__show-more' ).trigger( 'click' );
 
 	expect( push ).toHaveBeenCalledWith( '/review' );
+} );
+
+test( 'the show more button shows more edits in the card on a wide viewport', async () => {
+	feedState.isLoading = false;
+	feedState.items = Array.from( { length: 5 }, ( _, i ) => makeFeedItem( i ) );
+	feedState.hasMore = true;
+
+	const push = vi.fn();
+	const wrapper = mount( RecentActivity, { global: { mocks: { $router: { push } } } } );
+	const showMore = wrapper.find( '.personal-dashboard-feed__show-more' );
+
+	expect( showMore.attributes( 'aria-label' ) )
+		.toStrictEqual( '⧼personal-dashboard-review-changes-show-more-aria-label⧽' );
+
+	await showMore.trigger( 'click' );
+
+	expect( wrapper.findAllComponents( { name: 'ListCard' } ) ).toHaveLength( 5 );
+	expect( loadMore ).toHaveBeenCalledTimes( 1 );
+	expect( push ).not.toHaveBeenCalled();
+	expect( wrapper.find( '.personal-dashboard-feed__show-less' ).attributes( 'aria-label' ) )
+		.toStrictEqual( '⧼personal-dashboard-review-changes-show-less-aria-label⧽' );
 } );
 
 describe( 'loading more edits', () => {
@@ -242,81 +257,6 @@ describe( 'loading more edits', () => {
 			.toStrictEqual( false );
 		// The edits already loaded stay on screen.
 		expect( wrapper.findAllComponents( { name: 'ListCard' } ) ).toHaveLength( 5 );
-	} );
-} );
-
-// Every mock IntersectionObserver below must be a real function, not an arrow:
-// App.vue calls `new IntersectionObserver()`, and arrows can't be constructors.
-describe( 'IntersectionObserver lifecycle', () => {
-	let originalIntersectionObserver;
-
-	beforeEach( () => {
-		originalIntersectionObserver = window.IntersectionObserver;
-	} );
-
-	afterEach( () => {
-		window.IntersectionObserver = originalIntersectionObserver;
-	} );
-
-	test( 'disconnects the observer on unmount', () => {
-		const disconnect = vi.fn();
-		// eslint-disable-next-line prefer-arrow-callback
-		window.IntersectionObserver = vi.fn().mockImplementation( function () {
-			return {
-				observe: vi.fn(),
-				unobserve: vi.fn(),
-				disconnect
-			};
-		} );
-
-		const wrapper = mount( RecentActivity );
-		wrapper.unmount();
-
-		expect( disconnect ).toHaveBeenCalledTimes( 1 );
-	} );
-
-	test( 'fires the loaded hook only once even if the observer intersects again', () => {
-		let intersect;
-		// eslint-disable-next-line prefer-arrow-callback
-		window.IntersectionObserver = vi.fn().mockImplementation( function ( callback ) {
-			intersect = callback;
-			return { observe: vi.fn(), unobserve: vi.fn(), disconnect: vi.fn() };
-		} );
-
-		feedState.isLoading = false;
-		const fired = vi.fn();
-		mw.hook( 'personaldashboard.recentactivity.loaded' ).add( fired );
-
-		mount( RecentActivity );
-		intersect( [ { isIntersecting: true } ] );
-		intersect( [ { isIntersecting: true } ] );
-
-		mw.hook( 'personaldashboard.recentactivity.loaded' ).remove( fired );
-		expect( fired ).toHaveBeenCalledTimes( 1 );
-	} );
-
-	test( 'waits for the feed to finish loading before firing, even once visible', async () => {
-		let intersect;
-		// eslint-disable-next-line prefer-arrow-callback
-		window.IntersectionObserver = vi.fn().mockImplementation( function ( callback ) {
-			intersect = callback;
-			return { observe: vi.fn(), unobserve: vi.fn(), disconnect: vi.fn() };
-		} );
-
-		feedState.isLoading = true;
-		const fired = vi.fn();
-		mw.hook( 'personaldashboard.recentactivity.loaded' ).add( fired );
-
-		mount( RecentActivity );
-		intersect( [ { isIntersecting: true } ] );
-
-		expect( fired ).not.toHaveBeenCalled();
-
-		feedState.isLoading = false;
-		await nextTick();
-
-		mw.hook( 'personaldashboard.recentactivity.loaded' ).remove( fired );
-		expect( fired ).toHaveBeenCalledTimes( 1 );
 	} );
 } );
 

@@ -3,6 +3,8 @@
 		class="personal-dashboard-review-changes__card"
 		:url="diffUrl"
 		open-in-new-tab
+		mark-visited
+		overlay-link
 		:aria-label="ariaLabel"
 		:data-feedorigin="feedorigin"
 	>
@@ -226,29 +228,27 @@ module.exports = defineComponent( {
 
 <style lang="less">
 @import 'mediawiki.skin.variables.less';
+@import 'mediawiki.mixins';
 
-// The card chrome (the whole-card link, the visited state and the row layout)
-// lives in FeedCard; only what is specific to a Review Changes item is here.
+// FeedCard.vue and feed.less have the card chrome. This file styles only what is
+// specific to a Review Changes item.
 .personal-dashboard-review-changes__card {
-	.personal-dashboard-feed__card__container &__icon .cdx-icon,
-	.cdx-button:enabled {
-		color: inherit;
+	// The edit details use the page title color, not the Codex gray.
+	.cdx-card__text__description {
+		&,
+		.cdx-icon {
+			color: inherit;
+		}
 	}
 
 	&__username {
 		font-weight: @font-weight-bold;
 	}
 
-	// The title is never cut short. A long title flows onto the next line, and a
-	// word that is longer than the line breaks instead of overflowing the card.
-	&__title {
-		overflow-wrap: anywhere;
-	}
-
 	&__username,
 	&__timestamp {
 		overflow: hidden;
-		text-overflow: ellipsis;
+		text-overflow: @text-overflow-ellipsis;
 		white-space: nowrap;
 	}
 
@@ -258,7 +258,7 @@ module.exports = defineComponent( {
 		display: flex;
 		align-items: center;
 		gap: @spacing-25;
-		min-width: 0;
+		min-width: @size-0;
 	}
 
 	&__meta {
@@ -266,6 +266,8 @@ module.exports = defineComponent( {
 		flex-shrink: 0;
 		align-items: center;
 		gap: @spacing-25;
+		// Not wider than the card, so a long timestamp gets its ellipsis.
+		max-width: @size-full;
 	}
 
 	&__icon {
@@ -273,7 +275,8 @@ module.exports = defineComponent( {
 	}
 
 	&__icon .cdx-button:enabled {
-		margin-left: -6px;
+		.cdx-mixin-button-layout-flush( 'start', true );
+		color: inherit;
 	}
 
 	// FeedCard lays the header out as a centred row. The description stays
@@ -288,11 +291,11 @@ module.exports = defineComponent( {
 	}
 
 	// The page description keeps to a single line; a long one is cut short. The
-	// weight is reset because FeedCard emboldens the header for the title.
+	// weight is reset because the Codex card title is bold.
 	&__description {
 		font-weight: @font-weight-normal;
 		overflow: hidden;
-		text-overflow: ellipsis;
+		text-overflow: @text-overflow-ellipsis;
 		white-space: nowrap;
 	}
 

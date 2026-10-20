@@ -1,75 +1,102 @@
 <template>
 	<div class="personal-dashboard-feed">
-		<div v-if="isLoading">
-			<cdx-progress-bar inline :aria-label="progressBarAriaLabel"></cdx-progress-bar>
-		</div>
-		<div v-else-if="error">
-			<p>{{ $i18n( 'personal-dashboard-feed-error', error.message ) }}</p>
-		</div>
-		<p v-else-if="!items.length && isIncomplete" class="personal-dashboard-feed__empty">
-			{{ $i18n( 'personal-dashboard-feed-incomplete' ) }}
-		</p>
-		<p v-else-if="!items.length && emptyLabel" class="personal-dashboard-feed__empty">
-			{{ emptyLabel }}
-		</p>
-
-		<div
-			v-show="items.length"
-			class="personal-dashboard-feed__container">
+		<template v-if="isLoading">
 			<div
+				v-if="showsLoadingCards"
 				class="personal-dashboard-feed__list"
-				:class="{ 'personal-dashboard-feed__list--summary': showsSummaryFooter }"
-			>
-				<template v-for="item in visibleItems" :key="item.id">
-					<slot
-						name="item"
-						:item="item"
-						:is-narrow="isNarrow">
-					</slot>
+				aria-hidden="true">
+				<template v-for="index in summaryLimit" :key="index">
+					<slot name="loading-card"></slot>
 				</template>
 			</div>
+			<cdx-progress-bar v-else inline></cdx-progress-bar>
+		</template>
+		<div v-else-if="error">
+			<div class="personal-dashboard-feed__error">
+				{{ $i18n( 'personal-dashboard-feed-error', error.message ) }}
+			</div>
+		</div>
+		<div v-else-if="!items.length && isIncomplete" class="personal-dashboard-feed__empty">
+			{{ $i18n( 'personal-dashboard-feed-incomplete' ) }}
+		</div>
+		<div v-else-if="!items.length && emptyLabel" class="personal-dashboard-feed__empty">
+			{{ emptyLabel }}
 		</div>
 
-		<template v-if="!isSummary">
-			<cdx-progress-bar
-				v-if="isLoadingMore"
-				inline
-				:aria-label="progressBarAriaLabel"
-			></cdx-progress-bar>
+		<div
+			v-show="items.length && !showsLoadingCards"
+			ref="list"
+			class="personal-dashboard-feed__list"
+			:class="{ 'personal-dashboard-feed__list--dividers': usesDividers }"
+			role="group"
+			tabindex="-1"
+			:aria-busy="isLoadingMore || null"
+			:aria-label="busyLabel">
+			<template v-for="item in visibleItems" :key="item.id">
+				<slot
+					name="item"
+					:item="item"
+					:is-narrow="isNarrow">
+				</slot>
+			</template>
+		</div>
+
+		<div
+			v-if="!isSummary && ( isLoadingMore || hasMore && !isLoading )"
+			class="personal-dashboard-feed__show-more-row"
+		>
+			<cdx-progress-bar v-if="isLoadingMore" inline></cdx-progress-bar>
 			<!-- Absent, not disabled, while a page is in flight or the first
 				one is still loading: there is nothing to ask for yet. -->
 			<cdx-button
-				v-else-if="hasMore && !isLoading"
-				action="progressive"
-				weight="quiet"
+				v-else
 				class="personal-dashboard-feed__load-more"
 				@click="$emit( 'load-more' )"
 			>
 				{{ $i18n( 'personal-dashboard-feed-load-more' ) }}
 			</cdx-button>
-		</template>
+		</div>
 
-		<cdx-button
-			v-if="showsSummaryFooter"
-			:id="footerId || undefined"
-			:aria-label="footerAriaLabel || undefined"
-			action="progressive"
-			weight="quiet"
-			class="personal-dashboard-feed__summary-footer"
-			@click="openFullList"
+		<div
+			v-else-if="hasShowMoreButton || isExpanded || showsLoadingCards"
+			class="personal-dashboard-feed__show-more-row"
 		>
-			{{ footerLabel }}
-		</cdx-button>
+			<cdx-progress-bar v-if="isLoadingMore" inline></cdx-progress-bar>
+			<cdx-button
+				v-else-if="hasShowMoreButton || isLoading"
+				:id="footerId || undefined"
+				ref="showMoreButton"
+				:disabled="isLoading"
+				:aria-label="showMoreAriaLabel || undefined"
+				class="personal-dashboard-feed__show-more"
+				@click="showMore"
+			>
+				{{ showMoreLabel || $i18n( 'personal-dashboard-feed-load-more' ) }}
+			</cdx-button>
+			<cdx-button
+				v-if="isExpanded"
+				ref="showLess"
+				weight="quiet"
+				:aria-label="showLessAriaLabel || $i18n( 'personal-dashboard-feed-show-less' )"
+				class="personal-dashboard-feed__show-less"
+				@click="collapse"
+			>
+				<cdx-icon :icon="cdxIconCollapse"></cdx-icon>
+			</cdx-button>
+		</div>
 	</div>
 </template>
 
 <script>
-const { defineComponent } = require( 'vue' );
-const { CdxButton, CdxProgressBar } = require( '../codex.js' );
+const { computed, defineComponent } = require( 'vue' );
+const { CdxButton, CdxIcon, CdxProgressBar } = require( '../codex.js' );
+const { cdxIconCollapse } = require( '../icons.json' );
+
+const FOCUSABLE = 'a[href], button:not( [disabled] ), [tabindex]:not( [tabindex="-1"] )';
 
 /**
  * The shared feed scaffold: loading, error, empty, compact-versus-full, and the
- * footer control every feed module would otherwise re-implement.
+ * show more button every feed module would otherwise re-implement.
  *
  * A module supplies the normalized feed state (see composables/useFeedState.js),
  * its labels, and one `#item` slot rendering a card per item; everything else
@@ -80,7 +107,14 @@ module.exports = defineComponent( {
 	name: 'FeedPanel',
 	components: {
 		CdxButton,
+		CdxIcon,
 		CdxProgressBar
+	},
+	// FeedCard reads this, so a module card gets the divider rows without a prop.
+	provide() {
+		return {
+			personalDashboardFeedSeparation: computed( () => this.usesDividers ? 'divider' : 'outline' )
+		};
 	},
 	props: {
 		/**
@@ -100,8 +134,6 @@ module.exports = defineComponent( {
 			type: Boolean,
 			default: false
 		},
-		// Only the full list offers a further page: the summary already ends in
-		// a control that opens that list, and two would compete.
 		hasMore: {
 			type: Boolean,
 			default: false
@@ -116,10 +148,8 @@ module.exports = defineComponent( {
 			type: Object,
 			default: null
 		},
-		// How many items the compact summary shows. The module fetches the full
-		// count once and the summary slices it, so there is no re-fetch on the
-		// summary/full transition: the card and the dialog share one teleported
-		// component instance rather than remounting.
+		// How many items the summary shows, and how many the show more button adds
+		// when it expands in place.
 		summaryLimit: {
 			type: Number,
 			default: 3
@@ -138,30 +168,31 @@ module.exports = defineComponent( {
 			default: 'viewport',
 			validator: ( value ) => [ 'card', 'viewport' ].includes( value )
 		},
-		// This module's public route, which the footer control pushes to open
-		// its full list. It is the slug the module group gave the module, not
-		// the module name: a slug belongs to a placement, so the dashboard app
-		// resolves it and hands it down through $attrs rather than the module
-		// naming its own. Optional like the other props that arrive that way,
-		// so a module mounted outside the dashboard still renders; the footer
-		// control then has nowhere to go and says so by doing nothing.
+		// The module route, which the show more button opens unless it expands in
+		// place. The dashboard app passes the slug that the module group gives the
+		// module. Outside the dashboard there is no route, and the button then opens
+		// nothing.
 		route: {
 			type: String,
 			default: ''
 		},
-		footerLabel: {
+		// Empty means "Show more".
+		showMoreLabel: {
 			type: String,
-			required: true
+			default: ''
 		},
-		footerAriaLabel: {
+		// Names the module, so screen readers can tell the show more buttons
+		// on one page apart. It must start with the visible label.
+		showMoreAriaLabel: {
+			type: String,
+			default: ''
+		},
+		// For the icon-only show less button. Empty means "Show less".
+		showLessAriaLabel: {
 			type: String,
 			default: ''
 		},
 		footerId: {
-			type: String,
-			default: ''
-		},
-		progressBarAriaLabel: {
 			type: String,
 			default: ''
 		},
@@ -188,71 +219,145 @@ module.exports = defineComponent( {
 		isNarrow: {
 			type: Boolean,
 			default: false
+		},
+		// On a wide viewport, the show more button adds items to the card instead of
+		// opening the full list.
+		expandInPlace: {
+			type: Boolean,
+			default: false
 		}
 	},
 	emits: [ 'load-more' ],
+	setup() {
+		return { cdxIconCollapse };
+	},
+	data() {
+		return {
+			// How many items the expanded summary shows. Null means summaryLimit.
+			shownCount: null,
+			// The item to focus when it shows, so keyboard users reach the new items.
+			// The button they used can disappear while a page loads.
+			focusIndex: null
+		};
+	},
 	computed: {
 		isSummary() {
 			return this.summaryMode === 'card' ?
 				!( this.focused || this.active ) :
 				this.detail === 'compact';
 		},
+		showsLoadingCards() {
+			return this.isLoading && this.isSummary && !!this.$slots[ 'loading-card' ];
+		},
+		// The full list on a narrow viewport shows rows with dividers, not cards.
+		usesDividers() {
+			return !this.isSummary && this.isNarrow;
+		},
+		expandsInPlace() {
+			return this.expandInPlace && this.isSummary && !this.isNarrow;
+		},
+		summaryCount() {
+			return ( this.expandsInPlace && this.shownCount ) || this.summaryLimit;
+		},
 		visibleItems() {
 			return this.isSummary ?
-				this.items.slice( 0, this.summaryLimit ) :
+				this.items.slice( 0, this.summaryCount ) :
 				this.items;
 		},
-		// The summary footer and the fade hinting at it above the list must
-		// agree, or the fade points at a button that isn't there.
-		showsSummaryFooter() {
-			return this.isSummary && !this.isLoading && this.items.length > this.summaryLimit;
+		hasShowMoreButton() {
+			return this.isSummary && !this.isLoading && (
+				this.items.length > this.summaryCount ||
+				( this.expandsInPlace && this.hasMore )
+			);
+		},
+		isExpanded() {
+			return this.expandsInPlace && !this.isLoading &&
+				this.visibleItems.length > this.summaryLimit;
+		},
+		// Names the list while it holds focus during a load.
+		busyLabel() {
+			return this.isLoadingMore ? mw.msg( 'personal-dashboard-feed-loading-more' ) : null;
 		}
 	},
 	methods: {
-		openFullList() {
-			if ( !this.route ) {
+		showMore() {
+			if ( !this.expandsInPlace ) {
+				if ( this.route ) {
+					this.$router.push( '/' + this.route );
+				}
+
 				return;
 			}
-			this.$router.push( '/' + this.route );
+
+			// After a failed page, the count can be ahead of the items that loaded.
+			const firstNew = Math.min( this.summaryCount, this.items.length );
+
+			this.shownCount = firstNew + this.summaryLimit;
+
+			if ( this.shownCount > this.items.length && this.hasMore ) {
+				this.requestNextPage( firstNew );
+				return;
+			}
+
+			this.focusIndex = firstNew;
+			this.$nextTick( this.focusNewItem );
+		},
+		requestNextPage( firstNew ) {
+			this.focusIndex = firstNew;
+			this.$emit( 'load-more' );
+		},
+		collapse() {
+			this.shownCount = null;
+			// A page that is still loading must not move focus after the collapse.
+			this.focusIndex = null;
+			this.$nextTick( () => {
+				// While a page loads, the progress bar replaces the show more button.
+				const button = this.$refs.showMoreButton;
+
+				( button ? button.$el : this.$refs.list ).focus();
+			} );
+		},
+		// Without an item at focusIndex (the next page was empty), focus goes to a button.
+		focusNewItem() {
+			if ( this.focusIndex === null ) {
+				return;
+			}
+
+			const item = this.$refs.list.children[ this.focusIndex ];
+			const target = item &&
+				( item.matches( FOCUSABLE ) ? item : item.querySelector( FOCUSABLE ) );
+			const fallback = this.$refs.showMoreButton || this.$refs.showLess;
+
+			this.focusIndex = null;
+
+			if ( target ) {
+				target.focus();
+			} else if ( fallback ) {
+				fallback.$el.focus();
+			}
+		}
+	},
+	watch: {
+		// A reload (e.g. new filters) starts the list again from the top.
+		isLoading( value ) {
+			if ( value ) {
+				this.shownCount = null;
+				this.focusIndex = null;
+			}
+		},
+		isLoadingMore( value ) {
+			if ( !value ) {
+				this.$nextTick( this.focusNewItem );
+				return;
+			}
+
+			// The progress bar replaces the button that had focus, and an inline
+			// Codex progress bar is aria-hidden. Focus goes to the show less button,
+			// or to the list, which is named for the load while it is busy.
+			if ( this.focusIndex !== null ) {
+				( this.$refs.showLess ? this.$refs.showLess.$el : this.$refs.list ).focus();
+			}
 		}
 	}
 } );
 </script>
-
-<style lang="less">
-@import 'mediawiki.skin.variables.less';
-
-.personal-dashboard-feed {
-	&__container {
-		background: @background-color-neutral;
-		padding: @spacing-25;
-	}
-
-	&__list {
-		display: flex;
-		flex-direction: column;
-		gap: @spacing-25;
-
-		// Hints at the summary footer below, scoped to the last card itself so
-		// it can never leak into a card beneath it.
-		&--summary > :last-child::after {
-			content: '';
-			position: absolute;
-			bottom: 0;
-			left: 0;
-			right: 0;
-			height: 64px;
-			z-index: 2;
-			pointer-events: none;
-			background: linear-gradient( @background-color-transparent, @background-color-base );
-		}
-	}
-
-	&__summary-footer.cdx-button,
-	&__load-more.cdx-button {
-		width: 100%;
-		max-width: none;
-		padding: @spacing-75 0;
-	}
-}
-</style>

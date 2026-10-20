@@ -19,6 +19,14 @@ class ActiveDiscussions extends BaseModule {
 		return $this->msg( 'personal-dashboard-active-discussions-title' )->text();
 	}
 
+	/**
+	 * The progress bar of the island while it loads its first page.
+	 * @inheritDoc
+	 */
+	protected function getLoadingMarkup(): string {
+		return FeedLoadingMarkup::getHtml( $this );
+	}
+
 	/** @inheritDoc */
 	protected function getModules(): array {
 		return [ 'ext.personalDashboard.activeDiscussions' ];

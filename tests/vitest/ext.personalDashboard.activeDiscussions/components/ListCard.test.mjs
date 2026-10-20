@@ -19,11 +19,14 @@ function mountCard( props = {} ) {
 	} );
 }
 
-test( 'mount component', () => {
-	const date = new Date( 2026, 1, 1 );
-	date.setHours( 8, 25 );
+test( 'shows the topic with its comment and author counts', () => {
+	const wrapper = mountCard();
 
-	expect( mountCard( { timestamp: date.toISOString() } ).element ).toMatchSnapshot();
+	expect( wrapper.text() ).toContain( 'Test Title' );
+	expect( wrapper.text() ).toContain( '12' );
+	expect( wrapper.text() ).toContain( '4' );
+	expect( wrapper.get( '.personal-dashboard-feed__card__link' ).attributes( 'aria-label' ) )
+		.toContain( 'Test Title' );
 } );
 
 test( 'renders appropriate message when edit is made today', () => {

@@ -3,10 +3,9 @@
 		v-bind="{ ...$attrs, ...feedState }"
 		:is-narrow="isNarrow"
 		summary-mode="card"
-		footer-id="personal-dashboard-go-to-active-discussions"
-		:footer-label="footerLabel"
-		:footer-aria-label="footerAriaLabel"
-		:progress-bar-aria-label="progressBarAriaLabel"
+		expand-in-place
+		:show-more-aria-label
+		:show-less-aria-label
 		:empty-label="emptyLabel"
 		@load-more="loadMore">
 		<template #item="{ item, isNarrow: itemIsNarrow }">
@@ -45,9 +44,8 @@ module.exports = defineComponent( {
 			feedState,
 			load,
 			loadMore,
-			footerLabel: mw.msg( 'personal-dashboard-active-discussions-mobile-summary-footer-link-text' ),
-			footerAriaLabel: mw.msg( 'personal-dashboard-active-discussions-mobile-summary-footer-button-aria-label' ),
-			progressBarAriaLabel: mw.msg( 'personal-dashboard-active-discussions-progress-bar-aria-label' ),
+			showMoreAriaLabel: mw.msg( 'personal-dashboard-active-discussions-show-more-aria-label' ),
+			showLessAriaLabel: mw.msg( 'personal-dashboard-active-discussions-show-less-aria-label' ),
 			emptyLabel: mw.msg( 'personal-dashboard-active-discussions-fetch-error' )
 		};
 	},
@@ -56,11 +54,3 @@ module.exports = defineComponent( {
 	}
 } );
 </script>
-
-<style lang="less">
-@import 'mediawiki.skin.variables.less';
-
-.personal-dashboard-module-activeDiscussions .personal-dashboard-module-section-body {
-	margin: @spacing-0;
-}
-</style>

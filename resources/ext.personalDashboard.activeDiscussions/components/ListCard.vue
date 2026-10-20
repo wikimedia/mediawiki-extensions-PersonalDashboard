@@ -1,8 +1,11 @@
 <template>
 	<feed-card
 		class="personal-dashboard-active-discussions__card"
+		:class="{ 'personal-dashboard-active-discussions__card--narrow': isNarrow }"
 		:url="discussionUrl"
 		open-in-new-tab
+		mark-visited
+		overlay-link
 		:aria-label="ariaLabel"
 	>
 		<template #header>
@@ -105,27 +108,28 @@ module.exports = defineComponent( {
 <style lang="less">
 @import 'mediawiki.skin.variables.less';
 
-// The card chrome (the whole-card link, the visited state and the row layout)
-// lives in FeedCard; only what is specific to an Active Discussions item is here.
+// FeedCard.vue and feed.less have the card chrome. This file styles only what is
+// specific to an Active Discussions item.
 .personal-dashboard-active-discussions__card {
-	// FeedCard lays the header out as a row; this card puts its counts at the
-	// far end of that row, and stacks them under the title on Minerva.
+	// The card details use the page title color, not the Codex gray.
+	.cdx-card__text__description {
+		color: inherit;
+	}
+
 	.personal-dashboard-feed__card__header {
 		justify-content: space-between;
+	}
 
-		.skin-minerva & {
-			flex-direction: column;
-			align-items: start;
-		}
+	&--narrow .personal-dashboard-feed__card__header {
+		flex-direction: column;
+		align-items: flex-start;
 	}
 
 	// The page and topic keep to one line; a long one ends in an ellipsis.
-	// `min-width: 0` lets the flex item shrink below its text.
 	&__subheader {
-		max-width: 100%;
-		min-width: 0;
+		max-width: @size-full;
 		overflow: hidden;
-		text-overflow: ellipsis;
+		text-overflow: @text-overflow-ellipsis;
 		white-space: nowrap;
 	}
 
@@ -135,6 +139,11 @@ module.exports = defineComponent( {
 		font-weight: @font-weight-normal;
 		gap: @spacing-50;
 		white-space: nowrap;
+
+		// The header is in the Codex card title, so the icons need the subtle color back.
+		.cdx-icon {
+			color: @color-subtle;
+		}
 	}
 }
 </style>

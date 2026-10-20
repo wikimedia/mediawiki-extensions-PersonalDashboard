@@ -42,7 +42,7 @@ function mountWithLengths( oldlen, newlen ) {
 // Safely ignore error: Cannot find package 'ext.checkUser.userInfoCard'
 mw.loader.using = () => {};
 
-test( 'mount component', () => {
+test( 'gives the diff link an accessible name and shows the edit', () => {
 	const date = new Date( 2026, 1, 1, 3, 0 );
 
 	const wrapper = mount( ListCard, {
@@ -65,7 +65,11 @@ test( 'mount component', () => {
 		}
 	} );
 
-	expect( wrapper.element ).toMatchSnapshot();
+	expect( wrapper.get( '.personal-dashboard-feed__card__link' ).attributes( 'aria-label' ) )
+		.toStrictEqual( '⧼personal-dashboard-risky-article-edits-list-card-aria-label⧽' );
+	expect( wrapper.text() ).toContain( 'TestUser' );
+	expect( wrapper.text() ).toContain( 'TestComment' );
+	expect( wrapper.text() ).toContain( 'a description' );
 } );
 
 test( 'renders appropriate message when edit is made today', () => {

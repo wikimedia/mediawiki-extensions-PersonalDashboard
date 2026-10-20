@@ -1,22 +1,20 @@
 <template>
-	<div ref="moduleRef">
-		<feed-panel
-			v-bind="{ ...$attrs, ...feedState }"
-			:is-narrow="isNarrow"
-			summary-mode="card"
-			footer-id="personal-dashboard-go-to-recentchanges"
-			:footer-label="footerLabel"
-			:progress-bar-aria-label="progressBarAriaLabel"
-			:empty-label="emptyLabel"
-			@load-more="loadMore"
-		>
-			<!-- Renamed, because isNarrow is a prop of this component as well.
-				The scaffold owns the value the slot supplies. -->
-			<template #item="{ item, isNarrow: itemIsNarrow }">
-				<list-card v-bind="item" :is-narrow="itemIsNarrow"></list-card>
-			</template>
-		</feed-panel>
-	</div>
+	<feed-panel
+		v-bind="{ ...$attrs, ...feedState }"
+		:is-narrow="isNarrow"
+		summary-mode="card"
+		expand-in-place
+		:show-more-aria-label
+		:show-less-aria-label
+		:empty-label="emptyLabel"
+		@load-more="loadMore"
+	>
+		<!-- Renamed, because isNarrow is a prop of this component as well.
+			The scaffold owns the value the slot supplies. -->
+		<template #item="{ item, isNarrow: itemIsNarrow }">
+			<list-card v-bind="item" :is-narrow="itemIsNarrow"></list-card>
+		</template>
+	</feed-panel>
 
 	<!--
 		The menu button belongs in the module header, which the server renders.
@@ -52,7 +50,7 @@
 </template>
 
 <script>
-const { defineComponent, ref, watch } = require( 'vue' );
+const { defineComponent, ref } = require( 'vue' );
 const {
 	FeedPanel,
 	FULL_LIMIT,
@@ -72,11 +70,8 @@ module.exports = defineComponent( {
 		ModuleHeaderMenu,
 		PersonalizationPanel
 	},
-	// The compact/full island props (detail, focused, active) and the module's
-	// route are never declared here: they ride in $attrs and are forwarded
-	// untouched to the scaffold, which owns the compact/full derivation. This
-	// module only decides which rule it follows, via summary-mode, and hands
-	// over the feed contract.
+	// FeedPanel gets the module route and the island props detail, focused,
+	// and active through $attrs.
 	inheritAttrs: false,
 	props: {
 		// Selector for the mount slot in the server-rendered module header, or
@@ -98,39 +93,13 @@ module.exports = defineComponent( {
 		}
 	},
 	setup() {
-		const moduleRef = ref();
 		const { feedState, load, loadMore } = useReviewChangesFeed();
 
 		// Which panel the menu has opened, or null for none. One value rather
 		// than a flag each: the menu opens one panel at a time.
 		const openPanel = ref( null );
 
-		// Fires once the module has both scrolled into view and its feed has
-		// finished loading, so a module still off-screen when the fetch resolves
-		// doesn't count as an impression (T417757), and the footer link the
-		// instrument looks for isn't queried before load() renders it.
-		let hasIntersected = false;
-		let hasFiredLoadedHook = false;
-		function fireLoadedHookWhenReady() {
-			if ( hasFiredLoadedHook || !hasIntersected || feedState.isLoading ) {
-				return;
-			}
-			hasFiredLoadedHook = true;
-			mw.hook( 'personaldashboard.recentactivity.loaded' ).fire();
-		}
-
-		const observer = new IntersectionObserver( ( entries ) => {
-			if ( entries[ 0 ].isIntersecting ) {
-				hasIntersected = true;
-				fireLoadedHookWhenReady();
-			}
-		} );
-
-		watch( () => feedState.isLoading, fireLoadedHookWhenReady );
-
 		return {
-			moduleRef,
-			observer,
 			feedState,
 			load,
 			loadMore,
@@ -154,18 +123,14 @@ module.exports = defineComponent( {
 				value: 'about',
 				label: mw.msg( 'personal-dashboard-review-changes-menu-about' )
 			},
-			footerLabel: mw.msg( 'personal-dashboard-risky-article-edits-mobile-summary-footer-link-text' ),
-			progressBarAriaLabel: mw.msg( 'personal-dashboard-risky-article-edits-progress-bar-aria-label' ),
+			showMoreAriaLabel: mw.msg( 'personal-dashboard-review-changes-show-more-aria-label' ),
+			showLessAriaLabel: mw.msg( 'personal-dashboard-review-changes-show-less-aria-label' ),
 			emptyLabel: mw.msg( 'personal-dashboard-review-changes-empty' ),
 			menuButtonLabel: mw.msg( 'personal-dashboard-review-changes-menu-button-label' )
 		};
 	},
 	mounted() {
-		this.observer.observe( this.moduleRef );
 		this.load( FULL_LIMIT );
-	},
-	unmounted() {
-		this.observer.disconnect();
 	}
 } );
 </script>

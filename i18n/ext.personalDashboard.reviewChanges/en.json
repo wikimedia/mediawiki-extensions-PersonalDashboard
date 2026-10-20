@@ -17,5 +17,7 @@
 	"personal-dashboard-review-changes-menu-personalization": "Personalization",
 	"personal-dashboard-review-changes-menu-about": "About Review changes",
 	"personal-dashboard-review-changes-personalization-title": "Personalize Review changes",
-	"personal-dashboard-review-changes-personalization-description": "Suggests relevant changes based on your editing activity. [https://www.mediawiki.org/wiki/Home/Recommendations#Review_Changes Learn more]"
+	"personal-dashboard-review-changes-personalization-description": "Suggests relevant changes based on your editing activity. [https://www.mediawiki.org/wiki/Home/Recommendations#Review_Changes Learn more]",
+	"personal-dashboard-review-changes-show-more-aria-label": "Show more changes to review",
+	"personal-dashboard-review-changes-show-less-aria-label": "Show fewer changes to review"
 }

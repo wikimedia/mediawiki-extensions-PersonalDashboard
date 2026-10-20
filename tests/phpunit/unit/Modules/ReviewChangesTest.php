@@ -96,6 +96,12 @@ class ReviewChangesTest extends MediaWikiUnitTestCase {
 		$this->assertSame( [ 'ext.personalDashboard.reviewChanges' ], $module->getModules() );
 	}
 
+	public function testShowsTheFeedProgressBarWhileTheIslandLoads() {
+		$module = TestingAccessWrapper::newFromObject( $this->newModule( null ) );
+
+		$this->assertStringContainsString( 'cdx-progress-bar--inline', $module->getLoadingMarkup() );
+	}
+
 	public function testDeclaresHeaderMenuSoTheFrameEmitsAHeaderMountSlot() {
 		$module = $this->newModule( null );
 

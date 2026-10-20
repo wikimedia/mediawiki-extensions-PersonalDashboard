@@ -30,8 +30,8 @@ const { cdxIconEllipsis } = require( '../icons.json' );
  * The overflow menu for a module header: a quiet icon button that opens a menu
  * of actions about the module.
  *
- * A module opts in server-side with BaseModule::hasHeaderMenu(), which emits an
- * empty mount slot at the end of the header row. The module's own component then
+ * A module opts in server-side with BaseModule::hasHeaderMenu(), which emits a
+ * mount slot at the end of the header row. The module's own component then
  * teleports this component into that slot. A menu holds client state, so the
  * header cannot render it as server HTML; see ./docs/render-contract.md.
  */
@@ -109,23 +109,32 @@ module.exports = defineComponent( {
 @import 'mediawiki.skin.variables.less';
 
 .personal-dashboard-module-menu {
-	&__button .cdx-button:enabled {
-		color: @color-subtle;
-	}
+	&__button {
+		// Codex renders this menu in place, so its list lands in the page content,
+		// where a skin's own content list styles reach it: Minerva pads `.content ul`
+		// at the inline start and gives `.content li` a bottom margin (T433725). Both
+		// beat Codex's reset, which names the listbox by one class and says nothing
+		// about the items, so the items come out narrower than the menu and spaced
+		// apart. Put the menu's own geometry back.
+		.cdx-menu__listbox {
+			margin: @spacing-0;
+			padding: @spacing-0;
+		}
 
-	// Codex renders this menu in place, so its list lands in the page content,
-	// where a skin's own content list styles reach it: Minerva pads `.content ul`
-	// at the inline start and gives `.content li` a bottom margin (T433725). Both
-	// beat Codex's reset, which names the listbox by one class and says nothing
-	// about the items, so the items come out narrower than the menu and spaced
-	// apart. Put the menu's own geometry back.
-	&__button .cdx-menu__listbox {
-		margin: @spacing-0;
-		padding: @spacing-0;
-	}
+		.cdx-menu-item {
+			margin: @spacing-0;
+		}
 
-	&__button .cdx-menu-item {
-		margin: @spacing-0;
+		// Codex always opens the menu at the start edge. Floating UI reads the edge
+		// from the menu direction, so reverse the direction to open the menu at the
+		// end edge.
+		.cdx-menu {
+			direction: rtl;
+
+			> * {
+				direction: ltr;
+			}
+		}
 	}
 
 	// The divider Codex draws for a menu footer, drawn here instead.

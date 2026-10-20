@@ -17,5 +17,7 @@
 	"personal-dashboard-review-changes-menu-personalization": "Item in the Review changes header menu, and the label above {{msg-mw|personal-dashboard-review-changes-personalization-description}} in the panel it opens.",
 	"personal-dashboard-review-changes-menu-about": "Item in the Review changes header menu, and the title of the panel it opens. The panel body is {{msg-mw|personal-dashboard-risky-article-edits-subheader-info}}.",
 	"personal-dashboard-review-changes-personalization-title": "Title of the panel opened by {{msg-mw|personal-dashboard-review-changes-menu-personalization}}.",
-	"personal-dashboard-review-changes-personalization-description": "Body of the personalization panel. Links to the help page about the recommender system."
+	"personal-dashboard-review-changes-personalization-description": "Body of the personalization panel. Links to the help page about the recommender system.",
+	"personal-dashboard-review-changes-show-more-aria-label": "Accessible label for the \"Show more\" button at the bottom of the Review changes module. It names the module, so screen reader users can tell it apart from the same button in other modules. It must start with the translation of {{msg-mw|personal-dashboard-feed-load-more}}.",
+	"personal-dashboard-review-changes-show-less-aria-label": "Accessible label for the icon-only button at the bottom of the Review changes module that hides the extra changes again after \"Show more\" was used."
 }

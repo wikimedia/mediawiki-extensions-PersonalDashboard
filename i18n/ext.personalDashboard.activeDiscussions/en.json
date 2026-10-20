@@ -8,7 +8,6 @@
 	"personal-dashboard-active-discussions-latest-comment": "Latest comment:",
 	"personal-dashboard-active-discussions-fetch-error": "No active discussions found",
 	"personal-dashboard-active-discussions-in-topic": "$1, in $2",
-	"personal-dashboard-active-discussions-mobile-summary-footer-link-text": "View more",
-	"personal-dashboard-active-discussions-mobile-summary-footer-button-aria-label": "Navigate to more active discussions",
-	"personal-dashboard-active-discussions-progress-bar-aria-label": "inline progress bar that indicates that active discussions are being loaded"
+	"personal-dashboard-active-discussions-show-more-aria-label": "Show more active discussions",
+	"personal-dashboard-active-discussions-show-less-aria-label": "Show fewer active discussions"
 }

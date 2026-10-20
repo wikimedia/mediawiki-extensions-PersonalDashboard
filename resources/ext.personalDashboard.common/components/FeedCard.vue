@@ -1,26 +1,30 @@
 <template>
 	<cdx-card
 		class="personal-dashboard-feed__card"
-		:class="{ 'personal-dashboard-feed__card--visited': hasVisited }"
+		:separation
+		:class="{
+			'cdx-card--is-link': url,
+			'personal-dashboard-feed__card--visited': markVisited && hasVisited
+		}"
 	>
-		<!-- Header content often contains a link, and because we need the whole card to also
-			be a link (when `url` is set), the header/title goes inside the description slot. -->
-		<template #description>
+		<template #title>
+			<a
+				v-if="url"
+				class="personal-dashboard-feed__card__link"
+				:href="url"
+				:target="openInNewTab ? '_blank' : null"
+				:aria-label="ariaLabel"
+				@click="hasVisited = true">
+			</a>
+
+			<span class="personal-dashboard-feed__card__header">
+				<slot name="header"></slot>
+			</span>
+		</template>
+
+		<template v-if="$slots.meta" #description>
 			<span class="personal-dashboard-feed__card__container">
-				<a
-					v-if="url"
-					class="personal-dashboard-feed__card__link"
-					:href="url"
-					:target="openInNewTab ? '_blank' : null"
-					:aria-label="ariaLabel"
-					@click="hasVisited = true">
-				</a>
-
-				<span class="personal-dashboard-feed__card__header">
-					<slot name="header"></slot>
-				</span>
-
-				<span v-if="$slots.meta" class="personal-dashboard-feed__card__meta">
+				<span class="personal-dashboard-feed__card__meta">
 					<slot name="meta"></slot>
 				</span>
 
@@ -28,6 +32,10 @@
 					<slot name="description"></slot>
 				</span>
 			</span>
+		</template>
+
+		<template v-else-if="$slots.description" #description>
+			<slot name="description"></slot>
 		</template>
 
 		<template v-if="$slots[ 'supporting-text' ]" #supporting-text>
@@ -57,6 +65,13 @@ const { CdxCard } = require( '../codex.js' );
 module.exports = defineComponent( {
 	name: 'FeedCard',
 	components: { CdxCard },
+	inject: {
+		// FeedPanel switches its cards to divider rows in the narrow full list.
+		separation: {
+			from: 'personalDashboardFeedSeparation',
+			default: 'outline'
+		}
+	},
 	props: {
 		// Where the whole card leads. Omit it for a card with no single
 		// destination; only the slotted links are then clickable.
@@ -66,6 +81,12 @@ module.exports = defineComponent( {
 		},
 		// When the card is clicked, navigate to the url in a new tab.
 		openInNewTab: {
+			type: Boolean,
+			default: false
+		},
+		// Dims the card after a click on its link, so a user can see which items
+		// they opened. Codex cards have no visited state, so it is opt-in.
+		markVisited: {
 			type: Boolean,
 			default: false
 		},
@@ -82,94 +103,3 @@ module.exports = defineComponent( {
 	}
 } );
 </script>
-
-<style lang="less">
-@import 'mediawiki.skin.variables.less';
-
-.personal-dashboard-feed__card {
-	&.cdx-card {
-		border-color: @border-color-transparent;
-		color: @color-emphasized;
-		padding: @spacing-100;
-		position: relative;
-
-		&:hover {
-			border-color: @border-color-subtle;
-		}
-	}
-
-	&__header {
-		align-items: center;
-		display: flex;
-		font-weight: @font-weight-bold;
-		gap: @spacing-35;
-	}
-
-	&__header a,
-	&__meta a {
-		color: inherit;
-	}
-
-	// Doubled class on purpose: a module sets its own text colour on the card
-	// from its own stylesheet, which ResourceLoader loads after this one, so the
-	// visited treatment needs the extra specificity to win.
-	.cdx-card&.personal-dashboard-feed__card--visited {
-		color: @color-subtle;
-		background-color: @background-color-neutral-subtle;
-	}
-
-	.cdx-card__text {
-		width: @size-full;
-
-		&__title,
-		&__description {
-			color: inherit;
-		}
-
-		&__description {
-			margin-top: @spacing-0;
-		}
-	}
-
-	&__container {
-		display: flex;
-		flex-direction: column;
-		gap: @spacing-25;
-		line-height: @line-height-x-small;
-	}
-
-	&__link {
-		position: absolute;
-		inset: 0;
-		z-index: 0;
-	}
-
-	// Lifted above the overlay link so slotted links and buttons stay clickable.
-	// The overlay itself is excluded: it has to keep its absolute positioning.
-	&__container a:not( .personal-dashboard-feed__card__link ),
-	&__container .cdx-button {
-		position: relative;
-		z-index: 1;
-	}
-
-	&__meta {
-		display: flex;
-		align-items: center;
-		// A row that runs long wraps rather than overflowing the card, so a
-		// module can let its leading group truncate only once the trailing one
-		// has moved down. min-height, not height: a fixed one can't hold the
-		// second line.
-		flex-wrap: wrap;
-		gap: @spacing-25;
-		min-height: 20px;
-	}
-
-	// How much of this row is shown is the module's call, since only it knows
-	// what it put there. All the row guarantees is that a word longer than the
-	// line breaks rather than overflowing the card; overflow-wrap inherits, so
-	// this covers the module's own elements too.
-	&__description {
-		overflow-wrap: break-word;
-	}
-}
-</style>

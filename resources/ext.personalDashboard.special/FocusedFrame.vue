@@ -9,7 +9,7 @@
 			:actions-target-id="FRAME_HEADER_TARGET_ID"
 			@back="$emit( 'back' )">
 		</focused-header>
-		<div :id="FRAME_TARGET_ID"></div>
+		<div :id="FRAME_TARGET_ID" class="personal-dashboard-focused-frame__body"></div>
 	</div>
 </template>
 
@@ -49,10 +49,14 @@ module.exports = defineComponent( {
 .personal-dashboard-focused-frame {
 	display: flex;
 	flex-direction: column;
-	gap: @spacing-25;
-	background: @background-color-base;
-	border: @border-subtle;
-	border-radius: @border-radius-base;
+
+	// The same space below the header and at the end as on the focused page
+	// (index.less). A long word breaks, as in a module, because the island
+	// content is outside one.
+	&__body {
+		padding: @spacing-100 @spacing-0;
+		overflow-wrap: anywhere;
+	}
 
 	// A soft nav focuses this element programmatically (see mounted() above)
 	// so a keyboard user lands somewhere real; it is not an interactive control

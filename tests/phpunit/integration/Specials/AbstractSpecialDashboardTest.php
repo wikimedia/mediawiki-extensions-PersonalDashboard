@@ -462,7 +462,7 @@ class AbstractSpecialDashboardTest extends SpecialPageTestBase {
 
 		$this->assertStringContainsString(
 			'href="' . htmlspecialchars( $elsewhere->getLinkURL() ) . '" '
-				. 'class="personal-dashboard-module-header-back-icon"',
+				. 'class="personal-dashboard-module-header-back-icon cdx-button',
 			$html
 		);
 	}

@@ -39,17 +39,6 @@ mw.loader.using( 'ext.wikimediaEvents.testKitchen' ).then( ( require ) => {
 		}
 	}
 
-	mw.hook( 'personaldashboard.recentactivity.loaded' ).add( () => {
-		// Not all views include this link
-		if ( document.querySelector( '#personal-dashboard-go-to-recentchanges' ) ) {
-			ClickThroughRateInstrument.start(
-				'#personal-dashboard-go-to-recentchanges',
-				'Go to Recent Changes link',
-				instrument
-			);
-		}
-	} );
-
 	mw.hook( 'personaldashboard.recentactivity.listcard.loaded' ).add( () => {
 		instrumentReviewChangesLinks(
 			'.personal-dashboard-review-changes__card' );

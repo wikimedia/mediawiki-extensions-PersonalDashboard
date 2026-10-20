@@ -1,0 +1,120 @@
+// The feed scaffold (FeedPanel.vue) and the feed card (FeedCard.vue). The page
+// loads these styles up front, so a placeholder that a module renders on the
+// server looks the same as the island that replaces it.
+
+.personal-dashboard-feed {
+	&__list {
+		display: flex;
+		flex-direction: column;
+		gap: @spacing-50;
+
+		// The body padding is the only space above the first row and below the
+		// last one.
+		&--dividers {
+			gap: @spacing-0;
+
+			> .cdx-card:first-child {
+				padding-top: @spacing-0;
+			}
+
+			> .cdx-card:last-child {
+				padding-bottom: @spacing-0;
+			}
+		}
+	}
+
+	&__show-more-row {
+		display: flex;
+		align-items: center;
+		gap: @spacing-50;
+		// Keep the row height while the progress bar replaces the button.
+		min-height: @min-size-interactive-pointer;
+		margin-top: @spacing-75;
+	}
+
+	&__show-less.cdx-button {
+		margin-left: auto;
+	}
+
+	&__load-more.cdx-button {
+		width: @size-full;
+		max-width: none;
+	}
+
+	// The narrow viewport breakpoint, not a class from the island, so a
+	// placeholder that a module renders on the server matches it.
+	@media screen and ( max-width: @max-width-breakpoint-mobile ) {
+		&__show-more.cdx-button {
+			width: @size-full;
+			max-width: none;
+		}
+	}
+}
+
+.personal-dashboard-feed__card {
+	// Codex styles the focus of the link card itself, but here the overlay link
+	// inside the card gets the focus.
+	&.cdx-card--is-link:has( .personal-dashboard-feed__card__link:focus-visible ) {
+		border-color: @border-color-progressive--focus;
+		box-shadow: @box-shadow-inset-small @box-shadow-color-progressive--focus;
+	}
+
+	// The doubled class beats the background of .cdx-card, which can load later.
+	&&--visited {
+		background-color: @background-color-neutral-subtle;
+		color: @color-subtle;
+
+		.cdx-card__text__title {
+			color: inherit;
+		}
+	}
+
+	.cdx-card__text {
+		width: @size-full;
+
+		// Lifted above the overlay link so slotted links and buttons stay clickable.
+		a:not( .personal-dashboard-feed__card__link ),
+		.cdx-button {
+			position: relative;
+			z-index: @z-index-above-content;
+		}
+	}
+
+	&__header {
+		display: flex;
+		align-items: center;
+		gap: @spacing-35;
+	}
+
+	&__header a,
+	&__meta a {
+		color: inherit;
+	}
+
+	&__container {
+		display: flex;
+		flex-direction: column;
+		gap: @spacing-25;
+	}
+
+	&__link {
+		position: absolute;
+		inset: 0;
+
+		// Without :has(), the overlay link keeps the browser focus ring.
+		@supports selector( :has( a ) ) {
+			&:focus-visible {
+				outline: @outline-base--focus;
+			}
+		}
+	}
+
+	&__meta {
+		display: flex;
+		align-items: center;
+		// A module can then truncate its leading group only after the trailing
+		// group wraps to the next line.
+		flex-wrap: wrap;
+		gap: @spacing-25;
+	}
+}

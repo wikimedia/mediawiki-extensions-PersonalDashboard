@@ -533,8 +533,8 @@ abstract class AbstractSpecialDashboard extends SpecialPage {
 	}
 
 	/**
-	 * Emit the server-owned card frames, grouped into the layout the Vue app
-	 * adopts. Each island frame carries an empty slot the client teleports into;
+	 * Emit the server-owned module frames, grouped into the layout the Vue app
+	 * adopts. Each island frame carries a slot the client teleports into;
 	 * server-rendered modules carry their full body.
 	 *
 	 * @param array $groups Module group tree
@@ -623,17 +623,25 @@ abstract class AbstractSpecialDashboard extends SpecialPage {
 	 * than minted per module, so a headerless module gets a way back too.
 	 */
 	private function buildBackLink(): string {
-		return Html::element( 'a', [
+		// The same Codex quiet icon button as the back link of FocusedHeader.vue.
+		return Html::rawElement( 'a', [
 			'href' => $this->getBackLinkTarget()->getLinkURL(),
-			'class' => 'personal-dashboard-module-header-back-icon',
+			'class' => [
+				'personal-dashboard-module-header-back-icon',
+				'cdx-button',
+				'cdx-button--fake-button',
+				'cdx-button--fake-button--enabled',
+				'cdx-button--weight-quiet',
+				'cdx-button--icon-only',
+			],
 			'aria-label' => $this->msg( 'personal-dashboard-back-to-dashboard' )->text(),
-		] );
+		], Html::element( 'span', [ 'class' => 'cdx-button__icon' ] ) );
 	}
 
 	/**
-	 * A page-level noscript notice explaining the empty card bodies. Island
-	 * bodies only fill in once the client mounts, so a no-JS visitor otherwise
-	 * sees bordered cards with nothing in them and no reason why.
+	 * A Codex warning that tells a no-JS visitor why the module bodies are empty:
+	 * island bodies fill in only when the client mounts. index.less hides it under
+	 * client-js.
 	 */
 	private function emitNoJsNotice(): void {
 		$this->getOutput()->addHTML( $this->codex

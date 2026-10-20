@@ -419,8 +419,9 @@ abstract class BaseModule implements IModule, MessageLocalizer {
 	 * Whether this module renders its whole body server-side. Three kinds of
 	 * module share this one flag:
 	 *
-	 *  - Island (the default, false): the frame carries an empty slot that the
-	 *    module's Vue component fills in client-side.
+	 *  - Island (the default, false): the frame carries a slot that the module's
+	 *    Vue component fills in client-side. Until then, it shows the module's
+	 *    loading markup.
 	 *  - Server-static (true, no getModules()): render() emits the full body and
 	 *    the client leaves it alone (Banner, ReturnToHomepage).
 	 *  - Progressively enhanced (true, with getModules()): render() emits the full
@@ -465,8 +466,8 @@ abstract class BaseModule implements IModule, MessageLocalizer {
 	}
 
 	/**
-	 * The body content for the frame: an empty mount slot for island modules, or
-	 * the full server-rendered body for modules that report serverRendered() true.
+	 * The body content for the frame: the mount slot for island modules, or the
+	 * full server-rendered body for modules that report serverRendered() true.
 	 *
 	 * @return string
 	 */
@@ -475,15 +476,33 @@ abstract class BaseModule implements IModule, MessageLocalizer {
 	}
 
 	/**
-	 * The empty mount slot an island module's Vue component teleports into.
+	 * The mount slot an island module's Vue component teleports into, with the
+	 * module's loading markup in it.
 	 *
 	 * @return string
 	 */
 	protected function getSlot(): string {
-		return Html::element( 'div', [
+		$loading = $this->getLoadingMarkup();
+
+		return Html::rawElement( 'div', [
 			'id' => 'pd-slot-' . $this->getName(),
 			'class' => 'personal-dashboard-module-slot',
-		] );
+		], $loading === '' ? '' : Html::rawElement( 'div', [
+			'class' => 'personal-dashboard-module-slot-loading',
+			'aria-hidden' => 'true',
+		], $loading ) );
+	}
+
+	/**
+	 * Server markup that looks like the island's loading state, for example the
+	 * empty cards of a feed. The island replaces it when it mounts, so the
+	 * module does not change size then. Without JS, no island comes, so the
+	 * loading markup does not show. Empty by default.
+	 *
+	 * @return string HTML
+	 */
+	protected function getLoadingMarkup(): string {
+		return '';
 	}
 
 	/**
@@ -502,19 +521,31 @@ abstract class BaseModule implements IModule, MessageLocalizer {
 	}
 
 	/**
-	 * The empty mount slot for the header menu. The module's Vue component
-	 * teleports its button, and the dialogs the button opens, into this slot.
+	 * The mount slot for the header menu. The module's Vue component teleports its
+	 * button, and the dialogs the button opens, into this slot.
 	 *
-	 * It reserves the button's own box, so the header does not move when the
-	 * island mounts.
+	 * Until then, the slot shows a look-alike of the button, so the header looks
+	 * the same before and after the island mounts. The look-alike is not a
+	 * control: it is hidden from assistive technology, and without JS, where no
+	 * menu can open, it does not show.
 	 *
 	 * @return string
 	 */
 	protected function getHeaderMenuSlot(): string {
-		return Html::element( 'div', [
+		return Html::rawElement( 'div', [
 			'id' => 'pd-header-slot-' . $this->getName(),
 			'class' => 'personal-dashboard-module-header-menu',
-		] );
+		], Html::rawElement( 'span', [
+			'class' => [
+				'personal-dashboard-module-header-menu-loading',
+				'cdx-button',
+				'cdx-button--fake-button',
+				'cdx-button--fake-button--enabled',
+				'cdx-button--weight-quiet',
+				'cdx-button--icon-only',
+			],
+			'aria-hidden' => 'true',
+		], Html::element( 'span', [ 'class' => 'cdx-button__icon' ] ) ) );
 	}
 
 	/**
@@ -632,7 +663,7 @@ abstract class BaseModule implements IModule, MessageLocalizer {
 	 * The module body. Island modules leave this empty (their body is the
 	 * client-filled slot); server-rendered modules override it with their full
 	 * content, and must also override serverRendered() to return true. Override
-	 * one without the other and getBodyContent() hands back an empty slot, so the
+	 * one without the other and getBodyContent() hands back the mount slot, so the
 	 * body silently never renders.
 	 *
 	 * @return string HTML content of the body

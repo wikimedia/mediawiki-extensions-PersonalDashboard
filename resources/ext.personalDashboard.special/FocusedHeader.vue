@@ -23,11 +23,9 @@
 			<cdx-icon :icon="cdxIconArrowPrevious"></cdx-icon>
 		</cdx-button>
 
-		<div class="personal-dashboard-focused-header__title-group">
-			<h2 class="personal-dashboard-focused-header__title">
-				{{ title }}
-			</h2>
-		</div>
+		<h2 class="personal-dashboard-focused-header__title">
+			{{ title }}
+		</h2>
 
 		<!--
 			The mount slot for the module's header menu while this header stands
@@ -91,8 +89,7 @@ module.exports = defineComponent( {
 .personal-dashboard-focused-header {
 	.personal-dashboard-focused-header-frame();
 	.personal-dashboard-focused-header-content();
-	box-sizing: border-box;
-	width: 100%;
+	width: @size-full;
 
 	// Pushed to the far end, opposite the back arrow, as the card header's own
 	// slot is. CSSJanus flips this for RTL.
@@ -105,32 +102,17 @@ module.exports = defineComponent( {
 		min-height: @min-size-interactive-pointer;
 	}
 
-	&__title-group {
-		flex-grow: 0;
-		overflow: hidden;
-
-		// Heading 4 (T433896). Hard-coded rather than @font-size-medium because
-		// Vector reports this special page as excluded from font modes, which
-		// pins that token to @font-size-small. Same workaround, same reason, as
-		// the card headers in ext.personalDashboard.styles.
-		//
-		// The margin/padding/border/font-family reset undoes the content-heading
-		// styling the skin applies (`.mw-body h2`, `.mw-body-content h2`), which
-		// applies to any h2 in the page body, not just ones inside parser
-		// output; a CdxDialog header carries that reset for free, but
-		// this element renders outside one. Qualified by the parent class
-		// rather than the bare `&__title` class alone: the selectors the skin uses
-		// pair a class with the `h2` type, so matching their specificity
-		// exactly instead of beating it would leave the winner up to
-		// stylesheet order.
-		.personal-dashboard-focused-header__title {
-			.personal-dashboard-module-header-title();
-			margin: 0;
-			padding: 0;
-			border: 0;
-			font-family: inherit;
-			line-height: 1.5;
-		}
+	// Heading 4 (T433896). Reset the skin styles for h2 in the page body
+	// (`.mw-body h2`), as a CdxDialog header does. The parent class makes the
+	// selector more specific than the skin selector.
+	& &__title {
+		.personal-dashboard-module-header-title();
+		margin: @spacing-0;
+		padding: @spacing-0;
+		border: 0;
+		font-family: inherit;
+		line-height: inherit;
+		color: inherit;
 	}
 }
 </style>

@@ -36,6 +36,13 @@ test( 'renders the meta and description rows when filled', () => {
 	expect( wrapper.find( '.personal-dashboard-feed__card__description' ).text() ).toStrictEqual( 'The latest comment' );
 } );
 
+test( 'renders a description without meta as the Codex card description', () => {
+	const wrapper = mountCard( {}, { description: 'French painter' } );
+
+	expect( wrapper.find( '.cdx-card__text__description' ).text() ).toStrictEqual( 'French painter' );
+	expect( wrapper.find( '.personal-dashboard-feed__card__container' ).exists() ).toStrictEqual( false );
+} );
+
 test( 'passes supporting text through to the card', () => {
 	const wrapper = mountCard( {}, { 'supporting-text': '<span class="test-chip">Major</span>' } );
 
@@ -68,10 +75,17 @@ test( 'has no overlay link without a destination', () => {
 	const wrapper = mountCard();
 
 	expect( wrapper.find( LINK_SELECTOR ).exists() ).toStrictEqual( false );
+	expect( wrapper.classes() ).not.toContain( 'cdx-card--is-link' );
+} );
+
+test( 'is a Codex link card when it has a destination', () => {
+	const wrapper = mountCard( { url: '/wiki/Foo' } );
+
+	expect( wrapper.classes() ).toContain( 'cdx-card--is-link' );
 } );
 
 test( 'marks itself visited once the overlay link is clicked', async () => {
-	const wrapper = mountCard( { url: '/wiki/Foo' } );
+	const wrapper = mountCard( { url: '/wiki/Foo', markVisited: true } );
 
 	expect( wrapper.classes() ).not.toContain( VISITED_CLASS );
 
@@ -84,11 +98,22 @@ test( 'marks itself visited once the overlay link is clicked', async () => {
 } );
 
 test( 'a click on a slotted link does not mark the card visited', async () => {
-	const wrapper = mountCard( { url: '/wiki/Foo' }, {
+	const wrapper = mountCard( { url: '/wiki/Foo', markVisited: true }, {
 		meta: '<a class="test-inner-link">A user</a>'
 	} );
 
 	await wrapper.find( '.test-inner-link' ).trigger( 'click' );
+
+	expect( wrapper.classes() ).not.toContain( VISITED_CLASS );
+} );
+
+test( 'does not mark itself visited without markVisited', async () => {
+	const wrapper = mountCard( { url: '/wiki/Foo' } );
+
+	// Remove href, or happy-dom fetches the URL.
+	const link = wrapper.find( LINK_SELECTOR );
+	link.element.removeAttribute( 'href' );
+	await link.trigger( 'click' );
 
 	expect( wrapper.classes() ).not.toContain( VISITED_CLASS );
 } );

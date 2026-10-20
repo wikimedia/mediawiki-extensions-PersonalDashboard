@@ -163,7 +163,9 @@
 				"personal-dashboard-multi-step-dialog-got-it-button",
 				"personal-dashboard-feed-error",
 				"personal-dashboard-feed-incomplete",
-				"personal-dashboard-feed-load-more"
+				"personal-dashboard-feed-load-more",
+				"personal-dashboard-feed-loading-more",
+				"personal-dashboard-feed-show-less"
 			],
 			"packageFiles": [
 				"index.js",
@@ -181,6 +183,7 @@
 					"callback": "MediaWiki\\ResourceLoader\\CodexModule::getIcons",
 					"callbackParam": [
 						"cdxIconClose",
+						"cdxIconCollapse",
 						"cdxIconEllipsis",
 						"cdxIconNext",
 						"cdxIconPrevious"
@@ -276,10 +279,10 @@
 				"personal-dashboard-review-changes-menu-personalization",
 				"personal-dashboard-review-changes-personalization-description",
 				"personal-dashboard-review-changes-personalization-title",
+				"personal-dashboard-review-changes-show-less-aria-label",
+				"personal-dashboard-review-changes-show-more-aria-label",
 				"personal-dashboard-risky-article-edits-list-card-aria-label",
 				"personal-dashboard-risky-article-edits-list-card-no-comment-message",
-				"personal-dashboard-risky-article-edits-mobile-summary-footer-link-text",
-				"personal-dashboard-risky-article-edits-progress-bar-aria-label",
 				"personal-dashboard-risky-article-edits-subheader-info",
 				"tag-mw-reverted",
 				"tag-mw-rollback",
@@ -321,9 +324,8 @@
 				"personal-dashboard-active-discussions-fetch-error",
 				"personal-dashboard-active-discussions-in-topic",
 				"comma-separator",
-				"personal-dashboard-active-discussions-mobile-summary-footer-link-text",
-				"personal-dashboard-active-discussions-mobile-summary-footer-button-aria-label",
-				"personal-dashboard-active-discussions-progress-bar-aria-label"
+				"personal-dashboard-active-discussions-show-more-aria-label",
+				"personal-dashboard-active-discussions-show-less-aria-label"
 			],
 			"dependencies": [
 				"vue",
@@ -337,8 +339,12 @@
 			"class": "MediaWiki\\ResourceLoader\\CodexModule",
 			"codexStyleOnly": true,
 			"codexComponents": [
+				"CdxButton",
+				"CdxCard",
 				"CdxInfoChip",
-				"CdxMessage"
+				"CdxMessage",
+				"CdxProgressBar",
+				"CdxThumbnail"
 			],
 			"styles": [
 				"index.less"

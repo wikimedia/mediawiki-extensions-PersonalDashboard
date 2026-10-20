@@ -39,6 +39,7 @@ class BaseModuleTest extends MediaWikiUnitTestCase {
 			public bool $hasHeaderMenuFlag = false;
 			public string $headerTextValue = '';
 			public string $subheaderTextValue = '';
+			public string $loadingMarkupValue = '';
 
 			protected function getHeaderText(): string {
 				return $this->headerTextValue;
@@ -58,6 +59,10 @@ class BaseModuleTest extends MediaWikiUnitTestCase {
 
 			protected function getBody(): string {
 				return '<p>SERVER_BODY_SENTINEL</p>';
+			}
+
+			protected function getLoadingMarkup(): string {
+				return $this->loadingMarkupValue;
 			}
 
 			public function callGetBodyContent(): string {
@@ -107,6 +112,19 @@ class BaseModuleTest extends MediaWikiUnitTestCase {
 
 		$this->assertStringStartsWith(
 			'<div id="pd-slot-impact" class="personal-dashboard-module-slot"></div>',
+			$module->callGetSlot()
+		);
+	}
+
+	public function testGetSlotHidesTheLoadingMarkupFromAssistiveTechnology() {
+		$module = $this->newModule();
+		$module->setName( 'impact' );
+		$module->loadingMarkupValue = '<span id="LOADING_SENTINEL"></span>';
+
+		$this->assertSame(
+			'<div id="pd-slot-impact" class="personal-dashboard-module-slot">'
+				. '<div class="personal-dashboard-module-slot-loading" aria-hidden="true">'
+				. '<span id="LOADING_SENTINEL"></span></div></div>',
 			$module->callGetSlot()
 		);
 	}
@@ -294,6 +312,20 @@ class BaseModuleTest extends MediaWikiUnitTestCase {
 			strrpos( $html, 'id="pd-header-slot-ext.personalDashboard.reviewChanges"' ),
 			'the menu slot must come after the link it sits beside'
 		);
+	}
+
+	public function testHeaderMenuSlotShowsAHiddenLookAlikeOfTheButton() {
+		$module = $this->newModule();
+		$module->setName( 'ext.personalDashboard.reviewChanges' );
+		$module->headerTextValue = 'Review changes';
+		$module->hasHeaderMenuFlag = true;
+
+		$html = $module->callGetHtml();
+
+		$this->assertStringContainsString(
+			'<span class="personal-dashboard-module-header-menu-loading cdx-button', $html );
+		$this->assertMatchesRegularExpression(
+			'/class="personal-dashboard-module-header-menu-loading[^"]*" aria-hidden="true"/', $html );
 	}
 
 	public function testHeaderMenuFocusedHeaderCarriesTheMountSlotAfterTheBackLink() {

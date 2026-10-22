@@ -10,5 +10,6 @@
 	"personal-dashboard-multi-step-dialog-previous-button": "السابق",
 	"personal-dashboard-multi-step-dialog-got-it-button": "عُلِم",
 	"personal-dashboard-feed-error": "خطأ $1",
+	"personal-dashboard-feed-incomplete": "تعذر تحميل هذا الآن. حاول مرة أخرى لاحقاً.",
 	"personal-dashboard-feed-load-more": "عرض المزيد"
 }

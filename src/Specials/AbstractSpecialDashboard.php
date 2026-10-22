@@ -344,6 +344,7 @@ abstract class AbstractSpecialDashboard extends SpecialPage {
 			$this->dependencies->experimentManager,
 			$this->dependencies->statsFactory,
 			$this->getExperimentManifest(),
+			$this->getStatsComponent(),
 			$registry
 		);
 		$resolution = $resolver->resolve();

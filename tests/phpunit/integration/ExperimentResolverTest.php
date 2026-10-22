@@ -17,7 +17,16 @@ use Wikimedia\Stats\StatsFactory;
  */
 class ExperimentResolverTest extends MediaWikiIntegrationTestCase {
 
-	private const REGISTRY = [ 'default' => [], 'T426615' => [], 'T430001' => [] ];
+	private const array REGISTRY = [ 'default' => [], 'T426615' => [], 'T430001' => [] ];
+
+	/**
+	 * Deliberately not the 'PersonalDashboard' default. A counter that still
+	 * reported under a hardcoded component would never reach a helper that
+	 * watches this one, and the helper throws OutOfBoundsException for a
+	 * component it never saw. So one assertion per counter test proves the
+	 * resolver reports under the name the dashboard gave it.
+	 */
+	private const string STATS_COMPONENT = 'PersonalDashboardTestDouble';
 
 	protected function setUp(): void {
 		parent::setUp();
@@ -60,7 +69,8 @@ class ExperimentResolverTest extends MediaWikiIntegrationTestCase {
 			$experimentManager,
 			$statsFactory ?? StatsFactory::newNull(),
 			$manifest,
-			$registry
+			statsComponent: self::STATS_COMPONENT,
+			moduleGroupRegistry: $registry,
 		);
 	}
 
@@ -157,7 +167,7 @@ class ExperimentResolverTest extends MediaWikiIntegrationTestCase {
 		$experiment->expects( $this->never() )->method( 'sendExposure' );
 		$experimentManager = $this->mockExperimentManager( [ 'T426615' => $experiment ] );
 
-		$statsHelper = StatsFactory::newUnitTestingHelper()->withComponent( 'PersonalDashboard' );
+		$statsHelper = StatsFactory::newUnitTestingHelper()->withComponent( self::STATS_COMPONENT );
 
 		$logger = $this->createMock( LoggerInterface::class );
 		$logger->expects( $this->once() )->method( 'error' );
@@ -189,7 +199,7 @@ class ExperimentResolverTest extends MediaWikiIntegrationTestCase {
 			'T430001' => $loser,
 		] );
 
-		$statsHelper = StatsFactory::newUnitTestingHelper()->withComponent( 'PersonalDashboard' );
+		$statsHelper = StatsFactory::newUnitTestingHelper()->withComponent( self::STATS_COMPONENT );
 
 		$logger = $this->createMock( LoggerInterface::class );
 		$logger->expects( $this->once() )->method( 'error' );

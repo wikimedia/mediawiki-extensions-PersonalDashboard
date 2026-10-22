@@ -200,7 +200,7 @@ class SpecialBoilerPlateDashboard extends AbstractSpecialDashboard {
 
 That is a working dashboard. Four more accessors have defaults you may want to change:
 
-- `getStatsComponent()`: the StatsFactory component the server-side render timings report under. It defaults to `PersonalDashboard`, so your dashboard's timings land in Personal Dashboard's metrics. Return your own extension's name to tell them apart in Grafana.
+- `getStatsComponent()`: the StatsFactory component this dashboard's server-side metrics report under — the render timings, and the experiment routing counters behind them. It defaults to `PersonalDashboard`, so your dashboard's metrics land in Personal Dashboard's. Return your own extension's name to tell them apart in Grafana.
 - `getBackLinkTarget()`: the `Title` a focused module's back link returns to. It defaults to your own dashboard. Override it to send the user somewhere else, for example the page your dashboard is reached from.
 - `getExperimentManifest()`: the TestKitchen experiments that can reroute your dashboard to another module group. It defaults to none, so leave it alone until you run one. A manifest names module groups, and a module group by convention belongs to one dashboard, so only declare your own experiments here. See [./experiments.md](./experiments.md).
 - `requiresNamedUser()`: whether the page refuses anyone who is not logged in. It defaults to `true`, which is what every dashboard wants that reads the viewer's own activity. Return `false` only if yours renders something for a logged-out reader.

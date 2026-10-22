@@ -122,11 +122,14 @@ class AbstractSpecialDashboardTest extends SpecialPageTestBase {
 		parent::tearDown();
 	}
 
-	private function dependencies( ?ExperimentManagerInterface $experimentManager = null ): DashboardPageDependencies {
+	private function dependencies(
+		?ExperimentManagerInterface $experimentManager = null,
+		?StatsFactory $statsFactory = null
+	): DashboardPageDependencies {
 		$services = $this->getServiceContainer();
 		return new DashboardPageDependencies(
 			PersonalDashboardServices::wrap( $services )->getPersonalDashboardModuleFactory(),
-			$services->getStatsFactory(),
+			$statsFactory ?? $services->getStatsFactory(),
 			$experimentManager,
 		);
 	}
@@ -418,11 +421,8 @@ class AbstractSpecialDashboardTest extends SpecialPageTestBase {
 	public function testStatsComponentAccessorIsHonoured() {
 		$statsHelper = StatsFactory::newUnitTestingHelper()
 			->withComponent( 'PersonalDashboardTestDouble' );
-		$this->page = new TestDashboardSpecialPage( new DashboardPageDependencies(
-			PersonalDashboardServices::wrap( $this->getServiceContainer() )
-				->getPersonalDashboardModuleFactory(),
-			$statsHelper->getStatsFactory(),
-		) );
+		$this->page = new TestDashboardSpecialPage(
+			$this->dependencies( null, $statsHelper->getStatsFactory() ) );
 
 		$this->executeSpecialPage( '', null, null, ( new TestUser( 'ADashboardUser' ) )->getUser() );
 
@@ -434,6 +434,41 @@ class AbstractSpecialDashboardTest extends SpecialPageTestBase {
 		 */
 		$this->assertSame( 1, $statsHelper->count(
 			'special_dashboard_server_side_render_seconds{platform="desktop"}' ) );
+	}
+
+	/**
+	 * The same accessor one layer down: the experiment resolver's counters
+	 * belong to the dashboard that built it, so a dashboard's routing counters
+	 * sit beside its render timings instead of in Personal Dashboard's
+	 * metrics.
+	 *
+	 * An unroutable manifest is the cheapest way to make the resolver count
+	 * anything, because it needs only one experiment. ExperimentResolverTest
+	 * covers what the counter means.
+	 */
+	public function testStatsComponentReachesTheExperimentResolver() {
+		$this->requireTestKitchen();
+		$logger = $this->createMock( LoggerInterface::class );
+		$logger->expects( $this->once() )->method( 'error' );
+		$this->setLogger( 'PersonalDashboard', $logger );
+
+		$statsHelper = StatsFactory::newUnitTestingHelper()
+			->withComponent( 'PersonalDashboardTestDouble' );
+		$dashboard = $this->wrap( new TestDashboardSpecialPage(
+			$this->dependencies(
+				$this->experimentManagerAssigning( 'treatment' ),
+				$statsHelper->getStatsFactory()
+			),
+			'PersonalDashboardTestDouble',
+			'testDouble',
+			'PersonalDashboardTestDouble',
+			[ 'T426615' => [ 'treatment' => 'notARegisteredGroup' ] ]
+		) );
+		$dashboard->getModuleGroups();
+
+		// One assertion again, for the reason the test above gives.
+		$this->assertSame( 1, $statsHelper->count(
+			'special_dashboard_experiment_unroutable_total{experiment="T426615"}' ) );
 	}
 
 	public function testBackLinkTargetDefaultsToThisDashboard() {

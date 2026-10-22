@@ -22,13 +22,17 @@ final readonly class ExperimentResolver {
 	 * @param ?ExperimentManagerInterface $experimentManager TestKitchen's
 	 *   enrollment reader, or null if TestKitchen isn't installed
 	 * @param StatsFactory $statsFactory
-	 * @param array<string, array<string, string>> $manifest Experiments::all()
+	 * @param array<string, array<string, string>> $manifest The dashboard's
+	 *   own manifest, from AbstractSpecialDashboard::getExperimentManifest()
+	 * @param string $statsComponent StatsFactory component the counters
+	 *   report under, so they sit with that dashboard's other metrics
 	 * @param array $moduleGroupRegistry Registered module groups, keyed by ID
 	 */
 	public function __construct(
 		private ?ExperimentManagerInterface $experimentManager,
 		private StatsFactory $statsFactory,
 		private array $manifest,
+		private string $statsComponent,
 		private array $moduleGroupRegistry
 	) {
 	}
@@ -103,7 +107,7 @@ final readonly class ExperimentResolver {
 	}
 
 	private function recordUnroutable( string $experimentName, string $moduleGroup ): void {
-		$this->statsFactory->withComponent( 'PersonalDashboard' )
+		$this->statsFactory->withComponent( $this->statsComponent )
 			->getCounter( 'special_dashboard_experiment_unroutable_total' )
 			->setLabel( 'wiki', WikiMap::getCurrentWikiId() )
 			->setLabel( 'experiment', $experimentName )
@@ -128,7 +132,7 @@ final readonly class ExperimentResolver {
 	 */
 	private function recordConflicts( string $winner, array $preempted, string $moduleGroup ): void {
 		foreach ( $preempted as $preemptedName ) {
-			$this->statsFactory->withComponent( 'PersonalDashboard' )
+			$this->statsFactory->withComponent( $this->statsComponent )
 				->getCounter( 'special_dashboard_experiment_routing_conflicts_total' )
 				->setLabel( 'wiki', WikiMap::getCurrentWikiId() )
 				->setLabel( 'winner', $winner )

@@ -141,6 +141,11 @@ visible via:
   `experiment`, `module_group`), and a matching error log line, when an
   experiment's variant maps to a module group this wiki doesn't have.
 
+Both counters report under the dashboard's own StatsFactory component, the
+one `getStatsComponent()` names, so they sit beside that dashboard's render
+timings rather than in Personal Dashboard's metrics. Look for them under
+your own component where your dashboard supplies one.
+
 Two routing experiments over genuinely disjoint populations (say, different
 edit-count bands) never compete for the same request and won't trigger
 either counter.

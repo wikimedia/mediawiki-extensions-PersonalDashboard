@@ -9,5 +9,7 @@
 	"personal-dashboard-multi-step-dialog-next-button": "Ďalej",
 	"personal-dashboard-multi-step-dialog-previous-button": "Späť",
 	"personal-dashboard-multi-step-dialog-got-it-button": "Rozumiem",
-	"personal-dashboard-feed-incomplete": "Toto sa momentálne nepodarilo načítať. Skúste to znova neskôr."
+	"personal-dashboard-feed-error": "Chyba $1",
+	"personal-dashboard-feed-incomplete": "Toto sa momentálne nepodarilo načítať. Skúste to znova neskôr.",
+	"personal-dashboard-feed-load-more": "Zobraziť viac"
 }

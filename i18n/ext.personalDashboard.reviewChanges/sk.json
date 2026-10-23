@@ -11,5 +11,12 @@
 	"personal-dashboard-risky-article-edits-list-card-aria-label": "Otvoriť zobrazenie rozdielov pre $1",
 	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Bez zhrnutia úpravy",
 	"personal-dashboard-risky-article-edits-progress-bar-aria-label": "vložený ukazovateľ priebehu naznačujúci, kedy sú zmeny na posúdenie načítané",
-	"personal-dashboard-review-changes-empty": "Nenašli sa žiadne zmeny"
+	"personal-dashboard-review-changes-empty": "Nenašli sa žiadne zmeny",
+	"personal-dashboard-review-changes-major-changes-label": "Veľké zmeny",
+	"personal-dashboard-review-changes-high-revert-risk-label": "Vysoké riziko revertu",
+	"personal-dashboard-review-changes-menu-button-label": "Ďalšie možnosti pre Kontrolu zmien",
+	"personal-dashboard-review-changes-menu-personalization": "Prispôsobenie",
+	"personal-dashboard-review-changes-menu-about": "O Kontrole zmien",
+	"personal-dashboard-review-changes-personalization-title": "Prispôsobiť Kontrolu zmien",
+	"personal-dashboard-review-changes-personalization-description": "Navrhuje relevantné zmeny na základe vašej aktivity pri úpravách. [https://www.mediawiki.org/wiki/Home/Recommendations#Review_Changes Ďalšie informácie]"
 }

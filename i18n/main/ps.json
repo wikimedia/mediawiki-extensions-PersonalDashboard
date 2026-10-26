@@ -8,7 +8,7 @@
 	"personal-dashboard-beta-info-chip-text": "ازمېښتي",
 	"personal-dashboard-desc": "مديرانو لپاره يو ازمېښتي ليددړه",
 	"personal-dashboard-link-title": "ليددړه",
-	"personal-dashboard-module-no-js-fallback": "د دې ټوټې کتلو لپاره مهرباني وکړئ جاواسکريپټ چارن کړئ.",
+	"personal-dashboard-module-no-js-fallback": "د دې ليددړې ځينې برخې به تر هغې نه ښکاري؛ ترڅو چې ستاسو ښوونگر کې جاواسکريپټ چارن نه وي.",
 	"personal-dashboard-open-module": "دا چلنوال پرانېځئ",
 	"personal-dashboard-specialpage-title": "{{GENDER:$1|سلام}}، {{bidi:$1}}!",
 	"personal-dashboard-survey-text": "[$1 غبرگون شريکول]",

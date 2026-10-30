@@ -13,6 +13,27 @@ function mountMenu( slots = {}, global = {} ) {
 	} );
 }
 
+test( 'emits menu-open when the menu opens, but not when the menu closes', async () => {
+	const wrapper = mountMenu();
+	const button = wrapper.get( 'button' );
+
+	await button.trigger( 'click' );
+	await button.trigger( 'click' );
+
+	expect( wrapper.emitted( 'menu-open' ) ).toHaveLength( 1 );
+} );
+
+test( 'emits menu-open when a key opens the menu, but not for the Tab key', async () => {
+	const wrapper = mountMenu();
+	const button = wrapper.get( 'button' );
+
+	await button.trigger( 'keydown', { key: 'Tab' } );
+	expect( wrapper.emitted( 'menu-open' ) ).toBeUndefined();
+
+	await button.trigger( 'keydown', { key: 'ArrowDown' } );
+	expect( wrapper.emitted( 'menu-open' ) ).toHaveLength( 1 );
+} );
+
 test( 'names the icon-only button, which would otherwise announce nothing', () => {
 	const wrapper = mountMenu();
 

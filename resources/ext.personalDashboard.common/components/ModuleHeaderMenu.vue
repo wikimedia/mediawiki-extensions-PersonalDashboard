@@ -22,7 +22,7 @@
 </template>
 
 <script>
-const { defineComponent, ref } = require( 'vue' );
+const { defineComponent, ref, watch } = require( 'vue' );
 const { CdxIcon, CdxMenuButton } = require( '../codex.js' );
 const { cdxIconEllipsis } = require( '../icons.json' );
 
@@ -61,9 +61,10 @@ module.exports = defineComponent( {
 			required: true
 		}
 	},
-	emits: [ 'select' ],
+	emits: [ 'select', 'menu-open' ],
 	setup( props, { emit } ) {
 		const selected = ref( null );
+		const menuButton = ref( null );
 
 		/**
 		 * CdxMenuButton is a select control, so it holds the item it was given
@@ -80,6 +81,16 @@ module.exports = defineComponent( {
 			emit( 'select', value );
 		}
 
+		// TODO T443611: Use the Codex open event when it exists.
+		watch(
+			() => menuButton.value && menuButton.value.expanded,
+			( isOpen, wasOpen ) => {
+				if ( isOpen && !wasOpen ) {
+					emit( 'menu-open' );
+				}
+			}
+		);
+
 		return {
 			// The menu must stay inside this component. A teleported one goes to
 			// the target createMwApp provides, which is also where CdxDialog
@@ -89,7 +100,7 @@ module.exports = defineComponent( {
 			// stacking context and opens over the body. Set here rather than
 			// left to the app default, so no later app-wide provide can move it.
 			menuConfig: { renderInPlace: true },
-			menuButton: ref( null ),
+			menuButton,
 			selected,
 			onSelect,
 			cdxIconEllipsis

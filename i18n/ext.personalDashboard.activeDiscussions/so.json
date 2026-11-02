@@ -8,7 +8,6 @@
 	"personal-dashboard-active-discussions-latest-comment": "Faalladii ugu dambeysay:",
 	"personal-dashboard-active-discussions-fetch-error": "Lama helin dooddo firfircoon",
 	"personal-dashboard-active-discussions-in-topic": "$1, ee $2",
-	"personal-dashboard-active-discussions-mobile-summary-footer-link-text": "Eeg wax badan",
-	"personal-dashboard-active-discussions-mobile-summary-footer-button-aria-label": "U gudub doodo firfircoon oo dheeraad ah",
-	"personal-dashboard-active-discussions-progress-bar-aria-label": "Xariijinta horumarka ee gudaha ku jirta oo muujinaysa in doodaha firfircoon la soo rarayo"
+	"personal-dashboard-active-discussions-show-more-aria-label": "Muuji doodaha firfircoon ee dheeraadka ah",
+	"personal-dashboard-active-discussions-show-less-aria-label": "Muuji doodaha firfircoon ee yar"
 }

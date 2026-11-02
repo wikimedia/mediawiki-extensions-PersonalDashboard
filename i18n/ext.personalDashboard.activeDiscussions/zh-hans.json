@@ -8,7 +8,6 @@
 	"personal-dashboard-active-discussions-latest-comment": "最新留言：",
 	"personal-dashboard-active-discussions-fetch-error": "未找到活跃的讨论",
 	"personal-dashboard-active-discussions-in-topic": "$1，$2下",
-	"personal-dashboard-active-discussions-mobile-summary-footer-link-text": "查看更多",
-	"personal-dashboard-active-discussions-mobile-summary-footer-button-aria-label": "转到更活跃的讨论",
-	"personal-dashboard-active-discussions-progress-bar-aria-label": "内联进度条，提示正在加载活跃的讨论"
+	"personal-dashboard-active-discussions-show-more-aria-label": "显示更多活跃的讨论",
+	"personal-dashboard-active-discussions-show-less-aria-label": "显示更少活跃的讨论"
 }

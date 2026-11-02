@@ -17,5 +17,7 @@
 	"personal-dashboard-review-changes-menu-personalization": "Personalización",
 	"personal-dashboard-review-changes-menu-about": "Acerca da revisión de cambios",
 	"personal-dashboard-review-changes-personalization-title": "Personalizar a revisión de cambios",
-	"personal-dashboard-review-changes-personalization-description": "Suxire cambios relevantes en función da túa actividade de edición. [https://www.mediawiki.org/wiki/Home/Recommendations#Review_Changes Máis información]."
+	"personal-dashboard-review-changes-personalization-description": "Suxire cambios relevantes en función da túa actividade de edición. [https://www.mediawiki.org/wiki/Home/Recommendations#Review_Changes Máis información].",
+	"personal-dashboard-review-changes-show-more-aria-label": "Mostrar máis cambios para revisar",
+	"personal-dashboard-review-changes-show-less-aria-label": "Mostrar menos cambios para revisar"
 }

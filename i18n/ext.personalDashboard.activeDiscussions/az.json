@@ -8,7 +8,6 @@
 	"personal-dashboard-active-discussions-latest-comment": "Son şərh:",
 	"personal-dashboard-active-discussions-fetch-error": "Aktiv müzakirə tapılmadı",
 	"personal-dashboard-active-discussions-in-topic": "$1, \"$2\" mövzusunda",
-	"personal-dashboard-active-discussions-mobile-summary-footer-link-text": "Daha ətraflı",
-	"personal-dashboard-active-discussions-mobile-summary-footer-button-aria-label": "Daha aktiv müzakirələrə keçin",
-	"personal-dashboard-active-discussions-progress-bar-aria-label": "aktiv müzakirələrin yükləndiyini göstərən sətir içi irəliləyiş paneli"
+	"personal-dashboard-active-discussions-show-more-aria-label": "Daha aktiv müzakirələri göstər",
+	"personal-dashboard-active-discussions-show-less-aria-label": "Daha az aktiv müzakirə göstər"
 }

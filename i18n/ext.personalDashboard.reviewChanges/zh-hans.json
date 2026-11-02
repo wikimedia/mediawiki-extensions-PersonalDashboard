@@ -20,5 +20,7 @@
 	"personal-dashboard-review-changes-menu-personalization": "个性化",
 	"personal-dashboard-review-changes-menu-about": "关于检查更改",
 	"personal-dashboard-review-changes-personalization-title": "个性化检查更改",
-	"personal-dashboard-review-changes-personalization-description": "根据您编辑活动所提出的相关更改建议。[https://www.mediawiki.org/wiki/Home/Recommendations#Review_Changes 了解更多]"
+	"personal-dashboard-review-changes-personalization-description": "根据您编辑活动所提出的相关更改建议。[https://www.mediawiki.org/wiki/Home/Recommendations#Review_Changes 了解更多]",
+	"personal-dashboard-review-changes-show-more-aria-label": "显示更多待检查的更改",
+	"personal-dashboard-review-changes-show-less-aria-label": "显示更少待检查的更改"
 }

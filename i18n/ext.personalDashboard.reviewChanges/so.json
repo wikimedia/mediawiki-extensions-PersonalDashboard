@@ -17,5 +17,7 @@
 	"personal-dashboard-review-changes-menu-personalization": "Shakhsiyeyn",
 	"personal-dashboard-review-changes-menu-about": "Ku saabsan Dib u eegista isbeddellada",
 	"personal-dashboard-review-changes-personalization-title": "Shakhsiyey Dib u eegista isbeddellada",
-	"personal-dashboard-review-changes-personalization-description": "Waxay soo jeedinaysaa isbeddello khuseeya iyadoo ku salaynaysa hawshaada tifaftirka. [https://www.mediawiki.org/wiki/Home/Recommendations#Review_Changes Wax badan ka baro]"
+	"personal-dashboard-review-changes-personalization-description": "Waxay soo jeedinaysaa isbeddello khuseeya iyadoo ku salaynaysa hawshaada tifaftirka. [https://www.mediawiki.org/wiki/Home/Recommendations#Review_Changes Wax badan ka baro]",
+	"personal-dashboard-review-changes-show-more-aria-label": "Muuji isbeddello dheeraad ah oo dib loo eego",
+	"personal-dashboard-review-changes-show-less-aria-label": "Muuji isbeddello yar oo dib loo eego"
 }

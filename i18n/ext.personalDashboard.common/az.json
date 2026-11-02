@@ -10,5 +10,7 @@
 	"personal-dashboard-multi-step-dialog-got-it-button": "Başa düşdüm",
 	"personal-dashboard-feed-error": "Xəta $1",
 	"personal-dashboard-feed-incomplete": "İndi yükləmək mümkün deyil. Daha sonra yenidən cəhd edin.",
-	"personal-dashboard-feed-load-more": "Daha çox göstər"
+	"personal-dashboard-feed-load-more": "Daha çox göstər",
+	"personal-dashboard-feed-loading-more": "Daha çox yüklənir…",
+	"personal-dashboard-feed-show-less": "Daha az göstər"
 }

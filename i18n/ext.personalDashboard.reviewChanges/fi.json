@@ -9,5 +9,7 @@
 	"personal-dashboard-risky-article-edits-subheader-info": "Nämä muokkaukset ovat muiden käyttäjien tekemiä. Auta pitämään Wikipedia luotettavana tarkistamalla ne.",
 	"personal-dashboard-risky-article-edits-footer-preamble": "Katso lisää muokkauksia  [{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}} Tuoreet muutokset -sivulla]",
 	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Ei muokkausyhteenvetoa",
-	"personal-dashboard-review-changes-major-changes-label": "Suuret muutokset"
+	"personal-dashboard-review-changes-major-changes-label": "Suuret muutokset",
+	"personal-dashboard-review-changes-show-more-aria-label": "Näytä enemmän tarkistettavia muutoksia",
+	"personal-dashboard-review-changes-show-less-aria-label": "Näytä vähemmän tarkistettavia muutoksia"
 }

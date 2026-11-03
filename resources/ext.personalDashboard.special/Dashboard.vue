@@ -41,7 +41,7 @@ const {
 	DIALOG_HEADER_TARGET_ID,
 	FRAME_HEADER_TARGET_ID
 } = require( './teleportTargets.js' );
-const { useViewport } = require( './useViewport.js' );
+const { useViewport } = require( 'ext.personalDashboard.common' );
 
 // The server's card wrapper, which outlives this app and holds every card.
 const CARD_CONTAINER = '.personal-dashboard-container';

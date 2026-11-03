@@ -30,10 +30,10 @@ const { CdxDialog, CdxPopover } = require( '../codex.js' );
  * wide viewport, a bottom sheet on a narrow one, per T433725.
  *
  * The switch lives here rather than in each caller so the two presentations
- * cannot drift apart. `isNarrow` comes in as a prop because useViewport() lives
- * in ext.personalDashboard.special, which this module must not depend on; it
- * reads the same breakpoint CdxPopover uses to decide the bottom sheet, so the
- * two flip together.
+ * cannot drift apart. `isNarrow` comes in as a prop, the same as every other
+ * card gets it, so the island passes one value down instead of each panel
+ * calling useViewport() for itself. It reads the same breakpoint CdxPopover
+ * uses to decide the bottom sheet, so the two flip together.
  */
 module.exports = defineComponent( {
 	name: 'ModulePanel',

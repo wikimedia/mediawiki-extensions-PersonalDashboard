@@ -120,7 +120,6 @@
 				"ModuleDialog.vue",
 				"mediaWikiHistory.js",
 				"teleportTargets.js",
-				"useViewport.js",
 				"instrumentation/onPersonalDashboardBaseline.js",
 				"instrumentation/experiments.js",
 				"../ext.personalDashboard.common/stats.js",
@@ -134,7 +133,8 @@
 			],
 			"dependencies": [
 				"vue",
-				"personaldashboard-vue-router"
+				"personaldashboard-vue-router",
+				"ext.personalDashboard.common"
 			],
 			"messages": [
 				"personal-dashboard-back-to-dashboard"
@@ -179,6 +179,7 @@
 				"components/ModulePanel.vue",
 				"components/MultiStepDialog.vue",
 				"composables/useFeedState.js",
+				"composables/useViewport.js",
 				"stats.js",
 				{
 					"name": "icons.json",

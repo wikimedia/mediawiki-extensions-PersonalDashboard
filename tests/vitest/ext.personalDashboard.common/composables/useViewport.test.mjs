@@ -1,6 +1,6 @@
 import { vi, beforeEach, afterEach, test, expect } from 'vitest';
 
-const MODULE = '/resources/ext.personalDashboard.special/useViewport.js';
+const MODULE = '/resources/ext.personalDashboard.common/composables/useViewport.js';
 
 let matchMediaSpy;
 let capturedHandler;

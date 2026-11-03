@@ -3,7 +3,7 @@ import { mount, enableAutoUnmount } from '@vue/test-utils';
 import { ref } from 'vue';
 
 const isNarrow = ref( false );
-vi.mock( '/resources/ext.personalDashboard.special/useViewport.js', () => ( {
+vi.mock( 'ext.personalDashboard.common', () => ( {
 	useViewport: () => ( { isNarrow } )
 } ) );
 

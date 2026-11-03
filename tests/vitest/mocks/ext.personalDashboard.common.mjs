@@ -6,6 +6,7 @@ export { default as ModuleHeaderMenu } from '/resources/ext.personalDashboard.co
 export { default as ModulePanel } from '/resources/ext.personalDashboard.common/components/ModulePanel.vue';
 export { default as MultiStepDialog } from '/resources/ext.personalDashboard.common/components/MultiStepDialog.vue';
 export { useFeedState } from '/resources/ext.personalDashboard.common/composables/useFeedState.js';
+export { useViewport } from '/resources/ext.personalDashboard.common/composables/useViewport.js';
 import * as utils from '/resources/ext.personalDashboard.common/utils.js';
 
 export { utils };

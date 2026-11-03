@@ -24,7 +24,7 @@
 
 <script>
 const { defineComponent, ref } = require( 'vue' );
-const { useViewport } = require( './useViewport.js' );
+const { useViewport } = require( 'ext.personalDashboard.common' );
 const { recordTiming } = require( '../ext.personalDashboard.common/stats.js' );
 
 module.exports = defineComponent( {

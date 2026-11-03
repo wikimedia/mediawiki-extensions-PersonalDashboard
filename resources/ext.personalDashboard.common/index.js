@@ -4,6 +4,7 @@ const ModuleHeaderMenu = require( './components/ModuleHeaderMenu.vue' );
 const ModulePanel = require( './components/ModulePanel.vue' );
 const MultiStepDialog = require( './components/MultiStepDialog.vue' );
 const { useFeedState } = require( './composables/useFeedState.js' );
+const { useViewport } = require( './composables/useViewport.js' );
 const { FULL_LIMIT } = require( './constants.js' );
 const { fetchFeed } = require( './fetchFeed.js' );
 const utils = require( './utils.js' );
@@ -17,5 +18,6 @@ module.exports = {
 	ModulePanel,
 	MultiStepDialog,
 	useFeedState,
+	useViewport,
 	utils
 };

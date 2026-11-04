@@ -11,6 +11,14 @@ use MediaWiki\Language\MessageLocalizer;
  * The server copy of the loading state of FeedPanel.vue, for the
  * BaseModule::getLoadingMarkup() of a feed module. feed.less styles both, so the
  * page does not change when the island replaces this markup.
+ *
+ * @deprecated since 1.48, use the Modules\Trait\FeedLoadingMarkup trait. The
+ * trait builds the same markup with the Codex PHP instance of the module.
+ *
+ * This class stays only to keep GrowthExperiments master in operation until
+ * I05e64a39516514d74ff4385a0bb97fca5b336e81 merges. Zuul tests each repository
+ * against the master branch of the other one, and it does not support a
+ * dependency cycle. Delete this class after that change merges.
  */
 class FeedLoadingMarkup {
 
@@ -22,6 +30,7 @@ class FeedLoadingMarkup {
 	private const SUMMARY_LIMIT = 3;
 
 	/**
+	 * @deprecated since 1.48, use the Modules\Trait\FeedLoadingMarkup trait.
 	 * @param MessageLocalizer $localizer
 	 * @param string $thumbnailSize The thumbnail size ('small' or 'large') of the
 	 *  module's loading card, or '' for a module without a loading card. FeedPanel

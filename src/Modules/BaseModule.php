@@ -13,6 +13,8 @@ use MediaWiki\Html\Html;
 use MediaWiki\Language\MessageLocalizer;
 use MediaWiki\Message\Message;
 use MediaWiki\User\User;
+use Wikimedia\Codex\Localization\MediaWikiLocalization;
+use Wikimedia\Codex\Utility\Codex;
 use Wikimedia\Message\MessageSpecifier;
 
 /**
@@ -20,6 +22,9 @@ use Wikimedia\Message\MessageSpecifier;
  * It provides utilities and a default structure (header, subheader, body, footer).
  */
 abstract class BaseModule implements IModule, MessageLocalizer {
+
+	/** @var ?Codex Built on the first getCodex() call. */
+	private ?Codex $codex = null;
 
 	private bool $shouldWrapModuleWithLink;
 	private ?string $pageURL = null;
@@ -288,6 +293,20 @@ abstract class BaseModule implements IModule, MessageLocalizer {
 	 */
 	final protected function getConfig(): Config {
 		return $this->getContext()->getConfig();
+	}
+
+	/**
+	 * The Codex PHP component factory. Build server markup with it instead of
+	 * hand-written Codex class names.
+	 *
+	 * Codex PHP has presentation and form components only. A component with
+	 * client state has no PHP builder; see ./docs/render-contract.md.
+	 */
+	final protected function getCodex(): Codex {
+		// Localize through $this, not through the context object: the module reads
+		// its context on each msg(), so Codex follows a later setContext().
+		$this->codex ??= new Codex( new MediaWikiLocalization( $this ) );
+		return $this->codex;
 	}
 
 	final protected function getName(): string {

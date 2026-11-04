@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\PersonalDashboard\Modules;
 
 use MediaWiki\Context\IContextSource;
 use MediaWiki\Extension\PersonalDashboard\Feed\IRevisionScoreLookup;
+use MediaWiki\Extension\PersonalDashboard\Modules\Trait\FeedLoadingMarkup;
 use MediaWiki\Html\Html;
 
 /**
@@ -15,6 +16,8 @@ use MediaWiki\Html\Html;
  * GET /personaldashboard/v0/feed, a page at a time.
  */
 class ReviewChanges extends BaseModule {
+
+	use FeedLoadingMarkup;
 
 	public function __construct(
 		IContextSource $context,
@@ -72,7 +75,7 @@ class ReviewChanges extends BaseModule {
 	 * @inheritDoc
 	 */
 	protected function getLoadingMarkup(): string {
-		return FeedLoadingMarkup::getHtml( $this );
+		return $this->getFeedLoadingMarkup();
 	}
 
 	/** @inheritDoc */

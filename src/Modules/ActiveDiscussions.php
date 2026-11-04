@@ -5,11 +5,15 @@ declare( strict_types = 1 );
 namespace MediaWiki\Extension\PersonalDashboard\Modules;
 
 use MediaWiki\Context\IContextSource;
+use MediaWiki\Extension\PersonalDashboard\Modules\Trait\FeedLoadingMarkup;
 
 /**
  * Class for the Active Discussions module.
  */
 class ActiveDiscussions extends BaseModule {
+
+	use FeedLoadingMarkup;
+
 	public function __construct( IContextSource $context ) {
 		parent::__construct( $context, shouldWrapModuleWithLink: true );
 	}
@@ -24,7 +28,7 @@ class ActiveDiscussions extends BaseModule {
 	 * @inheritDoc
 	 */
 	protected function getLoadingMarkup(): string {
-		return FeedLoadingMarkup::getHtml( $this );
+		return $this->getFeedLoadingMarkup();
 	}
 
 	/** @inheritDoc */

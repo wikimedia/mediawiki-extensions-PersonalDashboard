@@ -4,38 +4,59 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Extension\PersonalDashboard\Tests\Unit\Modules;
 
-use MediaWiki\Extension\PersonalDashboard\Modules\FeedLoadingMarkup;
-use MediaWiki\Language\MessageLocalizer;
+use MediaWiki\Context\IContextSource;
+use MediaWiki\Extension\PersonalDashboard\Modules\BaseModule;
+use MediaWiki\Extension\PersonalDashboard\Modules\Trait\FeedLoadingMarkup;
 use MediaWiki\Message\Message;
 use MediaWikiUnitTestCase;
 
 /**
- * @covers \MediaWiki\Extension\PersonalDashboard\Modules\FeedLoadingMarkup
+ * @covers \MediaWiki\Extension\PersonalDashboard\Modules\Trait\FeedLoadingMarkup
  */
 class FeedLoadingMarkupTest extends MediaWikiUnitTestCase {
 
-	private function newLocalizer(): MessageLocalizer {
-		$localizer = $this->createMock( MessageLocalizer::class );
-		$localizer->method( 'msg' )->willReturnCallback( function ( $key ) {
+	/**
+	 * A feed module that uses the trait, with a settable focused flag and a
+	 * public pass-through for the markup under test.
+	 *
+	 * @return BaseModule
+	 */
+	private function newModule( bool $isFocused = false ) {
+		$context = $this->createMock( IContextSource::class );
+		$context->method( 'msg' )->willReturnCallback( function ( $key ) {
 			$message = $this->createMock( Message::class );
 			$message->method( 'text' )->willReturn( 'text-' . $key );
 			return $message;
 		} );
 
-		return $localizer;
+		$module = new class( $context ) extends BaseModule {
+			use FeedLoadingMarkup;
+
+			protected function getHeaderText(): string {
+				return '';
+			}
+
+			public function callGetFeedLoadingMarkup( string $thumbnailSize ): string {
+				return $this->getFeedLoadingMarkup( $thumbnailSize );
+			}
+		};
+		$module->setFocused( $isFocused );
+
+		return $module;
 	}
 
 	public function testSummaryWithLoadingCard(): void {
-		$html = FeedLoadingMarkup::getHtml( $this->newLocalizer(), 'large' );
+		$html = $this->newModule()->callGetFeedLoadingMarkup( 'large' );
 
 		$this->assertSame( 3, substr_count( $html, 'cdx-card--thumbnail-size-large' ) );
+		$this->assertSame( 3, substr_count( $html, 'cdx-thumbnail__placeholder__icon' ) );
 		$this->assertStringContainsString( 'disabled', $html );
 		$this->assertStringContainsString( 'text-personal-dashboard-feed-load-more', $html );
 		$this->assertStringNotContainsString( 'cdx-progress-bar', $html );
 	}
 
 	public function testSmallLoadingCardHasNoSizeClass(): void {
-		$html = FeedLoadingMarkup::getHtml( $this->newLocalizer(), 'small' );
+		$html = $this->newModule()->callGetFeedLoadingMarkup( 'small' );
 
 		$this->assertSame( 3, substr_count( $html, 'cdx-card--title-only' ) );
 		$this->assertStringNotContainsString( 'cdx-card--thumbnail-size', $html );
@@ -52,9 +73,11 @@ class FeedLoadingMarkupTest extends MediaWikiUnitTestCase {
 	 * @dataProvider provideProgressBar
 	 */
 	public function testProgressBar( string $thumbnailSize, bool $isFocused ): void {
-		$html = FeedLoadingMarkup::getHtml( $this->newLocalizer(), $thumbnailSize, $isFocused );
+		$html = $this->newModule( $isFocused )->callGetFeedLoadingMarkup( $thumbnailSize );
 
 		$this->assertStringContainsString( 'cdx-progress-bar--inline', $html );
+		// An inline progress bar is aria-hidden in Codex Vue, so this one is too.
+		$this->assertStringContainsString( 'aria-hidden="true"', $html );
 		$this->assertStringNotContainsString( 'cdx-card', $html );
 	}
 }

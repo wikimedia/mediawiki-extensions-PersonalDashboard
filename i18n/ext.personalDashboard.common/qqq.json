@@ -11,5 +11,5 @@
 	"personal-dashboard-multi-step-dialog-previous-button": "Text for the “Previous” button, which navigates to the previous page.",
 	"personal-dashboard-multi-step-dialog-got-it-button": "Text for the “Got it” button, which closes the multi-step dialog.",
 	"personal-dashboard-feed-error": "Error message for when the feed fails to load.\n\nParameters:\n* $1 - Unknown error message",
-	"personal-dashboard-feed-load-more": "Label for the button at the bottom of a full feed list, which loads more items below the ones already shown.\n{{Identical|Show more}}"
+	"personal-dashboard-feed-load-more": "Label for the button at the bottom of a feed, which shows more items below the ones already shown. In a card on a narrow viewport, or in a module that does not show more items in place, it opens the module's full list instead.\n{{Identical|Show more}}"
 }

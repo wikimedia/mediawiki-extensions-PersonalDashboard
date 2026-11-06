@@ -1,9 +1,14 @@
 {
 	"@metadata": {
 		"authors": [
+			"Samoasambia",
 			"Wikipeedikko"
 		]
 	},
+	"personal-dashboard-active-discussions-title": "Aktiiviset keskustelut",
+	"personal-dashboard-active-discussions-latest-comment": "Viimeisin kommentti:",
+	"personal-dashboard-active-discussions-fetch-error": "Aktiivisia keskusteluja ei löytynyt",
+	"personal-dashboard-active-discussions-in-topic": "$1, osiossa $2",
 	"personal-dashboard-active-discussions-show-more-aria-label": "Näytä enemmän aktiivisia keskusteluja",
 	"personal-dashboard-active-discussions-show-less-aria-label": "Näytä vähemmän aktiivisia keskusteluja"
 }

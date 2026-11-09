@@ -17,6 +17,7 @@ use Wikimedia\Codex\Utility\Codex;
  * the server loading state and the island come from one design system.
  *
  * @since 1.48
+ * @stable to use
  */
 trait FeedLoadingMarkup {
 

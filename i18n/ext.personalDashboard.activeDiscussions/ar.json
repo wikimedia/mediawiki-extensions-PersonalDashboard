@@ -7,5 +7,7 @@
 	"personal-dashboard-active-discussions-title": "مناقشات فعّالة",
 	"personal-dashboard-active-discussions-latest-comment": "آخر تعليق:",
 	"personal-dashboard-active-discussions-fetch-error": "لم يتم العثور على مناقشات نشطة",
-	"personal-dashboard-active-discussions-in-topic": "$1 ، في $2"
+	"personal-dashboard-active-discussions-in-topic": "$1 ، في $2",
+	"personal-dashboard-active-discussions-show-more-aria-label": "عرض المزيد من المناقشات النشطة",
+	"personal-dashboard-active-discussions-show-less-aria-label": "عرض عدد أقل من المناقشات النشطة"
 }

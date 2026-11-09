@@ -18,5 +18,7 @@
 	"personal-dashboard-review-changes-menu-personalization": "التخصيص",
 	"personal-dashboard-review-changes-menu-about": "حول تغييرات المراجعة",
 	"personal-dashboard-review-changes-personalization-title": "تخصيص مراجعة التغييرات",
-	"personal-dashboard-review-changes-personalization-description": "يقترح تغييرات مناسبة بناءً على نشاط التحرير الخاص بك. [https://www.mediawiki.org/wiki/Home/Recommendations#Review_Changes للمزيد من المعلومات]"
+	"personal-dashboard-review-changes-personalization-description": "يقترح تغييرات مناسبة بناءً على نشاط التحرير الخاص بك. [https://www.mediawiki.org/wiki/Home/Recommendations#Review_Changes للمزيد من المعلومات]",
+	"personal-dashboard-review-changes-show-more-aria-label": "عرض المزيد من التغييرات للمراجعة",
+	"personal-dashboard-review-changes-show-less-aria-label": "عرض عدد أقل من التغييرات للمراجعة"
 }

@@ -62,7 +62,7 @@ module.exports = defineComponent( {
 		}
 	},
 	emits: [ 'select', 'menu-open' ],
-	setup( props, { emit } ) {
+	setup( props, { emit, expose } ) {
 		const selected = ref( null );
 		const menuButton = ref( null );
 
@@ -90,6 +90,20 @@ module.exports = defineComponent( {
 				}
 			}
 		);
+
+		/**
+		 * Move the focus to the menu button. A caller uses this to give the focus
+		 * a place when the element that held it goes. Callers then do not depend
+		 * on the markup of this component.
+		 */
+		function focus() {
+			if ( menuButton.value ) {
+				menuButton.value.focus();
+			}
+		}
+
+		// Only focus() is public. The template still sees all of setup.
+		expose( { focus } );
 
 		return {
 			// The menu must stay inside this component. A teleported one goes to

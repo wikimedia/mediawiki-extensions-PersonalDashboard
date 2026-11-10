@@ -129,3 +129,15 @@ test( 'hands the button to the slot, since a popover cannot anchor without it', 
 
 	expect( anchor ).not.toBe( 'never called' );
 } );
+
+test( 'focus() moves the focus to the menu button', () => {
+	const wrapper = mount( ModuleHeaderMenu, {
+		props: { menuItems, footerItem, buttonLabel: 'More options for Review changes' },
+		attachTo: document.body
+	} );
+
+	wrapper.vm.focus();
+
+	expect( document.activeElement ).toBe( wrapper.get( 'button' ).element );
+	wrapper.unmount();
+} );

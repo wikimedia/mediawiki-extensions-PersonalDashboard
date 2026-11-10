@@ -191,43 +191,99 @@ test( 'a failed further page keeps the items and the offer to retry', async () =
 	expect( feedState.hasMore ).toBe( true );
 } );
 
-test( 'ignores a load while the first one is still in flight', async () => {
+test( 'a newer load replaces one still in flight', async () => {
 	let releaseFirst;
-	const loader = vi.fn().mockImplementationOnce( () => new Promise( ( resolve ) => {
-		releaseFirst = resolve;
-	} ) );
+	const loader = vi.fn()
+		.mockImplementationOnce( () => new Promise( ( resolve ) => {
+			releaseFirst = resolve;
+		} ) )
+		.mockResolvedValueOnce( [ { id: 'second' } ] );
 	const { feedState, load } = useFeedState( loader );
 
 	const first = load();
 	await load();
 
+	expect( feedState.items ).toStrictEqual( [ { id: 'second' } ] );
+	expect( feedState.isLoading ).toBe( false );
+
+	// The older result arrives last, and changes nothing.
 	releaseFirst( [ { id: 'first' } ] );
 	await first;
 
-	expect( loader ).toHaveBeenCalledTimes( 1 );
-	expect( feedState.items ).toStrictEqual( [ { id: 'first' } ] );
+	expect( loader ).toHaveBeenCalledTimes( 2 );
+	expect( feedState.items ).toStrictEqual( [ { id: 'second' } ] );
 	expect( feedState.isLoading ).toBe( false );
 } );
 
-test( 'ignores a load while a further page is in flight', async () => {
+test( 'stays loading when a replaced load ends before the newer one', async () => {
+	const releases = [];
+	const loader = vi.fn( () => new Promise( ( resolve ) => {
+		releases.push( resolve );
+	} ) );
+	const { feedState, load } = useFeedState( loader );
+
+	const first = load();
+	const second = load();
+
+	releases[ 0 ]( [ { id: 'first' } ] );
+	await first;
+
+	expect( feedState.isLoading ).toBe( true );
+	expect( feedState.items ).toStrictEqual( [] );
+
+	releases[ 1 ]( [ { id: 'second' } ] );
+	await second;
+
+	expect( feedState.isLoading ).toBe( false );
+	expect( feedState.items ).toStrictEqual( [ { id: 'second' } ] );
+} );
+
+test( 'ignores the failure of a replaced load', async () => {
+	const logError = vi.spyOn( mw.log, 'error' ).mockImplementation( () => {} );
+	let failFirst;
+	const loader = vi.fn()
+		.mockImplementationOnce( () => new Promise( ( resolve, reject ) => {
+			failFirst = reject;
+		} ) )
+		.mockResolvedValueOnce( [ { id: 'second' } ] );
+	const { feedState, load } = useFeedState( loader );
+
+	const first = load();
+	await load();
+	failFirst( new Error( 'boom' ) );
+	await first;
+
+	expect( feedState.error ).toBeNull();
+	expect( feedState.items ).toStrictEqual( [ { id: 'second' } ] );
+	expect( logError ).not.toHaveBeenCalled();
+} );
+
+test( 'a load replaces a further page in flight', async () => {
 	let releaseMore;
 	const loader = vi.fn()
 		.mockResolvedValueOnce( { items: [ { id: 'a' } ], continuation: 'token-1' } )
 		.mockImplementationOnce( () => new Promise( ( resolve ) => {
 			releaseMore = resolve;
-		} ) );
+		} ) )
+		.mockResolvedValueOnce( { items: [ { id: 'c' } ], continuation: null } );
 	const { feedState, load, loadMore } = useFeedState( loader );
 
 	await load( 10 );
 	const more = loadMore();
+	expect( feedState.isLoadingMore ).toBe( true );
 	await load( 10 );
 
-	releaseMore( { items: [ { id: 'b' } ], continuation: null } );
+	expect( feedState.items ).toStrictEqual( [ { id: 'c' } ] );
+	expect( feedState.isLoadingMore ).toBe( false );
+
+	// The page for the old list arrives last, and changes nothing.
+	releaseMore( { items: [ { id: 'b' } ], continuation: 'token-2' } );
 	await more;
 
-	expect( loader ).toHaveBeenCalledTimes( 2 );
-	expect( feedState.items ).toStrictEqual( [ { id: 'a' }, { id: 'b' } ] );
+	expect( loader ).toHaveBeenCalledTimes( 3 );
+	expect( feedState.items ).toStrictEqual( [ { id: 'c' } ] );
 	expect( feedState.hasMore ).toBe( false );
+	expect( feedState.isLoading ).toBe( false );
 	expect( feedState.isLoadingMore ).toBe( false );
 } );
 

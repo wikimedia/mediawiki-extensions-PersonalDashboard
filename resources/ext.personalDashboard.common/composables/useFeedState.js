@@ -62,12 +62,17 @@ function useFeedState( loader, module ) {
 	const hasMore = computed( () => continuation.value !== null );
 
 	let loadArgs = [];
+	// Counts the runs. Only the latest run commits its result and its flags.
+	let latestRun = 0;
 
 	/**
 	 * Run the loader and commit its result.
 	 *
-	 * One runs at a time: a call made while another is in flight does nothing,
-	 * so two results can never interleave.
+	 * A first load replaces any run in flight, because the loader can read
+	 * state that changed since the older run began, for example filters the
+	 * reader just saved. The older run commits nothing, so two results can
+	 * never interleave. A further page asks for the page after the one shown,
+	 * so a call made while any run is in flight does nothing.
 	 *
 	 * Never rejects: a failure lands in `error` for the scaffold to render.
 	 *
@@ -77,12 +82,15 @@ function useFeedState( loader, module ) {
 	 * @return {Promise<void>}
 	 */
 	async function run( append, args ) {
-		if ( isLoading.value || isLoadingMore.value ) {
+		if ( append && ( isLoading.value || isLoadingMore.value ) ) {
 			return;
 		}
 
-		const inFlight = append ? isLoadingMore : isLoading;
-		inFlight.value = true;
+		const thisRun = ++latestRun;
+		const isLatest = () => thisRun === latestRun;
+		// Set both flags: a first load can replace a further page in flight.
+		isLoading.value = !append;
+		isLoadingMore.value = append;
 		error.value = null;
 
 		if ( !append ) {
@@ -98,6 +106,9 @@ function useFeedState( loader, module ) {
 			const result = append ?
 				await loader( ...loadArgs, continuation.value ) :
 				await loader( ...loadArgs );
+			if ( !isLatest() ) {
+				return;
+			}
 			if ( module ) {
 				recordTiming( module, append ? 'feed_fetch_more' : 'feed_fetch', performance.now() - startTime );
 			}
@@ -112,6 +123,9 @@ function useFeedState( loader, module ) {
 				isIncomplete.value = page.incomplete === true;
 			}
 		} catch ( err ) {
+			if ( !isLatest() ) {
+				return;
+			}
 			mw.log.error( err.message );
 			error.value = err;
 			if ( !append ) {
@@ -120,13 +134,17 @@ function useFeedState( loader, module ) {
 			// A failed further page keeps its token and its control, so the
 			// reader can ask for the same page again.
 		} finally {
-			inFlight.value = false;
+			// A replaced run leaves the flags to the run that replaced it.
+			if ( isLatest() ) {
+				isLoading.value = false;
+				isLoadingMore.value = false;
+			}
 		}
 	}
 
 	/**
-	 * Load the first page, replacing whatever is shown. Call it again once a
-	 * load has finished to start the feed over.
+	 * Load the first page, replacing whatever is shown. Call it again to start
+	 * the feed over, also while a load is in flight: the newest call wins.
 	 *
 	 * @param {...*} args Forwarded to the loader.
 	 * @return {Promise<void>}

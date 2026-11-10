@@ -12,8 +12,7 @@ function fetchActiveDiscussions( limit, continuation ) {
 }
 
 // One state for the whole module: the card and the dialog share a single
-// teleported component instance, and any further mount should see the same feed
-// rather than issue its own request.
+// teleported component instance, so both read the same feed.
 const { feedState, load, loadMore } = useFeedState( fetchActiveDiscussions, 'ext.personalDashboard.activeDiscussions' );
 
 /**

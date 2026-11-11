@@ -1,0 +1,11 @@
+{
+	"@metadata": {
+		"authors": [
+			"Samoasambia",
+			"Wikipeedikko"
+		]
+	},
+	"personal-dashboard-active-discussions-title": "Aktiiviset keskustelut",
+	"personal-dashboard-active-discussions-latest-comment": "Viimeisin kommentti:",
+	"personal-dashboard-active-discussions-fetch-error": "Aktiivisia keskusteluja ei löytynyt"
+}

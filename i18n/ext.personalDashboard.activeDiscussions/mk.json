@@ -6,5 +6,8 @@
 	},
 	"personal-dashboard-active-discussions-title": "Тековни разговори",
 	"personal-dashboard-active-discussions-latest-comment": "Последен коментар:",
-	"personal-dashboard-active-discussions-fetch-error": "Не пронајдов активни разговори"
+	"personal-dashboard-active-discussions-fetch-error": "Не пронајдов активни разговори",
+	"personal-dashboard-active-discussions-in-topic": "$1, во $2",
+	"personal-dashboard-active-discussions-show-more-aria-label": "Прикажи повеќе активни разговори",
+	"personal-dashboard-active-discussions-show-less-aria-label": "Прикажи помалку активни разговори"
 }

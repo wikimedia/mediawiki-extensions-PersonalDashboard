@@ -66,7 +66,7 @@ abstract class AbstractSpecialDashboard extends SpecialPage {
 	/** Per-request memo of getModuleGroups()'s result. */
 	private ?array $resolvedModuleGroup = null;
 
-	/** Per-request memo of getModuleGroups()'s resolved registry key (e.g. 'default', 'review-changes-home'). */
+	/** Per-request memo of getModuleGroups()'s resolved registry key (e.g. 'default'). */
 	private ?string $resolvedModuleGroupName = null;
 
 	/** Per-request memo of experiment name => assigned variant, for every assignment that took effect. */
@@ -129,13 +129,14 @@ abstract class AbstractSpecialDashboard extends SpecialPage {
 
 	/**
 	 * The TestKitchen experiments that can reroute this dashboard to a
-	 * different module group, in the shape Experiments::all() returns.
+	 * different module group: each experiment name maps its overriding
+	 * variants to module groups.
 	 *
 	 * Defaults to no experiments. A manifest names module groups, and a module
 	 * group belongs to one dashboard, so a dashboard only ever declares its
 	 * own experiments; an inherited manifest would route users to another
-	 * team's modules. Personal Dashboard's own experiments are declared by
-	 * SpecialPersonalDashboard. See ../../docs/experiments.md.
+	 * team's modules. ModeratorToolkit's SpecialPersonalDashboard declares its
+	 * own experiments this way. See ../../docs/experiments.md.
 	 *
 	 * @return array<string, array<string, string>>
 	 * @stable to override
@@ -497,8 +498,8 @@ abstract class AbstractSpecialDashboard extends SpecialPage {
 	 * The survey this dashboard asks for feedback on, or null where its module
 	 * group declares none.
 	 *
-	 * The chrome belongs to a set of modules and not to a page: it is the
-	 * Moderator Tools dashboard that is in beta and collects feedback. So the
+	 * The chrome belongs to a set of modules and not to a page: for example,
+	 * ModeratorToolkit's dashboard is in beta and collects feedback. So the
 	 * survey travels with the module group's own `betaFeedback` declaration in
 	 * extension.json, and each dashboard points at a survey of its own.
 	 *

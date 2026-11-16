@@ -94,8 +94,8 @@ class RecentChangesFeedSourceTest extends MediaWikiIntegrationTestCase {
 	}
 
 	public function testKeepsTheViewersOwnEditsWhenPersonalizationIsOff() {
-		// The switch a depersonalized Review Changes will register this class a
-		// second time with. Without it, "no personalization" would still be
+		// The switch a depersonalized Review Changes, in ModeratorToolkit, will
+		// register this class a second time with. Without it, "no personalization" would still be
 		// filtered by who is asking.
 		$viewer = $this->getTestUser()->getUser();
 		$other = $this->getTestUser( 'other' )->getUser();

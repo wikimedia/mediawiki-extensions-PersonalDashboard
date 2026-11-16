@@ -4,7 +4,7 @@
  * Does nothing when the page sets no wgPersonalDashboardStats, which is the
  * case off the dashboard and in a pdo session.
  *
- * @param {string} module Module name, e.g. 'ext.personalDashboard.reviewChanges'
+ * @param {string} module Module name, e.g. 'ext.moderatorToolkit.activeDiscussions'
  * @param {string} operation What was timed, e.g. 'feed_fetch'
  * @param {number} milliseconds
  */

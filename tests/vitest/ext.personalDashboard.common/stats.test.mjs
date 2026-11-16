@@ -9,7 +9,7 @@ afterEach( () => {
 test( 'records nothing when the page sets no stats config', () => {
 	const track = mw.track = vi.fn();
 
-	recordTiming( 'ext.personalDashboard.reviewChanges', 'feed_fetch', 12 );
+	recordTiming( 'ext.example.feed', 'feed_fetch', 12 );
 
 	expect( track ).not.toHaveBeenCalled();
 } );
@@ -28,13 +28,13 @@ test( 'records under the component, with the server labels, normalised', () => {
 		}
 	} );
 
-	recordTiming( 'ext.personalDashboard.reviewChanges', 'feed_fetch', 12 );
+	recordTiming( 'ext.example.feed', 'feed_fetch', 12 );
 
 	expect( track ).toHaveBeenCalledWith(
 		'stats.mediawiki_PersonalDashboard_dashboard_client_seconds',
 		12,
 		{
-			module: 'ext_personalDashboard_reviewChanges',
+			module: 'ext_example_feed',
 			operation: 'feed_fetch',
 			wiki: 'enwiki',
 			// eslint-disable-next-line camelcase

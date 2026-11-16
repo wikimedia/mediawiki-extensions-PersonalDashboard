@@ -5,10 +5,10 @@ declare( strict_types = 1 );
 namespace MediaWiki\Extension\PersonalDashboard\Tests\Integration\Specials;
 
 use MediaWiki\Context\RequestContext;
-use MediaWiki\Extension\PersonalDashboard\Experiments;
+use MediaWiki\Extension\PersonalDashboard\Modules\Placeholder;
+use MediaWiki\Extension\PersonalDashboard\PersonalDashboardModuleFactory;
 use MediaWiki\Extension\PersonalDashboard\PersonalDashboardServices;
 use MediaWiki\Extension\PersonalDashboard\Specials\DashboardPageDependencies;
-use MediaWiki\Extension\PersonalDashboard\Specials\SpecialPersonalDashboard;
 use MediaWiki\Extension\TestKitchen\Sdk\ExperimentInterface;
 use MediaWiki\Extension\TestKitchen\Sdk\ExperimentManagerInterface;
 use MediaWiki\MainConfigNames;
@@ -30,8 +30,8 @@ use Wikimedia\TestingAccessWrapper;
  * back-link target and the experiment manifest all come from the subclass, and
  * that one render pipeline serves both.
  *
- * SpecialPersonalDashboardTest covers the same pipeline for the dashboard
- * Personal Dashboard itself ships.
+ * Two test doubles stand in for two dashboards. ModeratorToolkit's
+ * SpecialPersonalDashboardTest covers the same pipeline for a real one.
  *
  * @covers \MediaWiki\Extension\PersonalDashboard\Specials\AbstractSpecialDashboard
  *
@@ -40,25 +40,41 @@ use Wikimedia\TestingAccessWrapper;
  */
 class AbstractSpecialDashboardTest extends SpecialPageTestBase {
 
-	/** A server-rendered module that needs no services. */
-	private const MODULE = 'ext.personalDashboard.policiesGuidelines';
+	/** A server-rendered module that reads a focused subpath. */
+	private const MODULE = 'ext.example.serverRendered';
 
 	/** The route the fixture group publishes MODULE at. */
 	private const SLUG = 'policies';
 
 	/** A module whose card wraps in a link to its own focused subpage. */
-	private const LINKED_MODULE = 'ext.personalDashboard.activeDiscussions';
+	private const LINKED_MODULE = 'ext.example.linked';
 
 	/** The route the fixture group publishes LINKED_MODULE at. */
 	private const LINKED_SLUG = 'discussions';
 
+	/** The test modules, and the fallback for a name nothing registers. */
+	private const MODULES = [
+		'ext.personalDashboard.placeholder' => [
+			'class' => Placeholder::class,
+		],
+		self::MODULE => [ 'class' => TestServerRenderedModule::class ],
+		self::LINKED_MODULE => [ 'class' => TestLinkedModule::class ],
+	];
+
+	/** The experiment manifest of the other dashboard. */
+	private const MANIFEST = [
+		'testExperiment' => [
+			'treatment' => 'experimentDouble',
+		],
+	];
+
 	private const REGISTRY = [
-		'default' => [
-			'description' => 'Stands in for the Moderator Tools dashboard',
+		'otherDouble' => [
+			'description' => 'Stands in for a second dashboard',
 			'version' => 0,
 			'groups' => [],
 		],
-		'review-changes-home' => [
+		'experimentDouble' => [
 			'description' => 'Stands in for the module group an experiment routes to',
 			'version' => 0,
 			'groups' => [],
@@ -103,6 +119,9 @@ class AbstractSpecialDashboardTest extends SpecialPageTestBase {
 	 */
 	private ?ScopedCallback $moduleGroupsScope = null;
 
+	/** Keeps the test modules registered, the same way. */
+	private ?ScopedCallback $modulesScope = null;
+
 	/** Keeps the slug alias file fixture registered, the same way. */
 	private ?ScopedCallback $slugAliasFilesScope = null;
 
@@ -112,6 +131,8 @@ class AbstractSpecialDashboardTest extends SpecialPageTestBase {
 		// Every test here renders or resolves a group from the fixture below.
 		$this->moduleGroupsScope = ExtensionRegistry::getInstance()->setAttributeForTest(
 			'PersonalDashboardModuleGroups', self::REGISTRY );
+		$this->modulesScope = ExtensionRegistry::getInstance()->setAttributeForTest(
+			'PersonalDashboardModules', self::MODULES );
 		/*
 		 * SpecialPageExecutor calls getPageTitle() before execute(), and
 		 * SpecialPageFactory::getLocalNameFor() wfWarn()s for a page name that
@@ -124,8 +145,18 @@ class AbstractSpecialDashboardTest extends SpecialPageTestBase {
 
 	protected function tearDown(): void {
 		$this->moduleGroupsScope = null;
+		$this->modulesScope = null;
 		$this->slugAliasFilesScope = null;
 		parent::tearDown();
+	}
+
+	/**
+	 * Not the service: it reads the module registry one time, maybe before
+	 * setUp() registered the test modules.
+	 */
+	private function moduleFactory(): PersonalDashboardModuleFactory {
+		return new PersonalDashboardModuleFactory(
+			ExtensionRegistry::getInstance(), $this->getServiceContainer()->getObjectFactory() );
 	}
 
 	private function dependencies(
@@ -135,10 +166,24 @@ class AbstractSpecialDashboardTest extends SpecialPageTestBase {
 		$services = $this->getServiceContainer();
 		$dashboardServices = PersonalDashboardServices::wrap( $services );
 		return new DashboardPageDependencies(
-			$dashboardServices->getPersonalDashboardModuleFactory(),
+			$this->moduleFactory(),
 			$statsFactory ?? $services->getStatsFactory(),
 			$experimentManager,
 			$dashboardServices->getPersonalDashboardSlugAliasLookup(),
+		);
+	}
+
+	/**
+	 * A second dashboard with its own page name, module group, StatsFactory
+	 * component and experiment manifest.
+	 */
+	private function newOtherDashboard( DashboardPageDependencies $dependencies ): TestDashboardSpecialPage {
+		return new TestDashboardSpecialPage(
+			$dependencies,
+			'OtherDashboardTestDouble',
+			'otherDouble',
+			'OtherDashboardTestDouble',
+			self::MANIFEST
 		);
 	}
 
@@ -440,11 +485,10 @@ class AbstractSpecialDashboardTest extends SpecialPageTestBase {
 
 		// The same registry, the other subclass: proof the group is the
 		// subclass's answer and not something the registry decides.
-		$personalDashboard = $this->wrap(
-			new SpecialPersonalDashboard( $this->dependencies() ) );
-		$personalDashboard->getModuleGroups();
+		$otherDashboard = $this->wrap( $this->newOtherDashboard( $this->dependencies() ) );
+		$otherDashboard->getModuleGroups();
 
-		$this->assertSame( 'default', $personalDashboard->resolvedModuleGroupName );
+		$this->assertSame( 'otherDouble', $otherDashboard->resolvedModuleGroupName );
 	}
 
 	/**
@@ -466,11 +510,11 @@ class AbstractSpecialDashboardTest extends SpecialPageTestBase {
 
 		// The same enrollment does reroute the dashboard whose manifest it is,
 		// so the assertion above is not passing because nothing is enrolled.
-		$personalDashboard = $this->wrap( new SpecialPersonalDashboard(
+		$otherDashboard = $this->wrap( $this->newOtherDashboard(
 			$this->dependencies( $experimentManager ) ) );
-		$personalDashboard->getModuleGroups();
+		$otherDashboard->getModuleGroups();
 
-		$this->assertSame( 'review-changes-home', $personalDashboard->resolvedModuleGroupName );
+		$this->assertSame( 'experimentDouble', $otherDashboard->resolvedModuleGroupName );
 	}
 
 	/**
@@ -484,11 +528,11 @@ class AbstractSpecialDashboardTest extends SpecialPageTestBase {
 			'PersonalDashboardTestDouble',
 			'testDouble',
 			'PersonalDashboardTestDouble',
-			Experiments::all()
+			self::MANIFEST
 		) );
 		$dashboard->getModuleGroups();
 
-		$this->assertSame( 'review-changes-home', $dashboard->resolvedModuleGroupName );
+		$this->assertSame( 'experimentDouble', $dashboard->resolvedModuleGroupName );
 	}
 
 	public function testStatsComponentAccessorIsHonoured() {
@@ -548,8 +592,7 @@ class AbstractSpecialDashboardTest extends SpecialPageTestBase {
 		$statsHelper = StatsFactory::newUnitTestingHelper()
 			->withComponent( 'PersonalDashboardTestDouble' );
 		$this->page = new TestDashboardSpecialPage( new DashboardPageDependencies(
-			PersonalDashboardServices::wrap( $this->getServiceContainer() )
-				->getPersonalDashboardModuleFactory(),
+			$this->moduleFactory(),
 			$statsHelper->getStatsFactory(),
 		) );
 
@@ -562,7 +605,7 @@ class AbstractSpecialDashboardTest extends SpecialPageTestBase {
 			"special_dashboard_server_side_render_seconds{{$labels}}" ) );
 		$this->assertSame( 1, $statsHelper->count(
 			'special_dashboard_ssr_per_module_seconds'
-				. '{module="ext_personalDashboard_policiesGuidelines",' . $labels . '}' ) );
+				. '{module="ext_example_serverRendered",' . $labels . '}' ) );
 		$this->assertSame(
 			'PersonalDashboardTestDouble',
 			$this->page->getOutput()->getJsConfigVars()['wgPersonalDashboardStats']['component']
@@ -582,8 +625,7 @@ class AbstractSpecialDashboardTest extends SpecialPageTestBase {
 		$statsHelper = StatsFactory::newUnitTestingHelper()
 			->withComponent( 'PersonalDashboardTestDouble' );
 		$this->page = new TestDashboardSpecialPage( new DashboardPageDependencies(
-			PersonalDashboardServices::wrap( $this->getServiceContainer() )
-				->getPersonalDashboardModuleFactory(),
+			$this->moduleFactory(),
 			$statsHelper->getStatsFactory(),
 		) );
 
@@ -640,15 +682,15 @@ class AbstractSpecialDashboardTest extends SpecialPageTestBase {
 	 * other: the cookie is named after the page that wrote it.
 	 */
 	public function testPdoCookieIsNotSharedBetweenDashboards() {
-		// What a browser already holding a pinned Special:PersonalDashboard
-		// session would send to both pages.
-		$cookies = [ 'pdo-PersonalDashboard' => 'review-changes-home' ];
+		// What a browser already holding a pinned session on the other
+		// dashboard would send to both pages.
+		$cookies = [ 'pdo-OtherDashboardTestDouble' => 'experimentDouble' ];
 
-		$personalDashboard = $this->wrapWithRequest(
-			new SpecialPersonalDashboard( $this->dependencies() ), [], $cookies );
+		$otherDashboard = $this->wrapWithRequest(
+			$this->newOtherDashboard( $this->dependencies() ), [], $cookies );
 		$this->assertSame(
-			'review-changes-home',
-			$personalDashboard->resolvePdoOverride( self::REGISTRY ),
+			'experimentDouble',
+			$otherDashboard->resolvePdoOverride( self::REGISTRY ),
 			'the dashboard that wrote the cookie still reads it'
 		);
 
@@ -666,8 +708,7 @@ class AbstractSpecialDashboardTest extends SpecialPageTestBase {
 	 */
 	public function testPdoUrlParamWritesACookieNamedForThisDashboard() {
 		// FauxResponse::setCookie() stores under $wgCookiePrefix . $name while
-		// getCookie() reads back the bare name, so pin the prefix empty; see
-		// SpecialPersonalDashboardExperimentsTest for the full note.
+		// getCookie() reads back the bare name, so pin the prefix empty.
 		$this->overrideConfigValue( MainConfigNames::CookiePrefix, '' );
 
 		$dashboard = $this->wrapWithRequest(
@@ -679,7 +720,7 @@ class AbstractSpecialDashboardTest extends SpecialPageTestBase {
 		$this->assertSame( 'testDouble', $response->getCookie( 'pdo-PersonalDashboardTestDouble' ) );
 		// The unsuffixed name is what every dashboard used to share.
 		$this->assertNull( $response->getCookie( 'pdo' ) );
-		$this->assertNull( $response->getCookie( 'pdo-PersonalDashboard' ) );
+		$this->assertNull( $response->getCookie( 'pdo-OtherDashboardTestDouble' ) );
 	}
 
 	/**
@@ -689,27 +730,27 @@ class AbstractSpecialDashboardTest extends SpecialPageTestBase {
 	public function testPdoCookieOverridesOnlyTheDashboardThatSetIt() {
 		$this->overrideConfigValue( 'PersonalDashboardAllowOverride', true );
 
-		$cookies = [ 'pdo-PersonalDashboardTestDouble' => 'review-changes-home' ];
+		$cookies = [ 'pdo-PersonalDashboardTestDouble' => 'experimentDouble' ];
 
 		$dashboard = $this->wrapWithRequest(
 			new TestDashboardSpecialPage( $this->dependencies() ), [], $cookies );
 		$dashboard->getModuleGroups();
 
-		$this->assertSame( 'review-changes-home', $dashboard->resolvedModuleGroupName );
+		$this->assertSame( 'experimentDouble', $dashboard->resolvedModuleGroupName );
 		$this->assertTrue( $dashboard->pdoOverrideActive );
 
-		$personalDashboard = $this->wrapWithRequest(
-			new SpecialPersonalDashboard( $this->dependencies() ), [], $cookies );
-		$personalDashboard->getModuleGroups();
+		$otherDashboard = $this->wrapWithRequest(
+			$this->newOtherDashboard( $this->dependencies() ), [], $cookies );
+		$otherDashboard->getModuleGroups();
 
-		$this->assertSame( 'default', $personalDashboard->resolvedModuleGroupName );
-		$this->assertFalse( $personalDashboard->pdoOverrideActive );
+		$this->assertSame( 'otherDouble', $otherDashboard->resolvedModuleGroupName );
+		$this->assertFalse( $otherDashboard->pdoOverrideActive );
 	}
 
 	/**
-	 * The Beta chip and its feedback link are Moderator Tools chrome, declared
-	 * by that dashboard's module group. A group that declares no survey gets
-	 * no chip. The positive case is in SpecialPersonalDashboardTest.
+	 * The Beta chip and its feedback link come from the module group's
+	 * `betaFeedback`. A group that declares no survey gets no chip.
+	 * ModeratorToolkit's SpecialPersonalDashboardTest has the positive case.
 	 */
 	public function testBetaFeedbackIsAbsentForAGroupThatDoesNotDeclareIt() {
 		$dashboard = $this->wrap( new TestDashboardSpecialPage( $this->dependencies() ) );

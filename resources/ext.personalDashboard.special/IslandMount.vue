@@ -64,8 +64,8 @@ module.exports = defineComponent( {
 			activeTargetInternal: ref( props.activeTarget ),
 			activeHeaderTargetInternal: ref( props.activeHeaderTarget ),
 			// The server emits a mount slot for every card-bearing island. A
-			// behavior-only island (onboarding) has none, so it renders in
-			// place and manages its own portal.
+			// behavior-only island (such as ModeratorToolkit's onboarding) has
+			// none, so it renders in place and manages its own portal.
 			hasSlot: !!document.getElementById( 'pd-slot-' + props.name ),
 			// A second slot, emitted only for a module that declares
 			// hasHeaderMenu() server-side. It holds the header's menu button and

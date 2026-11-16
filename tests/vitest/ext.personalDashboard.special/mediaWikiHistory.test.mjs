@@ -7,8 +7,8 @@ import {
 
 test( 'subpage returns everything after the special-page segment', () => {
 	expect( subpage( 'Special:PersonalDashboard' ) ).toBe( '' );
-	expect( subpage( 'Special:PersonalDashboard/ext.personalDashboard.impact' ) )
-		.toBe( 'ext.personalDashboard.impact' );
+	expect( subpage( 'Special:PersonalDashboard/ext.example.impact' ) )
+		.toBe( 'ext.example.impact' );
 	// A deeper tail is preserved verbatim; the history never interprets it.
 	expect( subpage( 'Special:PersonalDashboard/ext.foo/neutral-point-of-view' ) )
 		.toBe( 'ext.foo/neutral-point-of-view' );
@@ -16,13 +16,13 @@ test( 'subpage returns everything after the special-page segment', () => {
 
 test( 'titleFromLocation reads the same title from either URL form', () => {
 	const short = titleFromLocation(
-		'/wiki/Special:PersonalDashboard/ext.personalDashboard.impact', '', '/wiki/$1'
+		'/wiki/Special:PersonalDashboard/ext.example.impact', '', '/wiki/$1'
 	);
 	const long = titleFromLocation(
-		'/w/index.php', '?title=Special:PersonalDashboard/ext.personalDashboard.impact', '/wiki/$1'
+		'/w/index.php', '?title=Special:PersonalDashboard/ext.example.impact', '/wiki/$1'
 	);
 	// The whole design turns on these being equal: two URL forms, one route.
-	expect( short ).toBe( 'Special:PersonalDashboard/ext.personalDashboard.impact' );
+	expect( short ).toBe( 'Special:PersonalDashboard/ext.example.impact' );
 	expect( long ).toBe( short );
 } );
 

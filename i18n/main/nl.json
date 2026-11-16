@@ -8,10 +8,7 @@
 	"personal-dashboard-back-to-dashboard": "Terug naar het dashboard",
 	"personal-dashboard-beta-info-chip-text": "Bèta",
 	"personal-dashboard-desc": "Een experimenteel dashboard voor beheerders",
-	"personal-dashboard-link-title": "Dashboard",
 	"personal-dashboard-module-no-js-fallback": "Sommige delen van dit dashboard worden pas weergegeven als JavaScript in uw browser is ingeschakeld.",
 	"personal-dashboard-open-module": "Deze module openen",
-	"personal-dashboard-specialpage-title": "{{GENDER:$1|Hallo}}, {{bidi:$1}}!",
-	"personal-dashboard-survey-text": "[$1 Terugkoppeling delen]",
-	"tooltip-pt-personaldashboard": "{{GENDER:|Uw}} persoonlijke dashboard"
+	"personal-dashboard-survey-text": "[$1 Terugkoppeling delen]"
 }

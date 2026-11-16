@@ -11,14 +11,14 @@ stand-in for a third-party team's own extension.
 
 ## Before you start
 
-The manifest in `./src/Experiments.php` is the **Moderator Tools dashboard's**, declared by `SpecialPersonalDashboard::getExperimentManifest()`. A manifest names module groups, and a module group by convention belongs to one dashboard, so an experiment only reaches the dashboard whose subclass declares it. Another dashboard declares its own; a dashboard that declares nothing runs no experiments, which is the default. See [./modules.md](./modules.md#serve-your-own-dashboard).
+A dashboard declares its manifest in `getExperimentManifest()`. For example, ModeratorToolkit's `src/Experiments.php` is the manifest of Special:PersonalDashboard, declared by its `SpecialPersonalDashboard::getExperimentManifest()`. A manifest names module groups, and a module group by convention belongs to one dashboard, so an experiment only reaches the dashboard whose subclass declares it. Another dashboard declares its own; a dashboard that declares nothing runs no experiments, which is the default. See [./modules.md](./modules.md#serve-your-own-dashboard).
 
-An experiment needs, outside `./src/Experiments.php`:
+An experiment needs, outside the manifest:
 
 - A module group already registered on the wikis the experiment targets (see
   [./modules.md](./modules.md)).
 - The experiment itself registered in TestKitchen's own config, under the
-  **exact same name** used in `./src/Experiments.php` — not a close variant.
+  **exact same name** used in the manifest — not a close variant.
   A mismatch fails silently: TK enrolls and tags users under its own name
   just fine, but `getExperiment()` calls with `MANIFEST`'s name never find
   it, so Personal Dashboard treats every user as unenrolled. There's no
@@ -33,7 +33,8 @@ An experiment needs, outside `./src/Experiments.php`:
 
 ## Register the experiment
 
-Add one entry to `MANIFEST` in `./src/Experiments.php`, keyed by the
+Add one entry to your dashboard's manifest (`MANIFEST` in ModeratorToolkit's
+`src/Experiments.php`, for Special:PersonalDashboard), keyed by the
 experiment name. There are two shapes:
 
 **Routing** — the experiment picks which module group a user sees. List only

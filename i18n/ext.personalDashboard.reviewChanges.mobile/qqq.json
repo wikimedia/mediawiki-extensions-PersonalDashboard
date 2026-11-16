@@ -1,9 +1,0 @@
-{
-	"@metadata": {
-		"authors": [
-			"Katherine Graessle",
-			"McDutchie"
-		]
-	},
-	"personal-dashboard-risky-article-edits-mobile-summary-footer-link-text": "Button text for the Review Changes module's \"show more\" affordance, which opens the full edit list in a dialog."
-}

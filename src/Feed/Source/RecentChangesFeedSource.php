@@ -13,8 +13,8 @@ use MediaWiki\RecentChanges\ChangesListQuery\ChangesListQuery;
  *
  * The widest of the three sources, and the only one that adds nothing to the
  * shared query. It is what remains when the viewer has no watchlist and no edit
- * history to draw on, and it is the source a depersonalized Review Changes falls
- * back to.
+ * history to draw on, and it is the source a depersonalized Review Changes, in
+ * ModeratorToolkit, falls back to.
  */
 class RecentChangesFeedSource extends ChangesListFeedSource {
 

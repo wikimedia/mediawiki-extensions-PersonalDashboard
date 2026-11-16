@@ -110,6 +110,8 @@ readonly class OresRevisionScoreLookup implements IRevisionScoreLookup {
 			return null;
 		}
 
+		// FIXME: Review Changes is in ModeratorToolkit now. Move this config there,
+		// or give it a name that does not name the module.
 		$model = $this->config->get( 'PersonalDashboardReviewChangesMlModel' );
 		if ( !is_string( $model ) || $model === '' ) {
 			return null;

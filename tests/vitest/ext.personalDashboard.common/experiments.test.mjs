@@ -1,5 +1,5 @@
 import { afterEach, expect, test, vi } from 'vitest';
-import { isPdoActive, withExperimentTagging } from '/resources/ext.personalDashboard.special/instrumentation/experiments.js';
+import { isPdoActive, withExperimentTagging } from '/resources/ext.personalDashboard.common/experiments.js';
 
 afterEach( () => {
 	mw.config.reset();

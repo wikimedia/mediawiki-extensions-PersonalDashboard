@@ -41,8 +41,9 @@
 	}
 
 	&-group {
-		// Holds modules that only open dialogs, such as onboarding. Out of the
-		// flex row, so it does not add a column gap before the main group.
+		// Holds modules that only open dialogs, such as ModeratorToolkit's
+		// onboarding. Out of the flex row, so it does not add a column gap before
+		// the main group.
 		&-utils {
 			position: absolute;
 		}
@@ -227,14 +228,6 @@
 		}
 
 		.client-js &-no-js-fallback {
-			display: none;
-		}
-
-		// The reviewChanges footer is entirely a no-JS fallback, so hiding its inner
-		// content leaves an empty section. Collapse the whole section under JS from
-		// this upfront stylesheet (not the lazy island CSS) so no gap flashes before
-		// the client footer mounts.
-		.client-js &-reviewChanges &-section-footer {
 			display: none;
 		}
 

@@ -167,7 +167,7 @@ class BaseModuleTest extends MediaWikiUnitTestCase {
 
 	public function testCardHeaderLinksToTheRouteRatherThanTheName() {
 		$module = $this->newModule( true );
-		$module->setName( 'ext.personalDashboard.impact' );
+		$module->setName( 'ext.example.impact' );
 		$module->setRoute( 'impact' );
 		$module->setPageURL( '/wiki/Special:PersonalDashboard' );
 		$module->headerTextValue = 'Impact';
@@ -179,25 +179,25 @@ class BaseModuleTest extends MediaWikiUnitTestCase {
 		// The name stays the internal id everywhere the DOM carries it; only the
 		// URL takes the slug.
 		$this->assertStringContainsString(
-			'data-module-name="ext.personalDashboard.impact"', $html );
-		$this->assertStringContainsString( 'id="pd-slot-ext.personalDashboard.impact"', $html );
+			'data-module-name="ext.example.impact"', $html );
+		$this->assertStringContainsString( 'id="pd-slot-ext.example.impact"', $html );
 	}
 
 	public function testCardHeaderRouteDefaultsToTheModuleName() {
 		$module = $this->newModule( true );
-		$module->setName( 'ext.personalDashboard.impact' );
+		$module->setName( 'ext.example.impact' );
 		$module->setPageURL( '/wiki/Special:PersonalDashboard' );
 
-		$this->assertSame( 'ext.personalDashboard.impact', $module->getRoute() );
+		$this->assertSame( 'ext.example.impact', $module->getRoute() );
 		$this->assertStringContainsString(
-			'href="/wiki/Special:PersonalDashboard/ext.personalDashboard.impact"',
+			'href="/wiki/Special:PersonalDashboard/ext.example.impact"',
 			$module->callGetHtml()
 		);
 	}
 
 	public function testCardHeaderEncodesARouteThatIsNotAscii() {
 		$module = $this->newModule( true );
-		$module->setName( 'ext.personalDashboard.impact' );
+		$module->setName( 'ext.example.impact' );
 		$module->setRoute( 'tác động' );
 		$module->setPageURL( '/wiki/Special:PersonalDashboard' );
 
@@ -215,7 +215,7 @@ class BaseModuleTest extends MediaWikiUnitTestCase {
 		// the latter, or a deep link produces a garbled nested path.
 		$context = $this->createMock( IContextSource::class );
 		$title = $this->createMock( Title::class );
-		$title->method( 'getLinkURL' )->willReturn( '/wiki/Special:PersonalDashboard/policiesGuidelines' );
+		$title->method( 'getLinkURL' )->willReturn( '/wiki/Special:PersonalDashboard/otherModule' );
 		$context->method( 'getTitle' )->willReturn( $title );
 
 		$module = new class( $context, true ) extends BaseModule {
@@ -234,7 +234,7 @@ class BaseModuleTest extends MediaWikiUnitTestCase {
 
 		$this->assertStringContainsString(
 			'href="/wiki/Special:PersonalDashboard/impact"', $html );
-		$this->assertStringNotContainsString( 'policiesGuidelines', $html );
+		$this->assertStringNotContainsString( 'otherModule', $html );
 	}
 
 	public function testHeaderlessCardHeaderKeepsArrowAndCarriesAccessibleName() {
@@ -284,8 +284,8 @@ class BaseModuleTest extends MediaWikiUnitTestCase {
 
 	public function testHeaderMenuCardHeaderDropsTheArrowAndKeepsTheButtonOutOfTheLink() {
 		$module = $this->newModule( true );
-		$module->setName( 'ext.personalDashboard.reviewChanges' );
-		$module->headerTextValue = 'Review changes';
+		$module->setName( 'ext.example.feed' );
+		$module->headerTextValue = 'Example feed';
 		$module->hasHeaderMenuFlag = true;
 		$module->setPageURL( '/wiki/Special:PersonalDashboard' );
 
@@ -297,27 +297,27 @@ class BaseModuleTest extends MediaWikiUnitTestCase {
 			'<div class="personal-dashboard-module-header-container">', $html );
 		$this->assertStringContainsString(
 			'<a class="personal-dashboard-module-header-link" '
-				. 'href="/wiki/Special:PersonalDashboard/ext.personalDashboard.reviewChanges">',
+				. 'href="/wiki/Special:PersonalDashboard/ext.example.feed">',
 			$html
 		);
 		// The menu button takes the trailing corner, so the arrow is gone (T433725).
 		$this->assertStringNotContainsString(
 			'personal-dashboard-module-header-forward-icon', $html );
 		$this->assertStringContainsString(
-			'id="pd-header-slot-ext.personalDashboard.reviewChanges"', $html );
+			'id="pd-header-slot-ext.example.feed"', $html );
 		$this->assertStringContainsString(
 			'class="personal-dashboard-module-header-menu"', $html );
 		$this->assertGreaterThan(
 			strrpos( $html, 'personal-dashboard-module-header-link' ),
-			strrpos( $html, 'id="pd-header-slot-ext.personalDashboard.reviewChanges"' ),
+			strrpos( $html, 'id="pd-header-slot-ext.example.feed"' ),
 			'the menu slot must come after the link it sits beside'
 		);
 	}
 
 	public function testHeaderMenuSlotShowsAHiddenLookAlikeOfTheButton() {
 		$module = $this->newModule();
-		$module->setName( 'ext.personalDashboard.reviewChanges' );
-		$module->headerTextValue = 'Review changes';
+		$module->setName( 'ext.example.feed' );
+		$module->headerTextValue = 'Example feed';
 		$module->hasHeaderMenuFlag = true;
 
 		$html = $module->callGetHtml();
@@ -330,8 +330,8 @@ class BaseModuleTest extends MediaWikiUnitTestCase {
 
 	public function testHeaderMenuFocusedHeaderCarriesTheMountSlotAfterTheBackLink() {
 		$module = $this->newModule();
-		$module->setName( 'ext.personalDashboard.reviewChanges' );
-		$module->headerTextValue = 'Review changes';
+		$module->setName( 'ext.example.feed' );
+		$module->headerTextValue = 'Example feed';
 		$module->hasHeaderMenuFlag = true;
 		$module->setBackLink( '<a id="BACK_SENTINEL"></a>' );
 		$module->setFocused( true );
@@ -340,10 +340,10 @@ class BaseModuleTest extends MediaWikiUnitTestCase {
 
 		$this->assertStringContainsString( 'BACK_SENTINEL', $html );
 		$this->assertStringContainsString(
-			'id="pd-header-slot-ext.personalDashboard.reviewChanges"', $html );
+			'id="pd-header-slot-ext.example.feed"', $html );
 		$this->assertGreaterThan(
 			strrpos( $html, 'BACK_SENTINEL' ),
-			strrpos( $html, 'id="pd-header-slot-ext.personalDashboard.reviewChanges"' ),
+			strrpos( $html, 'id="pd-header-slot-ext.example.feed"' ),
 			'the menu slot ends the row, opposite the back link'
 		);
 	}

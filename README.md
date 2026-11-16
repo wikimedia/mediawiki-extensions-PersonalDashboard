@@ -1,5 +1,5 @@
 
-This mediawiki extension provides a personal dashboard.
+This MediaWiki extension is a platform for dashboards built from modules. It serves no dashboard of its own: ModeratorToolkit serves Special:PersonalDashboard, and GrowthExperiments serves Special:Home.
 
 Installation:
 ```
@@ -11,7 +11,7 @@ For product-side background (what the dashboard is, deployment history), see [Ex
 
 ## Instrumentation
 
-The baseline health-metrics instrument (`personal-dashboard-health-metrics`) lives at `resources/ext.personalDashboard.special/instrumentation/onPersonalDashboardBaseline.js`, a packageFile of `ext.personalDashboard.special` that `init.js` requires so it runs as part of the module. It previously lived in WikimediaEvents and was moved here in [T430716](https://phabricator.wikimedia.org/T430716).
+The baseline health-metrics instrument (`personal-dashboard-health-metrics`) lives at `resources/ext.personalDashboard.special/instrumentation/onPersonalDashboardBaseline.js`, a packageFile of `ext.personalDashboard.special` that `init.js` requires so it runs as part of the module. It previously lived in WikimediaEvents and was moved here in [T430716](https://phabricator.wikimedia.org/T430716). It sends the dashboard `pageview`. ModeratorToolkit's Review Changes sends the click-through events for its cards to the same instrument. Both wrap the instrument in `withExperimentTagging()`, which `ext.personalDashboard.common` exports.
 
 One instrument name serves every dashboard. Client events already say which dashboard they came from through `module_group` in `action_context`, because a module group belongs to one dashboard. Server-side metrics instead carry the dashboard's own StatsFactory component, which `AbstractSpecialDashboard::getStatsComponent()` supplies and which defaults to `PersonalDashboard`. The render timings, the experiment routing counters and the client timings (`dashboard_client_seconds`) all report under it, so one dashboard's metrics stay together. The exception is the `FeedHandler` (REST API) which is shared by all dashboards. The `feed_handler_seconds` and `feed_source_seconds` metrics are reported only under `PersonalDashboard`.
 

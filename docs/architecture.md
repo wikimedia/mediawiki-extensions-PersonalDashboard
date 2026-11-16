@@ -12,7 +12,7 @@ The one place the platform and a module meet is the render boundary. The server 
 
 ## How a dashboard loads
 
-Here is one request to a dashboard, `Special:PersonalDashboard` here, end to end.
+Here is one request to a dashboard, ModeratorToolkit's `Special:PersonalDashboard` here, end to end.
 
 1. `AbstractSpecialDashboard::execute( $par )` requires a logged-in user (unless `requiresNamedUser()` is overridden to be `false`), loads the app JS and styles, emits the `#personal-dashboard-root` mount point, and splits `$par` into a module name and an optional deeper sub-path.
 2. `PersonalDashboardModuleFactory` builds each module from the `PersonalDashboard.Modules` specs; the `PersonalDashboard.ModuleGroups` attribute arranges them into groups and subgroups, and the subclass says which group this dashboard renders. See [`./modules.md`](./modules.md).
@@ -23,7 +23,7 @@ Here is one request to a dashboard, `Special:PersonalDashboard` here, end to end
 
 Two more paths through the same code:
 
-- A module's route in the subpath (`Special:PersonalDashboard/review`, the slug its group gave `ext.personalDashboard.reviewChanges`) renders that one module as a whole server page (`AbstractSpecialDashboard::renderFocusedFrame()`). At a narrow viewport `ModuleDialog.vue` opens over that page, full-screen and free of the skin's chrome; at a wide viewport the server's own render already is the intended design, chrome and all, so nothing opens over it. An expandable card's header links to a module's own URL, but with JavaScript `Dashboard.vue` catches the click and pushes the route instead of loading it: at a narrow viewport that opens the dialog with no page load, at a wide viewport it opens `FocusedFrame.vue` in place instead, keeping the skin's chrome visible. Without JavaScript the link navigates to the server's inline render ([T433896](https://phabricator.wikimedia.org/T433896)). See [`./routing.md`](./routing.md).
+- A module's route in the subpath (`Special:PersonalDashboard/discussions`, the slug its group gave `ext.moderatorToolkit.activeDiscussions`) renders that one module as a whole server page (`AbstractSpecialDashboard::renderFocusedFrame()`). At a narrow viewport `ModuleDialog.vue` opens over that page, full-screen and free of the skin's chrome; at a wide viewport the server's own render already is the intended design, chrome and all, so nothing opens over it. An expandable card's header links to a module's own URL, but with JavaScript `Dashboard.vue` catches the click and pushes the route instead of loading it: at a narrow viewport that opens the dialog with no page load, at a wide viewport it opens `FocusedFrame.vue` in place instead, keeping the skin's chrome visible. Without JavaScript the link navigates to the server's inline render ([T433896](https://phabricator.wikimedia.org/T433896)). See [`./routing.md`](./routing.md).
 - With no JavaScript, server-rendered bodies show as-is; island modules show a header with an empty body, under a page-level notice that explains why. See [`./render-contract.md`](./render-contract.md).
 
 ## The pieces
@@ -36,12 +36,12 @@ Two more paths through the same code:
 
 **Experiments.** Serving a module group to real users through a TestKitchen experiment: registering the routing, how exposure and variant tagging work, and how concurrent experiments are arbitrated. See [`./experiments.md`](./experiments.md).
 
-**The shared feed scaffold.** Review Changes and Active Discussions are both feeds, and the loading state, the error state, the compact-versus-full derivation, the show more button and the card chrome are one implementation in `ext.personalDashboard.common` rather than a copy per module ([T433900](https://phabricator.wikimedia.org/T433900)). A feed module supplies its queries, its labels and a card body; the scaffold consumes a normalized feed-data contract (`items`, `isLoading`, `isLoadingMore`, `hasMore`, `error`) that a fetch composable or a server-fed `getJsData()` payload can both satisfy. See [`./modules.md`](./modules.md#feed-modules).
+**The shared feed scaffold.** ModeratorToolkit's Active Discussions and Review Changes are both feeds, and the loading state, the error state, the compact-versus-full derivation, the show more button and the card chrome are one implementation in `ext.personalDashboard.common` rather than a copy per module ([T433900](https://phabricator.wikimedia.org/T433900)). A feed module supplies its queries, its labels and a card body; the scaffold consumes a normalized feed-data contract (`items`, `isLoading`, `isLoadingMore`, `hasMore`, `error`) that a fetch composable or a server-fed `getJsData()` payload can both satisfy. See [`./modules.md`](./modules.md#feed-modules).
 
 **Serving your own dashboard.** A dashboard is a special page extending [`AbstractSpecialDashboard`](../src/Specials/AbstractSpecialDashboard.php), registered with one service, `PersonalDashboardPageDependencies`. The subclass answers six configuration questions and nothing else: its page name, its baseline module group, its StatsFactory component, its back-link target, its experiment manifest and whether it requires a logged-in reader. `execute()` is `final` and the render helpers are `private`, so the render sequence stays PD's to change. See [`./modules.md`](./modules.md#serve-your-own-dashboard).
 
 **Design decisions.** Deliberate divergences from MediaWiki convention, with the reasoning and a receipt for each: the dropped platform axis, why registration stays declarative attributes rather than a runtime registry, and why a dashboard is a subclass rather than a third attribute. See [`./decisions.md`](./decisions.md).
 
-**Type safety.** `IModule`, `BaseModule` and the module classes carry declared types, `strict_types` and enums (`ModuleStateEnum` is the first). `Banner` is the one module still missing its `strict_types` declaration; the hook handlers, the factory and the utility classes haven't had the sweep at all. No design change either way; `41413ef` was the first pass.
+**Type safety.** `IModule`, `BaseModule` and the module classes carry declared types, `strict_types` and enums (`ModuleStateEnum` is the first). The hook handlers, the factory and the utility classes haven't had the sweep at all. No design change either way; `41413ef` was the first pass.
 
 **Instrumentation.** The baseline health-metrics instrument moved out of WikimediaEvents into PD itself ([T430716](https://phabricator.wikimedia.org/T430716)); see [`../README.md`](../README.md#instrumentation).

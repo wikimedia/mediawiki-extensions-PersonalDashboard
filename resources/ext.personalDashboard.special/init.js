@@ -4,9 +4,8 @@ const { createMediaWikiHistory } = require( './mediaWikiHistory.js' );
 const App = require( './App.vue' );
 const Dashboard = require( './Dashboard.vue' );
 
-// Personal Dashboard health-metrics instrumentation. Self-contained: it wires
-// up its own hooks and soft-loads TestKitchen, so we only need to require it
-// here to run it.
+// Personal Dashboard health-metrics instrumentation. Self-contained: it
+// soft-loads TestKitchen, so we only need to require it here to run it.
 require( './instrumentation/onPersonalDashboardBaseline.js' );
 
 function lazyLoader( name ) {
@@ -24,8 +23,8 @@ function lazyLoader( name ) {
 //
 // A focused render emits only the focused module's frame as the whole page, so
 // the other card islands have no slot to teleport into and would mount in place,
-// stacked atop it. Drop them here. A behavior-only island (onboarding) owns no
-// card anywhere and always mounts.
+// stacked atop it. Drop them here. A behavior-only island (such as
+// ModeratorToolkit's onboarding) owns no card anywhere and always mounts.
 const islands = [];
 const groups = mw.config.get( 'wgPersonalDashboardGroups', [] );
 const focusedModule = mw.config.get( 'wgPersonalDashboardFocusedModule', null );
@@ -59,9 +58,9 @@ const router = createRouter( {
 			// on the server), the focused page a card falls through to with no JS,
 			// and the island the dashboard app opens in a dialog. That route is the
 			// group's slug for the module, with the full module name still
-			// resolving behind it. A step within a module
-			// (the policies walkthrough's policy) rides in the URL hash, which the
-			// module reads for itself; the dashboard app never reads the hash. The
+			// resolving behind it. A step within a module (such as a policy in
+			// ModeratorToolkit's policies walkthrough) rides in the URL hash, which
+			// the module reads for itself; the dashboard app never reads the hash. The
 			// greedy (.*) matches any subpage, even an unknown or multi-segment one,
 			// so the app always mounts and falls through to the grouped dashboard
 			// just as the server does for an unrecognized $par.
@@ -78,7 +77,7 @@ createMwApp( App )
 
 /*
  * Hand the router to any behavior module that wants to drive its own dialog
- * through browser history (the policies examples walkthrough does). We wait for
+ * through browser history (ModeratorToolkit's policies walkthrough does). We wait for
  * isReady() so the initial navigation has resolved: a module reads currentRoute
  * the instant it receives the router, and a deep-linked step has to already be
  * the current route or it won't open on first paint. mw.hook replays, so a

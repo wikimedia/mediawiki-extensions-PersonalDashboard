@@ -21,10 +21,10 @@ use Wikimedia\Timestamp\TimestampFormat;
 /**
  * Base class for every feed source that reads the recentchanges table.
  *
- * The three Review Changes sources ask almost the same question, so the shared
- * query lives here and a subclass adds only what makes it different: the
- * watchlist join, the recently edited page set, or nothing at all. Each returns
- * RecentChangeFeedItem, so one card renders all three.
+ * The three sources of ModeratorToolkit's Review Changes ask almost the same
+ * question, so the shared query lives here and a subclass adds only what makes
+ * it different: the watchlist join, the recently edited page set, or nothing at
+ * all. Each returns RecentChangeFeedItem, so one card renders all three.
  *
  * Two of the filters are viewer-relative, and they are options rather than part
  * of the chain: Review Changes will gain a setting that turns personalization

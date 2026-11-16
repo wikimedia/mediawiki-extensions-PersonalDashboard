@@ -5,10 +5,7 @@
 	"personal-dashboard-back-to-dashboard": "Zurück zum Dashboard",
 	"personal-dashboard-beta-info-chip-text": "Beta",
 	"personal-dashboard-desc": "Ein experimentelles Dashboard für Moderatoren",
-	"personal-dashboard-link-title": "Dashboard",
 	"personal-dashboard-module-no-js-fallback": "Einige Teile dieses Dashboards werden nur angezeigt, wenn JavaScript in deinem Browser aktiviert ist.",
 	"personal-dashboard-open-module": "Dieses Modul öffnen",
-	"personal-dashboard-specialpage-title": "{{GENDER:$1|Hallo}}, {{bidi:$1}}!",
-	"personal-dashboard-survey-text": "[$1 Feedback teilen]",
-	"tooltip-pt-personaldashboard": "{{GENDER:|Dein}} persönliches Dashboard"
+	"personal-dashboard-survey-text": "[$1 Feedback teilen]"
 }

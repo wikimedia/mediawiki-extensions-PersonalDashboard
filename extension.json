@@ -27,81 +27,25 @@
 	"ServiceWiringFiles": [
 		"ServiceWiring.php"
 	],
-	"SpecialPages": {
-		"PersonalDashboard": {
-			"class": "MediaWiki\\Extension\\PersonalDashboard\\Specials\\SpecialPersonalDashboard",
-			"services": [
-				"PersonalDashboardPageDependencies"
-			]
-		}
-	},
 	"ConfigRegistry": {
 		"PersonalDashboard": "MediaWiki\\Config\\GlobalVarConfig::newInstance"
 	},
-	"DefaultUserOptions": {
-		"personaldashboard-eligible": false,
-		"personaldashboard-visited": false,
-		"moderatortoolkit-reviewchanges-personalize": true
-	},
 	"HookHandlers": {
-		"skintemplatenav-universal": {
-			"class": "MediaWiki\\Extension\\PersonalDashboard\\HookHandler\\SkinTemplateNavigationUniversalHandler",
-			"services": [
-				"SpecialPageFactory",
-				"UserOptionsManager",
-				"UserEditTracker"
-			]
-		},
-		"preferences": {
-			"class": "MediaWiki\\Extension\\PersonalDashboard\\HookHandler\\GetPreferencesHandler"
-		},
 		"modules": {
 			"class": "MediaWiki\\Extension\\PersonalDashboard\\HookHandler\\ResourceLoaderRegisterModulesHandler"
 		}
 	},
 	"Hooks": {
-		"GetPreferences": "preferences",
-		"SkinTemplateNavigation::Universal": "skintemplatenav-universal",
 		"ResourceLoaderRegisterModules": "modules"
 	},
 	"MessagesDirs": {
 		"PersonalDashboard": [
 			"i18n/api",
-			"i18n/ext.personalDashboard.activeDiscussions",
 			"i18n/ext.personalDashboard.common",
-			"i18n/ext.personalDashboard.impact",
-			"i18n/ext.personalDashboard.onboarding",
-			"i18n/ext.personalDashboard.policiesGuidelines",
-			"i18n/ext.personalDashboard.reviewChanges",
-			"i18n/ext.personalDashboard.reviewChanges.mobile",
 			"i18n/main"
 		]
 	},
-	"ExtensionMessagesFiles": {
-		"PersonalDashboardAlias": "PersonalDashboard.i18n.alias.php"
-	},
 	"ResourceModules": {
-		"ext.personalDashboard.menuIcon": {
-			"class": "MediaWiki\\ResourceLoader\\OOUIIconPackModule",
-			"selectorWithVariant": ".vector-icon.mw-ui-icon-wikimedia-{name}-{variant}",
-			"selectorWithoutVariant": ".vector-icon.mw-ui-icon-wikimedia-{name}, .minerva-icon--{name}",
-			"useMaskImage": true,
-			"icons": [
-				"viewCompact"
-			]
-		},
-		"ext.personalDashboard.blueDot": {
-			"localBasePath": "resources/ext.personalDashboard.blueDot",
-			"dependencies": [
-				"mediawiki.pulsatingdot"
-			],
-			"packageFiles": [
-				"index.js"
-			],
-			"styles": [
-				"dots.less"
-			]
-		},
 		"ext.personalDashboard.special": {
 			"localBasePath": "resources/ext.personalDashboard.special",
 			"class": "MediaWiki\\ResourceLoader\\CodexModule",
@@ -121,7 +65,6 @@
 				"mediaWikiHistory.js",
 				"teleportTargets.js",
 				"instrumentation/onPersonalDashboardBaseline.js",
-				"instrumentation/experiments.js",
 				"../ext.personalDashboard.common/stats.js",
 				{
 					"name": "icons.json",
@@ -171,6 +114,7 @@
 			"packageFiles": [
 				"index.js",
 				"constants.js",
+				"experiments.js",
 				"fetchFeed.js",
 				"utils.js",
 				"components/FeedCard.vue",
@@ -194,148 +138,6 @@
 				}
 			]
 		},
-		"ext.personalDashboard.onboarding": {
-			"localBasePath": "resources/ext.personalDashboard.onboarding",
-			"dependencies": [
-				"vue",
-				"ext.personalDashboard.common"
-			],
-			"messages": [
-				"personal-dashboard-onboarding-title",
-				"personal-dashboard-onboarding-get-started-button",
-				"personal-dashboard-onboarding-step-1-body",
-				"personal-dashboard-onboarding-step-1-alt",
-				"personal-dashboard-onboarding-step-2-title",
-				"personal-dashboard-onboarding-step-3-title",
-				"personal-dashboard-onboarding-step-3-body",
-				"personal-dashboard-onboarding-step-3-alt"
-			],
-			"packageFiles": [
-				"App.vue"
-			]
-		},
-		"ext.personalDashboard.impact": {
-			"localBasePath": "resources/ext.personalDashboard.impact",
-			"remoteExtPath": "PersonalDashboard/resources/personalDashboard.impact",
-			"class": "MediaWiki\\ResourceLoader\\CodexModule",
-			"codexComponents": [
-				"CdxButton",
-				"CdxIcon",
-				"CdxPopover"
-			],
-			"dependencies": [
-				"vue"
-			],
-			"messages": [
-				"personal-dashboard-impact-thanks-sent",
-				"personal-dashboard-impact-edits-reviewed",
-				"personal-dashboard-impact-edits-reviewed-description",
-				"personal-dashboard-impact-info-button"
-			],
-			"packageFiles": [
-				"App.vue",
-				{
-					"name": "icons.json",
-					"callback": "MediaWiki\\ResourceLoader\\CodexModule::getIcons",
-					"callbackParam": [
-						"cdxIconCheckAll",
-						"cdxIconInfo",
-						"cdxIconInfoFilled",
-						"cdxIconUserTalk"
-					]
-				}
-			]
-		},
-		"ext.personalDashboard.reviewChanges": {
-			"localBasePath": "resources/ext.personalDashboard.reviewChanges",
-			"remoteExtPath": "PersonalDashboard/resources/ext.personalDashboard.reviewChanges",
-			"class": "MediaWiki\\ResourceLoader\\CodexModule",
-			"codexComponents": [
-				"CdxIcon",
-				"CdxInfoChip",
-				"CdxToggleSwitch"
-			],
-			"packageFiles": [
-				"App.vue",
-				"utils.js",
-				"components/AboutPanel.vue",
-				"components/ListCard.vue",
-				"components/PersonalizationPanel.vue",
-				"composables/useReviewChangesFeed.js",
-				{
-					"name": "icons.json",
-					"callback": "MediaWiki\\ResourceLoader\\CodexModule::getIcons",
-					"callbackParam": [
-						"cdxIconConfigure",
-						"cdxIconNotice",
-						"cdxIconUserAvatar",
-						"cdxIconUserTemporary"
-					]
-				}
-			],
-			"messages": [
-				"personal-dashboard-review-changes-empty",
-				"personal-dashboard-review-changes-high-revert-risk-label",
-				"personal-dashboard-review-changes-major-changes-label",
-				"personal-dashboard-review-changes-menu-about",
-				"personal-dashboard-review-changes-menu-button-label",
-				"personal-dashboard-review-changes-menu-personalization",
-				"personal-dashboard-review-changes-personalization-description",
-				"personal-dashboard-review-changes-personalization-title",
-				"personal-dashboard-review-changes-show-less-aria-label",
-				"personal-dashboard-review-changes-show-more-aria-label",
-				"personal-dashboard-risky-article-edits-list-card-aria-label",
-				"personal-dashboard-risky-article-edits-list-card-no-comment-message",
-				"personal-dashboard-risky-article-edits-subheader-info",
-				"tag-mw-reverted",
-				"tag-mw-rollback",
-				"tag-mw-replace",
-				"tag-mw-manual-revert"
-			],
-			"dependencies": [
-				"vue",
-				"mediawiki.api",
-				"mediawiki.jqueryMsg",
-				"mediawiki.Title",
-				"mediawiki.util",
-				"user.options",
-				"ext.personalDashboard.common"
-			]
-		},
-		"ext.personalDashboard.activeDiscussions": {
-			"localBasePath": "resources/ext.personalDashboard.activeDiscussions",
-			"remoteExtPath": "PersonalDashboard/resources/ext.personalDashboard.activeDiscussions",
-			"class": "MediaWiki\\ResourceLoader\\CodexModule",
-			"codexComponents": [
-				"CdxIcon"
-			],
-			"packageFiles": [
-				"App.vue",
-				"components/ListCard.vue",
-				"composables/useActiveDiscussionsFeed.js",
-				{
-					"name": "icons.json",
-					"callback": "MediaWiki\\ResourceLoader\\CodexModule::getIcons",
-					"callbackParam": [
-						"cdxIconUserAvatar",
-						"cdxIconSpeechBubble"
-					]
-				}
-			],
-			"messages": [
-				"personal-dashboard-active-discussions-latest-comment",
-				"personal-dashboard-active-discussions-fetch-error",
-				"personal-dashboard-active-discussions-in-topic",
-				"comma-separator",
-				"personal-dashboard-active-discussions-show-more-aria-label",
-				"personal-dashboard-active-discussions-show-less-aria-label"
-			],
-			"dependencies": [
-				"vue",
-				"mediawiki.util",
-				"ext.personalDashboard.common"
-			]
-		},
 		"ext.personalDashboard.styles": {
 			"localBasePath": "resources/ext.personalDashboard.styles",
 			"remoteExtPath": "PersonalDashboard/resources/personalDashboard.styles",
@@ -357,18 +159,6 @@
 				"vector": "skinStyles/vector.less",
 				"monobook": "skinStyles/monobook.less"
 			}
-		},
-		"ext.personalDashboard.policiesGuidelines.styles": {
-			"localBasePath": "resources/ext.personalDashboard.policiesGuidelines.styles",
-			"remoteExtPath": "PersonalDashboard/resources/personalDashboard.policiesGuidelines.styles",
-			"class": "MediaWiki\\ResourceLoader\\CodexModule",
-			"codexStyleOnly": true,
-			"codexComponents": [
-				"CdxAccordion"
-			],
-			"styles": [
-				"index.less"
-			]
 		}
 	},
 	"ForeignResourcesDir": "resources/lib",
@@ -377,29 +167,9 @@
 			"description": "Catch fewer errors for easier troubleshooting",
 			"value": false
 		},
-		"PersonalDashboardUserMenu": {
-			"description": "Show a link to the Personal Dashboard in the user menu.",
-			"value": true
-		},
-		"PersonalDashboardMinimumEdits": {
-			"description": "The minimum number of edits required to show the menu link. This has no effect if `$wgPersonalDashboardUserMenu = false`.",
-			"value": 0
-		},
-		"PersonalDashboardMaximumEdits": {
-			"description": "The maximum number of edits required to show the menu link. This has no effect if `$wgPersonalDashboardUserMenu = false`",
-			"value": 0
-		},
-		"PersonalDashboardBlueDot": {
-			"description": "Show a blue dot inviting users to try out the dashboard. This has no effect if `$wgPersonalDashboardUserMenu = false` or a user does not meet the `$wgPersonalDashboardMinimum/MaximumEdits` threshold.",
-			"value": true
-		},
 		"PersonalDashboardReviewChangesMlModel": {
 			"description": "Machine learning model used to score revisions for the review changes module",
 			"value": "revertrisklanguageagnostic"
-		},
-		"PersonalDashboardReviewChangesMinimumEditCount": {
-			"description": "Minimum edit count required to view the review changes module",
-			"value": 0
 		},
 		"PersonalDashboardActiveDiscussionsPages": {
 			"description": "The pages were active discussions will be extracted from",
@@ -415,9 +185,6 @@
 	],
 	"attributes": {
 		"PersonalDashboard": {
-			"SlugAliasFiles": [
-				"PersonalDashboardAlias"
-			],
 			"FeedSources": {
 				"activediscussions": {
 					"class": "MediaWiki\\Extension\\PersonalDashboard\\Feed\\Source\\ActiveDiscussionsFeedSource",
@@ -479,121 +246,11 @@
 				}
 			},
 			"Modules": {
-				"ext.personalDashboard.activeDiscussions": {
-					"class": "MediaWiki\\Extension\\PersonalDashboard\\Modules\\ActiveDiscussions"
-				},
-				"ext.personalDashboard.banner": {
-					"class": "MediaWiki\\Extension\\PersonalDashboard\\Modules\\Banner"
-				},
-				"ext.personalDashboard.impact": {
-					"class": "MediaWiki\\Extension\\PersonalDashboard\\Modules\\Impact",
-					"services": [
-						"ConnectionProvider"
-					]
-				},
 				"ext.personalDashboard.placeholder": {
 					"class": "MediaWiki\\Extension\\PersonalDashboard\\Modules\\Placeholder"
-				},
-				"ext.personalDashboard.onboarding": {
-					"class": "MediaWiki\\Extension\\PersonalDashboard\\Modules\\Onboarding",
-					"services": [
-						"UserOptionsManager"
-					]
-				},
-				"ext.personalDashboard.policiesGuidelines": {
-					"class": "MediaWiki\\Extension\\PersonalDashboard\\Modules\\PoliciesGuidelines"
-				},
-				"ext.personalDashboard.returnToHomepage": {
-					"class": "MediaWiki\\Extension\\PersonalDashboard\\Modules\\ReturnToHomepage"
-				},
-				"ext.personalDashboard.reviewChanges": {
-					"class": "MediaWiki\\Extension\\PersonalDashboard\\Modules\\ReviewChanges",
-					"services": [
-						"PersonalDashboardRevisionScoreLookup"
-					]
 				}
 			},
 			"ModuleGroups": {
-				"default": {
-					"description": "The Moderator Tools default Personal Dashboard experience",
-					"version": 0,
-					"betaFeedback": "https://wikimediafoundation.limesurvey.net/179424?lang=$1",
-					"groups": [
-						{
-							"name": "utils",
-							"enabled": true,
-							"hidden": true,
-							"subgroups": [
-								{
-									"name": "startup",
-									"enabled": true,
-									"modules": [
-										{
-											"name": "ext.personalDashboard.onboarding",
-											"enabled": true
-										}
-									]
-								}
-							]
-						},
-						{
-							"name": "main",
-							"enabled": true,
-							"subgroups": [
-								{
-									"name": "primary",
-									"enabled": true,
-									"modules": [
-										{
-											"name": "ext.personalDashboard.banner",
-											"enabled": true
-										},
-										{
-											"name": "ext.personalDashboard.reviewChanges",
-											"slug": "review",
-											"enabled": true,
-											"style": "thin"
-										},
-										{
-											"name": "ext.personalDashboard.activeDiscussions",
-											"slug": "discussions",
-											"enabled": true,
-											"style": "thin"
-										}
-									]
-								}
-							]
-						},
-						{
-							"name": "sidebar",
-							"enabled": true,
-							"subgroups": [
-								{
-									"name": "primary",
-									"enabled": true,
-									"modules": [
-										{
-											"name": "ext.personalDashboard.impact",
-											"slug": "impact",
-											"enabled": true
-										}
-									]
-								},
-								{
-									"name": "secondary",
-									"enabled": true,
-									"modules": [
-										{
-											"name": "ext.personalDashboard.policiesGuidelines",
-											"slug": "policies",
-											"enabled": true
-										}
-									]
-								}
-							]
-						}
-					]
-				},
 				"null": {
 					"description": "Null module test",
 					"version": 0,
@@ -608,34 +265,6 @@
 									"modules": [
 										{
 											"name": "ext.personalDashboard.example",
-											"enabled": true
-										}
-									]
-								}
-							]
-						}
-					]
-				},
-				"review-changes-home": {
-					"description": "Treatment group for the Review Changes in Home experiment",
-					"version": 0,
-					"betaFeedback": "https://wikimediafoundation.limesurvey.net/179424?lang=$1",
-					"groups": [
-						{
-							"name": "main",
-							"enabled": true,
-							"subgroups": [
-								{
-									"name": "primary",
-									"enabled": true,
-									"modules": [
-										{
-											"name": "ext.personalDashboard.reviewChanges",
-											"slug": "review",
-											"enabled": true
-										},
-										{
-											"name": "ext.personalDashboard.returnToHomepage",
 											"enabled": true
 										}
 									]

@@ -11,9 +11,10 @@ namespace MediaWiki\Extension\PersonalDashboard\Feed;
  * PersonalDashboard does not require ORES, so the implementation behind it is
  * either the real one or one that returns nothing, and a caller cannot tell.
  *
- * Scores describe an item; they never select one. Review Changes used to filter
- * recent changes on the score, and T433724 replaces that with a "High revert
- * risk" chip on the card, so what the feed needs is the number, not a verdict.
+ * Scores describe an item; they never select one. Review Changes (now in
+ * ModeratorToolkit) used to filter recent changes on the score, and T433724
+ * replaces that with a "High revert risk" chip on the card, so what the feed
+ * needs is the number, not a verdict.
  */
 interface IRevisionScoreLookup {
 

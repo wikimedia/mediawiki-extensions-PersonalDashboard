@@ -121,12 +121,12 @@ test( 'does not mark itself visited without markVisited', async () => {
 test( 'keeps a module class and data attribute on the rendered card', () => {
 	const wrapper = mount( FeedCard, {
 		attrs: {
-			class: 'personal-dashboard-review-changes__card',
+			class: 'example-feed__card',
 			'data-feedorigin': 'watchlist'
 		},
 		slots: { header: '<div>Title</div>' }
 	} );
 
-	expect( wrapper.classes() ).toContain( 'personal-dashboard-review-changes__card' );
+	expect( wrapper.classes() ).toContain( 'example-feed__card' );
 	expect( wrapper.attributes( 'data-feedorigin' ) ).toStrictEqual( 'watchlist' );
 } );

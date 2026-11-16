@@ -2,11 +2,11 @@
 
 Personal Dashboard is experimental; the details below will change.
 
-A module is a discrete unit of content on a dashboard (Impact, Active Discussions, Review Changes, and so on). Modules render their own content; the module-group registry places them into the page.
+A module is a discrete unit of content on a dashboard (for example ModeratorToolkit's Impact, Active Discussions and Review Changes). Modules render their own content; the module-group registry places them into the page.
 
 Any extension can contribute a module via the `PersonalDashboard.Modules` attribute. This doc uses [BoilerPlate](https://www.mediawiki.org/wiki/Extension:BoilerPlate) as a stand-in; it isn't actually shipping a module. For a real one, GrowthExperiments registers its Mentorship module this way ([T432039](https://phabricator.wikimedia.org/T432039)), extending `BaseModule` rather than implementing `IModule` directly.
 
-Registering a module means one entry in the extension's `./extension.json` and a PHP class. Placing it on the dashboard is either a change to Personal Dashboard (for the default layout) or a new group in your own `./extension.json` (for experiments).
+Registering a module means one entry in the extension's `./extension.json` and a PHP class. Placing it on a dashboard is a change to the extension that owns that dashboard's module groups, or a new group in your own `./extension.json`.
 
 ## Register the module
 
@@ -47,11 +47,11 @@ Modules implement `MediaWiki\Extension\PersonalDashboard\IModule`. Six methods:
 - `supports()`: return false to skip the module entirely; `render()` and `getJsData()` are then never called.
 - `setName($name)`, `setPageURL($url)`: called by the factory and the special page before render; typically empty stubs.
 
-For BoilerPlate, the class lives at `src/ModuleExample.php` under `MediaWiki\Extension\BoilerPlate\`. `./src/Modules/ReturnToHomepage.php` is the smallest working example in Personal Dashboard: no context, no services, `render()` returns a static link.
+For BoilerPlate, the class lives at `src/ModuleExample.php` under `MediaWiki\Extension\BoilerPlate\`. ModeratorToolkit's `src/Modules/ReturnToHomepage.php` is the smallest working example: no context, no services, `render()` returns a static link.
 
 If the module needs a context or services, the constructor takes an `IContextSource` first, then any services declared in the registry. The dashboard page supplies the context via `getRequestedModule()` in `./src/Specials/AbstractSpecialDashboard.php`; services come from the `"services"` list above.
 
-Personal Dashboard's own modules extend an internal helper, `MediaWiki\Extension\PersonalDashboard\Modules\BaseModule`, that composes `render()` from a header/subheader/body/footer skeleton so subclasses only supply the pieces. The helper isn't part of the platform contract, but it's a decent example of what a helper can look like. Typical overrides:
+ModeratorToolkit's modules extend a helper, `MediaWiki\Extension\PersonalDashboard\Modules\BaseModule`, that composes `render()` from a header/subheader/body/footer skeleton so subclasses only supply the pieces. The helper isn't part of the platform contract, but it's a decent example of what a helper can look like. Typical overrides:
 
 - `getHeaderText()`: the card title as a string.
 - `getModules()`: ResourceLoader module names to load for this module.
@@ -66,11 +66,11 @@ Build that server HTML with `$this->getCodex()`, the Codex-PHP component factory
 
 A third override adds a second mount slot rather than removing the first:
 
-- `hasHeaderMenu()`: return true for a module that puts an overflow menu at the end of its header row. The frame then emits `#pd-header-slot-<name>` there, and the module's Vue app teleports `ModuleHeaderMenu` (from `ext.personalDashboard.common`) into it, with a `ModulePanel` per item the menu opens. The affordance cannot be server HTML: a menu holds client state, and Codex-PHP has no menu builder. `./src/Modules/ReviewChanges.php` is the one consumer ([T433725](https://phabricator.wikimedia.org/T433725)).
+- `hasHeaderMenu()`: return true for a module that puts an overflow menu at the end of its header row. The frame then emits `#pd-header-slot-<name>` there, and the module's Vue app teleports `ModuleHeaderMenu` (from `ext.personalDashboard.common`) into it, with a `ModulePanel` per item the menu opens. The affordance cannot be server HTML: a menu holds client state, and Codex-PHP has no menu builder. ModeratorToolkit's `ReviewChanges` is the one consumer ([T433725](https://phabricator.wikimedia.org/T433725)).
 
-GrowthExperiments' `includes/PersonalDashboard/Mentorship.php` extends BaseModule from outside this extension and overrides both, so its body is server HTML. `./src/Modules/Impact.php` extends BaseModule but overrides neither, staying an island that queries the database and hands its counts to Vue as config vars.
+GrowthExperiments' `includes/PersonalDashboard/Mentorship.php` extends BaseModule from outside this extension and overrides both, so its body is server HTML. ModeratorToolkit's `src/Modules/Impact.php` extends BaseModule but overrides neither, staying an island that queries the database and hands its counts to Vue as config vars.
 
-Client-side (Vue) modules are the island default: BaseModule emits the mount slot, and a matching ResourceLoader module registered under `ResourceModules` in the same extension's `./extension.json` supplies the Vue app the dashboard teleports in. The dashboard app hands it `detail`, `focused`, `active`, `isNarrow` and `headerTarget`, and the module decides its own presentation from those; it needs no PHP beyond the frame. `./src/Modules/ReviewChanges.php` paired with `./resources/ext.personalDashboard.reviewChanges/` is the fullest in-tree example.
+Client-side (Vue) modules are the island default: BaseModule emits the mount slot, and a matching ResourceLoader module registered under `ResourceModules` in the same extension's `./extension.json` supplies the Vue app the dashboard teleports in. The dashboard app hands it `detail`, `focused`, `active`, `isNarrow` and `headerTarget`, and the module decides its own presentation from those; it needs no PHP beyond the frame. ModeratorToolkit's `src/Modules/ReviewChanges.php` paired with its `resources/ext.moderatorToolkit.reviewChanges/` is the fullest example.
 
 ## Feed modules
 
@@ -83,7 +83,7 @@ Four pieces, all exported from `ext.personalDashboard.common`:
 - **`fetchFeed( sources, limit, continuation )`** is a loader for `useFeedState` over the feed endpoint below: one page of the named sources, resolving to `{ items, continuation, incomplete }`, and rejecting with the wiki's own message for a refused request.
 - **`FeedCard`** is the card chrome: the Codex card, the whole-card overlay link and its stacking context, the opt-in visited state (`markVisited`), and the `#header` / `#meta` / `#description` rows. Your card component fills those slots from your item shape and keeps its own class on the element for anything specific to it.
 
-`./resources/ext.personalDashboard.activeDiscussions/` is the smaller of the two consumers and the better one to read first: one composable asking the feed endpoint below for its one source and handing the continuation token back, an `App.vue` that is little more than the labels and the fetch limit, and a `ListCard.vue` that is all slot content. `./resources/ext.personalDashboard.reviewChanges/` has the same shape and asks for several sources at once.
+ModeratorToolkit's `resources/ext.moderatorToolkit.activeDiscussions/` is the smaller of its two consumers and the better one to read first: one composable asking the feed endpoint below for its one source and handing the continuation token back, an `App.vue` that is little more than the labels and the fetch limit, and a `ListCard.vue` that is all slot content. Its `ext.moderatorToolkit.reviewChanges` has the same shape and asks for several sources at once.
 
 ## Register a feed source
 
@@ -124,11 +124,11 @@ Return `null` to opt out, and mean it: the item will never be merged away. That'
 
 ## Show it on the dashboard
 
-The default dashboard layout lives at `PersonalDashboard.ModuleGroups.default` in **Personal Dashboard's** own `./extension.json`. A group contains subgroups, and a subgroup contains modules. The `default` group has three top-level groups: `utils` (hidden, holds the onboarding module), `main`, and `sidebar`.
+A module group lives under `PersonalDashboard.ModuleGroups` in the `extension.json` of the extension that registers it. A group contains subgroups, and a subgroup contains modules. For example, ModeratorToolkit's `moderators` group, the layout of Special:PersonalDashboard, has three top-level groups: `utils` (hidden, holds the onboarding module), `main`, and `sidebar`.
 
 Two paths for a BoilerPlate module to appear:
 
-**Add to the default dashboard.** Submit a change to Personal Dashboard adding the module to a subgroup, for example the `primary` subgroup inside `main`:
+**Add to an existing dashboard.** Submit a change to the extension that owns the group, adding the module to a subgroup, for example the `primary` subgroup inside `main`. Another extension can't add a module to that group itself: MediaWiki merges extension attributes with `array_merge_recursive()`, which appends lists instead of merging them by `name`.
 
 ```json
 {
@@ -204,7 +204,7 @@ A group can also declare a feedback survey, which puts a Beta chip and a link to
 "betaFeedback": "https://example.com/survey?Q_lang=$1"
 ```
 
-`$1` becomes the viewer's language code, for a survey tool that takes the language as a parameter; a URL without it is linked as written. The survey belongs to the group, not to the wiki and not to the page, so your group sends your users to your own survey. A group that declares nothing gets no chip. Personal Dashboard's `default` group declares the Moderator Tools survey.
+`$1` becomes the viewer's language code, for a survey tool that takes the language as a parameter; a URL without it is linked as written. The survey belongs to the group, not to the wiki and not to the page, so your group sends your users to your own survey. A group that declares nothing gets no chip. ModeratorToolkit's `moderators` group declares the Moderator Tools survey.
 
 Registering the group is the platform mechanism today. User-facing `?moduleGroup=` routing, which let anyone silently re-target their own dashboard, is gone as part of [T430805](https://phabricator.wikimedia.org/T430805). `?pdo=<ModuleGroupId>` replaces it: a dev/QA-only override gated by the `PersonalDashboardAllowOverride` kill switch. The switch defaults to `false` in the extension's own config, so a third-party install or local dev checkout gets `pdo` disabled out of the box; WMF's deployment config sets it `true`. Setting `pdo` via URL param also sets a session cookie named for the dashboard that wrote it (`pdo-<PageName>`), so a single tagged link keeps routing a QA session across reloads until the browser session ends, and pinning one dashboard never re-targets another. A real TestKitchen enrollment always wins over `pdo`, and PersonalDashboard suppresses its own instrumentation entirely while `pdo` is active, so dev/QA traffic never contaminates analysis data.
 
@@ -212,7 +212,7 @@ Registering the group is the platform mechanism today. User-facing `?moduleGroup
 
 ## Serve your own dashboard {#serve-your-own-dashboard}
 
-Registering a group puts BoilerPlate's modules on the shelf. To serve them at a page BoilerPlate owns, rather than at `Special:PersonalDashboard`, subclass Personal Dashboard's abstract special page. GrowthExperiments serves `Special:Home` this way ([T438582](https://phabricator.wikimedia.org/T438582)).
+Registering a group puts BoilerPlate's modules on the shelf. To serve them at a page BoilerPlate owns, subclass Personal Dashboard's abstract special page. ModeratorToolkit serves `Special:PersonalDashboard` this way, and GrowthExperiments serves `Special:Home` ([T438582](https://phabricator.wikimedia.org/T438582)).
 
 Register the page in BoilerPlate's own `./extension.json`. It needs exactly one service, and it always will: Personal Dashboard can add a dependency to the bundle without a change here.
 
@@ -252,8 +252,8 @@ That is a working dashboard. Four more accessors have defaults you may want to c
 
 Two more things your extension has to supply, because MediaWiki asks every special page for them:
 
-- **An alias.** Add the page to your `$specialPageAliases` file and declare it under `ExtensionMessagesFiles`; `./PersonalDashboard.i18n.alias.php` is the template. Without one, `SpecialPageFactory` warns on every request and the page has no localised name.
-- **A title.** The base does not override `getDescription()`, so core's default applies and asks for the message named after your page, lowercased. Add that message, or override `getDescription()` to return a `Message` of your own. `SpecialPersonalDashboard::getDescription()` is an example: it passes the user's name into the title.
+- **An alias.** Add the page to your `$specialPageAliases` file and declare it under `ExtensionMessagesFiles`; ModeratorToolkit's `ModeratorToolkit.i18n.alias.php` is an example. Without one, `SpecialPageFactory` warns on every request and the page has no localised name.
+- **A title.** The base does not override `getDescription()`, so core's default applies and asks for the message named after your page, lowercased. Add that message, or override `getDescription()` to return a `Message` of your own. ModeratorToolkit's `SpecialPersonalDashboard::getDescription()` is an example: it passes the user's name into the title.
 
 `isListed()` and `getGroupName()` are yours too, under core's own contract. Personal Dashboard does not decide them. Its own `isListed()` returns `false` because that dashboard is in beta, which is a product decision about that dashboard and not a rule for yours.
 
@@ -270,12 +270,11 @@ Registering a group puts it on the shelf; a TestKitchen experiment is what serve
 
 ## Existing modules as reference
 
-Personal Dashboard ships most modules itself, and GrowthExperiments ships the Mentorship module from its own tree ([T432039](https://phabricator.wikimedia.org/T432039)). All of them use the same registration mechanism a third-party extension would.
+Personal Dashboard ships no modules of its own apart from the placeholder. ModeratorToolkit ships the modules of Special:PersonalDashboard, and GrowthExperiments ships the Mentorship module ([T432039](https://phabricator.wikimedia.org/T432039)). Both use the same registration mechanism a third-party extension would.
 
-- `./src/Modules/ReturnToHomepage.php`: smallest server-side module; implements `IModule` directly.
-- `./src/Modules/Banner.php`: static content from a wiki message; server-rendered (no client mount), extends `BaseModule`.
-- `./src/Modules/Impact.php`: DB-backed island, passes its counts to Vue via `getJsConfigVars()`; extends `BaseModule`.
-- `./src/Modules/ReviewChanges.php`: full client-side Vue module, the Review Changes experience; reads its feed a page at a time from the endpoint below, and the only PHP it still runs hands the card the wiki's high-risk threshold; extends `BaseModule`.
+- ModeratorToolkit's `src/Modules/ReturnToHomepage.php`: smallest server-side module; implements `IModule` directly.
+- ModeratorToolkit's `src/Modules/Banner.php`: static content from a wiki message; server-rendered (no client mount), extends `BaseModule`.
+- ModeratorToolkit's `src/Modules/Impact.php`: DB-backed island, passes its counts to Vue via `getJsConfigVars()`; extends `BaseModule`.
 - `./src/Modules/Placeholder.php`: fallback used when a registered module fails to load; implements `IModule` directly.
 
 ## See also

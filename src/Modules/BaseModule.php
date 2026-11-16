@@ -442,10 +442,11 @@ abstract class BaseModule implements IModule, MessageLocalizer {
 	 *    Vue component fills in client-side. Until then, it shows the module's
 	 *    loading markup.
 	 *  - Server-static (true, no getModules()): render() emits the full body and
-	 *    the client leaves it alone (Banner, ReturnToHomepage).
+	 *    the client leaves it alone (for example ModeratorToolkit's Banner).
 	 *  - Progressively enhanced (true, with getModules()): render() emits the full
 	 *    body and the module ships a behavior module that runs against that server
-	 *    DOM, adding interactivity without re-rendering it (PoliciesGuidelines).
+	 *    DOM, adding interactivity without re-rendering it (for example
+	 *    ModeratorToolkit's PoliciesGuidelines).
 	 *
 	 * @return bool
 	 */
@@ -585,12 +586,8 @@ abstract class BaseModule implements IModule, MessageLocalizer {
 				'id' => $this->getName(),
 				'class' => array_merge( [
 					'personal-dashboard-module',
-					// The following CSS classes are used here:
-					// * personal-dashboard-module-activeDiscussions
-					// * personal-dashboard-module-banner
-					// * personal-dashboard-module-impact
-					// * personal-dashboard-module-policiesGuidelines
-					// * personal-dashboard-module-reviewChanges
+					// One class per module, from the short name of the module's
+					// PHP class. PersonalDashboard itself renders none.
 					"personal-dashboard-module-$className",
 					// The following CSS classes are used here:
 					// * personal-dashboard-module--style-default

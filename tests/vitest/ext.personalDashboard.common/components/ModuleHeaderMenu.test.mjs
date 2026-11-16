@@ -3,11 +3,11 @@ import { mount } from '@vue/test-utils';
 import ModuleHeaderMenu from '/resources/ext.personalDashboard.common/components/ModuleHeaderMenu.vue';
 
 const menuItems = [ { value: 'personalization', label: 'Personalization' } ];
-const footerItem = { value: 'about', label: 'About Review changes' };
+const footerItem = { value: 'about', label: 'About Example feed' };
 
 function mountMenu( slots = {}, global = {} ) {
 	return mount( ModuleHeaderMenu, {
-		props: { menuItems, footerItem, buttonLabel: 'More options for Review changes' },
+		props: { menuItems, footerItem, buttonLabel: 'More options for Example feed' },
 		slots,
 		global
 	} );
@@ -38,7 +38,7 @@ test( 'names the icon-only button, which would otherwise announce nothing', () =
 	const wrapper = mountMenu();
 
 	expect( wrapper.get( 'button' ).attributes( 'aria-label' ) )
-		.toBe( 'More options for Review changes' );
+		.toBe( 'More options for Example feed' );
 } );
 
 // A button with no type attribute submits. The dashboard header can sit inside
@@ -65,7 +65,7 @@ test( 'renders every item the caller passes, the footer one last', async () => {
 	await wrapper.get( 'button' ).trigger( 'click' );
 
 	expect( wrapper.findAll( '.cdx-menu-item' ).map( ( item ) => item.text() ) )
-		.toStrictEqual( [ 'Personalization', 'About Review changes' ] );
+		.toStrictEqual( [ 'Personalization', 'About Example feed' ] );
 } );
 
 // Codex's own footer prop reserves room for the item by measuring it before the
@@ -132,7 +132,7 @@ test( 'hands the button to the slot, since a popover cannot anchor without it', 
 
 test( 'focus() moves the focus to the menu button', () => {
 	const wrapper = mount( ModuleHeaderMenu, {
-		props: { menuItems, footerItem, buttonLabel: 'More options for Review changes' },
+		props: { menuItems, footerItem, buttonLabel: 'More options for Example feed' },
 		attachTo: document.body
 	} );
 

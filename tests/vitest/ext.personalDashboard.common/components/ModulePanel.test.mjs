@@ -6,7 +6,7 @@ import ModulePanel from '/resources/ext.personalDashboard.common/components/Modu
 // still be mounted when that runs. Open it after mount and let the tick pass.
 async function mountPanel( props = {} ) {
 	const wrapper = mount( ModulePanel, {
-		props: Object.assign( { open: false, title: 'About Review changes' }, props ),
+		props: Object.assign( { open: false, title: 'About Example feed' }, props ),
 		slots: { default: '<p id="PANEL_BODY">Body copy</p>' }
 	} );
 	await wrapper.setProps( { open: true } );
@@ -38,7 +38,7 @@ test( 'a narrow viewport gets a bottom sheet instead', async () => {
 test.each( [ [ false ], [ true ] ] )( 'carries the title and the body when narrow is %s', async ( isNarrow ) => {
 	const wrapper = await mountPanel( { isNarrow } );
 
-	expect( wrapper.text() ).toContain( 'About Review changes' );
+	expect( wrapper.text() ).toContain( 'About Example feed' );
 	expect( wrapper.find( '#PANEL_BODY' ).exists() ).toBe( true );
 } );
 

@@ -102,9 +102,9 @@ module.exports = defineComponent( {
 	computed: {
 		activeName() {
 			// A step within a module lives in the URL hash and belongs to that
-			// module's own routing, not the dashboard app's dialog: a policy hash
-			// like #neutral-point-of-view opens the policies walkthrough, so the
-			// module dialog must stay shut over its card.
+			// module's own routing, not the dashboard app's dialog: for example, a
+			// policy hash like #neutral-point-of-view opens ModeratorToolkit's
+			// policies walkthrough, so the module dialog must stay shut over its card.
 			if ( this.$route.hash ) {
 				return '';
 			}

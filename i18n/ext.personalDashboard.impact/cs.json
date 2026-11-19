@@ -1,0 +1,12 @@
+{
+	"@metadata": {
+		"authors": [
+			"Mormegil"
+		]
+	},
+	"personal-dashboard-impact-title": "Váš dopad",
+	"personal-dashboard-impact-thanks-sent": "Odeslaná poděkování",
+	"personal-dashboard-impact-edits-reviewed": "Zkontrolované editace",
+	"personal-dashboard-impact-edits-reviewed-description": "Počítá editace, které jste během posledních třiceti dní {{GENDER:|revertoval|revertovala|revertovali}}, a všechna poděkování, která jste {{GENDER:|odeslal|odeslala|odeslali}}.",
+	"personal-dashboard-impact-info-button": "Informace"
+}

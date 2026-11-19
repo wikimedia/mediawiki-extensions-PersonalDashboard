@@ -9,7 +9,7 @@
 	"license-name": "GPL-3.0-or-later",
 	"type": "other",
 	"requires": {
-		"MediaWiki": ">= 1.47.0",
+		"MediaWiki": ">= 1.48.0",
 		"extensions": {
 			"CommunityConfiguration": "*"
 		}
@@ -615,7 +615,6 @@
 							]
 						}
 					]
-
 				},
 				"review-changes-home": {
 					"description": "Treatment group for the Review Changes in Home experiment",

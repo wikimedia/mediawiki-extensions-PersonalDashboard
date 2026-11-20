@@ -1,0 +1,12 @@
+{
+	"@metadata": {
+		"authors": [
+			"Mormegil"
+		]
+	},
+	"personal-dashboard-desc": "Experimentální řídicí panel pro moderátory",
+	"personal-dashboard-link-title": "Řídicí panel",
+	"personal-dashboard-specialpage-title": "Vítejte, {{GENDER:$1|uživateli|uživatelko}} {{bidi:$1}}!",
+	"personal-dashboard-survey-text": "[$1 Podělte se o názor]",
+	"tooltip-pt-personaldashboard": "{{GENDER:|Váš}} osobní řídicí panel"
+}

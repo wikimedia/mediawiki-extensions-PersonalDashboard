@@ -1,0 +1,14 @@
+{
+	"@metadata": {
+		"authors": [
+			"Mormegil"
+		]
+	},
+	"personal-dashboard-risky-article-edits-header": "Zkontrolovat změny",
+	"personal-dashboard-review-changes-empty": "Nenalezeny žádné změny",
+	"personal-dashboard-review-changes-high-revert-risk-label": "Vysoké riziko revertu",
+	"personal-dashboard-review-changes-menu-button-label": "Další možnosti pro Kontrolu změn",
+	"personal-dashboard-review-changes-menu-personalization": "Přizpůsobení",
+	"personal-dashboard-review-changes-menu-about": "O Kontrole změn",
+	"personal-dashboard-review-changes-personalization-title": "Přizpůsobení Kontroly změn"
+}

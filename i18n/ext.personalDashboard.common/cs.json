@@ -9,6 +9,7 @@
 	"personal-dashboard-multi-step-dialog-previous-button": "Předchozí",
 	"personal-dashboard-multi-step-dialog-got-it-button": "Rozumím",
 	"personal-dashboard-feed-error": "Chyba $1",
+	"personal-dashboard-feed-incomplete": "Toto se momentálně nepodařilo načíst. Zkuste to znovu později.",
 	"personal-dashboard-feed-load-more": "Zobrazit více",
 	"personal-dashboard-feed-loading-more": "Načítání dalších…",
 	"personal-dashboard-feed-show-less": "Zobrazit méně"

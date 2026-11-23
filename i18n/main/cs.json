@@ -5,6 +5,7 @@
 		]
 	},
 	"personal-dashboard-back-to-dashboard": "Zpět na řídicí panel",
+	"personal-dashboard-beta-info-chip-text": "Beta",
 	"personal-dashboard-desc": "Experimentální řídicí panel pro moderátory",
 	"personal-dashboard-link-title": "Řídicí panel",
 	"personal-dashboard-module-no-js-fallback": "Některé části tohoto panelu se nezobrazí, pokud si v prohlížeči nepovolíte JavaScript.",

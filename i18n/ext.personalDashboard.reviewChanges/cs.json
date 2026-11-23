@@ -5,10 +5,19 @@
 		]
 	},
 	"personal-dashboard-risky-article-edits-header": "Zkontrolovat změny",
+	"personal-dashboard-risky-article-edits-subheader-info": "Tyto editace provedli jiní uživatelé. Zůstaňte v obraze a pomozte udržovat kvalitu Wikipedie tím, že je zkontrolujete.",
+	"personal-dashboard-risky-article-edits-footer-preamble": "Více editací si můžete prohlédnout na [{{fullurl:Special:RecentChanges|revertrisklanguageagnostic=all}} stránce posledních změn]",
+	"personal-dashboard-risky-article-edits-list-card-aria-label": "Otevřít zobrazení rozdílů pro $1",
+	"personal-dashboard-risky-article-edits-list-card-no-comment-message": "Bez shrnutí editace",
+	"personal-dashboard-risky-article-edits-progress-bar-aria-label": "vložený ukazatel průběhu, který ukazuje, když se načítají změny ke kontrole",
 	"personal-dashboard-review-changes-empty": "Nenalezeny žádné změny",
+	"personal-dashboard-review-changes-major-changes-label": "Velké změny",
 	"personal-dashboard-review-changes-high-revert-risk-label": "Vysoké riziko revertu",
 	"personal-dashboard-review-changes-menu-button-label": "Další možnosti pro Kontrolu změn",
 	"personal-dashboard-review-changes-menu-personalization": "Přizpůsobení",
 	"personal-dashboard-review-changes-menu-about": "O Kontrole změn",
-	"personal-dashboard-review-changes-personalization-title": "Přizpůsobení Kontroly změn"
+	"personal-dashboard-review-changes-personalization-title": "Přizpůsobení Kontroly změn",
+	"personal-dashboard-review-changes-personalization-description": "Navrhovat relevantní změny na základě vaší editační aktivity. [https://www.mediawiki.org/wiki/Home/Recommendations#Review_Changes Více informací]",
+	"personal-dashboard-review-changes-show-more-aria-label": "Zobrazit více změn ke kontrole",
+	"personal-dashboard-review-changes-show-less-aria-label": "Zobrazit méně změn ke kontrole"
 }

@@ -8,6 +8,10 @@
 	"personal-dashboard-multi-step-dialog-progress": "$1 z $2",
 	"personal-dashboard-multi-step-dialog-next-button": "Dalej",
 	"personal-dashboard-multi-step-dialog-previous-button": "Wstecz",
-	"personal-dashboard-multi-step-dialog-got-it-button": "Zacznijmy",
-	"personal-dashboard-feed-load-more": "Pokaż więcej"
+	"personal-dashboard-multi-step-dialog-got-it-button": "Jasne",
+	"personal-dashboard-feed-error": "Błąd $1",
+	"personal-dashboard-feed-incomplete": "Nie można teraz tego wczytać. Spróbuj ponownie później.",
+	"personal-dashboard-feed-load-more": "Pokaż więcej",
+	"personal-dashboard-feed-loading-more": "Wczytywanie kolejnych…",
+	"personal-dashboard-feed-show-less": "Pokaż mniej"
 }

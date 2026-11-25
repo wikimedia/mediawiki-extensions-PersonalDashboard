@@ -1,0 +1,9 @@
+{
+	"@metadata": {
+		"authors": []
+	},
+	"rest-module-personaldashboard.v0-title": "API für das persönliche Dashboard",
+	"rest-module-personaldashboard.v0-desc": "Feeds mit den neuesten Aktivitäten für PersonalDashboard-Module",
+	"personal-dashboard-rest-endpoint-summary-feed": "Feed-Einträge aus den angeforderten Quellen abrufen",
+	"personal-dashboard-rest-endpoint-desc-feed": "Gibt einen zusammengeführten Feed mit Elementen aus den angeforderten Quellen zurück, wobei die neuesten Elemente zuerst angezeigt werden."
+}

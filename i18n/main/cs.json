@@ -1,0 +1,13 @@
+{
+	"@metadata": {
+		"authors": [
+			"Mormegil"
+		]
+	},
+	"personal-dashboard-back-to-dashboard": "Zpět na řídicí panel",
+	"personal-dashboard-beta-info-chip-text": "Beta",
+	"personal-dashboard-desc": "Experimentální řídicí panel pro moderátory",
+	"personal-dashboard-module-no-js-fallback": "Některé části tohoto panelu se nezobrazí, pokud si v prohlížeči nepovolíte JavaScript.",
+	"personal-dashboard-open-module": "Otevřít tento modul",
+	"personal-dashboard-survey-text": "[$1 Podělte se o názor]"
+}

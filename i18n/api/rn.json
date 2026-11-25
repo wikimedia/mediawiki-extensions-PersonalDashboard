@@ -1,0 +1,16 @@
+{
+	"@metadata": {
+		"authors": [
+			"NathanRUZO"
+		]
+	},
+	"rest-module-personaldashboard.v0-title": "Urubaho rw'umuntu ku giti ciwe API",
+	"personal-dashboard-rest-endpoint-summary-feed": "Kuronka ibifungurwa bivuye ku masoko yasabwe",
+	"personal-dashboard-rest-param-desc-feed-limit": "Igitigiri kinini c'ibintu vyo gusubizwa inyuma",
+	"personal-dashboard-rest-property-desc-id": "Indangamuntu y'iki kintu, yihariye mu nzira yose mu nyishu imwe.",
+	"personal-dashboard-rest-property-desc-revid": "Ikarata y'ubushakashatsi y'iyi nyandiko.",
+	"personal-dashboard-rest-property-desc-old-revid": "Indangamuntu y'isubiramwo iyi mpinduka yakozweko, canke `null` nimba iyo mpinduka yaremye urupapuro.",
+	"personal-dashboard-rest-property-desc-newlen": "Ingano ya paji inyuma yo guhindura, mu bytes.",
+	"personal-dashboard-rest-property-desc-bot": "Nimba iyo mpinduka yakozwe n’ubuhinga bwa bot.",
+	"personal-dashboard-rest-property-desc-tags": "Guhindura ibimenyetso vyakoreshejwe ku guhindura."
+}

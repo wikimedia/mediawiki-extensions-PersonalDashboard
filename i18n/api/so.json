@@ -1,0 +1,34 @@
+{
+	"@metadata": {
+		"authors": [
+			"AhmedG612"
+		]
+	},
+	"rest-module-personaldashboard.v0-title": "API-ga Guddiga Gaarka ah ee Isticmaalaha",
+	"rest-module-personaldashboard.v0-desc": "Quudinnada hawlaha ugu dambeeyay ee qaybaha Guddiga Gaarka ah ee Isticmaalaha",
+	"personal-dashboard-rest-endpoint-summary-feed": "Ka hel waxyaabaha quudinta ilaha la codsaday",
+	"personal-dashboard-rest-endpoint-desc-feed": "Wuxuu soo celiyaa quudin la isku daray oo ka kooban waxyaabo laga soo ururiyay ilaha la codsaday, iyadoo kuwa ugu cusub ay ugu horreeyaan.",
+	"personal-dashboard-rest-param-desc-feed-sources": "[Ilaha quudinta](https://www.mediawiki.org/wiki/Extension:PersonalDashboard/API#Sources) laga soo ururinayo, oo lagu kala saaray `|`. Waxyaabaha si siman ayaa loogu qaybiyaa ilahaas.",
+	"personal-dashboard-rest-param-desc-feed-limit": "Tirada ugu badan ee waxyaabaha la soo celinayo",
+	"personal-dashboard-rest-param-desc-feed-continue": "Calaamad qarsoon oo laga helay jawaab hore, si loo soo helo bogga xiga ee isla quudinta.",
+	"personal-dashboard-rest-schema-desc-feed-items": "Quudinta, iyadoo kuwa ugu cusub ay ugu horreeyaan, si simanna loogu qaybiyay ilaha la codsaday.",
+	"personal-dashboard-rest-schema-desc-feed-continue": "Calaamadda dib loogu gudbinayo sida `continue` si loo helo bogga xiga. Ma jiri doonto marka dhammaan ilaha la dhammeeyo.",
+	"personal-dashboard-rest-property-desc-id": "Aqoonsiga shaygan, kaas oo gaar u ah dhammaan ilaha ku jira hal jawaab.",
+	"personal-dashboard-rest-property-desc-feedorigin": "Magaca isha quudinta ee shaygani ka yimid.",
+	"personal-dashboard-rest-property-desc-title": "Cinwaanka bogga wax laga beddelay.",
+	"personal-dashboard-rest-property-desc-revid": "Aqoonsiga dib u eegista ee wax-ka-beddelkan.",
+	"personal-dashboard-rest-property-desc-pageid": "Aqoonsiga bogga wax laga beddelay.",
+	"personal-dashboard-rest-property-desc-old-revid": "Aqoonsiga dib u eegista uu wax ka beddelkani ka yimid, ama `null` haddii wax ka beddelku abuuray bogga.",
+	"personal-dashboard-rest-property-desc-user": "Magaca isticmaalaha sameeyay wax ka beddelka, ama cinwaankiisa IP-ga haddii aanu akoonkiisa ku jirin.",
+	"personal-dashboard-rest-property-desc-timestamp": "Waqtiga wax-ka-beddelka la sameeyay, qaabka ISO 8601.",
+	"personal-dashboard-rest-property-desc-newlen": "Cabbirka bogga kadib wax ka beddelka, oo lagu cabbiray bayt.",
+	"personal-dashboard-rest-property-desc-oldlen": "Cabbirka bogga ka hor wax ka beddelka, oo lagu cabbiray bayt.",
+	"personal-dashboard-rest-property-desc-parsedcomment": "Soo koobidda wax ka beddelka oo ah HTML la falanqeeyay. Madhan haddii soo koobiddu kaa qarsoon tahay.",
+	"personal-dashboard-rest-property-desc-description": "Sharaxaad kooban oo ku saabsan bogga. Madhan haddii boggu aanu lahayn.",
+	"personal-dashboard-rest-property-desc-minor": "Sharaxaad kooban oo ku saabsan bogga. Madhan haddii boggu aanu lahayn.",
+	"personal-dashboard-rest-property-desc-bot": "In wax ka beddelka uu sameeyay bot.",
+	"personal-dashboard-rest-property-desc-new": "In wax ka beddelku abuuray bogga.",
+	"personal-dashboard-rest-property-desc-tags": "Calaamadaha lagu dabaqay wax ka beddelka.",
+	"personal-dashboard-rest-property-desc-oresscores": "Dhibcaha barashada mashiinka ee wax ka beddelka, iyadoo loo kala saaray moodeelka iyo qaybta. Madhan haddii wax ka beddelku aanu lahayn.",
+	"personal-dashboard-rest-feed-bad-continue": "Qiimaha `continue` halkan laguma isticmaali karo. Mar kale codso quudinta adigoon ku darin."
+}

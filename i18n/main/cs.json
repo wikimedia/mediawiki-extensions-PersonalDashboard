@@ -4,6 +4,7 @@
 			"Mormegil"
 		]
 	},
+	"personal-dashboard-beta-info-chip-text": "Beta",
 	"personal-dashboard-desc": "Experimentální řídicí panel pro moderátory",
 	"personal-dashboard-link-title": "Řídicí panel",
 	"personal-dashboard-specialpage-title": "Vítejte, {{GENDER:$1|uživateli|uživatelko}} {{bidi:$1}}!",
